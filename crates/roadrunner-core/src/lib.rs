@@ -4,6 +4,8 @@
 //! dedicated implementation phases. This crate currently establishes the stable
 //! library boundary shared by Roadrunner's adapters.
 
+pub mod graph;
+
 /// Returns the version of the Roadrunner core crate.
 #[must_use]
 pub const fn version() -> &'static str {
