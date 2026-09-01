@@ -4,6 +4,7 @@
 //! dedicated implementation phases. This crate currently establishes the stable
 //! library boundary shared by Roadrunner's adapters.
 
+pub mod geo;
 pub mod graph;
 
 /// Returns the version of the Roadrunner core crate.
