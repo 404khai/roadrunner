@@ -154,7 +154,7 @@ impl Graph {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::geo::Coordinate;
+    use crate::geo::{Coordinate, Meters, Seconds};
 
     const A: NodeId = NodeId::new(1);
     const B: NodeId = NodeId::new(2);
@@ -163,6 +163,10 @@ mod tests {
 
     fn node(id: NodeId) -> Node {
         Node::new(id, Coordinate::ORIGIN)
+    }
+
+    fn edge(id: EdgeId, from: NodeId, to: NodeId) -> Edge {
+        Edge::new(id, from, to, Meters::ZERO, Seconds::ZERO)
     }
 
     fn add_nodes(graph: &mut Graph, ids: &[NodeId]) {
@@ -206,7 +210,7 @@ mod tests {
     fn directed_edge_is_visible_only_from_its_source() {
         let mut graph = Graph::new();
         add_nodes(&mut graph, &[A, B]);
-        let edge = Edge::new(EdgeId::new(10), A, B);
+        let edge = edge(EdgeId::new(10), A, B);
 
         assert_eq!(graph.add_edge(edge), Ok(()));
 
@@ -220,8 +224,8 @@ mod tests {
     fn reciprocal_edges_model_a_bidirectional_road() {
         let mut graph = Graph::new();
         add_nodes(&mut graph, &[A, B]);
-        let forward = Edge::new(EdgeId::new(10), A, B);
-        let reverse = Edge::new(EdgeId::new(11), B, A);
+        let forward = edge(EdgeId::new(10), A, B);
+        let reverse = edge(EdgeId::new(11), B, A);
 
         assert_eq!(graph.add_edge(forward), Ok(()));
         assert_eq!(graph.add_edge(reverse), Ok(()));
@@ -234,9 +238,9 @@ mod tests {
     fn cycles_preserve_each_outgoing_adjacency() {
         let mut graph = Graph::new();
         add_nodes(&mut graph, &[A, B, C]);
-        let ab = Edge::new(EdgeId::new(10), A, B);
-        let bc = Edge::new(EdgeId::new(11), B, C);
-        let ca = Edge::new(EdgeId::new(12), C, A);
+        let ab = edge(EdgeId::new(10), A, B);
+        let bc = edge(EdgeId::new(11), B, C);
+        let ca = edge(EdgeId::new(12), C, A);
 
         assert_eq!(graph.add_edge(ab), Ok(()));
         assert_eq!(graph.add_edge(bc), Ok(()));
@@ -251,8 +255,8 @@ mod tests {
     fn disconnected_components_remain_independent() {
         let mut graph = Graph::new();
         add_nodes(&mut graph, &[A, B, C, D]);
-        let ab = Edge::new(EdgeId::new(10), A, B);
-        let cd = Edge::new(EdgeId::new(11), C, D);
+        let ab = edge(EdgeId::new(10), A, B);
+        let cd = edge(EdgeId::new(11), C, D);
 
         assert_eq!(graph.add_edge(ab), Ok(()));
         assert_eq!(graph.add_edge(cd), Ok(()));
@@ -267,8 +271,8 @@ mod tests {
     fn edge_insertion_rejects_missing_endpoints_without_mutation() {
         let mut graph = Graph::new();
         assert_eq!(graph.add_node(node(A)), Ok(()));
-        let missing_source = Edge::new(EdgeId::new(10), B, A);
-        let missing_destination = Edge::new(EdgeId::new(11), A, B);
+        let missing_source = edge(EdgeId::new(10), B, A);
+        let missing_destination = edge(EdgeId::new(11), A, B);
 
         assert_eq!(
             graph.add_edge(missing_source),
@@ -292,8 +296,8 @@ mod tests {
     fn duplicate_identities_are_rejected_but_parallel_edges_are_allowed() {
         let mut graph = Graph::new();
         add_nodes(&mut graph, &[A, B]);
-        let first = Edge::new(EdgeId::new(10), A, B);
-        let parallel = Edge::new(EdgeId::new(11), A, B);
+        let first = edge(EdgeId::new(10), A, B);
+        let parallel = edge(EdgeId::new(11), A, B);
 
         assert_eq!(
             graph.add_node(node(A)),
@@ -301,7 +305,7 @@ mod tests {
         );
         assert_eq!(graph.add_edge(first), Ok(()));
         assert_eq!(
-            graph.add_edge(Edge::new(first.id(), B, A)),
+            graph.add_edge(edge(first.id(), B, A)),
             Err(GraphError::DuplicateEdge { id: first.id() })
         );
         assert_eq!(graph.add_edge(parallel), Ok(()));
@@ -313,7 +317,7 @@ mod tests {
     fn removing_an_edge_updates_lookup_adjacency_and_count() {
         let mut graph = Graph::new();
         add_nodes(&mut graph, &[A, B]);
-        let edge = Edge::new(EdgeId::new(10), A, B);
+        let edge = edge(EdgeId::new(10), A, B);
         assert_eq!(graph.add_edge(edge), Ok(()));
 
         assert_eq!(graph.remove_edge(edge.id()), Ok(edge));
