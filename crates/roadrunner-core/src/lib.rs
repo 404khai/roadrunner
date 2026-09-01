@@ -4,6 +4,7 @@
 //! dedicated implementation phases. This crate currently establishes the stable
 //! library boundary shared by Roadrunner's adapters.
 
+pub mod cost;
 pub mod geo;
 pub mod graph;
 

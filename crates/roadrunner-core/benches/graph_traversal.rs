@@ -4,7 +4,7 @@ use std::collections::{HashSet, VecDeque};
 use std::hint::black_box;
 
 use criterion::{BenchmarkId, Criterion, Throughput};
-use roadrunner_core::geo::Coordinate;
+use roadrunner_core::geo::{Coordinate, Meters, Seconds};
 use roadrunner_core::graph::{Edge, EdgeId, Graph, Node, NodeId};
 
 const FAN_OUT: u32 = 3;
@@ -29,6 +29,8 @@ fn generated_graph(node_count: u32) -> Graph {
                 EdgeId::new(edge_value),
                 NodeId::new(source),
                 NodeId::new((source + offset) % node_count),
+                Meters::ZERO,
+                Seconds::ZERO,
             );
             let result = graph.add_edge(edge);
             assert!(
