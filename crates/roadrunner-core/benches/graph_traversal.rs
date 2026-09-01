@@ -4,6 +4,7 @@ use std::collections::{HashSet, VecDeque};
 use std::hint::black_box;
 
 use criterion::{BenchmarkId, Criterion, Throughput};
+use roadrunner_core::geo::Coordinate;
 use roadrunner_core::graph::{Edge, EdgeId, Graph, Node, NodeId};
 
 const FAN_OUT: u32 = 3;
@@ -14,7 +15,7 @@ fn generated_graph(node_count: u32) -> Graph {
     let mut graph = Graph::new();
 
     for value in 0..node_count {
-        let result = graph.add_node(Node::new(NodeId::new(value)));
+        let result = graph.add_node(Node::new(NodeId::new(value), Coordinate::ORIGIN));
         assert!(
             result.is_ok(),
             "generated node insertion failed: {result:?}"

@@ -154,15 +154,20 @@ impl Graph {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::geo::Coordinate;
 
     const A: NodeId = NodeId::new(1);
     const B: NodeId = NodeId::new(2);
     const C: NodeId = NodeId::new(3);
     const D: NodeId = NodeId::new(4);
 
+    fn node(id: NodeId) -> Node {
+        Node::new(id, Coordinate::ORIGIN)
+    }
+
     fn add_nodes(graph: &mut Graph, ids: &[NodeId]) {
         for id in ids {
-            assert_eq!(graph.add_node(Node::new(*id)), Ok(()));
+            assert_eq!(graph.add_node(node(*id)), Ok(()));
         }
     }
 
@@ -188,12 +193,12 @@ mod tests {
     fn single_node_has_an_empty_adjacency_list() {
         let mut graph = Graph::new();
 
-        assert_eq!(graph.add_node(Node::new(A)), Ok(()));
+        assert_eq!(graph.add_node(node(A)), Ok(()));
 
         assert_eq!(graph.node_count(), 1);
         assert_eq!(graph.edge_count(), 0);
         assert!(graph.contains_node(A));
-        assert_eq!(graph.node(A), Some(&Node::new(A)));
+        assert_eq!(graph.node(A), Some(&node(A)));
         assert_eq!(graph.neighbors(A), Ok([].as_slice()));
     }
 
@@ -261,7 +266,7 @@ mod tests {
     #[test]
     fn edge_insertion_rejects_missing_endpoints_without_mutation() {
         let mut graph = Graph::new();
-        assert_eq!(graph.add_node(Node::new(A)), Ok(()));
+        assert_eq!(graph.add_node(node(A)), Ok(()));
         let missing_source = Edge::new(EdgeId::new(10), B, A);
         let missing_destination = Edge::new(EdgeId::new(11), A, B);
 
@@ -291,7 +296,7 @@ mod tests {
         let parallel = Edge::new(EdgeId::new(11), A, B);
 
         assert_eq!(
-            graph.add_node(Node::new(A)),
+            graph.add_node(node(A)),
             Err(GraphError::DuplicateNode { id: A })
         );
         assert_eq!(graph.add_edge(first), Ok(()));
