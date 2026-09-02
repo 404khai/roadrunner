@@ -47,7 +47,10 @@ impl RouteCost {
         if value < 0.0 {
             return Err(CostError::Negative { kind, value });
         }
-        Ok(Self { kind, value })
+        Ok(Self {
+            kind,
+            value: if value == 0.0 { 0.0 } else { value },
+        })
     }
 
     /// Creates a zero cost of the selected kind.

@@ -21,3 +21,7 @@ serde_json = "1"
 [[bench]]
 name = "graph_traversal"
 harness = false
+
+[[bench]]
+name = "dijkstra"
+harness = false

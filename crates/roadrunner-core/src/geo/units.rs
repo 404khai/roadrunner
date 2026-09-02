@@ -53,7 +53,7 @@ fn validate(value: f64, unit: MeasurementUnit) -> Result<f64, UnitError> {
     if value < 0.0 {
         return Err(UnitError::Negative { unit, value });
     }
-    Ok(value)
+    Ok(if value == 0.0 { 0.0 } else { value })
 }
 
 macro_rules! non_negative_unit {
@@ -81,6 +81,15 @@ macro_rules! non_negative_unit {
             #[must_use]
             pub const fn value(self) -> f64 {
                 self.0
+            }
+
+            /// Adds another measurement of the same unit and validates the result.
+            ///
+            /// # Errors
+            ///
+            /// Returns [`UnitError`] when finite inputs overflow during addition.
+            pub fn checked_add(self, other: Self) -> Result<Self, UnitError> {
+                Self::new(self.0 + other.0)
             }
         }
 
@@ -195,5 +204,22 @@ mod tests {
             Ok(value) if value == json!(42.5)
         ));
         assert!(serde_json::from_str::<Meters>("-1").is_err());
+    }
+
+    #[test]
+    fn checked_add_revalidates_the_result() {
+        let largest = Meters::new(f64::MAX);
+        let Ok(largest) = largest else {
+            panic!("expected the largest finite meter value to be valid");
+        };
+
+        assert_eq!(Meters::new(-0.0), Ok(Meters::ZERO));
+        assert!(matches!(
+            largest.checked_add(largest),
+            Err(UnitError::NotFinite {
+                unit: MeasurementUnit::Meters,
+                ..
+            })
+        ));
     }
 }
