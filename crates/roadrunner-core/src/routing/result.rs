@@ -10,6 +10,8 @@ use crate::graph::{EdgeId, NodeId};
 pub enum RoutingAlgorithm {
     /// Dijkstra's shortest-path algorithm.
     Dijkstra,
+    /// A* shortest-path search with a scaled Haversine heuristic.
+    AStar,
 }
 
 /// A validated shortest-path result and its search diagnostics.
@@ -25,6 +27,7 @@ pub struct RouteResult {
 
 impl RouteResult {
     pub(super) fn new(
+        algorithm: RoutingAlgorithm,
         path: Vec<NodeId>,
         edges: Vec<EdgeId>,
         total_distance: Meters,
@@ -32,7 +35,7 @@ impl RouteResult {
         visited_nodes: usize,
     ) -> Self {
         Self {
-            algorithm: RoutingAlgorithm::Dijkstra,
+            algorithm,
             path,
             edges,
             total_distance,
