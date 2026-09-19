@@ -1,82 +1,97 @@
 use serde::Serialize;
 
 use crate::cost::RouteCost;
-use crate::geo::Meters;
-use crate::graph::{EdgeId, NodeId};
+use crate::geo::{Meters, Seconds};
+use crate::graph::{EdgeId, GraphSnapshotId, NodeId};
 
-/// The algorithm used to compute a route.
+/// Algorithm used to compute a route.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum RoutingAlgorithm {
-    /// Dijkstra's shortest-path algorithm.
+    /// Dijkstra's algorithm.
     Dijkstra,
-    /// A* shortest-path search with a scaled Haversine heuristic.
+    /// A* search.
     AStar,
 }
 
-/// A validated shortest-path result and its search diagnostics.
+/// A validated route tied to the graph snapshot that produced it.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct RouteResult {
+    graph_snapshot_id: GraphSnapshotId,
     algorithm: RoutingAlgorithm,
     path: Vec<NodeId>,
     edges: Vec<EdgeId>,
     total_distance: Meters,
     total_cost: RouteCost,
-    visited_nodes: usize,
+    elapsed_travel_time: Seconds,
+    expanded_states: usize,
+}
+
+#[derive(Clone, Copy)]
+pub(super) struct RouteMetrics {
+    pub(super) total_distance: Meters,
+    pub(super) total_cost: RouteCost,
+    pub(super) elapsed_travel_time: Seconds,
+    pub(super) expanded_states: usize,
 }
 
 impl RouteResult {
     pub(super) fn new(
+        graph_snapshot_id: GraphSnapshotId,
         algorithm: RoutingAlgorithm,
         path: Vec<NodeId>,
         edges: Vec<EdgeId>,
-        total_distance: Meters,
-        total_cost: RouteCost,
-        visited_nodes: usize,
+        metrics: RouteMetrics,
     ) -> Self {
         Self {
+            graph_snapshot_id,
             algorithm,
             path,
             edges,
-            total_distance,
-            total_cost,
-            visited_nodes,
+            total_distance: metrics.total_distance,
+            total_cost: metrics.total_cost,
+            elapsed_travel_time: metrics.elapsed_travel_time,
+            expanded_states: metrics.expanded_states,
         }
     }
-
-    /// Returns the algorithm used for this result.
+    /// Returns the graph snapshot identity.
+    #[must_use]
+    pub const fn graph_snapshot_id(&self) -> GraphSnapshotId {
+        self.graph_snapshot_id
+    }
+    /// Returns the algorithm.
     #[must_use]
     pub const fn algorithm(&self) -> RoutingAlgorithm {
         self.algorithm
     }
-
-    /// Returns the ordered node path from source through destination.
+    /// Returns ordered nodes.
     #[must_use]
     pub fn path(&self) -> &[NodeId] {
         &self.path
     }
-
-    /// Returns the ordered directed edges connecting [`Self::path`].
+    /// Returns ordered directed edges.
     #[must_use]
     pub fn edges(&self) -> &[EdgeId] {
         &self.edges
     }
-
-    /// Returns total physical distance independently of the selected cost model.
+    /// Returns physical route distance.
     #[must_use]
     pub const fn total_distance(&self) -> Meters {
         self.total_distance
     }
-
-    /// Returns the accumulated value selected by the cost model.
+    /// Returns accumulated objective cost.
     #[must_use]
     pub const fn total_cost(&self) -> RouteCost {
         self.total_cost
     }
-
-    /// Returns the number of nodes finalized by the search.
+    /// Returns elapsed traversal time.
     #[must_use]
-    pub const fn visited_nodes(&self) -> usize {
-        self.visited_nodes
+    pub const fn elapsed_travel_time(&self) -> Seconds {
+        self.elapsed_travel_time
+    }
+    /// Returns the number of search-state expansion events.
+    #[must_use]
+    pub const fn expanded_states(&self) -> usize {
+        self.expanded_states
     }
 }

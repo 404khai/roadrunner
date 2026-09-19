@@ -1,0 +1,857 @@
+//! Independent correctness checks for the frozen routing core.
+#![allow(clippy::float_cmp)]
+
+use std::collections::BTreeMap;
+
+use roadrunner_core::cost::{
+    CostError, CostKind, DistanceCost, RouteCost, RoutingContext, SearchCapability, TravelTimeCost,
+    TraversalEvaluation, TraversalEvaluator, TraversalState,
+};
+use roadrunner_core::geo::{CanonicalCoordinate, KilometersPerHour, Meters, Seconds};
+use roadrunner_core::graph::{
+    AccessClass, BuilderNodeId, BuilderSegmentId, DirectedEdge, EdgeId, EdgeProperties,
+    FrozenGraph, GraphBuildIdentity, GraphBuilder, GraphMetadata, GraphSnapshotId, NodeId,
+    RoadSegment, decode_graph_artifact, encode_graph_artifact, write_graph_artifact_atomic,
+};
+use roadrunner_core::routing::{
+    DistanceHaversine, RoutingError, TravelTimeHaversine, ZeroHeuristic, astar, dijkstra,
+};
+
+fn canonical(id: u32) -> CanonicalCoordinate {
+    match CanonicalCoordinate::new(0, i32::try_from(id).unwrap_or(i32::MAX) * 10_000) {
+        Ok(value) => value,
+        Err(error) => panic!("invalid fixture coordinate: {error}"),
+    }
+}
+
+fn properties() -> EdgeProperties {
+    let Ok(speed) = KilometersPerHour::new(36.0) else {
+        panic!("valid speed");
+    };
+    EdgeProperties::new(speed, None, AccessClass::General)
+}
+
+fn graph(node_count: u32, segments: &[(u64, u32, u32)]) -> FrozenGraph {
+    let mut builder = GraphBuilder::new(
+        GraphSnapshotId::new(7),
+        GraphMetadata::new(
+            "test_v1",
+            "test",
+            GraphBuildIdentity::new("fixture", "fixture-sha256", "test-v1", "default"),
+        ),
+    );
+    for id in 0..node_count {
+        assert!(
+            builder
+                .add_node(BuilderNodeId::new(u64::from(id)), canonical(id))
+                .is_ok()
+        );
+    }
+    for (key, from, to) in segments {
+        assert!(
+            builder
+                .add_segment(
+                    BuilderSegmentId::new(*key),
+                    BuilderNodeId::new(u64::from(*from)),
+                    BuilderNodeId::new(u64::from(*to)),
+                    vec![canonical(*from), canonical(*to)],
+                    Some(properties()),
+                    None,
+                )
+                .is_ok()
+        );
+    }
+    match builder.finalize() {
+        Ok(value) => value,
+        Err(error) => panic!("fixture failed: {error}"),
+    }
+}
+
+#[derive(Debug)]
+struct WeightedEvaluator {
+    weights: BTreeMap<EdgeId, f64>,
+    forbidden: Option<EdgeId>,
+    fail: Option<EdgeId>,
+}
+
+impl TraversalEvaluator for WeightedEvaluator {
+    fn kind(&self) -> CostKind {
+        CostKind::TravelTime
+    }
+    fn capability(&self) -> SearchCapability {
+        SearchCapability::StaticNonNegative
+    }
+    fn evaluate(
+        &self,
+        edge: &DirectedEdge,
+        _segment: &RoadSegment,
+        _state: TraversalState,
+        _context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError> {
+        if self.forbidden == Some(edge.id()) {
+            return Ok(TraversalEvaluation::Forbidden);
+        }
+        if self.fail == Some(edge.id()) {
+            return Err(CostError::NotFinite {
+                kind: CostKind::TravelTime,
+                value: f64::NAN,
+            });
+        }
+        let value = self.weights.get(&edge.id()).copied().unwrap_or(1.0);
+        let cost = RouteCost::new(CostKind::TravelTime, value)?;
+        let time = Seconds::new(value).map_err(|_| CostError::NotFinite {
+            kind: CostKind::TravelTime,
+            value,
+        })?;
+        Ok(TraversalEvaluation::Traversable {
+            objective_cost: cost,
+            travel_time: time,
+        })
+    }
+}
+
+fn edge_between(graph: &FrozenGraph, from: u32, to: u32) -> EdgeId {
+    let Ok(edges) = graph.outgoing_edges(NodeId::new(from)) else {
+        panic!("valid node");
+    };
+    match edges.iter().find(|edge| edge.to() == NodeId::new(to)) {
+        Some(edge) => edge.id(),
+        None => panic!("missing edge {from}->{to}"),
+    }
+}
+
+fn bellman_ford(
+    graph: &FrozenGraph,
+    source: NodeId,
+    destination: NodeId,
+    weights: &BTreeMap<EdgeId, f64>,
+    forbidden: Option<EdgeId>,
+) -> Option<f64> {
+    let mut distances = vec![f64::INFINITY; graph.node_count()];
+    distances[source.value() as usize] = 0.0;
+    for _ in 1..graph.node_count() {
+        let mut changed = false;
+        for edge in graph.edges() {
+            if forbidden == Some(edge.id()) {
+                continue;
+            }
+            let from = edge.from().value() as usize;
+            let to = edge.to().value() as usize;
+            let candidate = distances[from] + weights.get(&edge.id()).copied().unwrap_or(1.0);
+            if candidate < distances[to] {
+                distances[to] = candidate;
+                changed = true;
+            }
+        }
+        if !changed {
+            break;
+        }
+    }
+    let result = distances[destination.value() as usize];
+    result.is_finite().then_some(result)
+}
+
+fn validate_route(
+    graph: &FrozenGraph,
+    source: NodeId,
+    destination: NodeId,
+    route: &roadrunner_core::routing::RouteResult,
+    weights: &BTreeMap<EdgeId, f64>,
+) {
+    assert_eq!(route.graph_snapshot_id(), graph.snapshot_id());
+    assert_eq!(route.path().first(), Some(&source));
+    assert_eq!(route.path().last(), Some(&destination));
+    assert_eq!(route.path().len(), route.edges().len() + 1);
+    let mut objective = 0.0;
+    let mut distance = Meters::ZERO;
+    for (index, edge_id) in route.edges().iter().enumerate() {
+        let Some(edge) = graph.edge(*edge_id) else {
+            panic!("route edge missing");
+        };
+        assert_eq!(edge.from(), route.path()[index]);
+        assert_eq!(edge.to(), route.path()[index + 1]);
+        objective += weights.get(edge_id).copied().unwrap_or(1.0);
+        let Some(segment) = graph.segment(edge.segment()) else {
+            panic!("route segment missing");
+        };
+        distance = match distance.checked_add(segment.distance()) {
+            Ok(value) => value,
+            Err(error) => panic!("distance failed: {error}"),
+        };
+    }
+    assert_eq!(route.total_cost().value(), objective);
+    assert_eq!(route.elapsed_travel_time().value(), objective);
+    assert_eq!(route.total_distance(), distance);
+}
+
+fn generated(seed: u64) -> (FrozenGraph, BTreeMap<EdgeId, f64>) {
+    let node_count = 12_u32;
+    let mut segments = Vec::new();
+    for id in 0..(node_count - 1) {
+        segments.push((u64::from(id), id, id + 1));
+    }
+    let mut state = seed;
+    for key in 100..145_u64 {
+        state = state
+            .wrapping_mul(6_364_136_223_846_793_005)
+            .wrapping_add(1);
+        let from = u32::try_from(state % u64::from(node_count)).unwrap_or(0);
+        state = state
+            .wrapping_mul(6_364_136_223_846_793_005)
+            .wrapping_add(1);
+        let to = u32::try_from(state % u64::from(node_count)).unwrap_or(0);
+        segments.push((key, from, to));
+    }
+    let graph = graph(node_count, &segments);
+    let weights = graph
+        .edges()
+        .iter()
+        .map(|edge| (edge.id(), f64::from(edge.segment().value() % 9)))
+        .collect();
+    (graph, weights)
+}
+
+#[test]
+fn seeded_dijkstra_matches_independent_bellman_ford_and_zero_astar() {
+    for seed in [1_u64, 7, 19, 42, 9_001] {
+        let (graph, weights) = generated(seed);
+        let evaluator = WeightedEvaluator {
+            weights: weights.clone(),
+            forbidden: None,
+            fail: None,
+        };
+        for destination in 0..12_u32 {
+            let expected = bellman_ford(
+                &graph,
+                NodeId::new(0),
+                NodeId::new(destination),
+                &weights,
+                None,
+            );
+            let dijkstra_result = dijkstra(
+                &graph,
+                NodeId::new(0),
+                NodeId::new(destination),
+                &evaluator,
+                &RoutingContext::new(),
+            );
+            let astar_result = astar(
+                &graph,
+                NodeId::new(0),
+                NodeId::new(destination),
+                &evaluator,
+                &ZeroHeuristic::new(CostKind::TravelTime),
+                &RoutingContext::new(),
+            );
+            match (expected, dijkstra_result, astar_result) {
+                (Some(cost), Ok(dijkstra_route), Ok(astar_route)) => {
+                    assert_eq!(dijkstra_route.total_cost().value(), cost);
+                    assert_eq!(astar_route.total_cost(), dijkstra_route.total_cost());
+                    validate_route(
+                        &graph,
+                        NodeId::new(0),
+                        NodeId::new(destination),
+                        &dijkstra_route,
+                        &weights,
+                    );
+                    validate_route(
+                        &graph,
+                        NodeId::new(0),
+                        NodeId::new(destination),
+                        &astar_route,
+                        &weights,
+                    );
+                }
+                (None, Err(RoutingError::NoRoute { .. }), Err(RoutingError::NoRoute { .. })) => {}
+                outcome => panic!("oracle disagreement for seed {seed}: {outcome:?}"),
+            }
+        }
+    }
+}
+
+#[test]
+fn built_in_distance_heuristic_matches_dijkstra() {
+    let (graph, _) = generated(73);
+    for destination in 1..12_u32 {
+        let dijkstra_route = dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(destination),
+            &DistanceCost,
+            &RoutingContext::new(),
+        );
+        let astar_route = astar(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(destination),
+            &DistanceCost,
+            &DistanceHaversine,
+            &RoutingContext::new(),
+        );
+        assert_eq!(
+            dijkstra_route
+                .as_ref()
+                .map(roadrunner_core::routing::RouteResult::total_cost),
+            astar_route
+                .as_ref()
+                .map(roadrunner_core::routing::RouteResult::total_cost)
+        );
+    }
+}
+
+#[test]
+fn built_in_travel_time_heuristic_matches_dijkstra() {
+    let (graph, _) = generated(91);
+    let Ok(maximum_speed) = KilometersPerHour::new(36.0) else {
+        panic!("valid maximum speed");
+    };
+    let Ok(heuristic) = TravelTimeHaversine::for_graph(&graph, maximum_speed) else {
+        panic!("valid heuristic configuration");
+    };
+    for destination in 1..12_u32 {
+        let dijkstra_route = dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(destination),
+            &TravelTimeCost,
+            &RoutingContext::new(),
+        );
+        let astar_route = astar(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(destination),
+            &TravelTimeCost,
+            &heuristic,
+            &RoutingContext::new(),
+        );
+        assert_eq!(
+            dijkstra_route
+                .as_ref()
+                .map(roadrunner_core::routing::RouteResult::total_cost),
+            astar_route
+                .as_ref()
+                .map(roadrunner_core::routing::RouteResult::total_cost)
+        );
+    }
+    assert!(TravelTimeHaversine::for_graph(&graph, KilometersPerHour::ZERO).is_err());
+}
+
+#[test]
+fn astar_geographic_rounding_regression_matches_dijkstra_exactly() {
+    let node_count = 1_000_u32;
+    let mut segments = Vec::new();
+    let mut key = 0_u64;
+    for from in 0..node_count {
+        for offset in 1..=3_u32 {
+            let Some(to) = from.checked_add(offset).filter(|to| *to < node_count) else {
+                continue;
+            };
+            segments.push((key, from, to));
+            key += 1;
+        }
+    }
+    let graph = graph(node_count, &segments);
+    for (source, destination) in [(0, 999), (13, 23), (0, 500)] {
+        let dijkstra_route = dijkstra(
+            &graph,
+            NodeId::new(source),
+            NodeId::new(destination),
+            &DistanceCost,
+            &RoutingContext::new(),
+        );
+        let astar_route = astar(
+            &graph,
+            NodeId::new(source),
+            NodeId::new(destination),
+            &DistanceCost,
+            &DistanceHaversine,
+            &RoutingContext::new(),
+        );
+        assert_eq!(
+            dijkstra_route
+                .as_ref()
+                .map(roadrunner_core::routing::RouteResult::total_cost),
+            astar_route
+                .as_ref()
+                .map(roadrunner_core::routing::RouteResult::total_cost)
+        );
+    }
+}
+
+#[test]
+fn stale_entries_parallel_edges_self_loops_and_zero_cycles_are_safe() {
+    let graph = graph(
+        4,
+        &[
+            (1, 0, 1),
+            (2, 0, 1),
+            (3, 0, 2),
+            (4, 2, 1),
+            (5, 1, 1),
+            (6, 1, 2),
+            (7, 1, 3),
+        ],
+    );
+    let mut weights = BTreeMap::new();
+    for edge in graph.edges() {
+        let weight = match (
+            edge.from().value(),
+            edge.to().value(),
+            edge.segment().value(),
+        ) {
+            (0, 1, 0) => 10.0,
+            (0, 1, 1) => 7.0,
+            (0, 2, _) | (2, 1, _) | (1, 3, _) => 1.0,
+            (1, 1 | 2, _) => 0.0,
+            _ => 50.0,
+        };
+        weights.insert(edge.id(), weight);
+    }
+    let evaluator = WeightedEvaluator {
+        weights: weights.clone(),
+        forbidden: None,
+        fail: None,
+    };
+    let route = dijkstra(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(3),
+        &evaluator,
+        &RoutingContext::new(),
+    );
+    let Ok(route) = route else {
+        panic!("expected route: {route:?}");
+    };
+    assert_eq!(route.total_cost().value(), 3.0);
+    validate_route(&graph, NodeId::new(0), NodeId::new(3), &route, &weights);
+}
+
+#[test]
+fn forbidden_edges_are_skipped_but_evaluator_errors_propagate() {
+    let graph = graph(3, &[(1, 0, 1), (2, 1, 2), (3, 0, 2)]);
+    let direct = edge_between(&graph, 0, 2);
+    let weights: BTreeMap<EdgeId, f64> = graph
+        .edges()
+        .iter()
+        .map(|edge| (edge.id(), if edge.id() == direct { 1.0 } else { 2.0 }))
+        .collect();
+    let forbidden = WeightedEvaluator {
+        weights: weights.clone(),
+        forbidden: Some(direct),
+        fail: None,
+    };
+    let route = dijkstra(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(2),
+        &forbidden,
+        &RoutingContext::new(),
+    );
+    assert_eq!(
+        route.as_ref().map(|value| value.total_cost().value()),
+        Ok(4.0)
+    );
+    let failure = WeightedEvaluator {
+        weights,
+        forbidden: None,
+        fail: Some(direct),
+    };
+    assert!(matches!(
+        dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(2),
+            &failure,
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::TraversalEvaluation { .. })
+    ));
+}
+
+#[test]
+fn objective_overflow_is_an_error() {
+    let graph = graph(3, &[(1, 0, 1), (2, 1, 2)]);
+    let weights = graph
+        .edges()
+        .iter()
+        .map(|edge| (edge.id(), f64::MAX))
+        .collect();
+    let evaluator = WeightedEvaluator {
+        weights,
+        forbidden: None,
+        fail: None,
+    };
+    assert!(matches!(
+        dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(2),
+            &evaluator,
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::CostAccumulation { .. })
+    ));
+}
+
+#[test]
+fn invalid_evaluator_values_are_routing_errors() {
+    let graph = graph(2, &[(1, 0, 1)]);
+    let edge = edge_between(&graph, 0, 1);
+    for value in [-1.0, f64::NAN, f64::INFINITY] {
+        let evaluator = WeightedEvaluator {
+            weights: BTreeMap::from([(edge, value)]),
+            forbidden: None,
+            fail: None,
+        };
+        assert!(matches!(
+            dijkstra(
+                &graph,
+                NodeId::new(0),
+                NodeId::new(1),
+                &evaluator,
+                &RoutingContext::new()
+            ),
+            Err(RoutingError::TraversalEvaluation { .. })
+        ));
+    }
+}
+
+#[test]
+fn disconnected_and_isolated_nodes_return_precise_outcomes() {
+    let graph = graph(4, &[(1, 0, 1)]);
+    assert!(matches!(
+        dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(3),
+            &DistanceCost,
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::NoRoute { .. })
+    ));
+    let isolated = dijkstra(
+        &graph,
+        NodeId::new(2),
+        NodeId::new(2),
+        &DistanceCost,
+        &RoutingContext::new(),
+    );
+    assert!(isolated.is_ok_and(|route| route.edges().is_empty() && route.path().len() == 1));
+}
+
+#[test]
+fn graph_builder_rejects_malformed_segments() {
+    let metadata = GraphMetadata::new(
+        "test_v1",
+        "test",
+        GraphBuildIdentity::new("fixture", "fixture-sha256", "test-v1", "default"),
+    );
+    let mut builder = GraphBuilder::new(GraphSnapshotId::new(8), metadata);
+    assert!(
+        builder
+            .add_node(BuilderNodeId::new(0), canonical(0))
+            .is_ok()
+    );
+    assert!(
+        builder
+            .add_node(BuilderNodeId::new(1), canonical(1))
+            .is_ok()
+    );
+    assert!(
+        builder
+            .add_segment(
+                BuilderSegmentId::new(1),
+                BuilderNodeId::new(0),
+                BuilderNodeId::new(9),
+                vec![canonical(0), canonical(1)],
+                Some(properties()),
+                None,
+            )
+            .is_err()
+    );
+    assert!(
+        builder
+            .add_segment(
+                BuilderSegmentId::new(2),
+                BuilderNodeId::new(0),
+                BuilderNodeId::new(1),
+                vec![canonical(1), canonical(0)],
+                Some(properties()),
+                None,
+            )
+            .is_err()
+    );
+    let zero_speed = EdgeProperties::new(KilometersPerHour::ZERO, None, AccessClass::General);
+    assert!(
+        builder
+            .add_segment(
+                BuilderSegmentId::new(3),
+                BuilderNodeId::new(0),
+                BuilderNodeId::new(1),
+                vec![canonical(0), canonical(1)],
+                Some(zero_speed),
+                None,
+            )
+            .is_err()
+    );
+}
+
+#[derive(Debug)]
+struct UnsupportedEvaluator;
+impl TraversalEvaluator for UnsupportedEvaluator {
+    fn kind(&self) -> CostKind {
+        CostKind::TravelTime
+    }
+    fn capability(&self) -> SearchCapability {
+        SearchCapability::RequiresExpandedState
+    }
+    fn evaluate(
+        &self,
+        _edge: &DirectedEdge,
+        _segment: &RoadSegment,
+        _state: TraversalState,
+        _context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError> {
+        Ok(TraversalEvaluation::Forbidden)
+    }
+}
+
+#[derive(Debug)]
+struct NonFifoEvaluator;
+impl TraversalEvaluator for NonFifoEvaluator {
+    fn kind(&self) -> CostKind {
+        CostKind::TravelTime
+    }
+    fn capability(&self) -> SearchCapability {
+        SearchCapability::Unsupported
+    }
+    fn evaluate(
+        &self,
+        _edge: &DirectedEdge,
+        _segment: &RoadSegment,
+        _state: TraversalState,
+        _context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError> {
+        Ok(TraversalEvaluation::Forbidden)
+    }
+}
+
+#[test]
+fn incompatible_capabilities_and_heuristics_are_rejected() {
+    let graph = graph(2, &[(1, 0, 1)]);
+    assert!(matches!(
+        dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(1),
+            &UnsupportedEvaluator,
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::UnsupportedCapability { .. })
+    ));
+    assert!(matches!(
+        astar(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(1),
+            &DistanceCost,
+            &ZeroHeuristic::new(CostKind::TravelTime),
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::HeuristicKindMismatch { .. })
+    ));
+    assert!(matches!(
+        dijkstra(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(1),
+            &NonFifoEvaluator,
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::UnsupportedCapability {
+            capability: SearchCapability::Unsupported
+        })
+    ));
+    let Ok(maximum_speed) = KilometersPerHour::new(36.0) else {
+        panic!("valid maximum speed");
+    };
+    let Ok(time_heuristic) = TravelTimeHaversine::for_graph(&graph, maximum_speed) else {
+        panic!("valid graph speed bound");
+    };
+    let custom_time = WeightedEvaluator {
+        weights: BTreeMap::new(),
+        forbidden: None,
+        fail: None,
+    };
+    assert!(matches!(
+        astar(
+            &graph,
+            NodeId::new(0),
+            NodeId::new(1),
+            &custom_time,
+            &time_heuristic,
+            &RoutingContext::new()
+        ),
+        Err(RoutingError::HeuristicPolicyMismatch { .. })
+    ));
+    let Ok(unsafe_speed) = KilometersPerHour::new(35.0) else {
+        panic!("valid but insufficient speed");
+    };
+    assert!(TravelTimeHaversine::for_graph(&graph, unsafe_speed).is_err());
+}
+
+#[derive(Debug)]
+struct FifoEvaluator;
+impl TraversalEvaluator for FifoEvaluator {
+    fn kind(&self) -> CostKind {
+        CostKind::TravelTime
+    }
+    fn capability(&self) -> SearchCapability {
+        SearchCapability::FifoEarliestArrival
+    }
+    fn evaluate(
+        &self,
+        edge: &DirectedEdge,
+        _segment: &RoadSegment,
+        state: TraversalState,
+        context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError> {
+        let arrival = context.departure_time().value() + state.elapsed_travel_time().value();
+        let value = match (edge.from().value(), edge.to().value()) {
+            (0, 1) => 5.0,
+            (1, 2) if arrival <= 5.0 => 1.0,
+            (1, 2) => 100.0,
+            (0, 2) => 20.0,
+            _ => 1.0,
+        };
+        let time = Seconds::new(value).map_err(|_| CostError::NotFinite {
+            kind: CostKind::TravelTime,
+            value,
+        })?;
+        Ok(TraversalEvaluation::Traversable {
+            objective_cost: RouteCost::from_travel_time(time),
+            travel_time: time,
+        })
+    }
+}
+
+#[test]
+fn fifo_evaluation_receives_arrival_time_at_each_node() {
+    let graph = graph(3, &[(1, 0, 1), (2, 1, 2), (3, 0, 2)]);
+    let result = dijkstra(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(2),
+        &FifoEvaluator,
+        &RoutingContext::new(),
+    );
+    assert_eq!(
+        result
+            .as_ref()
+            .map(|route| route.elapsed_travel_time().value()),
+        Ok(6.0)
+    );
+}
+
+#[test]
+fn finalization_is_independent_of_insertion_order_and_artifact_round_trips() {
+    fn build(reverse: bool) -> FrozenGraph {
+        let mut builder = GraphBuilder::new(
+            GraphSnapshotId::new(99),
+            GraphMetadata::new(
+                "test_v1",
+                "test",
+                GraphBuildIdentity::new("fixture", "fixture-sha256", "test-v1", "default"),
+            ),
+        );
+        let nodes = if reverse {
+            vec![2, 1, 0]
+        } else {
+            vec![0, 1, 2]
+        };
+        for id in nodes {
+            assert!(
+                builder
+                    .add_node(
+                        BuilderNodeId::new(id),
+                        canonical(u32::try_from(id).unwrap_or(0))
+                    )
+                    .is_ok()
+            );
+        }
+        let segments = if reverse {
+            vec![(20, 1, 2), (10, 0, 1)]
+        } else {
+            vec![(10, 0, 1), (20, 1, 2)]
+        };
+        for (key, from, to) in segments {
+            assert!(
+                builder
+                    .add_segment(
+                        BuilderSegmentId::new(key),
+                        BuilderNodeId::new(from),
+                        BuilderNodeId::new(to),
+                        vec![
+                            canonical(u32::try_from(from).unwrap_or(0)),
+                            canonical(u32::try_from(to).unwrap_or(0))
+                        ],
+                        Some(properties()),
+                        None
+                    )
+                    .is_ok()
+            );
+        }
+        match builder.finalize() {
+            Ok(value) => value,
+            Err(error) => panic!("finalization failed: {error}"),
+        }
+    }
+    let first = build(false);
+    let second = build(true);
+    let first_bytes = encode_graph_artifact(&first);
+    let second_bytes = encode_graph_artifact(&second);
+    assert_eq!(first_bytes.as_ref().ok(), second_bytes.as_ref().ok());
+    let Ok(bytes) = first_bytes else {
+        panic!("encoding failed");
+    };
+    let decoded = decode_graph_artifact(&bytes);
+    let Ok(decoded) = decoded else {
+        panic!("decoding failed: {decoded:?}");
+    };
+    assert_eq!(decoded.node_count(), first.node_count());
+    assert_eq!(decoded.edge_count(), first.edge_count());
+}
+
+#[test]
+fn corrupt_artifacts_are_rejected() {
+    let graph = graph(2, &[(1, 0, 1)]);
+    let Ok(mut bytes) = encode_graph_artifact(&graph) else {
+        panic!("encoding failed");
+    };
+    let middle = bytes.len() / 2;
+    bytes[middle] ^= 1;
+    assert!(decode_graph_artifact(&bytes).is_err());
+    let Ok(bytes) = encode_graph_artifact(&graph) else {
+        panic!("encoding failed");
+    };
+    assert!(decode_graph_artifact(&bytes[..bytes.len() / 2]).is_err());
+    let text = String::from_utf8_lossy(&bytes).replace("ROADRUNNER_GRAPH", "ROADRUNNER_WRONG");
+    assert!(decode_graph_artifact(text.as_bytes()).is_err());
+}
+
+#[test]
+fn atomic_artifact_publication_produces_a_valid_complete_file() {
+    let graph = graph(2, &[(1, 0, 1)]);
+    let directory =
+        std::env::temp_dir().join(format!("roadrunner-artifact-test-{}", std::process::id()));
+    assert!(std::fs::create_dir_all(&directory).is_ok());
+    let path = directory.join("graph.rrg");
+    assert!(write_graph_artifact_atomic(&path, &graph).is_ok());
+    let bytes = std::fs::read(&path);
+    let Ok(bytes) = bytes else {
+        panic!("published artifact should be readable");
+    };
+    assert!(decode_graph_artifact(&bytes).is_ok());
+    assert!(std::fs::remove_file(&path).is_ok());
+    assert!(std::fs::remove_dir(&directory).is_ok());
+}

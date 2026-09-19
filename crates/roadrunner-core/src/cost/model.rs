@@ -1,93 +1,152 @@
-use crate::graph::Edge;
+use crate::geo::Seconds;
+use crate::graph::{DirectedEdge, RoadSegment};
 
 use super::{CostError, CostKind, RouteCost, RoutingContext};
 
-/// Evaluates a directed edge under a selected routing objective.
-pub trait CostModel: Send + Sync {
-    /// Returns the semantic kind produced by this model.
-    fn kind(&self) -> CostKind;
+/// Search contract required by a traversal evaluator.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SearchCapability {
+    /// Static, non-negative, additive scalar routing.
+    StaticNonNegative,
+    /// FIFO time-dependent earliest-arrival routing.
+    FifoEarliestArrival,
+    /// The evaluator requires search state not supported by node-state routing.
+    RequiresExpandedState,
+    /// The evaluator cannot provide a correctness contract supported by this engine.
+    Unsupported,
+}
 
-    /// Evaluates an edge in an immutable routing context.
+/// Named heuristic policies whose lower-bound contracts an evaluator may support.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum HeuristicPolicy {
+    /// The always-safe zero lower bound.
+    Zero,
+    /// Endpoint Haversine distance for a physical-distance objective.
+    DistanceHaversine,
+    /// Endpoint Haversine distance divided by a validated maximum speed.
+    TravelTimeHaversine,
+}
+
+/// Search-label information available while evaluating an outgoing edge.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct TraversalState {
+    elapsed_travel_time: Seconds,
+}
+
+impl TraversalState {
+    /// Creates state for the supplied elapsed travel time.
+    #[must_use]
+    pub const fn new(elapsed_travel_time: Seconds) -> Self {
+        Self {
+            elapsed_travel_time,
+        }
+    }
+    /// Returns elapsed time since request departure.
+    #[must_use]
+    pub const fn elapsed_travel_time(self) -> Seconds {
+        self.elapsed_travel_time
+    }
+}
+
+/// Result of evaluating one outgoing directed edge.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum TraversalEvaluation {
+    /// The edge may be traversed and contributes objective cost and elapsed time.
+    Traversable {
+        /// Contribution to the selected optimization objective.
+        objective_cost: RouteCost,
+        /// Physical/logical time elapsed while traversing the edge.
+        travel_time: Seconds,
+    },
+    /// The edge is unavailable for this request without constituting an error.
+    Forbidden,
+}
+
+/// Evaluates directed traversals under an objective and request context.
+pub trait TraversalEvaluator: Send + Sync {
+    /// Returns the semantic objective kind.
+    fn kind(&self) -> CostKind;
+    /// Returns the search contract required by this evaluator.
+    fn capability(&self) -> SearchCapability;
+    /// Declares whether this evaluator preserves a named heuristic's lower bound.
+    ///
+    /// Custom evaluators are conservative by default and accept only zero.
+    fn supports_heuristic(&self, policy: HeuristicPolicy) -> bool {
+        policy == HeuristicPolicy::Zero
+    }
+    /// Evaluates one edge transition.
     ///
     /// # Errors
     ///
-    /// Returns [`CostError`] when the model cannot produce a valid non-negative,
-    /// finite cost. The Phase 4 models operate on validated edge attributes and
-    /// therefore always succeed.
-    fn edge_cost(&self, edge: &Edge, context: &RoutingContext) -> Result<RouteCost, CostError>;
+    /// Returns [`CostError`] when evaluation cannot produce valid values.
+    fn evaluate(
+        &self,
+        edge: &DirectedEdge,
+        segment: &RoadSegment,
+        state: TraversalState,
+        context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError>;
 }
 
-/// Selects edge distance in meters as route cost.
+/// Static physical-distance objective.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct DistanceCost;
 
-impl CostModel for DistanceCost {
+impl TraversalEvaluator for DistanceCost {
     fn kind(&self) -> CostKind {
         CostKind::Distance
     }
-
-    fn edge_cost(&self, edge: &Edge, _context: &RoutingContext) -> Result<RouteCost, CostError> {
-        Ok(RouteCost::from_distance(edge.distance()))
+    fn capability(&self) -> SearchCapability {
+        SearchCapability::StaticNonNegative
+    }
+    fn supports_heuristic(&self, policy: HeuristicPolicy) -> bool {
+        matches!(
+            policy,
+            HeuristicPolicy::Zero | HeuristicPolicy::DistanceHaversine
+        )
+    }
+    fn evaluate(
+        &self,
+        edge: &DirectedEdge,
+        segment: &RoadSegment,
+        _state: TraversalState,
+        _context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError> {
+        Ok(TraversalEvaluation::Traversable {
+            objective_cost: RouteCost::from_distance(segment.distance()),
+            travel_time: edge.free_flow_travel_time(),
+        })
     }
 }
 
-/// Selects edge base travel time in seconds as route cost.
+/// Static free-flow travel-time objective.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct TravelTimeCost;
 
-impl CostModel for TravelTimeCost {
+impl TraversalEvaluator for TravelTimeCost {
     fn kind(&self) -> CostKind {
         CostKind::TravelTime
     }
-
-    fn edge_cost(&self, edge: &Edge, _context: &RoutingContext) -> Result<RouteCost, CostError> {
-        Ok(RouteCost::from_travel_time(edge.base_travel_time()))
+    fn capability(&self) -> SearchCapability {
+        SearchCapability::StaticNonNegative
     }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::geo::{Meters, Seconds};
-    use crate::graph::{EdgeId, NodeId};
-
-    use super::*;
-
-    fn edge() -> Edge {
-        let distance = Meters::new(1_250.0);
-        let travel_time = Seconds::new(180.0);
-        let (Ok(distance), Ok(travel_time)) = (distance, travel_time) else {
-            panic!("expected valid edge measurements");
-        };
-        Edge::new(
-            EdgeId::new(1),
-            NodeId::new(10),
-            NodeId::new(11),
-            distance,
-            travel_time,
+    fn supports_heuristic(&self, policy: HeuristicPolicy) -> bool {
+        matches!(
+            policy,
+            HeuristicPolicy::Zero | HeuristicPolicy::TravelTimeHaversine
         )
     }
-
-    #[test]
-    fn distance_model_selects_only_edge_distance() {
-        let model = DistanceCost;
-        let edge = edge();
-
-        assert_eq!(model.kind(), CostKind::Distance);
-        assert_eq!(
-            model.edge_cost(&edge, &RoutingContext::new()),
-            Ok(RouteCost::from_distance(edge.distance()))
-        );
-    }
-
-    #[test]
-    fn travel_time_model_selects_only_base_travel_time() {
-        let model = TravelTimeCost;
-        let edge = edge();
-
-        assert_eq!(model.kind(), CostKind::TravelTime);
-        assert_eq!(
-            model.edge_cost(&edge, &RoutingContext::new()),
-            Ok(RouteCost::from_travel_time(edge.base_travel_time()))
-        );
+    fn evaluate(
+        &self,
+        edge: &DirectedEdge,
+        _segment: &RoadSegment,
+        _state: TraversalState,
+        _context: &RoutingContext,
+    ) -> Result<TraversalEvaluation, CostError> {
+        let travel_time = edge.free_flow_travel_time();
+        Ok(TraversalEvaluation::Traversable {
+            objective_cost: RouteCost::from_travel_time(travel_time),
+            travel_time,
+        })
     }
 }

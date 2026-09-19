@@ -155,6 +155,10 @@ mod tests {
                 ..
             })
         ));
+        assert!(RouteCost::new(CostKind::TravelTime, f64::INFINITY).is_err());
+        let negative_zero = RouteCost::new(CostKind::Distance, -0.0);
+        assert_eq!(negative_zero.map(RouteCost::value), Ok(0.0));
+        assert!(negative_zero.is_ok_and(|value| value.value().is_sign_positive()));
     }
 
     #[test]

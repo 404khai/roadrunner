@@ -1,13 +1,19 @@
 //! Directed road-network graph types and adjacency-list storage.
 
+mod artifact;
 mod edge;
 mod error;
 mod ids;
 mod network;
 mod node;
+mod segment;
 
-pub use edge::Edge;
+pub use artifact::{
+    GraphArtifactError, decode_graph_artifact, encode_graph_artifact, write_graph_artifact_atomic,
+};
+pub use edge::{AccessClass, DirectedEdge, EdgeProperties, Orientation};
 pub use error::GraphError;
-pub use ids::{EdgeId, NodeId};
-pub use network::Graph;
+pub use ids::{BuilderNodeId, BuilderSegmentId, EdgeId, GraphSnapshotId, NodeId, RoadSegmentId};
+pub use network::{FrozenGraph, GraphBuildIdentity, GraphBuilder, GraphMetadata};
 pub use node::Node;
+pub use segment::{GeometryRange, RoadSegment};

@@ -1,15 +1,46 @@
 # Routing Benchmarks
 
+> Historical note: the measurements below describe the Phase 6 mutable graph and
+> graph-scanning A* implementation. They are preserved for comparison and are not
+> evidence of Phase 7 or OSM-scale performance. The revised-core baseline is
+> governed by [ADR 0010](adr/0010-benchmarking-and-phase-7-readiness.md).
+
 Roadrunner records benchmark methodology and machine-readable results so algorithm comparisons
 can be reproduced rather than inferred from isolated timing claims.
 
-## A* versus Dijkstra
+## Revised pre-Phase-7 baseline
 
-Run the Phase 6 comparison with:
+The frozen-core baseline uses one deterministic `FrozenGraph` per size and a five-query corpus
+covering local, medium, long, unreachable, and source-equals-destination requests. Dijkstra and A*
+receive the same snapshot, corpus, distance objective, and routing context. The corpus seed is
+`0x5EED`. Each reported routing sample is one complete five-query corpus iteration.
+
+The lifecycle benchmark measures mutable builder construction, deterministic finalization,
+serialization, and decode plus mandatory validation separately. Criterion uses 20 samples, a
+one-second warmup, and a two-second target measurement window. Exact hardware, software,
+per-iteration median/p95/p99, artifact sizes, and expanded-state totals are stored in
+[`../benchmarks/results/2026-09-19-apple-m3-revised-core.json`](../benchmarks/results/2026-09-19-apple-m3-revised-core.json).
+
+This deliberately simple forward-banded graph is useful for regression and asymptotic signals,
+not realism. On this topology A* and Dijkstra expand the same number of states, so A*'s additional
+Haversine work makes it slower. That is a property of this fixture, not a general algorithm
+conclusion. Loaded heap memory, allocation counts, and peak build memory remain unmeasured until a
+controlled measurement method is added; the JSON artifact size is measured and is currently large.
+
+Reproduce the baseline with:
 
 ```bash
-cargo bench -p roadrunner-core --bench astar --locked
+cargo bench -p roadrunner-core --bench graph_lifecycle -- --noplot --warm-up-time 1 --measurement-time 2 --sample-size 20
+cargo bench -p roadrunner-core --bench dijkstra -- --noplot --warm-up-time 1 --measurement-time 2 --sample-size 20
+cargo bench -p roadrunner-core --bench astar -- --noplot --warm-up-time 1 --measurement-time 2 --sample-size 20
+cargo bench -p roadrunner-core --bench graph_traversal -- --noplot --warm-up-time 1 --measurement-time 2 --sample-size 20
 ```
+
+## Historical Phase 6: A* versus Dijkstra
+
+The implementation that produced this section has been superseded. The results remain immutable
+historical evidence; the current `astar` benchmark exercises the revised frozen core described
+above.
 
 The deterministic `geographic_backbone_with_northern_dead_ends` dataset places 10% of its nodes
 on the only route from source to destination. The remaining 90% are reachable dead ends whose

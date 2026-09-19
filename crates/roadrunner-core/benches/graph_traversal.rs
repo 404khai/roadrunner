@@ -1,92 +1,44 @@
-//! Generated-graph traversal benchmark for the Phase 2 adjacency list.
+//! Frozen adjacency traversal benchmark.
 
-use std::collections::{HashSet, VecDeque};
+mod support;
+
+use std::collections::VecDeque;
 use std::hint::black_box;
 
-use criterion::{BenchmarkId, Criterion, Throughput};
-use roadrunner_core::geo::{Coordinate, Meters, Seconds};
-use roadrunner_core::graph::{Edge, EdgeId, Graph, Node, NodeId};
+use criterion::{BenchmarkId, Criterion};
+use roadrunner_core::graph::{FrozenGraph, NodeId};
 
-const FAN_OUT: u32 = 3;
-const SAMPLE_SIZE: usize = 20;
-
-fn generated_graph(node_count: u32) -> Graph {
-    assert!(node_count > FAN_OUT);
-    let mut graph = Graph::new();
-
-    for value in 0..node_count {
-        let result = graph.add_node(Node::new(NodeId::new(value), Coordinate::ORIGIN));
-        assert!(
-            result.is_ok(),
-            "generated node insertion failed: {result:?}"
-        );
-    }
-
-    let mut edge_value = 0_u64;
-    for source in 0..node_count {
-        for offset in 1..=FAN_OUT {
-            let edge = Edge::new(
-                EdgeId::new(edge_value),
-                NodeId::new(source),
-                NodeId::new((source + offset) % node_count),
-                Meters::ZERO,
-                Seconds::ZERO,
-            );
-            let result = graph.add_edge(edge);
-            assert!(
-                result.is_ok(),
-                "generated edge insertion failed: {result:?}"
-            );
-            edge_value += 1;
-        }
-    }
-
-    graph
-}
-
-fn breadth_first_node_count(graph: &Graph, start: NodeId) -> usize {
-    let mut visited = HashSet::with_capacity(graph.node_count());
-    let mut queue = VecDeque::new();
-    visited.insert(start);
-    queue.push_back(start);
-
-    while let Some(node_id) = queue.pop_front() {
-        let edges = match graph.neighbors(node_id) {
-            Ok(edges) => edges,
-            Err(error) => panic!("generated graph traversal failed: {error}"),
+fn breadth_first_count(graph: &FrozenGraph) -> usize {
+    let mut seen = vec![false; graph.node_count()];
+    let mut queue = VecDeque::from([NodeId::new(0)]);
+    seen[0] = true;
+    while let Some(node) = queue.pop_front() {
+        let Ok(edges) = graph.outgoing_edges(node) else {
+            return 0;
         };
         for edge in edges {
-            if visited.insert(edge.to()) {
+            let target = edge.to().value() as usize;
+            if !seen[target] {
+                seen[target] = true;
                 queue.push_back(edge.to());
             }
         }
     }
-
-    visited.len()
-}
-
-fn graph_traversal(criterion: &mut Criterion) {
-    let mut group = criterion.benchmark_group("graph_traversal");
-    group.sample_size(SAMPLE_SIZE);
-
-    for node_count in [1_000_u32, 10_000, 100_000] {
-        let graph = generated_graph(node_count);
-        group.throughput(Throughput::Elements(u64::from(node_count)));
-        group.bench_with_input(
-            BenchmarkId::new("breadth_first", node_count),
-            &graph,
-            |bencher, graph| {
-                bencher
-                    .iter(|| black_box(breadth_first_node_count(black_box(graph), NodeId::new(0))));
-            },
-        );
-    }
-
-    group.finish();
+    seen.into_iter().filter(|value| *value).count()
 }
 
 fn main() {
     let mut criterion = Criterion::default().configure_from_args();
-    graph_traversal(&mut criterion);
+    let mut group = criterion.benchmark_group("frozen_graph_traversal");
+    group.sample_size(20);
+    for node_count in [1_000_u32, 10_000, 100_000] {
+        let graph = support::generated_graph(node_count, 3);
+        group.bench_with_input(
+            BenchmarkId::new("breadth_first", node_count),
+            &graph,
+            |bencher, graph| bencher.iter(|| black_box(breadth_first_count(black_box(graph)))),
+        );
+    }
+    group.finish();
     criterion.final_summary();
 }
