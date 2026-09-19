@@ -49,3 +49,20 @@ result snapshot.
 
 The initial result is
 [`2026-09-04-apple-m3-astar-comparison.json`](results/2026-09-04-apple-m3-astar-comparison.json).
+
+## Phase 7 OSM pipeline
+
+Run the real-fixture ingestion benchmark with:
+
+```bash
+cargo bench -p roadrunner-osm --bench osm_pipeline --locked
+```
+
+It measures two-pass PBF extraction, normalized-artifact decoding/validation,
+and `delivery_motorcycle_v1`/`ng_v1` graph compilation separately. The input is
+the versioned Lagos Marina fixture documented under `data/fixtures/phase-7/`.
+The fixture is deliberately tiny and provides real-road pipeline evidence, not
+an OSM-scale performance claim.
+
+The initial result is
+[`2026-09-19-apple-m3-phase-7-osm.json`](results/2026-09-19-apple-m3-phase-7-osm.json).

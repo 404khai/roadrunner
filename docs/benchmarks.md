@@ -89,3 +89,17 @@ The exact configuration and unrounded percentiles are in
 These synthetic results isolate search behavior; they do not establish performance on real road
 networks. Memory remains unreported until a controlled allocator or profiler configuration is
 available.
+
+## Phase 7 real-road pipeline baseline
+
+The Phase 7 harness uses the committed, provenance-pinned Lagos Marina PBF and
+measures source extraction, normalized-artifact validation, and motorcycle graph
+compilation independently. Its structured result is
+[`2026-09-19-apple-m3-phase-7-osm.json`](../benchmarks/results/2026-09-19-apple-m3-phase-7-osm.json).
+
+On the recorded Apple M3 environment, the 18,932-byte fixture normalized 218
+required source nodes and 37 candidate ways, then compiled 57 routing nodes, 58
+segments, and 112 directed edges. Median timings were approximately 1.054 ms for
+two-pass extraction, 0.494 ms for decode/validation, and 0.498 ms for graph
+compilation. These values are regression evidence for this exact small fixture;
+they make no claim about city, country, or planet-scale ingestion.
