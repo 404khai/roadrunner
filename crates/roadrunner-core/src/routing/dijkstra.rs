@@ -3,9 +3,10 @@ use std::collections::{BinaryHeap, HashMap};
 
 use crate::cost::{CostModel, RouteCost, RoutingContext};
 use crate::geo::Meters;
-use crate::graph::{Edge, EdgeId, Graph, NodeId};
+use crate::graph::{Graph, NodeId};
 
-use super::{RouteEndpoint, RouteResult, RoutingError};
+use super::search::{evaluate_edge_cost, reconstruct_route, sorted_outgoing, validate_endpoints};
+use super::{RouteResult, RoutingAlgorithm, RoutingError};
 
 #[derive(Debug, Clone, Copy)]
 struct QueueEntry {
@@ -59,6 +60,7 @@ pub fn dijkstra(
     let zero_cost = RouteCost::zero(cost_kind);
     if source == destination {
         return Ok(RouteResult::new(
+            RoutingAlgorithm::Dijkstra,
             vec![source],
             Vec::new(),
             Meters::ZERO,
@@ -89,6 +91,7 @@ pub fn dijkstra(
         if entry.node_id == destination {
             return reconstruct_route(
                 graph,
+                RoutingAlgorithm::Dijkstra,
                 source,
                 destination,
                 &predecessors,
@@ -97,31 +100,8 @@ pub fn dijkstra(
             );
         }
 
-        let mut outgoing: Vec<&Edge> = graph
-            .neighbors(entry.node_id)
-            .map_err(|source| RoutingError::Graph { source })?
-            .iter()
-            .collect();
-        outgoing.sort_unstable_by(|left, right| {
-            left.to()
-                .cmp(&right.to())
-                .then_with(|| left.id().cmp(&right.id()))
-        });
-
-        for edge in outgoing {
-            let edge_cost = cost_model.edge_cost(edge, context).map_err(|source| {
-                RoutingError::CostEvaluation {
-                    edge_id: edge.id(),
-                    source,
-                }
-            })?;
-            if edge_cost.kind() != cost_kind {
-                return Err(RoutingError::CostKindMismatch {
-                    edge_id: edge.id(),
-                    expected: cost_kind,
-                    actual: edge_cost.kind(),
-                });
-            }
+        for edge in sorted_outgoing(graph, entry.node_id)? {
+            let edge_cost = evaluate_edge_cost(cost_model, edge, *context, cost_kind)?;
             let candidate_cost = current_cost.checked_add(edge_cost).map_err(|source| {
                 RoutingError::CostAccumulation {
                     edge_id: edge.id(),
@@ -150,83 +130,12 @@ pub fn dijkstra(
     })
 }
 
-fn validate_endpoints(
-    graph: &Graph,
-    source: NodeId,
-    destination: NodeId,
-) -> Result<(), RoutingError> {
-    if !graph.contains_node(source) {
-        return Err(RoutingError::NodeNotFound {
-            endpoint: RouteEndpoint::Source,
-            node_id: source,
-        });
-    }
-    if !graph.contains_node(destination) {
-        return Err(RoutingError::NodeNotFound {
-            endpoint: RouteEndpoint::Destination,
-            node_id: destination,
-        });
-    }
-    Ok(())
-}
-
-fn reconstruct_route(
-    graph: &Graph,
-    source: NodeId,
-    destination: NodeId,
-    predecessors: &HashMap<NodeId, EdgeId>,
-    total_cost: RouteCost,
-    visited_nodes: usize,
-) -> Result<RouteResult, RoutingError> {
-    let mut path = vec![destination];
-    let mut edges = Vec::new();
-    let mut total_distance = Meters::ZERO;
-    let mut cursor = destination;
-
-    while cursor != source {
-        if path.len() > graph.node_count() {
-            return Err(RoutingError::PredecessorCycle);
-        }
-        let edge_id = predecessors
-            .get(&cursor)
-            .copied()
-            .ok_or(RoutingError::MissingPredecessor { node_id: cursor })?;
-        let edge = graph
-            .edge(edge_id)
-            .ok_or(RoutingError::MissingRouteEdge { edge_id })?;
-        if edge.to() != cursor {
-            return Err(RoutingError::InvalidPredecessorEdge {
-                edge_id,
-                expected_to: cursor,
-                actual_to: edge.to(),
-            });
-        }
-
-        total_distance = total_distance
-            .checked_add(edge.distance())
-            .map_err(|source| RoutingError::DistanceAccumulation { edge_id, source })?;
-        edges.push(edge_id);
-        cursor = edge.from();
-        path.push(cursor);
-    }
-
-    path.reverse();
-    edges.reverse();
-    Ok(RouteResult::new(
-        path,
-        edges,
-        total_distance,
-        total_cost,
-        visited_nodes,
-    ))
-}
-
 #[cfg(test)]
 mod tests {
     use crate::cost::{CostError, CostKind, DistanceCost, TravelTimeCost};
     use crate::geo::{Coordinate, Seconds};
-    use crate::graph::Node;
-    use crate::routing::RoutingAlgorithm;
+    use crate::graph::{Edge, EdgeId, Node};
+    use crate::routing::{RouteEndpoint, RoutingAlgorithm};
 
     use super::*;
 

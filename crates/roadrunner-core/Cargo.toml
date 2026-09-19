@@ -25,3 +25,7 @@ harness = false
 [[bench]]
 name = "dijkstra"
 harness = false
+
+[[bench]]
+name = "astar"
+harness = false

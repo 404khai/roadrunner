@@ -74,6 +74,42 @@ pub enum RoutingError {
         actual: CostKind,
     },
 
+    /// An edge references a node that is missing during heuristic preparation.
+    #[error("edge {edge_id} references missing node {node_id}")]
+    MissingEdgeNode {
+        /// The edge with the invalid endpoint.
+        edge_id: EdgeId,
+        /// The missing endpoint node.
+        node_id: NodeId,
+    },
+
+    /// A node needed for heuristic evaluation is missing from the graph.
+    #[error("heuristic node {node_id} is missing")]
+    MissingHeuristicNode {
+        /// The missing node identity.
+        node_id: NodeId,
+    },
+
+    /// Constructing a node's heuristic cost failed.
+    #[error("heuristic evaluation failed for node {node_id}: {source}")]
+    HeuristicEvaluation {
+        /// The node being estimated.
+        node_id: NodeId,
+        /// The underlying cost validation error.
+        #[source]
+        source: CostError,
+    },
+
+    /// Combining path and heuristic costs failed.
+    #[error("estimated-total cost failed for node {node_id}: {source}")]
+    EstimatedTotal {
+        /// The node whose estimated total could not be represented.
+        node_id: NodeId,
+        /// The underlying cost validation error.
+        #[source]
+        source: CostError,
+    },
+
     /// Accumulating route cost failed.
     #[error("cost accumulation failed at edge {edge_id}: {source}")]
     CostAccumulation {

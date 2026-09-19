@@ -115,6 +115,14 @@ impl Graph {
             .find(|edge| edge.id() == id)
     }
 
+    /// Iterates over every directed edge in unspecified order.
+    ///
+    /// Algorithms that expose deterministic results must apply their own stable
+    /// ordering rather than depend on this iterator's hash-map traversal order.
+    pub fn edges(&self) -> impl Iterator<Item = &Edge> {
+        self.outgoing.values().flat_map(|edges| edges.iter())
+    }
+
     /// Returns the outgoing edges for a node in insertion order.
     ///
     /// # Errors

@@ -26,3 +26,26 @@ versions, and Criterion configuration.
 
 Memory is not reported until Roadrunner adopts a controlled allocator or profiler configuration.
 An unavailable measurement is recorded explicitly rather than estimated.
+
+## A* comparison
+
+Run the Phase 6 comparison with:
+
+```bash
+cargo bench -p roadrunner-core --bench astar --locked
+```
+
+The benchmark builds deterministic geographic graphs with a directed eastbound backbone and
+dead-end northern branches. Both algorithms return the same optimal backbone route. Dijkstra
+finalizes the lower-cost dead ends before reaching the destination, while the scaled Haversine
+heuristic lets A* exclude them from its search.
+
+Cases cover 1K, 10K, and 100K nodes. Benchmark identifiers include graph size and observed
+finalized-node count. Criterion measures the complete routing call, including A* heuristic
+preparation; graph construction and correctness comparisons happen outside the timed closure.
+
+See [`../docs/benchmarks.md`](../docs/benchmarks.md) for findings and the linked structured
+result snapshot.
+
+The initial result is
+[`2026-09-04-apple-m3-astar-comparison.json`](results/2026-09-04-apple-m3-astar-comparison.json).
