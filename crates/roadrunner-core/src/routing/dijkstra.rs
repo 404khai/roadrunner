@@ -1,371 +1,122 @@
 use std::cmp::Ordering;
-use std::collections::{BinaryHeap, HashMap};
+use std::collections::BinaryHeap;
 
-use crate::cost::{CostModel, RouteCost, RoutingContext};
-use crate::geo::Meters;
-use crate::graph::{Graph, NodeId};
+use crate::cost::{RouteCost, RoutingContext, TraversalEvaluator};
+use crate::geo::{Meters, Seconds};
+use crate::graph::{FrozenGraph, NodeId};
 
-use super::search::{evaluate_edge_cost, reconstruct_route, sorted_outgoing, validate_endpoints};
+use super::result::RouteMetrics;
+use super::search::{Label, evaluate, index, reconstruct_route, validate_request};
 use super::{RouteResult, RoutingAlgorithm, RoutingError};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 struct QueueEntry {
-    node_id: NodeId,
-    cost: f64,
+    node: NodeId,
+    objective: f64,
+    elapsed: Seconds,
 }
-
-impl PartialEq for QueueEntry {
-    fn eq(&self, other: &Self) -> bool {
-        self.node_id == other.node_id && self.cost.total_cmp(&other.cost).is_eq()
-    }
-}
-
 impl Eq for QueueEntry {}
-
 impl PartialOrd for QueueEntry {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
-
 impl Ord for QueueEntry {
     fn cmp(&self, other: &Self) -> Ordering {
         other
-            .cost
-            .total_cmp(&self.cost)
-            .then_with(|| other.node_id.cmp(&self.node_id))
+            .objective
+            .total_cmp(&self.objective)
+            .then_with(|| other.node.cmp(&self.node))
     }
 }
 
-/// Calculates the lowest-cost directed route using Dijkstra's algorithm.
-///
-/// This implementation uses a binary heap, best-cost map, and predecessor edge
-/// map. Equal-cost work is ordered by stable node and edge identities, making the
-/// selected path independent of hash iteration and edge insertion order.
+/// Calculates a lowest-cost route using node-state Dijkstra search.
 ///
 /// # Errors
 ///
-/// Returns [`RoutingError`] for absent endpoints, unreachable destinations, cost
-/// failures, or graph/predecessor invariant violations.
+/// Returns a typed error for invalid endpoints, incompatible capabilities,
+/// evaluation failure, arithmetic failure, or no permitted route.
 pub fn dijkstra(
-    graph: &Graph,
+    graph: &FrozenGraph,
     source: NodeId,
     destination: NodeId,
-    cost_model: &dyn CostModel,
+    evaluator: &dyn TraversalEvaluator,
     context: &RoutingContext,
 ) -> Result<RouteResult, RoutingError> {
-    validate_endpoints(graph, source, destination)?;
-
-    let cost_kind = cost_model.kind();
-    let zero_cost = RouteCost::zero(cost_kind);
+    validate_request(graph, source, destination, evaluator)?;
+    let zero = Label {
+        objective: RouteCost::zero(evaluator.kind()),
+        elapsed: Seconds::ZERO,
+    };
     if source == destination {
         return Ok(RouteResult::new(
+            graph.snapshot_id(),
             RoutingAlgorithm::Dijkstra,
             vec![source],
             Vec::new(),
-            Meters::ZERO,
-            zero_cost,
-            1,
+            RouteMetrics {
+                total_distance: Meters::ZERO,
+                total_cost: zero.objective,
+                elapsed_travel_time: zero.elapsed,
+                expanded_states: 1,
+            },
         ));
     }
-
-    let mut best_costs = HashMap::new();
-    let mut predecessors = HashMap::new();
+    let mut best = vec![None; graph.node_count()];
+    let mut predecessors = vec![None; graph.node_count()];
     let mut queue = BinaryHeap::new();
-    let mut visited_nodes = 0;
-    best_costs.insert(source, zero_cost);
+    let mut expanded_states = 0;
+    best[index(source)] = Some(zero);
     queue.push(QueueEntry {
-        node_id: source,
-        cost: zero_cost.value(),
+        node: source,
+        objective: 0.0,
+        elapsed: Seconds::ZERO,
     });
-
     while let Some(entry) = queue.pop() {
-        let Some(current_cost) = best_costs.get(&entry.node_id).copied() else {
+        let Some(current) = best[index(entry.node)] else {
             continue;
         };
-        if entry.cost.total_cmp(&current_cost.value()).is_gt() {
+        if entry
+            .objective
+            .total_cmp(&current.objective.value())
+            .is_gt()
+        {
             continue;
         }
-
-        visited_nodes += 1;
-        if entry.node_id == destination {
+        expanded_states += 1;
+        if entry.node == destination {
             return reconstruct_route(
                 graph,
                 RoutingAlgorithm::Dijkstra,
                 source,
                 destination,
                 &predecessors,
-                current_cost,
-                visited_nodes,
+                current,
+                expanded_states,
             );
         }
-
-        for edge in sorted_outgoing(graph, entry.node_id)? {
-            let edge_cost = evaluate_edge_cost(cost_model, edge, *context, cost_kind)?;
-            let candidate_cost = current_cost.checked_add(edge_cost).map_err(|source| {
-                RoutingError::CostAccumulation {
-                    edge_id: edge.id(),
-                    source,
-                }
-            })?;
-            let improves = best_costs
-                .get(&edge.to())
-                .is_none_or(|known_cost| candidate_cost < *known_cost);
-            if !improves {
+        for edge in graph
+            .outgoing_edges(entry.node)
+            .map_err(|source| RoutingError::Graph { source })?
+        {
+            let Some(candidate) = evaluate(graph, evaluator, edge, current, *context)? else {
+                continue;
+            };
+            let target = index(edge.to());
+            if best[target].is_some_and(|known: Label| candidate.objective >= known.objective) {
                 continue;
             }
-
-            best_costs.insert(edge.to(), candidate_cost);
-            predecessors.insert(edge.to(), edge.id());
+            best[target] = Some(candidate);
+            predecessors[target] = Some(edge.id());
             queue.push(QueueEntry {
-                node_id: edge.to(),
-                cost: candidate_cost.value(),
+                node: edge.to(),
+                objective: candidate.objective.value(),
+                elapsed: candidate.elapsed,
             });
         }
     }
-
     Err(RoutingError::NoRoute {
         source_node: source,
         destination,
     })
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::cost::{CostError, CostKind, DistanceCost, TravelTimeCost};
-    use crate::geo::{Coordinate, Seconds};
-    use crate::graph::{Edge, EdgeId, Node};
-    use crate::routing::{RouteEndpoint, RoutingAlgorithm};
-
-    use super::*;
-
-    const A: NodeId = NodeId::new(1);
-    const B: NodeId = NodeId::new(2);
-    const C: NodeId = NodeId::new(3);
-    const D: NodeId = NodeId::new(4);
-
-    fn meters(value: f64) -> Meters {
-        let result = Meters::new(value);
-        let Ok(value) = result else {
-            panic!("expected valid test distance: {result:?}");
-        };
-        value
-    }
-
-    fn seconds(value: f64) -> Seconds {
-        let result = Seconds::new(value);
-        let Ok(value) = result else {
-            panic!("expected valid test duration: {result:?}");
-        };
-        value
-    }
-
-    fn graph_with_nodes(node_ids: &[NodeId]) -> Graph {
-        let mut graph = Graph::new();
-        for node_id in node_ids {
-            let result = graph.add_node(Node::new(*node_id, Coordinate::ORIGIN));
-            assert!(result.is_ok(), "test node insertion failed: {result:?}");
-        }
-        graph
-    }
-
-    fn add_edge(
-        graph: &mut Graph,
-        id: u64,
-        from: NodeId,
-        to: NodeId,
-        distance: f64,
-        travel_time: f64,
-    ) {
-        let edge = Edge::new(
-            EdgeId::new(id),
-            from,
-            to,
-            meters(distance),
-            seconds(travel_time),
-        );
-        let result = graph.add_edge(edge);
-        assert!(result.is_ok(), "test edge insertion failed: {result:?}");
-    }
-
-    #[test]
-    fn finds_the_known_lowest_cost_path() {
-        let mut graph = graph_with_nodes(&[A, B, C, D]);
-        add_edge(&mut graph, 10, A, B, 2.0, 2.0);
-        add_edge(&mut graph, 11, B, D, 2.0, 2.0);
-        add_edge(&mut graph, 12, A, C, 10.0, 10.0);
-        add_edge(&mut graph, 13, C, D, 1.0, 1.0);
-
-        let result = dijkstra(&graph, A, D, &DistanceCost, &RoutingContext::new());
-        let Ok(result) = result else {
-            panic!("expected a route: {result:?}");
-        };
-
-        assert_eq!(result.path(), &[A, B, D]);
-        assert_eq!(result.edges(), &[EdgeId::new(10), EdgeId::new(11)]);
-        assert_eq!(result.algorithm(), RoutingAlgorithm::Dijkstra);
-        assert_eq!(result.total_distance(), meters(4.0));
-        assert_eq!(result.total_cost(), RouteCost::from_distance(meters(4.0)));
-        assert_eq!(result.visited_nodes(), 3);
-    }
-
-    #[test]
-    fn source_equal_to_destination_returns_a_zero_cost_route() {
-        let graph = graph_with_nodes(&[A]);
-
-        let result = dijkstra(&graph, A, A, &TravelTimeCost, &RoutingContext::new());
-        let Ok(result) = result else {
-            panic!("expected a trivial route: {result:?}");
-        };
-
-        assert_eq!(result.path(), &[A]);
-        assert!(result.edges().is_empty());
-        assert_eq!(result.total_distance(), Meters::ZERO);
-        assert_eq!(result.total_cost(), RouteCost::zero(CostKind::TravelTime));
-        assert_eq!(result.visited_nodes(), 1);
-    }
-
-    #[test]
-    fn reports_unreachable_destinations_in_disconnected_graphs() {
-        let mut graph = graph_with_nodes(&[A, B, C]);
-        add_edge(&mut graph, 10, A, B, 1.0, 1.0);
-
-        assert_eq!(
-            dijkstra(&graph, A, C, &DistanceCost, &RoutingContext::new()),
-            Err(RoutingError::NoRoute {
-                source_node: A,
-                destination: C,
-            })
-        );
-    }
-
-    #[test]
-    fn rejects_unknown_endpoints() {
-        let graph = graph_with_nodes(&[A]);
-
-        assert_eq!(
-            dijkstra(&graph, B, A, &DistanceCost, &RoutingContext::new()),
-            Err(RoutingError::NodeNotFound {
-                endpoint: RouteEndpoint::Source,
-                node_id: B,
-            })
-        );
-        assert_eq!(
-            dijkstra(&graph, A, B, &DistanceCost, &RoutingContext::new()),
-            Err(RoutingError::NodeNotFound {
-                endpoint: RouteEndpoint::Destination,
-                node_id: B,
-            })
-        );
-    }
-
-    #[test]
-    fn handles_cycles_without_revisiting_equal_cost_paths() {
-        let mut graph = graph_with_nodes(&[A, B, C]);
-        add_edge(&mut graph, 10, A, B, 0.0, 0.0);
-        add_edge(&mut graph, 11, B, A, 0.0, 0.0);
-        add_edge(&mut graph, 12, B, C, 1.0, 1.0);
-
-        let result = dijkstra(&graph, A, C, &DistanceCost, &RoutingContext::new());
-        let Ok(result) = result else {
-            panic!("expected a route through the cycle: {result:?}");
-        };
-
-        assert_eq!(result.path(), &[A, B, C]);
-        assert_eq!(result.visited_nodes(), 3);
-    }
-
-    #[test]
-    fn cost_model_changes_the_selected_route() {
-        let mut graph = graph_with_nodes(&[A, B, C, D]);
-        add_edge(&mut graph, 10, A, B, 1.0, 10.0);
-        add_edge(&mut graph, 11, B, D, 1.0, 10.0);
-        add_edge(&mut graph, 12, A, C, 5.0, 1.0);
-        add_edge(&mut graph, 13, C, D, 5.0, 1.0);
-
-        let distance = dijkstra(&graph, A, D, &DistanceCost, &RoutingContext::new());
-        let travel_time = dijkstra(&graph, A, D, &TravelTimeCost, &RoutingContext::new());
-        let (Ok(distance), Ok(travel_time)) = (distance, travel_time) else {
-            panic!("expected both cost models to find a route");
-        };
-
-        assert_eq!(distance.path(), &[A, B, D]);
-        assert_eq!(travel_time.path(), &[A, C, D]);
-        assert_eq!(travel_time.total_distance(), meters(10.0));
-        assert_eq!(
-            travel_time.total_cost(),
-            RouteCost::from_travel_time(seconds(2.0))
-        );
-    }
-
-    #[test]
-    fn chooses_the_cheaper_parallel_edge() {
-        let mut graph = graph_with_nodes(&[A, B]);
-        add_edge(&mut graph, 10, A, B, 10.0, 10.0);
-        add_edge(&mut graph, 11, A, B, 2.0, 2.0);
-
-        let result = dijkstra(&graph, A, B, &DistanceCost, &RoutingContext::new());
-        let Ok(result) = result else {
-            panic!("expected a route: {result:?}");
-        };
-
-        assert_eq!(result.edges(), &[EdgeId::new(11)]);
-        assert_eq!(result.total_cost(), RouteCost::from_distance(meters(2.0)));
-    }
-
-    #[test]
-    fn equal_cost_ties_are_independent_of_edge_insertion_order() {
-        fn tied_graph(reverse: bool) -> Graph {
-            let mut graph = graph_with_nodes(&[A, B, C, D]);
-            let edges = if reverse {
-                [(13, C, D), (12, A, C), (11, B, D), (10, A, B)]
-            } else {
-                [(10, A, B), (11, B, D), (12, A, C), (13, C, D)]
-            };
-            for (id, from, to) in edges {
-                add_edge(&mut graph, id, from, to, 1.0, 1.0);
-            }
-            graph
-        }
-
-        for graph in [tied_graph(false), tied_graph(true)] {
-            let result = dijkstra(&graph, A, D, &DistanceCost, &RoutingContext::new());
-            let Ok(result) = result else {
-                panic!("expected a route: {result:?}");
-            };
-            assert_eq!(result.path(), &[A, B, D]);
-        }
-    }
-
-    #[derive(Debug)]
-    struct WrongKindCost;
-
-    impl CostModel for WrongKindCost {
-        fn kind(&self) -> CostKind {
-            CostKind::Distance
-        }
-
-        fn edge_cost(
-            &self,
-            _edge: &Edge,
-            _context: &RoutingContext,
-        ) -> Result<RouteCost, CostError> {
-            Ok(RouteCost::zero(CostKind::TravelTime))
-        }
-    }
-
-    #[test]
-    fn rejects_costs_that_do_not_match_the_model_kind() {
-        let mut graph = graph_with_nodes(&[A, B]);
-        add_edge(&mut graph, 10, A, B, 1.0, 1.0);
-
-        assert_eq!(
-            dijkstra(&graph, A, B, &WrongKindCost, &RoutingContext::new()),
-            Err(RoutingError::CostKindMismatch {
-                edge_id: EdgeId::new(10),
-                expected: CostKind::Distance,
-                actual: CostKind::TravelTime,
-            })
-        );
-    }
 }

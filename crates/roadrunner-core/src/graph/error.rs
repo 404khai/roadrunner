@@ -1,69 +1,85 @@
 use thiserror::Error;
 
-use super::{EdgeId, NodeId};
+use crate::geo::UnitError;
 
-/// Errors produced while constructing or querying a graph.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Error)]
+use super::{BuilderNodeId, BuilderSegmentId, EdgeId, NodeId, RoadSegmentId};
+
+/// Errors produced while building or querying a frozen graph.
+#[derive(Debug, Clone, PartialEq, Error)]
 pub enum GraphError {
-    /// A node already uses the supplied identity.
-    #[error("node {id} already exists")]
-    DuplicateNode {
-        /// The duplicated node identity.
-        id: NodeId,
+    /// A construction node key is duplicated.
+    #[error("builder node {id} already exists")]
+    DuplicateBuilderNode {
+        /// Duplicated construction key.
+        id: BuilderNodeId,
     },
-
-    /// An edge already uses the supplied identity.
-    #[error("edge {id} already exists")]
-    DuplicateEdge {
-        /// The duplicated edge identity.
-        id: EdgeId,
+    /// A construction segment key is duplicated.
+    #[error("builder segment {id} already exists")]
+    DuplicateBuilderSegment {
+        /// Duplicated construction key.
+        id: BuilderSegmentId,
     },
-
-    /// A requested node does not exist.
+    /// A segment references an absent construction node.
+    #[error("segment {segment_id} references missing builder node {node_id}")]
+    MissingBuilderNode {
+        /// Segment containing the invalid reference.
+        segment_id: BuilderSegmentId,
+        /// Missing construction node.
+        node_id: BuilderNodeId,
+    },
+    /// A segment has fewer than two geometry points.
+    #[error("segment {segment_id} geometry requires at least two points")]
+    GeometryTooShort {
+        /// Segment with insufficient geometry.
+        segment_id: BuilderSegmentId,
+    },
+    /// Segment geometry does not begin and end at its routing nodes.
+    #[error("segment {segment_id} geometry endpoints do not match its nodes")]
+    GeometryEndpointMismatch {
+        /// Segment with mismatched endpoints.
+        segment_id: BuilderSegmentId,
+    },
+    /// No directed traversal was supplied for a segment.
+    #[error("segment {segment_id} has no directed traversal")]
+    SegmentWithoutEdges {
+        /// Segment with no traversal.
+        segment_id: BuilderSegmentId,
+    },
+    /// Effective traversal speed must be positive.
+    #[error("segment {segment_id} has a zero effective speed")]
+    ZeroEffectiveSpeed {
+        /// Segment containing the invalid speed.
+        segment_id: BuilderSegmentId,
+    },
+    /// A graph collection cannot be represented by dense identifiers.
+    #[error("{collection} contains too many elements for dense identifiers")]
+    DenseIdOverflow {
+        /// Collection that exceeded its dense ID width.
+        collection: &'static str,
+    },
+    /// A derived distance or duration is invalid.
+    #[error("derived measurement is invalid: {source}")]
+    DerivedMeasurement {
+        /// Invalid derived unit value.
+        #[source]
+        source: UnitError,
+    },
+    /// A requested node is absent.
     #[error("node {id} does not exist")]
     NodeNotFound {
-        /// The missing node identity.
+        /// Missing node identity.
         id: NodeId,
     },
-
-    /// A requested edge does not exist.
+    /// A requested edge is absent.
     #[error("edge {id} does not exist")]
     EdgeNotFound {
-        /// The missing edge identity.
+        /// Missing edge identity.
         id: EdgeId,
     },
-
-    /// A new edge references a source node that is absent.
-    #[error("edge {edge_id} references missing source node {node_id}")]
-    MissingSourceNode {
-        /// The edge being inserted.
-        edge_id: EdgeId,
-        /// The missing source node.
-        node_id: NodeId,
-    },
-
-    /// A new edge references a destination node that is absent.
-    #[error("edge {edge_id} references missing destination node {node_id}")]
-    MissingDestinationNode {
-        /// The edge being inserted.
-        edge_id: EdgeId,
-        /// The missing destination node.
-        node_id: NodeId,
-    },
-
-    /// Internal node and adjacency storage disagree.
-    #[error("node {node_id} has no adjacency list")]
-    MissingAdjacency {
-        /// The node whose adjacency list is absent.
-        node_id: NodeId,
-    },
-
-    /// Internal edge identity and adjacency storage disagree.
-    #[error("edge {edge_id} is not stored under source node {source_node}")]
-    MissingStoredEdge {
-        /// The edge missing from its expected adjacency list.
-        edge_id: EdgeId,
-        /// The expected source node.
-        source_node: NodeId,
+    /// A requested segment is absent.
+    #[error("road segment {id} does not exist")]
+    SegmentNotFound {
+        /// Missing segment identity.
+        id: RoadSegmentId,
     },
 }

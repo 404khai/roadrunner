@@ -1,7 +1,7 @@
 # Roadrunner v0 Specification
 
-Status: Accepted for initial implementation
-Last updated: 2026-09-01
+Status: Accepted; amended by pre-Phase-7 review
+Last updated: 2026-09-19
 
 ## 1. Purpose
 
@@ -70,26 +70,28 @@ rider tracking are outside these use cases.
 
 ### 5.1 Graph construction
 
-Roadrunner must represent a directed graph as an adjacency list. It must support:
+Roadrunner constructs a directed graph through `GraphBuilder` and publishes a
+validated immutable `FrozenGraph`. It must support:
 
-- adding nodes with stable `NodeId` values and coordinates;
+- adding nodes during construction and assigning deterministic dense `NodeId` values at finalization;
 - adding directed edges between existing nodes;
 - representing a two-way road as two directed edges;
 - rejecting edges whose endpoints are absent;
 - an explicit, documented policy for duplicate edges;
-- removing an edge;
+- builder-time mutation without live mutation of a published snapshot;
 - retrieving outgoing neighbors;
 - node and edge counts; and
 - disconnected graphs and isolated nodes.
 
-For v0, parallel edges between the same nodes are allowed only when they have
-different `EdgeId` values. Adding an existing `EdgeId` is an error. This retains
-real-world modeling flexibility while keeping identity unambiguous.
+Parallel directed edges are allowed. `NodeId`, `RoadSegmentId`, and `EdgeId` are
+snapshot-local; durable references also carry `GraphSnapshotId`.
 
 ### 5.2 Geographic and unit types
 
-Coordinates use WGS 84 latitude and longitude in decimal degrees. Latitude must
-be in `[-90, 90]` and longitude in `[-180, 180]`.
+Coordinates use WGS 84 latitude and longitude. Public/calculation boundaries use
+validated decimal degrees; canonical source and graph geometry uses a
+schema-declared fixed-point representation, initially E7 for supported standard
+OSM extracts.
 
 The core must provide domain types for at least:
 
@@ -103,8 +105,9 @@ models must not use unlabelled `f64` values for distances or durations.
 
 ### 5.3 Cost models
 
-Graph topology and route cost must remain separate. A cost model evaluates an
-edge in a routing context. v0 includes:
+Graph topology and traversal policy remain separate. A traversal evaluator
+returns either `Forbidden` or a traversable result containing objective cost and
+elapsed travel time. Evaluation failures remain errors. v0 includes:
 
 - `DistanceCost`, measured in meters; and
 - `TravelTimeCost`, measured in seconds.
@@ -112,8 +115,9 @@ edge in a routing context. v0 includes:
 Every traversable edge cost must be finite and non-negative. Dijkstra and A* must
 reject an invalid cost instead of silently producing a route.
 
-The initial routing context is intentionally small and deterministic. Its public
-shape may reserve a departure time, but v0 cost models do not vary with time.
+Search/evaluator capabilities explicitly distinguish `StaticNonNegative` from
+`FifoEarliestArrival`. Unsupported expanded-state or multi-label problems are
+rejected. Static evaluators remain deterministic and simple.
 
 ### 5.4 Shortest-path routing
 
@@ -127,7 +131,7 @@ routing context. Both return a `RouteResult` containing:
 - ordered node and edge identifiers;
 - total distance;
 - total selected cost;
-- number of visited nodes; and
+- number of expanded search states; and
 - algorithm identifier.
 
 Required behavior:
@@ -138,10 +142,11 @@ Required behavior:
 - cycles do not cause non-termination; and
 - every returned edge connects its adjacent nodes in order.
 
-A* uses a heuristic compatible with the chosen cost model. Haversine distance is
-admissible for distance cost. A travel-time heuristic must divide straight-line
-distance by a documented maximum traversable speed; otherwise A* must use a zero
-heuristic. A heuristic must never be selected merely because it is faster.
+A* receives an explicit heuristic compatible with the traversal objective and
+search capability. Haversine is admissible for distance when graph construction
+proves the segment-distance invariant. A travel-time heuristic divides Haversine
+distance by a documented maximum possible profile speed. Unknown combinations
+use `ZeroHeuristic`; A* never derives a heuristic by scanning edge costs.
 
 When multiple equal-cost paths exist, results must be deterministic. The router
 breaks ties by stable node or edge identifier ordering, and tests document the
@@ -263,32 +268,28 @@ values use the domain types defined in section 5.2.
 ### 6.2 Node and edge
 
 ```rust
-struct Node {
-    id: NodeId,
-    coordinate: Coordinate,
+struct RoadSegment {
+    id: RoadSegmentId,
+    endpoints: (NodeId, NodeId),
+    geometry: GeometryRange,
+    distance: Meters,
 }
 
-struct Edge {
+struct DirectedEdge {
     id: EdgeId,
-    from: NodeId,
-    to: NodeId,
-    distance: Meters,
-    base_travel_time: Seconds,
-    road_class: RoadClass,
-    speed_limit: Option<KilometersPerHour>,
-    traffic_multiplier: TrafficMultiplier,
-    reliability: ReliabilityScore,
+    segment: RoadSegmentId,
+    orientation: Orientation,
+    effective_free_flow_speed: KilometersPerHour,
+    free_flow_travel_time: Seconds,
+    access: AccessClass,
 }
 ```
 
-An `Edge` is one directed traversal. The graph does not store a redundant
-`one_way` flag: a one-way road has one edge and a two-way road has reciprocal
-edges. Import adapters may retain the source road's one-way attribute before
-normalizing it into edges.
-
-Distances and base travel times are finite and non-negative. A zero-distance edge
-is permitted for modeled connectors, but fixtures must document why it exists.
-The v0 traffic multiplier defaults to `1.0`; traffic-aware routing is out of scope.
+A `RoadSegment` is a physical corridor with canonical geometry stored once. A
+`DirectedEdge` is a potentially permitted traversal. Directionality compiles into
+edge existence; contextual access remains evaluator input. Segment distance is
+derived by summing Haversine distance across canonical geometry. Free-flow travel
+time is a deterministic profile estimate, not a legal limit or live ETA.
 
 ### 6.3 Order
 
@@ -347,7 +348,7 @@ struct Route {
     edges: Vec<EdgeId>,
     total_distance: Meters,
     total_cost: RouteCost,
-    visited_nodes: usize,
+    expanded_states: usize,
 }
 ```
 
@@ -365,17 +366,19 @@ values returned by the engine in v0; durable audit storage is deferred.
 
 ### 7.1 Correctness
 
-- Core algorithms have deterministic example-based unit tests.
-- Property tests cover non-negative route distance, zero-cost self routes, route
-  connectivity, and A*/Dijkstra cost equivalence under admissible heuristics.
+- Core algorithms have deterministic example and generated tests.
+- An independent oracle and route validator cover optimality, connectivity,
+  reconstructed totals, zero-cost behavior, forbidden edges, numeric failures,
+  and A*/Dijkstra equivalence under compatible heuristics.
 - Every fixed routing or dispatch bug receives a regression test.
 - Unsafe Rust requires a documented need, tests, and benchmark evidence; v0 is
   expected to need none.
 
 ### 7.2 Explainability
 
-Routing results identify the algorithm, cost model, total cost, distance, and
-visited nodes. Dispatch results preserve candidate scores and rejection reasons.
+Routing results identify the algorithm, traversal policy, total cost, distance,
+elapsed time, and expanded states. Durable results include graph snapshot identity.
+Dispatch results preserve candidate scores and rejection reasons.
 Simulation results identify their scenario and seed.
 
 ### 7.3 Observability
@@ -411,10 +414,11 @@ the Rust workspace, linting, CI, and the `core` and `cli` crate foundations.
 The following choices belong to later phases and do not block the workspace
 foundation:
 
-- compact indexed graph storage beyond the initial correct adjacency list;
+- exact physical encoding of the accepted dense frozen graph;
 - the alternative-route candidate algorithm and calibrated diversity threshold;
-- the road fixture serialization format;
-- real OSM parsing and supported tag subset;
+- compact/binary graph artifact encoding, mmap, and zero-copy loading (the
+  initial canonical JSON encoding and validating load boundary are implemented);
+- PBF implementation details and the supported tag matrix;
 - persistence schemas;
-- time-dependent cost semantics; and
+- non-FIFO and multi-label time-dependent routing; and
 - frontend route geometry contracts.

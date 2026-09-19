@@ -1,7 +1,7 @@
 # Roadrunner Glossary
 
 Status: Normative for v0
-Last updated: 2026-09-01
+Last updated: 2026-09-19
 
 This glossary defines how Roadrunner uses domain terms. Code, API documentation,
 tests, and other design documents should use these meanings consistently.
@@ -34,10 +34,9 @@ location value; a node is a graph vertex that has a coordinate.
 
 ## Cost function
 
-The rule that assigns a non-negative scalar cost to traversing an edge in a
-routing context. v0 cost functions minimize either distance in meters or travel
-time in seconds. Topology answers where movement is possible; a cost function
-answers how expensive that movement is.
+The rule that assigns the non-negative objective contribution minimized by a
+routing algorithm. It is one part of traversal evaluation and is distinct from
+elapsed travel time unless the objective explicitly minimizes arrival time.
 
 ## Delivery
 
@@ -52,10 +51,26 @@ is an input to dispatch; dispatch is not a shortest-path algorithm.
 
 ## Edge
 
-A directed, traversable connection from one graph node to another. An edge has a
-stable identity and attributes such as distance and base travel time. A two-way
-road is represented by two directed edges. A one-way road is represented only in
-the permitted direction.
+A snapshot-local directed, potentially permitted traversal of a road segment. A
+two-way road normally has two directed edges sharing one segment. Static
+directionality is represented by edge existence; contextual or dynamic access may
+still make an existing edge forbidden for a request.
+
+## Expanded state
+
+A search-state expansion event in Dijkstra or A*. A state may be expanded more
+than once under algorithms that permit reopening. This replaces the ambiguous
+term `visited_nodes`.
+
+## Frozen graph
+
+An immutable, validated, densely indexed graph snapshot produced by deterministic
+builder finalization or validated artifact loading.
+
+## Graph snapshot ID
+
+The identity domain for snapshot-local node, segment, and edge IDs. It accompanies
+every durable or detached graph-element reference.
 
 ## ETA
 
@@ -78,10 +93,17 @@ than risking an incorrect optimal route.
 
 ## Node
 
-A vertex in the road-network graph with a stable `NodeId` and coordinate. Nodes
+A vertex in one road-network snapshot with a snapshot-local `NodeId` and
+coordinate. Nodes
 can be origins, destinations, pickup points, drop-off points, or intermediate
 intersections. A node is not an arbitrary address or necessarily a physical road
 intersection.
+
+## Normalized OSM dataset
+
+A deterministic, versioned, profile-independent routing-source artifact produced
+from staged PBF extraction. It is neither a complete OSM mirror nor a compiled
+vehicle routing graph.
 
 ## Order
 
@@ -107,11 +129,17 @@ A domain classification for an edge, derived from fixture or source road data.
 It may influence later speed and access policies. It does not by itself determine
 v0 route cost.
 
+## Road segment
+
+A snapshot-local physical corridor between routing nodes. It references canonical
+geometry once and owns compiler-derived physical distance. One or more directed
+edges may traverse it.
+
 ## Route
 
 An immutable computed path between an origin node and destination node under a
-specific algorithm, cost model, and routing context. It includes ordered nodes and
-edges, total distance, selected cost, and calculation metadata. Recalculation
+specific algorithm, traversal policy, and routing context. It includes ordered
+nodes and edges, total distance, selected cost, elapsed time, and calculation metadata. Recalculation
 produces a new route.
 
 ## Route alternative
@@ -131,6 +159,12 @@ as if they shared a unit.
 Immutable information available while evaluating a route, separate from graph
 topology and edge attributes. v0 context is deterministic; later contexts may
 include departure time or traffic state.
+
+## Traversal evaluation
+
+The result of evaluating an outgoing directed edge for a search label and request:
+either `Forbidden` or a traversable objective-cost and elapsed-time contribution.
+Evaluation failures are errors, not forbidden edges.
 
 ## Simulation
 
@@ -152,15 +186,15 @@ optimize assignments using complex SLA penalties.
 
 ## Traffic multiplier
 
-A dimensionless factor applied to base travel time. `1.0` means unchanged travel
+A dimensionless factor applied to free-flow travel time. `1.0` means unchanged travel
 time; a value greater than `1.0` means slower traversal. v0 stores a validated
 default multiplier of `1.0` but does not implement traffic-aware routing.
 
 ## Travel time
 
-The duration required to traverse an edge, route, or trip. Base travel time is an
-edge attribute; selected route cost equals travel time only when using the
-travel-time cost model.
+The duration required to traverse an edge, route, or trip. Free-flow travel time
+is a deterministic uncongested profile estimate; selected route cost equals
+travel time only when using the travel-time objective.
 
 ## Trip
 
@@ -173,8 +207,8 @@ continue after a route is recalculated.
 A rider's mode of transport, such as bicycle, motorcycle, car, or foot. It is
 modeled in v0 for future access and speed rules but does not alter v0 routing.
 
-## Visited node
+## Zero heuristic
 
-A node removed from the routing priority queue with its best-known cost finalized
-under the algorithm's rules. `visited_nodes` is a diagnostic search-effort count,
-not the number of nodes in the returned route.
+An A* heuristic that always returns zero. It is the mandatory fallback when no
+stronger compatible lower bound has been proved and gives Dijkstra-equivalent
+guidance.

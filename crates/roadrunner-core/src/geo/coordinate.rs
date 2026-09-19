@@ -42,6 +42,13 @@ impl Coordinate {
         })
     }
 
+    pub(crate) const fn from_validated(latitude: f64, longitude: f64) -> Self {
+        Self {
+            latitude,
+            longitude,
+        }
+    }
+
     /// Returns latitude in decimal degrees.
     #[must_use]
     pub const fn latitude(self) -> f64 {

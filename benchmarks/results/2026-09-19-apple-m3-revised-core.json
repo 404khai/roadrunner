@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "benchmark_version": "pre-phase-7-revised-core-v1",
+  "date": "2026-09-19",
+  "git_commit_before_worktree_changes": "1e375d065db9b116394e33e73d630fe1868aae87",
+  "worktree_note": "Results include the uncommitted pre-Phase-7 refactor described by ADRs 0001-0010.",
+  "hardware": {
+    "machine": "Apple MacBook Pro",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184,
+    "architecture": "arm64"
+  },
+  "software": {
+    "os": "Darwin 27.0.0",
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "criterion": "0.7.0",
+    "build_profile": "bench (optimized)"
+  },
+  "methodology": {
+    "warmup_seconds": 1,
+    "target_measurement_seconds": 2,
+    "samples": 20,
+    "sampling": "Criterion linear sampling",
+    "percentiles": "Computed from per-iteration sample times: median is the mean of sorted samples 10 and 11; p95 and p99 use nearest-rank samples 19 and 20.",
+    "query_corpus": {
+      "seed": 24301,
+      "queries_per_iteration": 5,
+      "categories": [
+        "local reachable",
+        "medium reachable",
+        "long reachable",
+        "unreachable",
+        "source equals destination"
+      ]
+    }
+  },
+  "synthetic_graph": {
+    "version": "forward_banded_v1",
+    "description": "Deterministic forward directed graph with fan-out three and equatorial E7 geometry.",
+    "warning": "This topology is not representative of an OSM road network and supports no real-world scalability claim."
+  },
+  "units": {
+    "latency": "nanoseconds per complete operation or five-query corpus iteration",
+    "artifact_size": "bytes"
+  },
+  "routing": [
+    {"algorithm":"dijkstra","nodes":1000,"expanded_states":1513,"median_ns":99226.78916855203,"p95_ns":101684.11458333333,"p99_ns":101888.09201388889},
+    {"algorithm":"astar_distance_haversine","nodes":1000,"expanded_states":1513,"median_ns":222833.93720930233,"p95_ns":267978.52067183465,"p99_ns":268397.5924112607},
+    {"algorithm":"dijkstra","nodes":10000,"expanded_states":15013,"median_ns":1046344.7967611336,"p95_ns":1083714.8714285714,"p99_ns":1084234.7166666666},
+    {"algorithm":"astar_distance_haversine","nodes":10000,"expanded_states":15013,"median_ns":2470039.6205357146,"p95_ns":2523201.923076923,"p99_ns":2524708.375},
+    {"algorithm":"dijkstra","nodes":100000,"expanded_states":150013,"median_ns":11289444,"p95_ns":11648937.5,"p99_ns":12175042},
+    {"algorithm":"astar_distance_haversine","nodes":100000,"expanded_states":150013,"median_ns":24921370.799999997,"p95_ns":27742141.6,"p99_ns":29696541.6}
+  ],
+  "graph_lifecycle": [
+    {"operation":"construct_builder","nodes":1000,"median_ns":555374.9941176471,"p95_ns":568847.5529411765,"p99_ns":589926.4705882353},
+    {"operation":"finalize","nodes":1000,"median_ns":379490.8697222222,"p95_ns":382877.49666666664,"p99_ns":385462.66538461536},
+    {"operation":"serialize","nodes":1000,"artifact_size_bytes":1244772,"median_ns":7316083.7625,"p95_ns":7368029.5,"p99_ns":7374379.611111111},
+    {"operation":"load_validate","nodes":1000,"artifact_size_bytes":1244772,"median_ns":8138448.795138889,"p95_ns":8184846.590909091,"p99_ns":8231923.625},
+    {"operation":"construct_builder","nodes":10000,"median_ns":8536660.5,"p95_ns":8623253.416666666,"p99_ns":8688135.425},
+    {"operation":"finalize","nodes":10000,"median_ns":5308334,"p95_ns":5579238.388888889,"p99_ns":5598947.875},
+    {"operation":"serialize","nodes":10000,"artifact_size_bytes":12725045,"median_ns":79489593.75,"p95_ns":151860917,"p99_ns":177927979},
+    {"operation":"load_validate","nodes":10000,"artifact_size_bytes":12725045,"median_ns":84913187.5,"p95_ns":91844791.5,"p99_ns":109485812.5}
+  ],
+  "adjacency_traversal": [
+    {"nodes":1000,"median_ns":6465.992849214481,"p95_ns":6477.174408014572,"p99_ns":6479.97862423658},
+    {"nodes":10000,"median_ns":62190.400280112044,"p95_ns":62418.89106753813,"p99_ns":62985.1568627451},
+    {"nodes":100000,"median_ns":651465.020952381,"p95_ns":654614.5833333334,"p99_ns":658238.8666666667}
+  ],
+  "not_measured": [
+    "loaded graph heap memory",
+    "routing allocation count",
+    "peak builder memory"
+  ]
+}

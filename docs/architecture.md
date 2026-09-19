@@ -1,7 +1,7 @@
 # Roadrunner Architecture
 
-Status: Phase 0 baseline
-Last updated: 2026-09-01
+Status: Accepted through pre-Phase-7 review
+Last updated: 2026-09-19
 
 ## 1. Architectural intent
 
@@ -49,7 +49,7 @@ graph fixture ---> Roadrunner ---> route/assignment/simulation result
              HTTP or CLI request        JSON or human output
 ```
 
-In v0, graph fixtures and generated benchmark graphs are trusted local inputs.
+Before Phase 7, graph fixtures and generated benchmark graphs are trusted local inputs.
 Roadrunner has no dependency on a live mapping provider, traffic feed, database,
 message broker, or external routing API.
 
@@ -64,8 +64,8 @@ Owns the stable routing foundation:
 
 ```text
 geo       Coordinate, units, bounding boxes, Haversine distance
-graph     Node, Edge, Graph, graph validation and adjacency access
-cost      CostModel, RoutingContext, distance and travel-time costs
+graph     GraphBuilder, FrozenGraph, nodes, segments, directed edges, geometry
+cost      traversal evaluation, routing context, objectives, travel time
 routing   Dijkstra, A*, route reconstruction, alternatives, RouteResult
 ```
 
@@ -115,8 +115,9 @@ all application crates. Business rules must not live in command handlers.
 | Concept | Canonical owner | Mutable in v0 | Notes |
 | --- | --- | --- | --- |
 | Coordinates and units | `core::geo` | No | Validated value types |
-| Nodes, edges, graph | `core::graph` | During construction | Read-only while routing |
-| Cost models and context | `core::cost` | No | Deterministic strategy values |
+| Graph builder | `core::graph` | Yes | Cannot be used for routing |
+| Frozen graph snapshot | `core::graph` | No | Validated and densely indexed |
+| Traversal evaluators and context | `core::cost` | No | Feasibility, objective, and elapsed time |
 | Routes and routing errors | `core::routing` | No | Route results are immutable |
 | Orders and riders | `dispatch` | Yes | State transitions are validated |
 | Assignment decisions | `dispatch` | No | Includes all candidate explanations |
@@ -132,39 +133,54 @@ create aliases with the same meaning.
 
 The examples below describe boundaries, not frozen Rust syntax.
 
-### 5.1 Graph access
+### 5.1 Graph lifecycle and access
 
-Routing consumes a read-only graph view:
+Routing consumes only `FrozenGraph`. `GraphBuilder` accepts mutable construction
+input and produces a validated, deterministic snapshot. Nodes, road segments,
+directed edges, adjacency, and geometry use contiguous indexable storage.
+
+`NodeId`, `RoadSegmentId`, and `EdgeId` are meaningful only inside one graph
+snapshot. Durable or detached references pair them with `GraphSnapshotId`.
+
+```text
+GraphBuilder -> validate/finalize -> FrozenGraph(snapshot_id)
+```
+
+### 5.2 Traversal evaluation
+
+The routing boundary evaluates a transition rather than returning only a scalar:
 
 ```rust
-trait GraphView {
-    fn node(&self, id: NodeId) -> Option<&Node>;
-    fn edge(&self, id: EdgeId) -> Option<&Edge>;
-    fn outgoing_edges(&self, id: NodeId) -> &[EdgeId];
+enum TraversalEvaluation {
+    Traversable {
+        objective_cost: RouteCost,
+        travel_time: Seconds,
+    },
+    Forbidden,
 }
 ```
 
-Construction and mutation remain methods on the concrete `Graph`. This prevents
-an in-progress route search from observing graph mutation. Concurrent mutation or
-snapshotting is outside v0.
+Evaluation errors are distinct from `Forbidden`. Search labels carry objective
+cost and elapsed travel time. The supported capabilities are static non-negative
+additive routing and FIFO earliest-arrival routing. Evaluators that require
+expanded or multi-label state are rejected by node-state algorithms.
 
-### 5.2 Cost evaluation
+Heuristics are explicit policies independent from traversal evaluation. Unknown
+or unproved combinations use `ZeroHeuristic`. Custom evaluators accept only that
+fallback unless they explicitly declare a stronger named compatibility contract.
+Travel-time Haversine parameters are validated once and tied to a graph snapshot.
 
-```rust
-trait CostModel {
-    fn edge_cost(
-        &self,
-        edge: &Edge,
-        context: &RoutingContext,
-    ) -> Result<RouteCost, CostError>;
-}
-```
+### 5.3 Graph artifacts
 
-`RouteCost` carries a unit or cost-kind discriminator so distance and seconds
-cannot be accidentally compared. Costs are validated as finite and non-negative
-at the boundary.
+`FrozenGraph` is not directly deserializable. Canonical artifact bytes decode to
+an untrusted payload; schema, integrity, build identity, offsets, dense
+references, ordering, geometry, capabilities, and numeric domains are validated
+before a trusted graph is returned. Build identity records source identity and
+integrity, compiler and normalization versions, profile, jurisdiction policy,
+and canonical build configuration. Publication writes and synchronizes a
+temporary file before atomically renaming it into place.
 
-### 5.3 Routing
+### 5.4 Routing
 
 ```rust
 trait Router {
@@ -175,12 +191,13 @@ trait Router {
 }
 ```
 
-`RouteRequest` contains node identifiers, selected cost model, routing context,
-and algorithm. It does not contain an HTTP DTO or file format. Alternative-route
+`RouteRequest` contains snapshot-scoped node identifiers, selected traversal
+policy, routing context, algorithm, and compatible heuristic. It does not contain
+an HTTP DTO or file format. Alternative-route
 generation composes one or more shortest-path searches behind a separate
 interface and returns the same canonical `Route` type.
 
-### 5.4 Dispatch routing dependency
+### 5.5 Dispatch routing dependency
 
 Dispatch needs travel-time routes for candidate legs but must not choose an API or
 global graph:
@@ -270,18 +287,22 @@ as implementation leaks.
 
 ## 8. Determinism and numerical policy
 
-- Stable identifiers break ties in graph search and assignment.
+- Deterministically assigned snapshot-local identifiers break exact-cost ties.
 - Simulation sequence numbers break equal-time event ties.
 - Randomized scenarios require an explicit seed recorded in their result.
 - Floating-point inputs must be finite and within their domain range.
 - Costs use a total ordering wrapper only after rejecting NaN and infinities.
-- Equality tests on geographic calculations use documented tolerances; route
-  optimality tests use exact fixture values where practical.
+- Canonical stored coordinates are fixed-point WGS 84 values with a schema-defined
+  scale; geographic calculations use validated `f64`.
+- Shortest-path relaxation uses exact finite cost ordering. Tolerances never alter
+  heap or relaxation ordering.
+- Segment distance is derived from canonical geometry. Validation comparisons may
+  use one documented tolerance policy.
 - Iteration order from hash-based collections must not determine public results.
 
 ## 9. Configuration and state
 
-v0 loads one graph at process startup. The graph is shared read-only across route
+v0 loads one validated frozen graph snapshot at process startup. The graph is shared read-only across route
 requests. Configuration includes graph fixture, listening address, log filter,
 and safety limits such as maximum alternatives. Defaults live in adapters and are
 documented; domain libraries do not read environment variables.
@@ -295,7 +316,7 @@ order, rider, and delivery data. The route endpoint itself is stateless.
 | --- | --- |
 | Unit | Value validation, graph operations, costs, reconstruction, scoring |
 | Algorithm | Known graphs with known Dijkstra, A*, and alternative results |
-| Property | Route connectivity, non-negative totals, A*/Dijkstra equivalence |
+| Property | Oracle agreement, route connectivity/totals, A*/Dijkstra equivalence |
 | Integration | Fixture to graph to route; order to assignment to route; simulation completion |
 | Regression | A minimal permanent case for every significant fixed defect |
 | Benchmark | Reproducible measurements after correctness checks pass |
@@ -320,8 +341,9 @@ code is not used to assert correctness.
 
 The architecture deliberately leaves these extension points:
 
-- graph import adapters normalize OSM data into `core::graph`;
-- traffic-aware and time-dependent models implement or evolve the cost boundary;
+- a staged OSM extractor produces a versioned `NormalizedOsmDataset`, which a
+  profile compiler feeds into `GraphBuilder`;
+- traffic-aware and FIFO time-dependent models implement the traversal boundary;
 - alternative algorithms preserve the canonical route contract;
 - spatial indexes feed candidate riders to dispatch without changing scoring;
 - persistence adapters store domain records without owning business rules;
@@ -331,9 +353,12 @@ The architecture deliberately leaves these extension points:
 
 These are seams, not v0 implementation commitments.
 
-## 13. Phase boundary decision
+## 13. Pre-Phase-7 boundary decision
 
-The model and module boundaries are sufficiently defined to begin Phase 1.
-Phase 1 creates the workspace, strict lint configuration, CI, and minimal `core`
-and `cli` crates. Graph structures and routing algorithms remain in their assigned
-later phases; empty directories are not created to mimic the eventual layout.
+Phase 7 does not begin until the frozen graph, traversal/search capability model,
+explicit heuristic policy, oracle-backed correctness gate, corrected
+`expanded_states` diagnostics, and revised synthetic benchmark baseline pass.
+Turn restrictions are preserved during Phase 7 but not enforced; Phase 7.5 adds
+maneuver-aware routing before serious reference-engine route validation.
+
+The accepted decisions are normative in [adr/](adr/).
