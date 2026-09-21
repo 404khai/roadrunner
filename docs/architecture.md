@@ -362,3 +362,17 @@ Turn restrictions are preserved during Phase 7 but not enforced; Phase 7.5 adds
 maneuver-aware routing before serious reference-engine route validation.
 
 The accepted decisions are normative in [adr/](adr/).
+
+## 14. Phase 7 OSM source pipeline
+
+The implemented Phase 7 adapter is documented in
+[OpenStreetMap ingestion](osm-ingestion.md), with acceptance evidence in the
+[Phase 7 completion report](phase-7-completion.md). `roadrunner-osm` owns staged PBF
+extraction, the independently validated normalized dataset artifact, the
+versioned delivery-motorcycle and Nigeria policy tables, contraction, and build
+diagnostics. `roadrunner-core` remains unaware of OSM types and tags.
+
+Turn-restriction source members and via split points cross this boundary, while
+the resulting graph metadata and manifest explicitly report that restrictions
+are not enforced. No Phase 7.5 maneuver state or Phase 8 reference-engine
+comparison is part of this pipeline.

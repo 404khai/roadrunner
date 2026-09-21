@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "benchmark_version": "phase-7-osm-pipeline-v1",
+  "date": "2026-09-19",
+  "git_commit_before_worktree_changes": "88e6ce7a25c7940eac6667f112d84b08d375b623",
+  "worktree_note": "Results include the uncommitted Phase 7 implementation represented by this result artifact.",
+  "hardware": {
+    "machine": "Apple MacBook Pro",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184,
+    "architecture": "arm64"
+  },
+  "software": {
+    "os": "macOS 27.0 (Darwin 27.0.0)",
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "criterion": "0.7.0",
+    "osmpbf": "0.3.7",
+    "build_profile": "bench (optimized)"
+  },
+  "methodology": {
+    "command": "cargo bench -p roadrunner-osm --bench osm_pipeline -- --warm-up-time 1 --measurement-time 3 --sample-size 30",
+    "warmup_seconds": 1,
+    "target_measurement_seconds": 3,
+    "samples": 30,
+    "sampling": "Criterion linear sampling",
+    "percentiles": "Computed from per-iteration sample times: median is the mean of sorted samples 15 and 16; p95 and p99 use nearest-rank samples 29 and 30. Outliers are retained.",
+    "warning": "This deliberately tiny correctness fixture is first real-road pipeline evidence, not an OSM-scale or production-scalability claim."
+  },
+  "dataset": {
+    "source_id": "openstreetmap-api:map:3.3780,6.5230,3.3810,6.5260:2026-09-19",
+    "pbf_sha256": "f1f0f4e7abfcc9396c6b67bbd08b720a0481bf69a636d6c07c50980ea15b8687",
+    "pbf_size_bytes": 18932,
+    "normalized_artifact_size_bytes": 31797,
+    "graph_artifact_size_bytes": 46981,
+    "normalized_nodes": 218,
+    "normalized_ways": 37,
+    "compiled_nodes": 57,
+    "compiled_segments": 58,
+    "compiled_directed_edges": 112
+  },
+  "units": {
+    "latency": "nanoseconds per complete operation"
+  },
+  "results": [
+    {
+      "operation": "extract_two_pass_and_hash_source",
+      "median_ns": 1053631.6694444444,
+      "p95_ns": 1188022.2333333334,
+      "p99_ns": 1357635.4166666667
+    },
+    {
+      "operation": "decode_integrity_and_validate_normalized_artifact",
+      "median_ns": 494329.0264423077,
+      "p95_ns": 1297354.4861538461,
+      "p99_ns": 5387394.096153846
+    },
+    {
+      "operation": "compile_delivery_motorcycle_v1_ng_v1",
+      "median_ns": 497514.7053140097,
+      "p95_ns": 530766.9395604396,
+      "p99_ns": 534130.9450549451
+    }
+  ],
+  "not_measured": [
+    "peak extraction memory",
+    "peak compilation memory",
+    "allocation count"
+  ]
+}
