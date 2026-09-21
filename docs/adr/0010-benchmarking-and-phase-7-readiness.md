@@ -28,6 +28,15 @@ automatically after the gate; its readiness report is reviewed first.
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+Phase 7 evidence uses a small correctness fixture and a materially larger pinned
+engineering fixture. It records source retention, contraction, policy decisions,
+components, restrictions, bundle sizes, lifecycle timing, process peak memory,
+deep verification, and a deterministic route workload. These measurements are
+a baseline, not permission for speculative layout optimization or a claim of
+production/OSM-scale behavior.
+
 - Measurements detect regressions without inventing service objectives.
 - Optimization waits for representative topology.
 - Lack of a practical allocator profiler does not alone block Phase 7 when the

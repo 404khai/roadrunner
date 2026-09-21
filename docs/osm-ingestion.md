@@ -1,106 +1,81 @@
 # OpenStreetMap ingestion
 
-Phase 7 implements the accepted source boundary from ADR 0008:
+Phase 7 implements this boundary:
 
 ```text
 .osm.pbf
-  -> two-pass extraction
-NormalizedOsmDataset artifact
-  -> delivery_motorcycle_v1 + ng_v1
-FrozenGraph artifact + build manifest
+  -> osm_normalization_v2
+NormalizedOsmDataset
+  -> delivery_motorcycle_v2 + ng_v2
+FrozenGraph + source provenance + manifest
 ```
 
-The implementation lives in `roadrunner-osm`, keeping source parsing and policy
-out of `roadrunner-core`. The CLI exposes the two boundaries separately:
+`roadrunner-osm` owns parsing and policy; `roadrunner-core` only sees the frozen
+routing graph. The CLI publishes and validates a snapshot bundle:
 
 ```bash
-cargo run -p roadrunner-cli -- osm extract \
-  input.osm.pbf output.rr-osm \
-  --source-id dataset-name-and-version
-
-cargo run -p roadrunner-cli -- osm compile \
-  output.rr-osm output.rr-graph manifest.json
+roadrunner osm extract input.osm.pbf output.rr-osm --source-id ID
+roadrunner osm compile output.rr-osm output-snapshot
+roadrunner graph verify output-snapshot --deep
 ```
 
-## Normalized dataset contract
+## Routing-source contract
 
-The extractor first reads candidate ways and restriction relations, then reads
-the PBF again to retain only referenced node coordinates. Its independent
-artifact envelope contains a schema version, canonical JSON payload, and SHA-256
-integrity value. It records a caller-declared source identity, exact PBF hash and
-size, normalization version, ordered node references, selected structured tags,
-unsupported routing-relevant values, relation members, and topology split
-points. Roadrunner routing IDs are not assigned at this stage.
+The normalized dataset is profile-independent within Roadrunner's versioned
+routing-source schema, not a complete OSM mirror. It preserves ordered source
+identities, exact E7 coordinates, supported routing node/way tags, relevant
+unsupported values, ferry connectors, and retained generic, vehicle-qualified,
+and conditional restriction variants. A vehicle profile never decides what
+survives extraction. Barrier, access, ford, restriction-via, intersection,
+endpoint, and other semantic boundaries become explicit split reasons.
 
-Canonical source coordinates must be exactly representable as WGS 84 E7. An
-input containing finer precision is rejected instead of rounded. Published OSM
-identifiers must be positive. Missing referenced coordinates, duplicate source
-objects, non-canonical artifacts, and integrity failures are rejected.
+The extractor uses two passes but retains candidate ways and requested node
+state in memory. Measurements are published; Roadrunner does not claim
+bounded-memory scaling.
 
-Candidate ways are those with `highway=*` and at least two node references. The
-structured v1 subset is:
+## Motorcycle and Nigeria policy
 
-- `highway`, `service`, and `junction`;
-- `oneway` and `oneway:motorcycle`;
-- `access`, `vehicle`, `motor_vehicle`, `motorcycle`, and directional motorcycle access;
-- `maxspeed`, motorcycle-specific speed, and directional speed variants.
+Access, directionality, physical suitability, and speed are separate decisions.
+Reason-specific access classes are preserved. General access is routable;
+destination, delivery, customer, private, permit, and unknown-explicit classes
+are denied unless a request proves the specific supported authorization. There
+is no generic contextual bypass. Endpoint-region semantics for destination,
+delivery, and customer access remain unsupported and therefore denied.
 
-Conditional access/speed values and selected physical attributes such as
-surface, track type, width, bridge, tunnel, ford, lanes, and toll are retained as
-unsupported values. They do not silently change v1 routing.
+Directionality has explicit bidirectional, forward-only, reverse-only,
+unsupported-dynamic, contradictory, and unknown-explicit outcomes. Missing
+directionality uses the documented default; unsupported explicit semantics never
+widen connectivity. `oneway:motorcycle` precedes `oneway`; `oneway=-1` uses
+original OSM order. Roundabout and circular junction forms have explicit policy.
 
-Restriction relations retain ordered members, roles, `restriction` or
-`restriction:motorcycle`, `except`, and unsupported values. Node-via members are
-split points. No restriction is enforced in Phase 7.
+Speed is derived through road-class default, parsed legal limit, profile maximum,
+and surface/tracktype/smoothness constraints. Common paved surfaces are normal,
+`unpaved`/`gravel` cap at 20 km/h, `ground`/`dirt` at 15 km/h, and mud, sand, or
+unknown explicit physical values are conservatively excluded. The resulting
+`free_flow_travel_time` remains deterministic uncongested time, never live ETA.
 
-## `delivery_motorcycle_v1` and `ng_v1`
+## Compilation and provenance
 
-Compilation contracts ways at endpoints, shared source nodes, and restriction
-via nodes. Dense graph IDs follow stable OSM way/node ordering. Static oneway
-rules become directed-edge existence. `oneway:motorcycle` overrides general
-`oneway`; roundabouts and motorways default to forward-only when no explicit
-tag overrides them.
+Semantic contraction preserves split points and shape coordinates. Physical
+length is the Haversine sum over canonical geometry. Ordinary zero-distance OSM
+candidates are quarantined. Geometry endpoints/orientation, endpoint lower
+bound, reciprocal traversal consistency, and derived travel times are checked.
 
-The initial profile supports motorway through residential/service/track road
-classes with conservative deterministic free-flow defaults. Normally unsupported
-classes become routable only with explicit motorcycle permission. Numeric km/h,
-`km/h`, `kph`, and `mph` speed values are parsed; symbolic or compound values
-remain observable but fall back to the class default. Effective speed is capped
-by a parsed legal limit.
+Canonical provenance maps retained OSM nodes to dense nodes and OSM ways to
+ordered physical segments plus forward/reverse edges and actual compiled
+access/speed attributes. It is bound to the exact full semantic snapshot digest.
 
-| `highway` value | Default km/h |
-| --- | ---: |
-| `motorway` | 80 |
-| `motorway_link`, `trunk` | 60 |
-| `trunk_link`, `primary` | 50 |
-| `primary_link`, `secondary` | 45 |
-| `secondary_link`, `tertiary` | 40 |
-| `tertiary_link`, `unclassified`, `road` | 35 |
-| `residential` | 30 |
-| `service`, `track` | 20 |
-| `living_street` | 15 |
+## Snapshot trust boundary
 
-Directional speed precedence is motorcycle-direction, motorcycle, general
-direction, then general `maxspeed`. Access precedence is motorcycle-direction,
-motorcycle, motor vehicle, vehicle, then general access.
+A snapshot directory contains `graph.rr-graph`, `graph.rr-provenance`, and
+`manifest.json`. Loading rejects noncanonical bytes, unknown fields, invalid
+domains, structural inconsistencies, stale metadata, invalid mappings, and
+cross-snapshot substitution. Publication validates and deep-verifies a temporary
+bundle before atomically renaming the directory.
 
-Static `no`, agricultural, and forestry access excludes a traversal. Private,
-destination, delivery, customer, permit, and unrecognized explicit access
-compile as `Contextual`, leaving request authorization to traversal evaluation.
-Absent access and explicit yes/permissive/designated/official values compile as
-general access.
+The authoritative 256-bit `GraphSnapshotDigest` binds source identity, semantic
+versions/configuration, canonical graph semantics, provenance, and capabilities.
+The 64-bit snapshot ID is a derived in-process convenience only.
 
-These tables are intentionally narrow and versioned. Changes require a new
-profile or jurisdiction policy identifier when graph semantics change.
-
-## Reproducibility and diagnostics
-
-The build manifest records source and normalized hashes, compiler and policy
-versions, build configuration, graph artifact hash, graph counts, weak-component
-sizes, and the explicit `turn_restrictions_enforced: false` boundary. All weak
-components are retained. The first real fixture and its complete provenance are
-documented under `data/fixtures/phase-7/`.
-
-Phase 7 does not include maneuver-aware state, turn-restriction enforcement,
-reference-engine route comparison, topology repair, conditional restrictions,
-or full OSM tag coverage. Those remain Phase 7.5 or later work.
+Phase 7 preserves restrictions and resolution provenance but does not enforce
+maneuvers. Phase 7 snapshots report `turn_restrictions_enforced: false`.

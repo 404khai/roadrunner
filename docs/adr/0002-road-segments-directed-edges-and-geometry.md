@@ -33,6 +33,14 @@ be explicit, deterministic, versioned, and reported.
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+OSM compilation quarantines ordinary zero-distance physical candidates and
+validates canonical endpoint orientation, positive geometry-derived distance,
+the endpoint-geodesic lower bound, and reciprocal traversal consistency.
+Routing identity remains source-topological: coordinate equality never merges
+distinct OSM nodes.
+
 - Search traverses routing choices rather than drawing points.
 - GeoJSON can reproduce full geometry without polluting the hot path.
 - Alternative-route comparison can distinguish physical, directional, and

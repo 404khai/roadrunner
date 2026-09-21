@@ -105,6 +105,14 @@ A deterministic, versioned, profile-independent routing-source artifact produced
 from staged PBF extraction. It is neither a complete OSM mirror nor a compiled
 vehicle routing graph.
 
+## Graph snapshot digest
+
+The authoritative collision-resistant identity of exact compiled routing
+semantics. It binds canonical graph and provenance content plus semantic source,
+schema, profile, policy, compiler, configuration, and capability metadata.
+Snapshot-local IDs are durable only when paired with this full digest; the
+derived 64-bit snapshot ID is an in-process convenience.
+
 ## Order
 
 A request to move goods from one pickup node to one drop-off node. It includes
