@@ -14,6 +14,27 @@ pub struct DatasetProvenance {
     pub source_size_bytes: u64,
 }
 
+/// Source primitive and retention counts collected during extraction.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SourceStatistics {
+    /// OSM nodes encountered in the PBF.
+    pub nodes_seen: u64,
+    /// OSM ways encountered in the PBF.
+    pub ways_seen: u64,
+    /// Ways matching the versioned routing-source schema.
+    pub candidate_ways: u64,
+    /// OSM relations encountered in the PBF.
+    pub relations_seen: u64,
+    /// Restriction relations encountered and preserved.
+    pub restriction_relations_seen: u64,
+    /// Unique node identities requested by retained topology.
+    pub referenced_nodes_requested: u64,
+    /// Requested nodes resolved from the PBF.
+    pub referenced_nodes_resolved: u64,
+    /// Requested node identities missing from the PBF.
+    pub referenced_nodes_missing: u64,
+}
+
 /// A required OSM node and its exact E7 coordinate.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NormalizedNode {
@@ -21,6 +42,10 @@ pub struct NormalizedNode {
     pub osm_id: i64,
     /// Canonical WGS 84 E7 coordinate.
     pub coordinate: CanonicalCoordinate,
+    /// Canonically ordered supported routing-source node tags.
+    pub tags: BTreeMap<String, String>,
+    /// Relevant explicit node values not interpreted by the source schema.
+    pub unsupported_tags: BTreeMap<String, String>,
 }
 
 /// A potentially routing-relevant OSM way.
@@ -71,15 +96,26 @@ pub enum RestrictionKind {
     Unsupported,
 }
 
+/// One independently preserved generic or qualified restriction value.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NormalizedRestriction {
+    /// Original canonical OSM tag key, such as `restriction:motorcycle`.
+    pub tag: String,
+    /// Original restriction value.
+    pub value: String,
+    /// Value-family classification independent of vehicle applicability.
+    pub kind: RestrictionKind,
+    /// Whether the tag describes conditional semantics.
+    pub conditional: bool,
+}
+
 /// A routing-relevant OSM restriction relation retained but not enforced.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NormalizedRelation {
     /// Original OSM relation identifier.
     pub osm_id: i64,
-    /// Parsed restriction family.
-    pub kind: RestrictionKind,
-    /// Original restriction tag value.
-    pub restriction: String,
+    /// Independently preserved generic and vehicle-qualified values.
+    pub restrictions: Vec<NormalizedRestriction>,
     /// Optional exception list as provided by OSM.
     pub except: Option<String>,
     /// Ordered source members.
@@ -98,6 +134,14 @@ pub enum SplitPoint {
     Junction,
     /// Node-via member of a retained restriction.
     RestrictionVia,
+    /// Node carrying a barrier source semantic.
+    Barrier,
+    /// Node carrying an access boundary semantic.
+    AccessBoundary,
+    /// Node explicitly marked as a ford.
+    Ford,
+    /// Node-level highway semantic retained by the routing-source schema.
+    HighwayNode,
 }
 
 /// Stable split-point record used during profile compilation.
@@ -116,6 +160,8 @@ pub struct NormalizedOsmDataset {
     pub normalization_version: String,
     /// Source provenance.
     pub provenance: DatasetProvenance,
+    /// Source primitive and retention statistics.
+    pub source_statistics: SourceStatistics,
     /// Required nodes sorted by OSM identifier.
     pub nodes: Vec<NormalizedNode>,
     /// Candidate ways sorted by OSM identifier.

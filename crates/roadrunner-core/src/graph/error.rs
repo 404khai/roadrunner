@@ -51,6 +51,18 @@ pub enum GraphError {
         /// Segment containing the invalid speed.
         segment_id: BuilderSegmentId,
     },
+    /// An ordinary physical road segment has zero geometric length.
+    #[error("segment {segment_id} has zero geometric length")]
+    ZeroDistanceSegment {
+        /// Segment with no physical length.
+        segment_id: BuilderSegmentId,
+    },
+    /// Polyline distance is meaningfully shorter than its endpoint geodesic.
+    #[error("segment {segment_id} violates the endpoint distance lower bound")]
+    EndpointDistanceLowerBound {
+        /// Segment with inconsistent geometry.
+        segment_id: BuilderSegmentId,
+    },
     /// A graph collection cannot be represented by dense identifiers.
     #[error("{collection} contains too many elements for dense identifiers")]
     DenseIdOverflow {

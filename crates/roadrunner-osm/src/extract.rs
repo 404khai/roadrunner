@@ -12,8 +12,8 @@ use crate::NORMALIZATION_VERSION;
 use crate::error::{OsmError, invalid};
 use crate::model::{
     DatasetProvenance, NormalizedNode, NormalizedOsmDataset, NormalizedRelation,
-    NormalizedRelationMember, NormalizedSplitPoint, NormalizedWay, OsmElementKind, RestrictionKind,
-    SplitPoint,
+    NormalizedRelationMember, NormalizedRestriction, NormalizedSplitPoint, NormalizedWay,
+    OsmElementKind, RestrictionKind, SourceStatistics, SplitPoint,
 };
 
 /// Extracts a deterministic, profile-independent routing dataset from a PBF.
@@ -43,13 +43,22 @@ pub fn extract_pbf(
     let mut required_nodes = BTreeSet::new();
     let mut reference_counts = BTreeMap::<i64, u32>::new();
     let mut extraction_error = None;
+    let mut nodes_seen = 0_u64;
+    let mut ways_seen = 0_u64;
+    let mut relations_seen = 0_u64;
+    let mut restriction_relations_seen = 0_u64;
 
     ElementReader::from_path(path)?.for_each(|element| {
         if extraction_error.is_some() {
             return;
         }
         let result = match element {
+            Element::Node(_) | Element::DenseNode(_) => {
+                nodes_seen = nodes_seen.saturating_add(1);
+                Ok(Ok(()))
+            }
             Element::Way(way) => extract_way(&way).map(|candidate| {
+                ways_seen = ways_seen.saturating_add(1);
                 if let Some(normalized) = candidate {
                     for node_id in &normalized.node_refs {
                         required_nodes.insert(*node_id);
@@ -63,7 +72,9 @@ pub fn extract_pbf(
                 Ok(())
             }),
             Element::Relation(relation) => extract_relation(&relation).map(|candidate| {
+                relations_seen = relations_seen.saturating_add(1);
                 if let Some(normalized) = candidate {
+                    restriction_relations_seen = restriction_relations_seen.saturating_add(1);
                     for member in &normalized.members {
                         if member.kind == OsmElementKind::Node && member.role == "via" {
                             required_nodes.insert(member.osm_id);
@@ -75,7 +86,6 @@ pub fn extract_pbf(
                 }
                 Ok(())
             }),
-            _ => Ok(Ok(())),
         };
         match result {
             Ok(Ok(())) => {}
@@ -93,23 +103,46 @@ pub fn extract_pbf(
             return;
         }
         let candidate = match element {
-            Element::Node(node) if required_nodes.contains(&node.id()) => Some((
-                node.id(),
-                exact_e7(node.id(), node.nano_lat(), node.nano_lon()),
-            )),
+            Element::Node(node) if required_nodes.contains(&node.id()) => {
+                let tags = decode_tags(
+                    node.raw_tags(),
+                    node.raw_tags().len(),
+                    node.raw_stringtable(),
+                    "node",
+                    node.id(),
+                );
+                Some((
+                    node.id(),
+                    exact_e7(node.id(), node.nano_lat(), node.nano_lon()),
+                    tags,
+                ))
+            }
             Element::DenseNode(node) if required_nodes.contains(&node.id()) => Some((
                 node.id(),
                 exact_e7(node.id(), node.nano_lat(), node.nano_lon()),
+                Ok(node
+                    .tags()
+                    .map(|(key, value)| (key.to_owned(), value.to_owned()))
+                    .collect()),
             )),
             _ => None,
         };
-        let Some((osm_id, coordinate)) = candidate else {
+        let Some((osm_id, coordinate, tags)) = candidate else {
             return;
         };
-        match coordinate {
-            Ok(coordinate) => {
+        match coordinate.and_then(|coordinate| tags.map(|tags| (coordinate, tags))) {
+            Ok((coordinate, tags)) => {
+                let (tags, unsupported_tags) = partition_node_tags(tags);
                 if nodes
-                    .insert(osm_id, NormalizedNode { osm_id, coordinate })
+                    .insert(
+                        osm_id,
+                        NormalizedNode {
+                            osm_id,
+                            coordinate,
+                            tags,
+                            unsupported_tags,
+                        },
+                    )
                     .is_some()
                 {
                     coordinate_error = Some(invalid(format!("duplicate OSM node {osm_id}")));
@@ -134,39 +167,64 @@ pub fn extract_pbf(
         )));
     }
 
-    let mut split_reasons = BTreeMap::<i64, BTreeSet<u8>>::new();
+    let mut split_reasons = BTreeMap::<i64, BTreeSet<SplitPoint>>::new();
     for way in ways.values() {
         if let Some(first) = way.node_refs.first() {
-            split_reasons.entry(*first).or_default().insert(0);
+            split_reasons
+                .entry(*first)
+                .or_default()
+                .insert(SplitPoint::WayEndpoint);
         }
         if let Some(last) = way.node_refs.last() {
-            split_reasons.entry(*last).or_default().insert(0);
+            split_reasons
+                .entry(*last)
+                .or_default()
+                .insert(SplitPoint::WayEndpoint);
         }
     }
     for (node_id, count) in reference_counts {
         if count > 1 {
-            split_reasons.entry(node_id).or_default().insert(1);
+            split_reasons
+                .entry(node_id)
+                .or_default()
+                .insert(SplitPoint::Junction);
         }
     }
     for relation in relations.values() {
         for member in &relation.members {
             if member.kind == OsmElementKind::Node && member.role == "via" {
-                split_reasons.entry(member.osm_id).or_default().insert(2);
+                split_reasons
+                    .entry(member.osm_id)
+                    .or_default()
+                    .insert(SplitPoint::RestrictionVia);
             }
+        }
+    }
+    for node in nodes.values() {
+        for (key, reason) in [
+            ("barrier", SplitPoint::Barrier),
+            ("ford", SplitPoint::Ford),
+            ("highway", SplitPoint::HighwayNode),
+        ] {
+            if node.tags.contains_key(key) || node.unsupported_tags.contains_key(key) {
+                split_reasons.entry(node.osm_id).or_default().insert(reason);
+            }
+        }
+        if ["access", "vehicle", "motor_vehicle", "motorcycle"]
+            .into_iter()
+            .any(|key| node.tags.contains_key(key))
+        {
+            split_reasons
+                .entry(node.osm_id)
+                .or_default()
+                .insert(SplitPoint::AccessBoundary);
         }
     }
     let split_points = split_reasons
         .into_iter()
         .map(|(osm_node_id, reasons)| NormalizedSplitPoint {
             osm_node_id,
-            reasons: reasons
-                .into_iter()
-                .map(|reason| match reason {
-                    0 => SplitPoint::WayEndpoint,
-                    1 => SplitPoint::Junction,
-                    _ => SplitPoint::RestrictionVia,
-                })
-                .collect(),
+            reasons: reasons.into_iter().collect(),
         })
         .collect();
 
@@ -176,6 +234,16 @@ pub fn extract_pbf(
             source_id,
             source_sha256,
             source_size_bytes,
+        },
+        source_statistics: SourceStatistics {
+            nodes_seen,
+            ways_seen,
+            candidate_ways: u64::try_from(ways.len()).unwrap_or(u64::MAX),
+            relations_seen,
+            restriction_relations_seen,
+            referenced_nodes_requested: u64::try_from(required_nodes.len()).unwrap_or(u64::MAX),
+            referenced_nodes_resolved: u64::try_from(nodes.len()).unwrap_or(u64::MAX),
+            referenced_nodes_missing: 0,
         },
         nodes: nodes.into_values().collect(),
         ways: ways.into_values().collect(),
@@ -199,7 +267,11 @@ fn extract_way(way: &osmpbf::Way<'_>) -> Result<Option<NormalizedWay>, OsmError>
         "way",
         way.id(),
     )?;
-    if !all_tags.contains_key("highway") {
+    let is_road = all_tags.contains_key("highway");
+    let is_ferry = all_tags
+        .get("route")
+        .is_some_and(|value| value.trim().eq_ignore_ascii_case("ferry"));
+    if !is_road && !is_ferry {
         return Ok(None);
     }
     let node_refs: Vec<_> = way.refs().collect();
@@ -232,30 +304,23 @@ fn extract_relation(
     if all_tags.get("type").map(String::as_str) != Some("restriction") {
         return Ok(None);
     }
-    let restriction = all_tags
-        .get("restriction:motorcycle")
-        .or_else(|| all_tags.get("restriction"))
-        .or_else(|| all_tags.get("restriction:motorcycle:conditional"))
-        .or_else(|| all_tags.get("restriction:conditional"))
-        .cloned()
-        .ok_or_else(|| {
-            invalid(format!(
-                "restriction relation {} has no value",
-                relation.id()
-            ))
-        })?;
     validate_positive_id("relation", relation.id())?;
-    let conditional = all_tags.contains_key("restriction:motorcycle:conditional")
-        || all_tags.contains_key("restriction:conditional");
-    let kind = if conditional {
-        RestrictionKind::Unsupported
-    } else if restriction.starts_with("no_") {
-        RestrictionKind::No
-    } else if restriction.starts_with("only_") {
-        RestrictionKind::Only
-    } else {
-        RestrictionKind::Unsupported
-    };
+    let restrictions = all_tags
+        .iter()
+        .filter(|(key, _)| key.as_str() == "restriction" || key.starts_with("restriction:"))
+        .map(|(tag, value)| NormalizedRestriction {
+            tag: tag.clone(),
+            value: value.clone(),
+            kind: if value.starts_with("no_") {
+                RestrictionKind::No
+            } else if value.starts_with("only_") {
+                RestrictionKind::Only
+            } else {
+                RestrictionKind::Unsupported
+            },
+            conditional: tag.ends_with(":conditional"),
+        })
+        .collect();
     let mut members = Vec::new();
     for member in relation.members() {
         validate_positive_id("relation member", member.member_id)?;
@@ -275,16 +340,15 @@ fn extract_relation(
     let unsupported_tags = all_tags
         .into_iter()
         .filter(|(key, _)| {
-            !matches!(
-                key.as_str(),
-                "type" | "restriction" | "restriction:motorcycle" | "except"
-            )
+            key != "type"
+                && key != "except"
+                && key != "restriction"
+                && !key.starts_with("restriction:")
         })
         .collect();
     Ok(Some(NormalizedRelation {
         osm_id: relation.id(),
-        kind,
-        restriction,
+        restrictions,
         except,
         members,
         unsupported_tags,
@@ -296,6 +360,7 @@ fn partition_way_tags(
 ) -> (BTreeMap<String, String>, BTreeMap<String, String>) {
     const SUPPORTED: &[&str] = &[
         "access",
+        "ferry",
         "highway",
         "junction",
         "maxspeed",
@@ -310,6 +375,7 @@ fn partition_way_tags(
         "motorcycle:forward",
         "oneway",
         "oneway:motorcycle",
+        "route",
         "service",
         "vehicle",
     ];
@@ -332,6 +398,7 @@ fn is_relevant_unsupported_key(key: &str) -> bool {
             | "construction"
             | "ford"
             | "lanes"
+            | "layer"
             | "smoothness"
             | "surface"
             | "toll"
@@ -344,6 +411,34 @@ fn is_relevant_unsupported_key(key: &str) -> bool {
         || key.starts_with("motor_vehicle:")
         || key.starts_with("motorcycle:")
         || key.starts_with("oneway:")
+        || key.starts_with("vehicle:")
+        || key.starts_with("motorcar:")
+        || key.starts_with("bicycle:")
+        || key.starts_with("hgv:")
+}
+
+fn partition_node_tags(
+    tags: BTreeMap<String, String>,
+) -> (BTreeMap<String, String>, BTreeMap<String, String>) {
+    const SUPPORTED: &[&str] = &[
+        "access",
+        "barrier",
+        "ford",
+        "highway",
+        "motor_vehicle",
+        "motorcycle",
+        "vehicle",
+    ];
+    let mut structured = BTreeMap::new();
+    let mut unsupported = BTreeMap::new();
+    for (key, value) in tags {
+        if SUPPORTED.binary_search(&key.as_str()).is_ok() {
+            structured.insert(key, value);
+        } else if is_relevant_unsupported_key(&key) {
+            unsupported.insert(key, value);
+        }
+    }
+    (structured, unsupported)
 }
 
 fn decode_tags(

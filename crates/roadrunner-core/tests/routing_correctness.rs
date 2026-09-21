@@ -31,6 +31,13 @@ fn properties() -> EdgeProperties {
     EdgeProperties::new(speed, None, AccessClass::General)
 }
 
+fn properties_with_access(access: AccessClass) -> EdgeProperties {
+    let Ok(speed) = KilometersPerHour::new(36.0) else {
+        panic!("valid speed");
+    };
+    EdgeProperties::new(speed, None, access)
+}
+
 fn graph(node_count: u32, segments: &[(u64, u32, u32)]) -> FrozenGraph {
     let mut builder = GraphBuilder::new(
         GraphSnapshotId::new(7),
@@ -466,6 +473,77 @@ fn forbidden_edges_are_skipped_but_evaluator_errors_propagate() {
         ),
         Err(RoutingError::TraversalEvaluation { .. })
     ));
+}
+
+#[test]
+fn built_in_evaluators_deny_reason_specific_access_by_default() {
+    let coordinates = [
+        CanonicalCoordinate::new(0, 0).unwrap_or_else(|error| panic!("coordinate: {error}")),
+        CanonicalCoordinate::new(20_000, 10_000)
+            .unwrap_or_else(|error| panic!("coordinate: {error}")),
+        CanonicalCoordinate::new(0, 20_000).unwrap_or_else(|error| panic!("coordinate: {error}")),
+    ];
+    let mut builder = GraphBuilder::new(
+        GraphSnapshotId::new(12),
+        GraphMetadata::new(
+            "test_v1",
+            "test",
+            GraphBuildIdentity::new("fixture", "fixture-sha256", "test-v1", "default"),
+        ),
+    );
+    for (index, coordinate) in coordinates.into_iter().enumerate() {
+        assert!(
+            builder
+                .add_node(BuilderNodeId::new(index as u64), coordinate)
+                .is_ok()
+        );
+    }
+    for (id, from, to, access) in [
+        (1, 0, 2, AccessClass::Private),
+        (2, 0, 1, AccessClass::General),
+        (3, 1, 2, AccessClass::General),
+    ] {
+        let from_index =
+            usize::try_from(from).unwrap_or_else(|error| panic!("fixture source index: {error}"));
+        let to_index =
+            usize::try_from(to).unwrap_or_else(|error| panic!("fixture target index: {error}"));
+        assert!(
+            builder
+                .add_segment(
+                    BuilderSegmentId::new(id),
+                    BuilderNodeId::new(from),
+                    BuilderNodeId::new(to),
+                    vec![coordinates[from_index], coordinates[to_index]],
+                    Some(properties_with_access(access)),
+                    None,
+                )
+                .is_ok()
+        );
+    }
+    let graph = builder
+        .finalize()
+        .unwrap_or_else(|error| panic!("fixture graph: {error}"));
+    let ordinary = dijkstra(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(2),
+        &DistanceCost,
+        &RoutingContext::new(),
+    )
+    .unwrap_or_else(|error| panic!("public alternative: {error}"));
+    assert_eq!(
+        ordinary.path(),
+        [NodeId::new(0), NodeId::new(1), NodeId::new(2)]
+    );
+    let authorized = dijkstra(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(2),
+        &DistanceCost,
+        &RoutingContext::new().with_private_access(),
+    )
+    .unwrap_or_else(|error| panic!("authorized private route: {error}"));
+    assert_eq!(authorized.path(), [NodeId::new(0), NodeId::new(2)]);
 }
 
 #[test]
