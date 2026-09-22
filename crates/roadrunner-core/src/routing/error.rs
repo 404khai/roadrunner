@@ -25,6 +25,15 @@ impl std::fmt::Display for RouteEndpoint {
 /// Errors produced while calculating or reconstructing a route.
 #[derive(Debug, Clone, PartialEq, Error)]
 pub enum RoutingError {
+    /// Alternative-route options violate their required bounds.
+    #[error("invalid alternative-route options: {reason}")]
+    InvalidAlternativeOptions {
+        /// Description of the invalid value.
+        reason: &'static str,
+    },
+    /// The bounded search could not establish an initial shortest route.
+    #[error("alternative-route search exhausted its state budget before finding a primary route")]
+    AlternativeSearchLimit,
     /// A requested endpoint is absent.
     #[error("{endpoint} node {node_id} does not exist")]
     NodeNotFound {

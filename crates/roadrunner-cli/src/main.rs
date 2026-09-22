@@ -8,6 +8,7 @@ use roadrunner_osm::{
     write_dataset_artifact_atomic, write_snapshot_bundle_atomic,
 };
 
+mod alternatives_command;
 mod reference_comparison;
 
 fn main() -> ExitCode {
@@ -63,6 +64,17 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
         [route, corpus, snapshot, queries] if route == "route" && corpus == "corpus" => {
             reference_comparison::run(snapshot, queries)
         }
+        [
+            route,
+            alternatives,
+            snapshot,
+            source,
+            destination,
+            count_flag,
+            count,
+        ] if route == "route" && alternatives == "alternatives" && count_flag == "--count" => {
+            alternatives_command::run(snapshot, source, destination, count)
+        }
         [] => {
             print_help();
             Ok(())
@@ -94,6 +106,7 @@ fn print_help() {
          roadrunner osm extract <input.osm.pbf> <output.rr-osm> --source-id <identity>\n  \
          roadrunner osm compile <input.rr-osm> <snapshot-directory>\n  \
          roadrunner graph verify <snapshot-directory> --deep\n  \
-         roadrunner route corpus <snapshot-directory> <route-corpus.json>"
+         roadrunner route corpus <snapshot-directory> <route-corpus.json>\n  \
+         roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>"
     );
 }

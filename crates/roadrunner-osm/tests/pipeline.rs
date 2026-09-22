@@ -3,10 +3,47 @@
 use std::collections::BTreeMap;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use roadrunner_core::cost::{DistanceCost, RoutingContext};
+use roadrunner_core::cost::{DistanceCost, RoutingContext, TravelTimeCost};
 use roadrunner_core::geo::CanonicalCoordinate;
 use roadrunner_core::graph::{FrozenGraph, NodeId};
-use roadrunner_core::routing::{DistanceHaversine, RouteResult, RoutingError, astar, dijkstra};
+use roadrunner_core::routing::{
+    AlternativeRouteOptions, DistanceHaversine, RouteResult, RoutingError, alternatives, astar,
+    dijkstra,
+};
+
+#[test]
+fn real_pbf_offers_distinct_legal_alternative_routes() {
+    let dataset = must(extract_pbf(fixture_path(), SOURCE_ID));
+    let decoded = must(decode_dataset_artifact(&must(encode_dataset_artifact(
+        &dataset,
+    ))));
+    let compiled = must(compile_motorcycle_graph(&decoded));
+    let source = source_node(&compiled, 5_602_610_872);
+    let destination = source_node(&compiled, 5_594_385_916);
+    let result = must(alternatives(
+        &compiled.graph,
+        source,
+        destination,
+        &TravelTimeCost,
+        &RoutingContext::new(),
+        AlternativeRouteOptions::default(),
+    ));
+    assert!(result.routes.len() >= 2);
+    assert!(!result.truncated);
+    for route in &result.routes {
+        assert_eq!(route.route.path().first(), Some(&source));
+        assert_eq!(route.route.path().last(), Some(&destination));
+        assert!(
+            route
+                .route
+                .edges()
+                .windows(2)
+                .all(|edges| compiled.graph.is_maneuver_allowed(edges[0], edges[1]))
+        );
+        assert!(route.max_shared_distance_ratio <= result.options.max_shared_distance_ratio);
+    }
+    assert!(result.routes[0].route.total_cost() <= result.routes[1].route.total_cost());
+}
 use roadrunner_osm::{
     DatasetProvenance, NormalizedNode, NormalizedOsmDataset, NormalizedRelation,
     NormalizedRelationMember, NormalizedRestriction, NormalizedSplitPoint, NormalizedWay,
