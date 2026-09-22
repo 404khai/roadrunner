@@ -6,7 +6,7 @@ use roadrunner_core::graph::{AccessClass, FrozenGraph, Orientation};
 use crate::error::{OsmError, invalid};
 
 const MAGIC: &str = "ROADRUNNER_GRAPH_PROVENANCE";
-const SCHEMA_VERSION: u32 = 1;
+const SCHEMA_VERSION: u32 = 2;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -104,8 +104,27 @@ pub struct RestrictionProvenance {
     pub to_way_count: usize,
     /// Whether all required source members can be mapped to this graph snapshot.
     pub source_members_mapped: bool,
-    /// Deterministic readiness classification; restrictions remain unenforced.
+    /// Restriction tag selected for this routing profile.
+    pub applied_tag: Option<String>,
+    /// Restriction value selected for this routing profile.
+    pub applied_value: Option<String>,
+    /// Resolved incoming traversal, when supported.
+    pub incoming_edge_id: Option<u32>,
+    /// Resolved declared `to` traversal, when supported.
+    pub outgoing_edge_id: Option<u32>,
+    /// Canonical forbidden transitions compiled from this relation.
+    pub forbidden_maneuvers: Vec<CompiledManeuverProvenance>,
+    /// Deterministic enforcement or unsupported-form classification.
     pub status: String,
+}
+
+/// One graph-level forbidden transition produced by a source restriction.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct CompiledManeuverProvenance {
+    /// Incoming directed edge.
+    pub incoming_edge_id: u32,
+    /// Forbidden outgoing directed edge.
+    pub outgoing_edge_id: u32,
 }
 
 /// Canonical source-to-graph mapping bound to one semantic graph snapshot.
@@ -186,8 +205,9 @@ pub fn provenance_artifact_sha256(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
 
+#[allow(clippy::too_many_lines)]
 fn validate_provenance(provenance: &GraphProvenance, graph: &FrozenGraph) -> Result<(), OsmError> {
-    if provenance.provenance_version != "osm_graph_provenance_v1"
+    if provenance.provenance_version != "osm_graph_provenance_v2"
         || provenance.graph_snapshot_digest != graph.metadata().snapshot_digest()
         || !is_sha256(&provenance.graph_snapshot_digest)
         || !is_sha256(&provenance.normalized_dataset_sha256)
@@ -216,6 +236,48 @@ fn validate_provenance(provenance: &GraphProvenance, graph: &FrozenGraph) -> Res
         {
             return Err(invalid("provenance references an absent routing node"));
         }
+    }
+    let mut compiled_maneuvers = std::collections::BTreeSet::new();
+    for restriction in &provenance.restrictions {
+        match (restriction.incoming_edge_id, restriction.outgoing_edge_id) {
+            (Some(incoming), Some(outgoing)) => {
+                let incoming = graph
+                    .edge(roadrunner_core::graph::EdgeId::new(incoming))
+                    .ok_or_else(|| invalid("restriction incoming edge is absent"))?;
+                let outgoing = graph
+                    .edge(roadrunner_core::graph::EdgeId::new(outgoing))
+                    .ok_or_else(|| invalid("restriction outgoing edge is absent"))?;
+                if incoming.to() != outgoing.from() {
+                    return Err(invalid("restriction resolved edges are not connected"));
+                }
+            }
+            (None, None) => {}
+            _ => return Err(invalid("restriction edge resolution is incomplete")),
+        }
+        if restriction
+            .forbidden_maneuvers
+            .windows(2)
+            .any(|pair| pair[0] >= pair[1])
+        {
+            return Err(invalid("restriction maneuver provenance is not canonical"));
+        }
+        for maneuver in &restriction.forbidden_maneuvers {
+            let pair = (
+                roadrunner_core::graph::EdgeId::new(maneuver.incoming_edge_id),
+                roadrunner_core::graph::EdgeId::new(maneuver.outgoing_edge_id),
+            );
+            if !compiled_maneuvers.insert(pair) {
+                continue;
+            }
+            if graph.is_maneuver_allowed(pair.0, pair.1) {
+                return Err(invalid("restriction provenance maneuver is not enforced"));
+            }
+        }
+    }
+    if compiled_maneuvers.len() != graph.forbidden_maneuvers().len() {
+        return Err(invalid(
+            "provenance does not cover every forbidden maneuver",
+        ));
     }
     let mut mapped_segments = std::collections::BTreeSet::new();
     for way in &provenance.ways {

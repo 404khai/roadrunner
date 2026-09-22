@@ -11,7 +11,7 @@ use super::{
 };
 
 const MAGIC: &str = "ROADRUNNER_GRAPH";
-const SCHEMA_VERSION: u32 = 2;
+const SCHEMA_VERSION: u32 = 3;
 static TEMPORARY_ARTIFACT_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Serialize, Deserialize)]
@@ -41,6 +41,14 @@ struct Payload {
     edges: Vec<EdgeDto>,
     adjacency_offsets: Vec<u64>,
     geometry: Vec<CoordinateDto>,
+    forbidden_maneuvers: Vec<ManeuverDto>,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ManeuverDto {
+    incoming_edge: u32,
+    outgoing_edge: u32,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -179,6 +187,7 @@ pub fn write_graph_artifact_atomic(
 /// # Errors
 ///
 /// Returns an error if deterministic JSON encoding fails.
+#[allow(clippy::too_many_lines)]
 pub fn encode_graph_artifact(graph: &FrozenGraph) -> Result<Vec<u8>, GraphArtifactError> {
     let payload = Payload {
         snapshot_id: graph.snapshot_id().value(),
@@ -260,6 +269,14 @@ pub fn encode_graph_artifact(graph: &FrozenGraph) -> Result<Vec<u8>, GraphArtifa
             .copied()
             .map(Into::into)
             .collect(),
+        forbidden_maneuvers: graph
+            .forbidden_maneuvers()
+            .iter()
+            .map(|(incoming, outgoing)| ManeuverDto {
+                incoming_edge: incoming.value(),
+                outgoing_edge: outgoing.value(),
+            })
+            .collect(),
     };
     let payload_bytes = serde_json::to_vec(&payload)
         .map_err(|source| GraphArtifactError::Serialization { source })?;
@@ -338,11 +355,6 @@ fn validate_payload(payload: Payload) -> Result<FrozenGraph, GraphArtifactError>
     if !is_sha256(&payload.snapshot_digest) {
         return Err(invalid(
             "graph snapshot digest is not a canonical SHA-256 value",
-        ));
-    }
-    if payload.turn_restrictions_enforced {
-        return Err(invalid(
-            "schema version 1 cannot contain enforced turn restrictions",
         ));
     }
     let node_coordinates: Vec<CanonicalCoordinate> = payload
@@ -516,25 +528,55 @@ fn validate_payload(payload: Payload) -> Result<FrozenGraph, GraphArtifactError>
         }
     }
 
+    let mut forbidden_maneuvers = Vec::with_capacity(payload.forbidden_maneuvers.len());
+    let mut previous_maneuver = None;
+    for maneuver in payload.forbidden_maneuvers {
+        let pair = (
+            EdgeId::new(maneuver.incoming_edge),
+            EdgeId::new(maneuver.outgoing_edge),
+        );
+        if previous_maneuver.is_some_and(|previous| previous >= pair) {
+            return Err(invalid("forbidden maneuvers are not canonical"));
+        }
+        let incoming = edges
+            .get(pair.0.value() as usize)
+            .ok_or_else(|| invalid("forbidden maneuver incoming edge is out of range"))?;
+        let outgoing = edges
+            .get(pair.1.value() as usize)
+            .ok_or_else(|| invalid("forbidden maneuver outgoing edge is out of range"))?;
+        if incoming.to() != outgoing.from() {
+            return Err(invalid("forbidden maneuver edges are not connected"));
+        }
+        previous_maneuver = Some(pair);
+        forbidden_maneuvers.push(pair);
+    }
+    if !payload.turn_restrictions_enforced && !forbidden_maneuvers.is_empty() {
+        return Err(invalid(
+            "forbidden maneuvers require the enforcement capability",
+        ));
+    }
+    let mut metadata = GraphMetadata::with_snapshot_digest(
+        payload.routing_profile,
+        payload.jurisdiction_policy,
+        GraphBuildIdentity::from_artifact(
+            payload.source_dataset,
+            payload.source_integrity,
+            payload.compiler_version,
+            payload.normalization_version,
+            payload.build_configuration,
+        ),
+        payload.snapshot_digest,
+    );
+    metadata.set_turn_restrictions_enforced(payload.turn_restrictions_enforced);
     Ok(FrozenGraph::from_validated_parts(
         GraphSnapshotId::new(payload.snapshot_id),
-        GraphMetadata::with_snapshot_digest(
-            payload.routing_profile,
-            payload.jurisdiction_policy,
-            GraphBuildIdentity::from_artifact(
-                payload.source_dataset,
-                payload.source_integrity,
-                payload.compiler_version,
-                payload.normalization_version,
-                payload.build_configuration,
-            ),
-            payload.snapshot_digest,
-        ),
+        metadata,
         nodes,
         segments,
         edges,
         adjacency_offsets,
         geometry,
+        forbidden_maneuvers,
     ))
 }
 

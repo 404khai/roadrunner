@@ -179,3 +179,68 @@ pub(super) fn reconstruct_route(
         },
     ))
 }
+
+pub(super) fn expanded_index(incoming: EdgeId) -> usize {
+    incoming.value() as usize + 1
+}
+
+pub(super) fn reconstruct_expanded_route(
+    graph: &FrozenGraph,
+    algorithm: RoutingAlgorithm,
+    source: NodeId,
+    destination_state: usize,
+    predecessors: &[Option<usize>],
+    label: Label,
+    expanded_states: usize,
+) -> Result<RouteResult, RoutingError> {
+    let mut edges = Vec::new();
+    let mut state = destination_state;
+    while state != 0 {
+        if edges.len() > graph.edge_count() {
+            return Err(RoutingError::PredecessorCycle);
+        }
+        let edge_id =
+            EdgeId::new(u32::try_from(state - 1).map_err(|_| RoutingError::PredecessorCycle)?);
+        edges.push(edge_id);
+        state =
+            predecessors
+                .get(state)
+                .copied()
+                .flatten()
+                .ok_or(RoutingError::MissingPredecessor {
+                    node_id: graph
+                        .edge(edge_id)
+                        .ok_or(RoutingError::MissingRouteEdge { edge_id })?
+                        .from(),
+                })?;
+    }
+    edges.reverse();
+    let mut path = Vec::with_capacity(edges.len() + 1);
+    path.push(source);
+    let mut total_distance = Meters::ZERO;
+    for &edge_id in &edges {
+        let edge = graph
+            .edge(edge_id)
+            .ok_or(RoutingError::MissingRouteEdge { edge_id })?;
+        path.push(edge.to());
+        let segment = graph
+            .segment(edge.segment())
+            .ok_or(RoutingError::MissingRouteEdge { edge_id })?;
+        total_distance = total_distance
+            .checked_add(segment.distance())
+            .map_err(|source| RoutingError::DistanceAccumulation { edge_id, source })?;
+    }
+    Ok(RouteResult::new(
+        graph.snapshot_id(),
+        graph.metadata().snapshot_digest().to_owned(),
+        algorithm,
+        path,
+        edges,
+        RouteMetrics {
+            total_distance,
+            total_cost: label.objective,
+            elapsed_travel_time: label.elapsed,
+            expanded_states,
+        },
+    ))
+}

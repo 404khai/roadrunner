@@ -153,7 +153,7 @@ fn validate_manifest(
         || manifest.routing_profile != graph.metadata().routing_profile()
         || manifest.jurisdiction_policy != graph.metadata().jurisdiction_policy()
         || manifest.compiler_version != graph.metadata().build_identity().compiler_version()
-        || manifest.compiler_semantic_version != "osm_graph_compiler_v2"
+        || manifest.compiler_semantic_version != "osm_graph_compiler_v3"
         || manifest.normalization_version
             != graph.metadata().build_identity().normalization_version()
         || manifest.build_configuration != graph.metadata().build_identity().build_configuration()

@@ -88,6 +88,14 @@ pub enum GraphError {
         /// Missing edge identity.
         id: EdgeId,
     },
+    /// A maneuver pair does not meet at a common node.
+    #[error("maneuver from edge {incoming} to edge {outgoing} is not connected")]
+    DisconnectedManeuver {
+        /// Incoming traversal.
+        incoming: EdgeId,
+        /// Outgoing traversal.
+        outgoing: EdgeId,
+    },
     /// A requested segment is absent.
     #[error("road segment {id} does not exist")]
     SegmentNotFound {

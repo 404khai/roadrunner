@@ -374,7 +374,8 @@ versioned delivery-motorcycle and Nigeria policy tables, contraction, and build
 diagnostics. `roadrunner-core` remains unaware of OSM types and tags.
 
 Validated source-to-graph provenance, restriction members, and via split points
-cross this boundary, while
-the resulting graph metadata and manifest explicitly report that restrictions
-are not enforced. No Phase 7.5 maneuver state or Phase 8 reference-engine
-comparison is part of this pipeline.
+cross this boundary. Phase 7.5 resolves the supported motorcycle-relevant
+node-via subset to forbidden directed-edge pairs. Dijkstra and A* use incoming
+edge search state when graph metadata enables the capability. Unsupported forms
+remain diagnosable in provenance; Phase 8 reference-engine comparison remains a
+separate milestone.

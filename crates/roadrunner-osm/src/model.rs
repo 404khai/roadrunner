@@ -109,7 +109,7 @@ pub struct NormalizedRestriction {
     pub conditional: bool,
 }
 
-/// A routing-relevant OSM restriction relation retained but not enforced.
+/// A routing-relevant OSM restriction relation retained for profile compilation.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NormalizedRelation {
     /// Original OSM relation identifier.
