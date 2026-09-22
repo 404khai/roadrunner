@@ -627,6 +627,7 @@ version = "0.1.0"
 dependencies = [
  "roadrunner-core",
  "roadrunner-osm",
+ "serde",
  "serde_json",
  "tracing",
 ]

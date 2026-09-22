@@ -69,3 +69,10 @@ Neither input supports an OSM-scale or bounded-memory claim.
 The remediated result is
 [`2026-09-21-apple-m3-phase-7-remediation.json`](results/2026-09-21-apple-m3-phase-7-remediation.json).
 The 2026-09-19 result remains historical evidence for the superseded schema.
+
+## Phase 8 reference validation
+
+[`reference-comparison/`](reference-comparison/) contains a reproducible OSRM comparison
+using the pinned Lagos Marina PBF and source-node route corpus. Its structured result
+records reachability, distance, duration, route geometry differences, and failures.
+This is a correctness diagnostic, not a routing latency benchmark.

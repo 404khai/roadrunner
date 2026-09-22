@@ -8,6 +8,8 @@ use roadrunner_osm::{
     write_dataset_artifact_atomic, write_snapshot_bundle_atomic,
 };
 
+mod reference_comparison;
+
 fn main() -> ExitCode {
     match run(std::env::args_os().skip(1).collect()) {
         Ok(()) => ExitCode::SUCCESS,
@@ -58,6 +60,9 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
             );
             Ok(())
         }
+        [route, corpus, snapshot, queries] if route == "route" && corpus == "corpus" => {
+            reference_comparison::run(snapshot, queries)
+        }
         [] => {
             print_help();
             Ok(())
@@ -88,6 +93,7 @@ fn print_help() {
          Usage:\n  \
          roadrunner osm extract <input.osm.pbf> <output.rr-osm> --source-id <identity>\n  \
          roadrunner osm compile <input.rr-osm> <snapshot-directory>\n  \
-         roadrunner graph verify <snapshot-directory> --deep"
+         roadrunner graph verify <snapshot-directory> --deep\n  \
+         roadrunner route corpus <snapshot-directory> <route-corpus.json>"
     );
 }

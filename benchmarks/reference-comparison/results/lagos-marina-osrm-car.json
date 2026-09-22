@@ -1,0 +1,403 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "fixture": "data/fixtures/phase-7/lagos-marina.osm.pbf",
+    "pbf_sha256": "f1f0f4e7abfcc9396c6b67bbd08b720a0481bf69a636d6c07c50980ea15b8687",
+    "corpus": "data/fixtures/phase-7/route-corpus.json",
+    "corpus_sha256": "a70ee3305c553c141f265cd727effde1c788e6eb485a716e1563986b47e9ef65",
+    "graph_snapshot_digest": "bc28988b61991fc1278a9f5753e670a064b02da336fd9dc905f3e301128c3918",
+    "graph_node_count": 58,
+    "graph_edge_count": 114
+  },
+  "roadrunner": {
+    "routing_profile": "delivery_motorcycle_v2",
+    "algorithm": "dijkstra",
+    "cost_model": "travel_time"
+  },
+  "reference": {
+    "engine": "OSRM",
+    "version": "5.27.1",
+    "image": "ghcr.io/project-osrm/osrm-backend@sha256:855614a38f464b0558a2ad6eaa7cb8c139f39887da9b38b485ce453c6e6e6124",
+    "profile": "stock car.lua",
+    "algorithm": "CH"
+  },
+  "source_files_sha256": {
+    "benchmarks/reference-comparison/run.py": "644824efa1a56fa1be52269df7808178fb852975df8d324414d25bcc6c2bae9f",
+    "crates/roadrunner-cli/src/reference_comparison.rs": "0a35e424a5f34854f6dda971e37dd0152d6649f75a8f8759b96f21224832c249",
+    "Cargo.lock": "3c2de5724a27876197411238756528b57910d944a094f794b46a2726bcc2c776"
+  },
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  },
+  "comparison": {
+    "query_count": 9,
+    "status_agreement_count": 9,
+    "roadrunner_expected_status_count": 9,
+    "both_reachable_count": 7,
+    "reference_failure_count": 0,
+    "median_absolute_distance_difference_meters": 0.343,
+    "median_absolute_duration_difference_seconds": 5.734,
+    "median_symmetric_max_geometry_deviation_meters": 0.065,
+    "queries": [
+      {
+        "id": "short_unpaved",
+        "from_osm_node": 86533883,
+        "to_osm_node": 3417072221,
+        "origin": [
+          3.3801305,
+          6.5232933
+        ],
+        "destination": [
+          3.3807667,
+          6.5216648
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 194.33363665696112,
+          "duration_seconds": 34.980054598253005
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 193.4,
+          "duration_seconds": 17.4,
+          "snapped_origin": [
+            3.380131,
+            6.523293
+          ],
+          "snapped_destination": [
+            3.380767,
+            6.521665
+          ],
+          "origin_snap_meters": 0.065,
+          "destination_snap_meters": 0.04
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.934,
+        "duration_difference_seconds": 17.58,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.065,
+          "symmetric_mean_deviation_meters": 0.026,
+          "sampling_step_meters": 10
+        }
+      },
+      {
+        "id": "medium_mixed_surface",
+        "from_osm_node": 3597365296,
+        "to_osm_node": 5597000373,
+        "origin": [
+          3.3791073,
+          6.522834
+        ],
+        "destination": [
+          3.3792066,
+          6.5246268
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 315.1315192727463,
+          "duration_seconds": 56.72367346909434
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 314.5,
+          "duration_seconds": 52.1,
+          "snapped_origin": [
+            3.379107,
+            6.522834
+          ],
+          "snapped_destination": [
+            3.379207,
+            6.524627
+          ],
+          "origin_snap_meters": 0.033,
+          "destination_snap_meters": 0.049
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.632,
+        "duration_difference_seconds": 4.624,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.055,
+          "symmetric_mean_deviation_meters": 0.027,
+          "sampling_step_meters": 10
+        }
+      },
+      {
+        "id": "long_main_component",
+        "from_osm_node": 5602610872,
+        "to_osm_node": 5594385916,
+        "origin": [
+          3.3792093,
+          6.5235968
+        ],
+        "destination": [
+          3.3811082,
+          6.5239812
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 452.0428374344492,
+          "duration_seconds": 81.36771073820086
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 451.7,
+          "duration_seconds": 63,
+          "snapped_origin": [
+            3.379209,
+            6.523597
+          ],
+          "snapped_destination": [
+            3.381108,
+            6.523981
+          ],
+          "origin_snap_meters": 0.04,
+          "destination_snap_meters": 0.031
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.343,
+        "duration_difference_seconds": 18.368,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.053,
+          "symmetric_mean_deviation_meters": 0.022,
+          "sampling_step_meters": 10
+        }
+      },
+      {
+        "id": "same_origin_destination",
+        "from_osm_node": 86533883,
+        "to_osm_node": 86533883,
+        "origin": [
+          3.3801305,
+          6.5232933
+        ],
+        "destination": [
+          3.3801305,
+          6.5232933
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 0.0,
+          "duration_seconds": 0.0
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 0,
+          "duration_seconds": 0,
+          "snapped_origin": [
+            3.380131,
+            6.523293
+          ],
+          "snapped_destination": [
+            3.380131,
+            6.523293
+          ],
+          "origin_snap_meters": 0.065,
+          "destination_snap_meters": 0.065
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.0,
+        "duration_difference_seconds": 0.0,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.065,
+          "symmetric_mean_deviation_meters": 0.065,
+          "sampling_step_meters": 10
+        }
+      },
+      {
+        "id": "cross_component",
+        "from_osm_node": 86533883,
+        "to_osm_node": 7735923848,
+        "origin": [
+          3.3801305,
+          6.5232933
+        ],
+        "destination": [
+          3.3811217,
+          6.5258456
+        ],
+        "expected_status": "unreachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "unreachable",
+          "distance_meters": null,
+          "duration_seconds": null
+        },
+        "reference": {
+          "status": "unreachable",
+          "osrm_code": "NoRoute"
+        },
+        "status_agrees": true
+      },
+      {
+        "id": "one_way_forward",
+        "from_osm_node": 7735923848,
+        "to_osm_node": 7735923851,
+        "origin": [
+          3.3811217,
+          6.5258456
+        ],
+        "destination": [
+          3.3812233,
+          6.5254773
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 81.2080056410592,
+          "duration_seconds": 14.617441015390657
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 81,
+          "duration_seconds": 28.1,
+          "snapped_origin": [
+            3.381122,
+            6.525846
+          ],
+          "snapped_destination": [
+            3.381223,
+            6.525477
+          ],
+          "origin_snap_meters": 0.055,
+          "destination_snap_meters": 0.047
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.208,
+        "duration_difference_seconds": -13.483,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.071,
+          "symmetric_mean_deviation_meters": 0.026,
+          "sampling_step_meters": 10
+        }
+      },
+      {
+        "id": "one_way_reverse",
+        "from_osm_node": 7735923851,
+        "to_osm_node": 7735923848,
+        "origin": [
+          3.3812233,
+          6.5254773
+        ],
+        "destination": [
+          3.3811217,
+          6.5258456
+        ],
+        "expected_status": "unreachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "unreachable",
+          "distance_meters": null,
+          "duration_seconds": null
+        },
+        "reference": {
+          "status": "unreachable",
+          "osrm_code": "NoRoute"
+        },
+        "status_agrees": true
+      },
+      {
+        "id": "parallel_one_way_segments",
+        "from_osm_node": 7735923852,
+        "to_osm_node": 7735923853,
+        "origin": [
+          3.3809502,
+          6.5257633
+        ],
+        "destination": [
+          3.3810146,
+          6.5254395
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 36.70115437716382,
+          "duration_seconds": 6.606207787889487
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 36.4,
+          "duration_seconds": 8.7,
+          "snapped_origin": [
+            3.38095,
+            6.525763
+          ],
+          "snapped_destination": [
+            3.381015,
+            6.52544
+          ],
+          "origin_snap_meters": 0.04,
+          "destination_snap_meters": 0.071
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.301,
+        "duration_difference_seconds": -2.094,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.071,
+          "symmetric_mean_deviation_meters": 0.03,
+          "sampling_step_meters": 10
+        }
+      },
+      {
+        "id": "paved_corridor",
+        "from_osm_node": 3597365327,
+        "to_osm_node": 5592870642,
+        "origin": [
+          3.3780105,
+          6.5247392
+        ],
+        "destination": [
+          3.379519,
+          6.5263449
+        ],
+        "expected_status": "reachable",
+        "roadrunner_matches_expected": true,
+        "roadrunner": {
+          "status": "reachable",
+          "distance_meters": 244.71637202497402,
+          "duration_seconds": 29.36596464299688
+        },
+        "reference": {
+          "status": "reachable",
+          "osrm_code": "Ok",
+          "distance_meters": 244.1,
+          "duration_seconds": 35.1,
+          "snapped_origin": [
+            3.378011,
+            6.524739
+          ],
+          "snapped_destination": [
+            3.379519,
+            6.526345
+          ],
+          "origin_snap_meters": 0.06,
+          "destination_snap_meters": 0.011
+        },
+        "status_agrees": true,
+        "distance_difference_meters": 0.616,
+        "duration_difference_seconds": -5.734,
+        "geometry_difference": {
+          "symmetric_max_deviation_meters": 0.063,
+          "symmetric_mean_deviation_meters": 0.02,
+          "sampling_step_meters": 10
+        }
+      }
+    ]
+  }
+}

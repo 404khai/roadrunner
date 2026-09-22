@@ -16,5 +16,6 @@ workspace = true
 [dependencies]
 roadrunner-core = { path = "../roadrunner-core" }
 roadrunner-osm = { path = "../roadrunner-osm" }
+serde.workspace = true
 serde_json.workspace = true
 tracing.workspace = true
