@@ -1,5 +1,6 @@
 //! Shortest-path algorithms and canonical route results.
 
+mod alternatives;
 mod astar;
 mod dijkstra;
 mod error;
@@ -7,6 +8,10 @@ mod heuristic;
 mod result;
 mod search;
 
+pub use alternatives::{
+    AlternativeRoute, AlternativeRouteOptions, AlternativeRoutes, AlternativeTermination,
+    alternatives,
+};
 pub use astar::astar;
 pub use dijkstra::dijkstra;
 pub use error::{RouteEndpoint, RoutingError};

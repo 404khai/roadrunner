@@ -12,6 +12,8 @@ pub enum RoutingAlgorithm {
     Dijkstra,
     /// A* search.
     AStar,
+    /// Yen-style loopless alternative-route enumeration.
+    Yen,
 }
 
 /// A validated route tied to the graph snapshot that produced it.

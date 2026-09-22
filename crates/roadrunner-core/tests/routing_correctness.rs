@@ -14,8 +14,267 @@ use roadrunner_core::graph::{
     RoadSegment, decode_graph_artifact, encode_graph_artifact, write_graph_artifact_atomic,
 };
 use roadrunner_core::routing::{
-    DistanceHaversine, RoutingError, TravelTimeHaversine, ZeroHeuristic, astar, dijkstra,
+    AlternativeRouteOptions, AlternativeTermination, DistanceHaversine, RoutingError,
+    TravelTimeHaversine, ZeroHeuristic, alternatives, astar, dijkstra,
 };
+
+#[test]
+fn alternatives_skip_tiny_detour_and_keep_distinct_corridor() {
+    let network = graph(
+        7,
+        &[
+            (0, 0, 1),
+            (1, 1, 2),
+            (2, 2, 3),
+            (3, 3, 4),
+            (4, 2, 5),
+            (5, 5, 3),
+            (6, 0, 6),
+            (7, 6, 4),
+        ],
+    );
+    let weights = BTreeMap::from([
+        (edge_between(&network, 0, 1), 1.0),
+        (edge_between(&network, 1, 2), 1.0),
+        (edge_between(&network, 2, 3), 1.0),
+        (edge_between(&network, 3, 4), 1.0),
+        (edge_between(&network, 2, 5), 1.0),
+        (edge_between(&network, 5, 3), 1.0),
+        (edge_between(&network, 0, 6), 3.0),
+        (edge_between(&network, 6, 4), 3.0),
+    ]);
+    let evaluator = WeightedEvaluator {
+        weights,
+        forbidden: None,
+        fail: None,
+    };
+    let options = AlternativeRouteOptions {
+        max_routes: 3,
+        max_shared_distance_ratio: 0.6,
+        max_cost_factor: 3.0,
+        ..AlternativeRouteOptions::default()
+    };
+    let result = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(4),
+        &evaluator,
+        &RoutingContext::new(),
+        options,
+    )
+    .unwrap_or_else(|error| panic!("alternatives failed: {error}"));
+    assert_eq!(result.routes.len(), 2);
+    assert_eq!(
+        result.routes[0].route.path(),
+        &[
+            NodeId::new(0),
+            NodeId::new(1),
+            NodeId::new(2),
+            NodeId::new(3),
+            NodeId::new(4)
+        ]
+    );
+    assert_eq!(
+        result.routes[1].route.path(),
+        &[NodeId::new(0), NodeId::new(6), NodeId::new(4)]
+    );
+    assert_eq!(result.routes[1].rank, 2);
+    assert_eq!(result.routes[1].max_shared_distance_ratio, 0.0);
+    assert!(result.ranked_paths >= 3);
+    assert!(!result.truncated);
+    let baseline = dijkstra(
+        &network,
+        NodeId::new(0),
+        NodeId::new(4),
+        &evaluator,
+        &RoutingContext::new(),
+    )
+    .unwrap_or_else(|error| panic!("baseline failed: {error}"));
+    assert_eq!(result.routes[0].route.total_cost(), baseline.total_cost());
+}
+
+#[test]
+fn alternatives_respect_incoming_maneuver_and_one_way_edges() {
+    let unrestricted = graph(5, &[(0, 0, 1), (1, 1, 2), (2, 2, 4), (3, 0, 3), (4, 3, 4)]);
+    let forbidden = (
+        edge_between(&unrestricted, 1, 2),
+        edge_between(&unrestricted, 2, 4),
+    );
+    let network = unrestricted
+        .with_forbidden_maneuvers(vec![forbidden])
+        .unwrap_or_else(|error| panic!("maneuver fixture failed: {error}"));
+    let result = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(4),
+        &DistanceCost,
+        &RoutingContext::new(),
+        AlternativeRouteOptions::default(),
+    )
+    .unwrap_or_else(|error| panic!("alternatives failed: {error}"));
+    assert_eq!(result.routes.len(), 1);
+    assert_eq!(
+        result.routes[0].route.path(),
+        &[NodeId::new(0), NodeId::new(3), NodeId::new(4)]
+    );
+    assert!(
+        result.routes[0]
+            .route
+            .edges()
+            .windows(2)
+            .all(|pair| network.is_maneuver_allowed(pair[0], pair[1]))
+    );
+    assert!(matches!(
+        alternatives(
+            &network,
+            NodeId::new(4),
+            NodeId::new(0),
+            &DistanceCost,
+            &RoutingContext::new(),
+            AlternativeRouteOptions::default()
+        ),
+        Err(RoutingError::NoRoute { .. })
+    ));
+}
+
+#[test]
+fn alternatives_rank_three_loopless_corridors_by_cost() {
+    let network = graph(
+        5,
+        &[
+            (0, 0, 1),
+            (1, 1, 4),
+            (2, 0, 2),
+            (3, 2, 4),
+            (4, 0, 3),
+            (5, 3, 4),
+            (6, 4, 0),
+        ],
+    );
+    let weights = BTreeMap::from([
+        (edge_between(&network, 0, 1), 1.0),
+        (edge_between(&network, 1, 4), 1.0),
+        (edge_between(&network, 0, 2), 1.5),
+        (edge_between(&network, 2, 4), 1.5),
+        (edge_between(&network, 0, 3), 2.0),
+        (edge_between(&network, 3, 4), 2.0),
+    ]);
+    let evaluator = WeightedEvaluator {
+        weights,
+        forbidden: None,
+        fail: None,
+    };
+    let result = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(4),
+        &evaluator,
+        &RoutingContext::new(),
+        AlternativeRouteOptions {
+            max_cost_factor: 3.0,
+            ..AlternativeRouteOptions::default()
+        },
+    )
+    .unwrap_or_else(|error| panic!("alternatives failed: {error}"));
+    assert_eq!(result.routes.len(), 3);
+    assert_eq!(result.termination, AlternativeTermination::RequestedCount);
+    assert_eq!(
+        result
+            .routes
+            .iter()
+            .map(|route| route.route.total_cost().value())
+            .collect::<Vec<_>>(),
+        vec![2.0, 3.0, 4.0]
+    );
+    for route in result.routes {
+        let nodes: std::collections::BTreeSet<_> = route.route.path().iter().copied().collect();
+        assert_eq!(nodes.len(), route.route.path().len());
+    }
+}
+
+#[test]
+fn alternatives_report_budget_and_degenerate_cases() {
+    let network = graph(3, &[(0, 0, 1), (1, 1, 2), (2, 0, 2)]);
+    let one = alternatives(
+        &network,
+        NodeId::new(1),
+        NodeId::new(1),
+        &DistanceCost,
+        &RoutingContext::new(),
+        AlternativeRouteOptions::default(),
+    )
+    .unwrap_or_else(|error| panic!("same-node failed: {error}"));
+    assert_eq!(one.routes.len(), 1);
+    assert_eq!(one.routes[0].route.total_distance(), Meters::ZERO);
+    let limited = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(2),
+        &DistanceCost,
+        &RoutingContext::new(),
+        AlternativeRouteOptions {
+            max_search_states: 1,
+            ..AlternativeRouteOptions::default()
+        },
+    );
+    assert!(matches!(limited, Err(RoutingError::AlternativeSearchLimit)));
+    let invalid = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(2),
+        &DistanceCost,
+        &RoutingContext::new(),
+        AlternativeRouteOptions {
+            max_shared_distance_ratio: 1.0,
+            ..AlternativeRouteOptions::default()
+        },
+    );
+    assert!(matches!(
+        invalid,
+        Err(RoutingError::InvalidAlternativeOptions { .. })
+    ));
+
+    let weighted = WeightedEvaluator {
+        weights: BTreeMap::from([
+            (edge_between(&network, 0, 2), 1.0),
+            (edge_between(&network, 0, 1), 1.0),
+            (edge_between(&network, 1, 2), 1.0),
+        ]),
+        forbidden: None,
+        fail: None,
+    };
+    let partial = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(2),
+        &weighted,
+        &RoutingContext::new(),
+        AlternativeRouteOptions {
+            max_search_states: 3,
+            ..AlternativeRouteOptions::default()
+        },
+    )
+    .unwrap_or_else(|error| panic!("partial result failed: {error}"));
+    assert_eq!(partial.routes.len(), 1);
+    assert!(partial.truncated);
+    assert_eq!(partial.termination, AlternativeTermination::Budget);
+
+    let capped = alternatives(
+        &network,
+        NodeId::new(0),
+        NodeId::new(2),
+        &weighted,
+        &RoutingContext::new(),
+        AlternativeRouteOptions {
+            max_cost_factor: 1.0,
+            ..AlternativeRouteOptions::default()
+        },
+    )
+    .unwrap_or_else(|error| panic!("cost-capped result failed: {error}"));
+    assert_eq!(capped.routes.len(), 1);
+    assert!(!capped.truncated);
+    assert_eq!(capped.termination, AlternativeTermination::CostLimit);
+}
 
 fn canonical(id: u32) -> CanonicalCoordinate {
     match CanonicalCoordinate::new(0, i32::try_from(id).unwrap_or(i32::MAX) * 10_000) {
