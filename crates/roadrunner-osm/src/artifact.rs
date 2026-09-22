@@ -255,6 +255,23 @@ fn validate_dataset(dataset: &NormalizedOsmDataset) -> Result<(), OsmError> {
                 relation.osm_id
             )));
         }
+        for restriction in &relation.restrictions {
+            let expected_kind = if restriction.value.starts_with("no_") {
+                crate::model::RestrictionKind::No
+            } else if restriction.value.starts_with("only_") {
+                crate::model::RestrictionKind::Only
+            } else {
+                crate::model::RestrictionKind::Unsupported
+            };
+            if restriction.kind != expected_kind
+                || restriction.conditional != restriction.tag.ends_with(":conditional")
+            {
+                return Err(invalid(format!(
+                    "restriction relation {} classification is inconsistent",
+                    relation.osm_id
+                )));
+            }
+        }
         for member in &relation.members {
             if member.osm_id <= 0 {
                 return Err(invalid(format!(

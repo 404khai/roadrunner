@@ -2,8 +2,8 @@
 //!
 //! This crate owns the Phase 7 boundary between raw `.osm.pbf` input and
 //! Roadrunner's source-independent [`roadrunner_core::graph::FrozenGraph`].
-//! It intentionally preserves turn-restriction source data without enforcing
-//! maneuvers; enforcement belongs to Phase 7.5.
+//! Supported node-via turn restrictions are compiled into maneuver-aware graph
+//! transitions; unsupported forms remain available as diagnostics.
 
 mod artifact;
 mod compile;
@@ -30,8 +30,8 @@ pub use model::{
 };
 pub use policy::{DELIVERY_MOTORCYCLE_PROFILE, NG_JURISDICTION_POLICY};
 pub use provenance::{
-    GraphProvenance, RestrictionProvenance, SourceNodeMapping, SourceSegmentMapping,
-    SourceWayMapping, TraversalPolicyProvenance, decode_provenance_artifact,
+    CompiledManeuverProvenance, GraphProvenance, RestrictionProvenance, SourceNodeMapping,
+    SourceSegmentMapping, SourceWayMapping, TraversalPolicyProvenance, decode_provenance_artifact,
     encode_provenance_artifact, provenance_artifact_sha256,
 };
 pub use snapshot::{LoadedGraphSnapshot, load_snapshot_bundle, write_snapshot_bundle_atomic};

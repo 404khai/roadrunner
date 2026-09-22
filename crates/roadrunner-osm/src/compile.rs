@@ -2,8 +2,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use roadrunner_core::geo::{Meters, haversine_distance};
 use roadrunner_core::graph::{
-    BuilderNodeId, BuilderSegmentId, FrozenGraph, GraphBuildIdentity, GraphBuilder, GraphMetadata,
-    GraphSnapshotId, encode_graph_artifact,
+    BuilderNodeId, BuilderSegmentId, EdgeId, FrozenGraph, GraphBuildIdentity, GraphBuilder,
+    GraphMetadata, GraphSnapshotId, encode_graph_artifact,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -11,19 +11,19 @@ use tracing::info;
 
 use crate::artifact::DecodedDataset;
 use crate::error::{OsmError, invalid};
-use crate::model::{NormalizedWay, OsmElementKind};
+use crate::model::{NormalizedRelation, NormalizedWay, OsmElementKind, RestrictionKind};
 use crate::policy::{
     DELIVERY_MOTORCYCLE_PROFILE, NG_JURISDICTION_POLICY, TraversalPolicyDecision,
     WayPolicyDecision, apply_node_semantics, compile_directions,
 };
 use crate::provenance::{
-    GraphProvenance, RestrictionProvenance, SourceNodeMapping, SourceSegmentMapping,
-    SourceWayMapping, TraversalPolicyProvenance, encode_provenance_artifact,
+    CompiledManeuverProvenance, GraphProvenance, RestrictionProvenance, SourceNodeMapping,
+    SourceSegmentMapping, SourceWayMapping, TraversalPolicyProvenance, encode_provenance_artifact,
     provenance_artifact_sha256,
 };
 
-const BUILD_CONFIGURATION: &str = "contraction=semantic_split_points_v2;retain_all_components=true;restrictions=preserved_not_enforced";
-const COMPILER_SEMANTIC_VERSION: &str = "osm_graph_compiler_v2";
+const BUILD_CONFIGURATION: &str = "contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1";
+const COMPILER_SEMANTIC_VERSION: &str = "osm_graph_compiler_v3";
 
 /// Deterministic weak-connectivity diagnostics for a compiled graph.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -118,6 +118,10 @@ pub struct CompilationDiagnostics {
     pub unresolved_restrictions: usize,
     /// Preserved forms outside the initial node-via subset.
     pub unsupported_restrictions: usize,
+    /// Relations compiled into at least one forbidden graph transition.
+    pub enforced_restrictions: usize,
+    /// Relation counts by deterministic compilation status.
+    pub restriction_status_counts: BTreeMap<String, usize>,
 }
 
 /// Reproducible manifest for one graph compilation.
@@ -198,10 +202,10 @@ struct SegmentDraft {
     reverse: Option<roadrunner_core::graph::EdgeProperties>,
 }
 
-/// Compiles `delivery_motorcycle_v1` with `ng_v1` defaults.
+/// Compiles `delivery_motorcycle_v2` with `ng_v2` defaults.
 ///
 /// Static directionality becomes edge existence and contextual access remains an
-/// edge property. Restriction relations affect split points but are not enforced.
+/// edge property. Supported node-via restrictions become forbidden edge pairs.
 ///
 /// # Errors
 ///
@@ -335,13 +339,14 @@ pub fn compile_motorcycle_graph(decoded: &DecodedDataset) -> Result<CompiledGrap
         )?;
     }
     let graph = builder.finalize()?;
-    let provenance = build_provenance(
+    let (provenance, forbidden_maneuvers) = build_provenance(
         decoded,
         &graph,
         &routing_node_ids,
         &drafts,
         &policy_decisions,
     )?;
+    let graph = graph.with_forbidden_maneuvers(forbidden_maneuvers)?;
     let components = component_diagnostics(&graph, dataset, &provenance);
     let diagnostics =
         compilation_diagnostics(dataset, &graph, &drafts, &policy_decisions, &provenance);
@@ -374,7 +379,7 @@ pub fn compile_motorcycle_graph(decoded: &DecodedDataset) -> Result<CompiledGrap
         graph_edge_count: graph.edge_count(),
         components,
         diagnostics,
-        turn_restrictions_enforced: false,
+        turn_restrictions_enforced: true,
     };
     info!(
         nodes = graph.node_count(),
@@ -471,6 +476,12 @@ fn compilation_diagnostics(
         .iter()
         .flat_map(|relation| &relation.restrictions);
     let values: Vec<_> = values.collect();
+    let mut restriction_status_counts = BTreeMap::new();
+    for restriction in &provenance.restrictions {
+        *restriction_status_counts
+            .entry(restriction.status.clone())
+            .or_default() += 1;
+    }
     CompilationDiagnostics {
         contracted_shape_node_count: dataset.nodes.len().saturating_sub(graph.node_count()),
         geometry_point_count: graph.geometry_point_count(),
@@ -486,11 +497,11 @@ fn compilation_diagnostics(
         way_via_restrictions,
         no_restriction_values: values
             .iter()
-            .filter(|value| value.kind == crate::model::RestrictionKind::No)
+            .filter(|value| value.kind == RestrictionKind::No)
             .count(),
         only_restriction_values: values
             .iter()
-            .filter(|value| value.kind == crate::model::RestrictionKind::Only)
+            .filter(|value| value.kind == RestrictionKind::Only)
             .count(),
         generic_restriction_values: values
             .iter()
@@ -504,7 +515,7 @@ fn compilation_diagnostics(
         source_resolvable_restrictions: provenance
             .restrictions
             .iter()
-            .filter(|restriction| restriction.status == "source_members_resolvable")
+            .filter(|restriction| restriction.source_members_mapped)
             .count(),
         ambiguous_restrictions: provenance
             .restrictions
@@ -523,8 +534,14 @@ fn compilation_diagnostics(
             .count()
             + values
                 .iter()
-                .filter(|value| value.kind == crate::model::RestrictionKind::Unsupported)
+                .filter(|value| value.kind == RestrictionKind::Unsupported)
                 .count(),
+        enforced_restrictions: provenance
+            .restrictions
+            .iter()
+            .filter(|restriction| restriction.status.starts_with("enforced_"))
+            .count(),
+        restriction_status_counts,
     }
 }
 
@@ -535,7 +552,7 @@ fn build_provenance(
     routing_node_ids: &BTreeSet<i64>,
     drafts: &[SegmentDraft],
     policy_decisions: &BTreeMap<i64, WayPolicyDecision>,
-) -> Result<GraphProvenance, OsmError> {
+) -> Result<(GraphProvenance, Vec<(EdgeId, EdgeId)>), OsmError> {
     let nodes = routing_node_ids
         .iter()
         .enumerate()
@@ -624,70 +641,231 @@ fn build_provenance(
         .map(|way| way.osm_way_id)
         .collect();
     let mapped_node_ids: BTreeSet<_> = nodes.iter().map(|node| node.osm_node_id).collect();
-    let restrictions = decoded
-        .dataset
-        .relations
+    let way_mappings: BTreeMap<_, _> = ways.iter().map(|way| (way.osm_way_id, way)).collect();
+    let mut restrictions = Vec::with_capacity(decoded.dataset.relations.len());
+    let mut forbidden_maneuvers = BTreeSet::new();
+    for relation in &decoded.dataset.relations {
+        let restriction = resolve_restriction(
+            relation,
+            graph,
+            &way_mappings,
+            &mapped_way_ids,
+            &mapped_node_ids,
+        );
+        forbidden_maneuvers.extend(restriction.forbidden_maneuvers.iter().map(|maneuver| {
+            (
+                EdgeId::new(maneuver.incoming_edge_id),
+                EdgeId::new(maneuver.outgoing_edge_id),
+            )
+        }));
+        restrictions.push(restriction);
+    }
+    Ok((
+        GraphProvenance {
+            provenance_version: "osm_graph_provenance_v2".to_owned(),
+            graph_snapshot_digest: graph.metadata().snapshot_digest().to_owned(),
+            normalized_dataset_sha256: decoded.payload_sha256.clone(),
+            nodes,
+            ways,
+            restrictions,
+        },
+        forbidden_maneuvers.into_iter().collect(),
+    ))
+}
+
+#[allow(clippy::assigning_clones, clippy::too_many_lines)]
+fn resolve_restriction(
+    relation: &NormalizedRelation,
+    graph: &FrozenGraph,
+    ways: &BTreeMap<i64, &SourceWayMapping>,
+    mapped_way_ids: &BTreeSet<i64>,
+    mapped_node_ids: &BTreeSet<i64>,
+) -> RestrictionProvenance {
+    let from_ways: Vec<_> = relation
+        .members
         .iter()
-        .map(|relation| {
-            let from_ways: Vec<_> = relation
-                .members
-                .iter()
-                .filter(|member| member.kind == OsmElementKind::Way && member.role == "from")
-                .collect();
-            let via_nodes: Vec<_> = relation
-                .members
-                .iter()
-                .filter(|member| member.kind == OsmElementKind::Node && member.role == "via")
-                .collect();
-            let via_ways: Vec<_> = relation
-                .members
-                .iter()
-                .filter(|member| member.kind == OsmElementKind::Way && member.role == "via")
-                .collect();
-            let to_ways: Vec<_> = relation
-                .members
-                .iter()
-                .filter(|member| member.kind == OsmElementKind::Way && member.role == "to")
-                .collect();
-            let source_members_mapped = from_ways
-                .iter()
-                .chain(&to_ways)
-                .all(|member| mapped_way_ids.contains(&member.osm_id))
-                && via_nodes
-                    .iter()
-                    .all(|member| mapped_node_ids.contains(&member.osm_id));
-            let status = if !via_ways.is_empty() {
-                "preserved_unsupported_way_via"
-            } else if from_ways.len() == 1
-                && via_nodes.len() == 1
-                && to_ways.len() == 1
-                && source_members_mapped
-            {
-                "source_members_resolvable"
-            } else if source_members_mapped {
-                "ambiguous_member_shape"
-            } else {
-                "unresolved_source_member"
-            };
-            RestrictionProvenance {
-                osm_relation_id: relation.osm_id,
-                from_way_count: from_ways.len(),
-                via_node_count: via_nodes.len(),
-                via_way_count: via_ways.len(),
-                to_way_count: to_ways.len(),
-                source_members_mapped,
-                status: status.to_owned(),
-            }
+        .filter(|member| member.kind == OsmElementKind::Way && member.role == "from")
+        .collect();
+    let via_nodes: Vec<_> = relation
+        .members
+        .iter()
+        .filter(|member| member.kind == OsmElementKind::Node && member.role == "via")
+        .collect();
+    let via_ways: Vec<_> = relation
+        .members
+        .iter()
+        .filter(|member| member.kind == OsmElementKind::Way && member.role == "via")
+        .collect();
+    let to_ways: Vec<_> = relation
+        .members
+        .iter()
+        .filter(|member| member.kind == OsmElementKind::Way && member.role == "to")
+        .collect();
+    let source_members_mapped = from_ways
+        .iter()
+        .chain(&to_ways)
+        .all(|member| mapped_way_ids.contains(&member.osm_id))
+        && via_nodes
+            .iter()
+            .all(|member| mapped_node_ids.contains(&member.osm_id));
+    let mut result = RestrictionProvenance {
+        osm_relation_id: relation.osm_id,
+        from_way_count: from_ways.len(),
+        via_node_count: via_nodes.len(),
+        via_way_count: via_ways.len(),
+        to_way_count: to_ways.len(),
+        source_members_mapped,
+        applied_tag: None,
+        applied_value: None,
+        incoming_edge_id: None,
+        outgoing_edge_id: None,
+        forbidden_maneuvers: Vec::new(),
+        status: String::new(),
+    };
+    if !via_ways.is_empty() {
+        result.status = "preserved_unsupported_way_via".to_owned();
+        return result;
+    }
+    if from_ways.len() != 1 || via_nodes.len() != 1 || to_ways.len() != 1 {
+        result.status = if source_members_mapped {
+            "ambiguous_member_shape"
+        } else {
+            "unresolved_source_member"
+        }
+        .to_owned();
+        return result;
+    }
+    if !source_members_mapped {
+        result.status = "unresolved_source_member".to_owned();
+        return result;
+    }
+    let Some(selected) = select_motorcycle_restriction(relation) else {
+        result.status = "not_applicable_to_motorcycle".to_owned();
+        return result;
+    };
+    result.applied_tag = Some(selected.tag.clone());
+    result.applied_value = Some(selected.value.clone());
+    if selected.conditional
+        || selected.kind == RestrictionKind::Unsupported
+        || !matches!(
+            selected.value.as_str(),
+            "no_left_turn"
+                | "no_right_turn"
+                | "no_straight_on"
+                | "no_u_turn"
+                | "only_left_turn"
+                | "only_right_turn"
+                | "only_straight_on"
+        )
+    {
+        result.status = "preserved_unsupported_restriction_value".to_owned();
+        return result;
+    }
+    let via = via_nodes[0].osm_id;
+    let incoming = incoming_edges(ways[&from_ways[0].osm_id], via);
+    let outgoing = outgoing_edges(ways[&to_ways[0].osm_id], via);
+    if incoming.len() != 1 || outgoing.len() != 1 {
+        result.status = "ambiguous_graph_traversal".to_owned();
+        return result;
+    }
+    let incoming = incoming[0];
+    let declared_outgoing = outgoing[0];
+    result.incoming_edge_id = Some(incoming.value());
+    result.outgoing_edge_id = Some(declared_outgoing.value());
+    let forbidden: Vec<_> = match selected.kind {
+        RestrictionKind::No => vec![declared_outgoing],
+        RestrictionKind::Only => graph
+            .edge(incoming)
+            .and_then(|edge| graph.outgoing_edges(edge.to()).ok())
+            .into_iter()
+            .flatten()
+            .map(|edge| edge.id())
+            .filter(|edge| *edge != declared_outgoing)
+            .collect(),
+        RestrictionKind::Unsupported => Vec::new(),
+    };
+    result.forbidden_maneuvers = forbidden
+        .into_iter()
+        .map(|outgoing| CompiledManeuverProvenance {
+            incoming_edge_id: incoming.value(),
+            outgoing_edge_id: outgoing.value(),
         })
         .collect();
-    Ok(GraphProvenance {
-        provenance_version: "osm_graph_provenance_v1".to_owned(),
-        graph_snapshot_digest: graph.metadata().snapshot_digest().to_owned(),
-        normalized_dataset_sha256: decoded.payload_sha256.clone(),
-        nodes,
-        ways,
-        restrictions,
-    })
+    result.status = match selected.kind {
+        RestrictionKind::No => "enforced_no",
+        RestrictionKind::Only => "enforced_only",
+        RestrictionKind::Unsupported => "preserved_unsupported_restriction_value",
+    }
+    .to_owned();
+    result
+}
+
+fn select_motorcycle_restriction(
+    relation: &NormalizedRelation,
+) -> Option<&crate::model::NormalizedRestriction> {
+    let motorcycle = relation
+        .restrictions
+        .iter()
+        .find(|restriction| restriction.tag == "restriction:motorcycle")
+        .or_else(|| {
+            relation
+                .restrictions
+                .iter()
+                .find(|restriction| restriction.tag.starts_with("restriction:motorcycle:"))
+        });
+    if motorcycle.is_some() {
+        return motorcycle;
+    }
+    let excepts_motorcycle = relation.except.as_deref().is_some_and(|except| {
+        except
+            .split([';', ','])
+            .map(str::trim)
+            .any(|vehicle| matches!(vehicle, "motorcycle" | "motor_vehicle" | "vehicle"))
+    });
+    (!excepts_motorcycle)
+        .then(|| {
+            relation
+                .restrictions
+                .iter()
+                .find(|restriction| restriction.tag == "restriction")
+                .or_else(|| {
+                    relation
+                        .restrictions
+                        .iter()
+                        .find(|restriction| restriction.tag == "restriction:conditional")
+                })
+        })
+        .flatten()
+}
+
+fn incoming_edges(way: &SourceWayMapping, via: i64) -> Vec<EdgeId> {
+    way.segments
+        .iter()
+        .filter_map(|segment| {
+            if segment.source_to_node == via {
+                segment.forward_edge_id.map(EdgeId::new)
+            } else if segment.source_from_node == via {
+                segment.reverse_edge_id.map(EdgeId::new)
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
+fn outgoing_edges(way: &SourceWayMapping, via: i64) -> Vec<EdgeId> {
+    way.segments
+        .iter()
+        .filter_map(|segment| {
+            if segment.source_from_node == via {
+                segment.forward_edge_id.map(EdgeId::new)
+            } else if segment.source_to_node == via {
+                segment.reverse_edge_id.map(EdgeId::new)
+            } else {
+                None
+            }
+        })
+        .collect()
 }
 
 fn traversal_provenance(decision: &TraversalPolicyDecision) -> TraversalPolicyProvenance {
@@ -779,10 +957,10 @@ fn derive_snapshot_identity(
         routing_profile: DELIVERY_MOTORCYCLE_PROFILE,
         jurisdiction_policy: NG_JURISDICTION_POLICY,
         compiler_semantic_version: COMPILER_SEMANTIC_VERSION,
-        graph_schema_version: 2,
-        provenance_schema_version: 1,
+        graph_schema_version: 3,
+        provenance_schema_version: 2,
         build_configuration: BUILD_CONFIGURATION,
-        turn_restrictions_enforced: false,
+        turn_restrictions_enforced: true,
         drafts,
     })?;
     let digest = Sha256::digest(preimage);

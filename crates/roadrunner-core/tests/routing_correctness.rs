@@ -277,6 +277,70 @@ fn seeded_dijkstra_matches_independent_bellman_ford_and_zero_astar() {
 }
 
 #[test]
+fn maneuver_aware_search_keeps_distinct_incoming_edge_states() {
+    let unrestricted = graph(4, &[(0, 0, 2), (1, 0, 1), (2, 1, 2), (3, 2, 3)]);
+    let direct = edge_between(&unrestricted, 0, 2);
+    let exit = edge_between(&unrestricted, 2, 3);
+    let graph = match unrestricted.with_forbidden_maneuvers(vec![(direct, exit)]) {
+        Ok(value) => value,
+        Err(error) => panic!("maneuver fixture failed: {error}"),
+    };
+    let weights = BTreeMap::from([
+        (direct, 1.0),
+        (edge_between(&graph, 0, 1), 2.0),
+        (edge_between(&graph, 1, 2), 2.0),
+        (exit, 1.0),
+    ]);
+    let evaluator = WeightedEvaluator {
+        weights,
+        forbidden: None,
+        fail: None,
+    };
+    let dijkstra_route = match dijkstra(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(3),
+        &evaluator,
+        &RoutingContext::new(),
+    ) {
+        Ok(value) => value,
+        Err(error) => panic!("expanded Dijkstra failed: {error}"),
+    };
+    let astar_route = match astar(
+        &graph,
+        NodeId::new(0),
+        NodeId::new(3),
+        &evaluator,
+        &ZeroHeuristic::new(CostKind::TravelTime),
+        &RoutingContext::new(),
+    ) {
+        Ok(value) => value,
+        Err(error) => panic!("expanded A* failed: {error}"),
+    };
+    assert_eq!(
+        dijkstra_route.path(),
+        &[
+            NodeId::new(0),
+            NodeId::new(1),
+            NodeId::new(2),
+            NodeId::new(3)
+        ]
+    );
+    assert_eq!(dijkstra_route.path(), astar_route.path());
+    assert_eq!(dijkstra_route.total_cost(), astar_route.total_cost());
+    let encoded = match encode_graph_artifact(&graph) {
+        Ok(value) => value,
+        Err(error) => panic!("maneuver graph encoding failed: {error}"),
+    };
+    let decoded = match decode_graph_artifact(&encoded) {
+        Ok(value) => value,
+        Err(error) => panic!("maneuver graph decoding failed: {error}"),
+    };
+    assert!(decoded.metadata().turn_restrictions_enforced());
+    assert_eq!(decoded.forbidden_maneuvers(), &[(direct, exit)]);
+}
+
+#[test]
 fn built_in_distance_heuristic_matches_dijkstra() {
     let (graph, _) = generated(73);
     for destination in 1..12_u32 {

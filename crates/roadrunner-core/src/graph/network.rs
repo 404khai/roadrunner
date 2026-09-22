@@ -153,6 +153,9 @@ impl GraphMetadata {
     pub const fn turn_restrictions_enforced(&self) -> bool {
         self.turn_restrictions_enforced
     }
+    pub(super) const fn set_turn_restrictions_enforced(&mut self, enforced: bool) {
+        self.turn_restrictions_enforced = enforced;
+    }
     /// Returns the authoritative full semantic snapshot digest.
     #[must_use]
     pub fn snapshot_digest(&self) -> &str {
@@ -396,6 +399,7 @@ impl GraphBuilder {
             edges,
             adjacency_offsets,
             geometry,
+            forbidden_maneuvers: Vec::new(),
         })
     }
 }
@@ -410,9 +414,11 @@ pub struct FrozenGraph {
     edges: Vec<DirectedEdge>,
     adjacency_offsets: Vec<usize>,
     geometry: Vec<CanonicalCoordinate>,
+    forbidden_maneuvers: Vec<(EdgeId, EdgeId)>,
 }
 
 impl FrozenGraph {
+    #[allow(clippy::too_many_arguments)]
     pub(super) fn from_validated_parts(
         snapshot_id: GraphSnapshotId,
         metadata: GraphMetadata,
@@ -421,6 +427,7 @@ impl FrozenGraph {
         edges: Vec<DirectedEdge>,
         adjacency_offsets: Vec<usize>,
         geometry: Vec<CanonicalCoordinate>,
+        forbidden_maneuvers: Vec<(EdgeId, EdgeId)>,
     ) -> Self {
         Self {
             snapshot_id,
@@ -430,7 +437,54 @@ impl FrozenGraph {
             edges,
             adjacency_offsets,
             geometry,
+            forbidden_maneuvers,
         }
+    }
+
+    /// Enables maneuver-aware routing with a canonical set of forbidden
+    /// `(incoming edge, outgoing edge)` pairs.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when an edge is absent or the pair is not connected at
+    /// a common via node.
+    pub fn with_forbidden_maneuvers(
+        mut self,
+        mut maneuvers: Vec<(EdgeId, EdgeId)>,
+    ) -> Result<Self, GraphError> {
+        maneuvers.sort_unstable();
+        maneuvers.dedup();
+        for &(incoming_id, outgoing_id) in &maneuvers {
+            let incoming = self
+                .edge(incoming_id)
+                .ok_or(GraphError::EdgeNotFound { id: incoming_id })?;
+            let outgoing = self
+                .edge(outgoing_id)
+                .ok_or(GraphError::EdgeNotFound { id: outgoing_id })?;
+            if incoming.to() != outgoing.from() {
+                return Err(GraphError::DisconnectedManeuver {
+                    incoming: incoming_id,
+                    outgoing: outgoing_id,
+                });
+            }
+        }
+        self.forbidden_maneuvers = maneuvers;
+        self.metadata.set_turn_restrictions_enforced(true);
+        Ok(self)
+    }
+
+    /// Returns whether the transition between two directed edges is permitted.
+    #[must_use]
+    pub fn is_maneuver_allowed(&self, incoming: EdgeId, outgoing: EdgeId) -> bool {
+        self.forbidden_maneuvers
+            .binary_search(&(incoming, outgoing))
+            .is_err()
+    }
+
+    /// Returns canonical forbidden maneuver pairs.
+    #[must_use]
+    pub fn forbidden_maneuvers(&self) -> &[(EdgeId, EdgeId)] {
+        &self.forbidden_maneuvers
     }
 
     /// Returns snapshot identity.

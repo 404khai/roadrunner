@@ -1,6 +1,6 @@
 # OpenStreetMap ingestion
 
-Phase 7 implements this boundary:
+Phases 7 and 7.5 implement this boundary:
 
 ```text
 .osm.pbf
@@ -65,6 +65,27 @@ Canonical provenance maps retained OSM nodes to dense nodes and OSM ways to
 ordered physical segments plus forward/reverse edges and actual compiled
 access/speed attributes. It is bound to the exact full semantic snapshot digest.
 
+## Maneuver-aware routing
+
+The delivery-motorcycle compiler resolves applicable, non-conditional node-via
+restrictions with exactly one `from` way, one `via` node, and one `to` way. The
+supported values are `no_left_turn`, `no_right_turn`, `no_straight_on`,
+`no_u_turn`, `only_left_turn`, `only_right_turn`, and `only_straight_on`.
+`restriction:motorcycle` takes precedence over a generic `restriction`; a generic
+restriction is ignored when `except` includes `motorcycle`, `motor_vehicle`, or
+`vehicle`.
+
+Compilation resolves source members to directed graph edges after one-way and
+access policy has been applied. A `no_*` relation forbids its resolved edge pair.
+An `only_*` relation forbids every other outgoing edge after the incoming edge.
+Dijkstra and A* then search `(node, incoming edge)` states, so a cheaper arrival
+that cannot make the next turn does not suppress a legal arrival at the same
+node. Route reconstruction follows expanded-state predecessors.
+
+Way-via, conditional, malformed, ambiguous, unresolved, and unsupported vehicle
+forms remain preserved with explicit provenance statuses. They are not silently
+treated as enforced.
+
 ## Snapshot trust boundary
 
 A snapshot directory contains `graph.rr-graph`, `graph.rr-provenance`, and
@@ -77,5 +98,7 @@ The authoritative 256-bit `GraphSnapshotDigest` binds source identity, semantic
 versions/configuration, canonical graph semantics, provenance, and capabilities.
 The 64-bit snapshot ID is a derived in-process convenience only.
 
-Phase 7 preserves restrictions and resolution provenance but does not enforce
-maneuvers. Phase 7 snapshots report `turn_restrictions_enforced: false`.
+Current compiled snapshots report `turn_restrictions_enforced: true`, including
+snapshots that contain no applicable restrictions, because the routing engine
+enforces the declared supported subset. Graph and provenance schema versions are
+part of snapshot identity; older Phase 7 bundles must be rebuilt.
