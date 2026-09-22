@@ -140,7 +140,8 @@ input and produces a validated, deterministic snapshot. Nodes, road segments,
 directed edges, adjacency, and geometry use contiguous indexable storage.
 
 `NodeId`, `RoadSegmentId`, and `EdgeId` are meaningful only inside one graph
-snapshot. Durable or detached references pair them with `GraphSnapshotId`.
+snapshot. Durable or detached references pair them with the collision-resistant
+`GraphSnapshotDigest`; the 64-bit `GraphSnapshotId` is a runtime convenience.
 
 ```text
 GraphBuilder -> validate/finalize -> FrozenGraph(snapshot_id)
@@ -367,12 +368,13 @@ The accepted decisions are normative in [adr/](adr/).
 
 The implemented Phase 7 adapter is documented in
 [OpenStreetMap ingestion](osm-ingestion.md), with acceptance evidence in the
-[Phase 7 completion report](phase-7-completion.md). `roadrunner-osm` owns staged PBF
+[Phase 7 remediation report](phase-7-remediation-report.md). `roadrunner-osm` owns staged PBF
 extraction, the independently validated normalized dataset artifact, the
 versioned delivery-motorcycle and Nigeria policy tables, contraction, and build
 diagnostics. `roadrunner-core` remains unaware of OSM types and tags.
 
-Turn-restriction source members and via split points cross this boundary, while
+Validated source-to-graph provenance, restriction members, and via split points
+cross this boundary, while
 the resulting graph metadata and manifest explicitly report that restrictions
 are not enforced. No Phase 7.5 maneuver state or Phase 8 reference-engine
 comparison is part of this pipeline.

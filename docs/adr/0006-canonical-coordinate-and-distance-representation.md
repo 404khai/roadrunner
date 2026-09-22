@@ -32,6 +32,13 @@ explicitly and never merged merely by coordinate equality.
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+Artifact coordinates pass the same E7/WGS84 validation as constructed values.
+Deep verification recomputes polyline Haversine distance, endpoint lower bounds,
+geometry orientation, and free-flow traversal time under one central numerical
+tolerance policy.
+
 - Geometry has exact canonical equality and compact storage.
 - Stored distance can be reproduced from the artifact.
 - Distance-model or coordinate-scale changes are versioned semantic changes.

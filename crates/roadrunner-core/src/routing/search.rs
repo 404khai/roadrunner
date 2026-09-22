@@ -167,6 +167,7 @@ pub(super) fn reconstruct_route(
     }
     Ok(RouteResult::new(
         graph.snapshot_id(),
+        graph.metadata().snapshot_digest().to_owned(),
         algorithm,
         path,
         edges,

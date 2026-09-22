@@ -51,6 +51,7 @@ pub fn dijkstra(
     if source == destination {
         return Ok(RouteResult::new(
             graph.snapshot_id(),
+            graph.metadata().snapshot_digest().to_owned(),
             RoutingAlgorithm::Dijkstra,
             vec![source],
             Vec::new(),

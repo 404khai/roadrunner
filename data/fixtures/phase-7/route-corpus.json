@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "fixture": "lagos-marina.osm.pbf",
+  "queries": [
+    {
+      "id": "short_unpaved",
+      "from_osm_node": 86533883,
+      "to_osm_node": 3417072221,
+      "expected": "reachable"
+    },
+    {
+      "id": "medium_mixed_surface",
+      "from_osm_node": 3597365296,
+      "to_osm_node": 5597000373,
+      "expected": "reachable"
+    },
+    {
+      "id": "long_main_component",
+      "from_osm_node": 5602610872,
+      "to_osm_node": 5594385916,
+      "expected": "reachable"
+    },
+    {
+      "id": "same_origin_destination",
+      "from_osm_node": 86533883,
+      "to_osm_node": 86533883,
+      "expected": "reachable"
+    },
+    {
+      "id": "cross_component",
+      "from_osm_node": 86533883,
+      "to_osm_node": 7735923848,
+      "expected": "unreachable"
+    },
+    {
+      "id": "one_way_forward",
+      "from_osm_node": 7735923848,
+      "to_osm_node": 7735923851,
+      "expected": "reachable"
+    },
+    {
+      "id": "one_way_reverse",
+      "from_osm_node": 7735923851,
+      "to_osm_node": 7735923848,
+      "expected": "unreachable"
+    },
+    {
+      "id": "parallel_one_way_segments",
+      "from_osm_node": 7735923852,
+      "to_osm_node": 7735923853,
+      "expected": "reachable"
+    },
+    {
+      "id": "paved_corridor",
+      "from_osm_node": 3597365327,
+      "to_osm_node": 5592870642,
+      "expected": "reachable"
+    }
+  ]
+}

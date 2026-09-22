@@ -50,7 +50,7 @@ result snapshot.
 The initial result is
 [`2026-09-04-apple-m3-astar-comparison.json`](results/2026-09-04-apple-m3-astar-comparison.json).
 
-## Phase 7 OSM pipeline
+## Phase 7 OSM remediation baseline
 
 Run the real-fixture ingestion benchmark with:
 
@@ -58,11 +58,14 @@ Run the real-fixture ingestion benchmark with:
 cargo bench -p roadrunner-osm --bench osm_pipeline --locked
 ```
 
-It measures two-pass PBF extraction, normalized-artifact decoding/validation,
-and `delivery_motorcycle_v1`/`ng_v1` graph compilation separately. The input is
-the versioned Lagos Marina fixture documented under `data/fixtures/phase-7/`.
-The fixture is deliberately tiny and provides real-road pipeline evidence, not
-an OSM-scale performance claim.
+It measures extraction, normalized validation, `delivery_motorcycle_v2` plus
+`ng_v2` compilation, graph/provenance encoding and validation, deep
+verification, and Dijkstra/A* routing. It runs both the small correctness input
+and the larger pinned engineering input documented under
+`data/fixtures/phase-7/`. Process-level `/usr/bin/time -l` measurements provide
+peak resident memory for extraction, compile/publication, and load/verification.
+Neither input supports an OSM-scale or bounded-memory claim.
 
-The initial result is
-[`2026-09-19-apple-m3-phase-7-osm.json`](results/2026-09-19-apple-m3-phase-7-osm.json).
+The remediated result is
+[`2026-09-21-apple-m3-phase-7-remediation.json`](results/2026-09-21-apple-m3-phase-7-remediation.json).
+The 2026-09-19 result remains historical evidence for the superseded schema.

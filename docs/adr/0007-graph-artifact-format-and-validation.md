@@ -30,6 +30,14 @@ atomic publication so partial files never appear valid.
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+The publication unit is a canonical graph/provenance/manifest snapshot bundle.
+Every load validates framing, domain values, unique traversals, contiguous
+geometry, canonical CSR adjacency, manifest agreement, provenance ranges and
+ordering, hashes, and snapshot binding. Publication additionally runs the deep
+verifier and atomically renames the complete directory.
+
 - Routing code can trust `FrozenGraph` invariants in its hot path.
 - Corrupt, truncated, or incompatible artifacts fail explicitly.
 - Loading has validation cost that must be benchmarked.

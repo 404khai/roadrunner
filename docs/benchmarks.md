@@ -1,5 +1,19 @@
 # Routing Benchmarks
 
+## Phase 7 remediation baseline (2026-09-21)
+
+The OSM lifecycle has separate small correctness and larger engineering
+fixtures. Structured counts, bundle sizes, Criterion median/p95/p99 samples, and
+process peak-memory measurements are recorded in
+[`2026-09-21-apple-m3-phase-7-remediation.json`](../benchmarks/results/2026-09-21-apple-m3-phase-7-remediation.json).
+The engineering graph contains 652 nodes, 780 physical segments, and 1,470
+directed edges. On the recorded Apple M3 environment its compilation median is
+18.67 ms, graph-load median 5.63 ms, and deep-verification median 98.49 µs.
+
+These measurements establish lifecycle evidence only. They do not establish
+production scalability, bounded-memory extraction, or a reason for speculative
+graph-layout optimization.
+
 > Historical note: the measurements below describe the Phase 6 mutable graph and
 > graph-scanning A* implementation. They are preserved for comparison and are not
 > evidence of Phase 7 or OSM-scale performance. The revised-core baseline is
@@ -90,7 +104,7 @@ These synthetic results isolate search behavior; they do not establish performan
 networks. Memory remains unreported until a controlled allocator or profiler configuration is
 available.
 
-## Phase 7 real-road pipeline baseline
+## Superseded Phase 7 real-road pipeline baseline (2026-09-19)
 
 The Phase 7 harness uses the committed, provenance-pinned Lagos Marina PBF and
 measures source extraction, normalized-artifact validation, and motorcycle graph
@@ -101,5 +115,7 @@ On the recorded Apple M3 environment, the 18,932-byte fixture normalized 218
 required source nodes and 37 candidate ways, then compiled 57 routing nodes, 58
 segments, and 112 directed edges. Median timings were approximately 1.054 ms for
 two-pass extraction, 0.494 ms for decode/validation, and 0.498 ms for graph
-compilation. These values are regression evidence for this exact small fixture;
+compilation. These values are historical evidence for the superseded v1
+normalization/profile and must not be compared as current output. They are
+regression evidence for that exact small fixture;
 they make no claim about city, country, or planet-scale ingestion.

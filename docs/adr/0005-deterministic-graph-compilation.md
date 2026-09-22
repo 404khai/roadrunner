@@ -26,6 +26,13 @@ deterministically; pruning is an explicit build option that changes the artifact
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+Determinism covers canonical normalized bytes, graph bytes, provenance,
+manifests, dense IDs, adjacency, geometry, routes, and the full semantic
+snapshot digest. Semantic build configuration is identity-bearing; worker
+count, temporary paths, timing, and other execution configuration are not.
+
 - Rebuilds are reproducible and benchmark/regression diffs are attributable.
 - Equal-cost tie-breaking can safely use deterministic dense IDs.
 - Offline sorting and canonicalization consume additional build time and memory.

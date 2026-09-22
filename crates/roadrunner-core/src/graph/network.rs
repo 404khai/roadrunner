@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 
 use crate::geo::{CanonicalCoordinate, Meters, Seconds, haversine_distance};
 
@@ -9,6 +10,9 @@ use super::{
     GraphError, GraphSnapshotId, Node, NodeId, Orientation, RoadSegment, RoadSegmentId,
 };
 
+/// Numerical tolerance for geometry-derived distance invariant comparisons.
+pub const DISTANCE_INVARIANT_TOLERANCE_METERS: f64 = 1.0e-8;
+
 /// Immutable metadata that participates in graph semantics.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GraphMetadata {
@@ -16,6 +20,7 @@ pub struct GraphMetadata {
     jurisdiction_policy: String,
     build_identity: GraphBuildIdentity,
     turn_restrictions_enforced: bool,
+    snapshot_digest: String,
 }
 
 /// Versioned inputs that explain how a graph snapshot was compiled.
@@ -95,11 +100,37 @@ impl GraphMetadata {
         jurisdiction_policy: impl Into<String>,
         build_identity: GraphBuildIdentity,
     ) -> Self {
+        let routing_profile = routing_profile.into();
+        let jurisdiction_policy = jurisdiction_policy.into();
+        let mut hasher = Sha256::new();
+        hasher.update(routing_profile.as_bytes());
+        hasher.update(jurisdiction_policy.as_bytes());
+        hasher.update(build_identity.source_integrity().as_bytes());
+        hasher.update(build_identity.compiler_version().as_bytes());
+        hasher.update(build_identity.normalization_version().as_bytes());
+        hasher.update(build_identity.build_configuration().as_bytes());
+        Self {
+            routing_profile,
+            jurisdiction_policy,
+            build_identity,
+            turn_restrictions_enforced: false,
+            snapshot_digest: format!("{:x}", hasher.finalize()),
+        }
+    }
+    /// Creates metadata bound to an authoritative semantic snapshot digest.
+    #[must_use]
+    pub fn with_snapshot_digest(
+        routing_profile: impl Into<String>,
+        jurisdiction_policy: impl Into<String>,
+        build_identity: GraphBuildIdentity,
+        snapshot_digest: impl Into<String>,
+    ) -> Self {
         Self {
             routing_profile: routing_profile.into(),
             jurisdiction_policy: jurisdiction_policy.into(),
             build_identity,
             turn_restrictions_enforced: false,
+            snapshot_digest: snapshot_digest.into(),
         }
     }
     /// Returns the routing-profile identifier.
@@ -121,6 +152,11 @@ impl GraphMetadata {
     #[must_use]
     pub const fn turn_restrictions_enforced(&self) -> bool {
         self.turn_restrictions_enforced
+    }
+    /// Returns the authoritative full semantic snapshot digest.
+    #[must_use]
+    pub fn snapshot_digest(&self) -> &str {
+        &self.snapshot_digest
     }
 }
 
@@ -254,7 +290,7 @@ impl GraphBuilder {
         let mut segments = Vec::with_capacity(self.segments.len());
         let mut geometry = Vec::new();
         let mut edge_drafts = Vec::new();
-        for (index, (_builder_id, draft)) in self.segments.into_iter().enumerate() {
+        for (index, (builder_segment_id, draft)) in self.segments.into_iter().enumerate() {
             let segment_value = u32::try_from(index).map_err(|_| GraphError::DenseIdOverflow {
                 collection: "segments",
             })?;
@@ -276,6 +312,15 @@ impl GraphBuilder {
                         pair[1].to_coordinate(),
                     ))
                     .map_err(|source| GraphError::DerivedMeasurement { source })?;
+            }
+            let endpoint_distance = haversine_distance(
+                draft.geometry[0].to_coordinate(),
+                draft.geometry[draft.geometry.len() - 1].to_coordinate(),
+            );
+            if distance.value() + DISTANCE_INVARIANT_TOLERANCE_METERS < endpoint_distance.value() {
+                return Err(GraphError::EndpointDistanceLowerBound {
+                    segment_id: builder_segment_id,
+                });
             }
             geometry.extend(draft.geometry);
             segments.push(RoadSegment::new(

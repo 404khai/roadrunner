@@ -11,7 +11,7 @@ use crate::error::{OsmError, invalid};
 use crate::model::NormalizedOsmDataset;
 
 const MAGIC: &str = "ROADRUNNER_NORMALIZED_OSM";
-const SCHEMA_VERSION: u32 = 1;
+const SCHEMA_VERSION: u32 = 2;
 static TEMPORARY_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Serialize, Deserialize)]
@@ -155,6 +155,16 @@ fn validate_dataset(dataset: &NormalizedOsmDataset) -> Result<(), OsmError> {
     {
         return Err(invalid("invalid dataset provenance"));
     }
+    if dataset.source_statistics.nodes_seen < dataset.source_statistics.referenced_nodes_resolved
+        || dataset.source_statistics.ways_seen < dataset.source_statistics.candidate_ways
+        || dataset.source_statistics.relations_seen
+            < dataset.source_statistics.restriction_relations_seen
+        || dataset.source_statistics.referenced_nodes_requested
+            != dataset.source_statistics.referenced_nodes_resolved
+                + dataset.source_statistics.referenced_nodes_missing
+    {
+        return Err(invalid("invalid source extraction statistics"));
+    }
     strictly_sorted_unique(&dataset.nodes, |node| node.osm_id, "nodes")?;
     strictly_sorted_unique(&dataset.ways, |way| way.osm_id, "ways")?;
     strictly_sorted_unique(&dataset.relations, |relation| relation.osm_id, "relations")?;
@@ -181,6 +191,7 @@ fn validate_dataset(dataset: &NormalizedOsmDataset) -> Result<(), OsmError> {
         {
             return Err(invalid(format!("invalid normalized node {}", node.osm_id)));
         }
+        add_node_semantic_split_reasons(node, &mut expected_split_reasons);
     }
     for way in &dataset.ways {
         if way.osm_id <= 0 || way.node_refs.len() < 2 {
@@ -212,14 +223,35 @@ fn validate_dataset(dataset: &NormalizedOsmDataset) -> Result<(), OsmError> {
                 .or_default()
                 .insert(crate::model::SplitPoint::WayEndpoint);
         }
-        if !way.tags.contains_key("highway") {
-            return Err(invalid(format!("way {} has no highway tag", way.osm_id)));
+        let is_ferry = way
+            .tags
+            .get("route")
+            .is_some_and(|value| value.trim().eq_ignore_ascii_case("ferry"));
+        if !way.tags.contains_key("highway") && !is_ferry {
+            return Err(invalid(format!(
+                "way {} is neither a road nor a supported connector",
+                way.osm_id
+            )));
         }
     }
     for relation in &dataset.relations {
-        if relation.osm_id <= 0 || relation.restriction.is_empty() {
+        if relation.osm_id <= 0 {
             return Err(invalid(format!(
                 "invalid restriction relation {}",
+                relation.osm_id
+            )));
+        }
+        if relation
+            .restrictions
+            .windows(2)
+            .any(|pair| pair[0].tag >= pair[1].tag)
+            || relation
+                .restrictions
+                .iter()
+                .any(|restriction| restriction.tag.is_empty() || restriction.value.is_empty())
+        {
+            return Err(invalid(format!(
+                "restriction relation {} values are not canonical",
                 relation.osm_id
             )));
         }
@@ -284,6 +316,34 @@ fn validate_dataset(dataset: &NormalizedOsmDataset) -> Result<(), OsmError> {
         ));
     }
     Ok(())
+}
+
+fn add_node_semantic_split_reasons(
+    node: &crate::model::NormalizedNode,
+    reasons: &mut std::collections::BTreeMap<
+        i64,
+        std::collections::BTreeSet<crate::model::SplitPoint>,
+    >,
+) {
+    use crate::model::SplitPoint;
+    for (key, reason) in [
+        ("barrier", SplitPoint::Barrier),
+        ("ford", SplitPoint::Ford),
+        ("highway", SplitPoint::HighwayNode),
+    ] {
+        if node.tags.contains_key(key) || node.unsupported_tags.contains_key(key) {
+            reasons.entry(node.osm_id).or_default().insert(reason);
+        }
+    }
+    if ["access", "vehicle", "motor_vehicle", "motorcycle"]
+        .into_iter()
+        .any(|key| node.tags.contains_key(key))
+    {
+        reasons
+            .entry(node.osm_id)
+            .or_default()
+            .insert(SplitPoint::AccessBoundary);
+    }
 }
 
 fn is_sha256(value: &str) -> bool {

@@ -76,6 +76,7 @@ pub fn astar(
     if source == destination {
         return Ok(RouteResult::new(
             graph.snapshot_id(),
+            graph.metadata().snapshot_digest().to_owned(),
             RoutingAlgorithm::AStar,
             vec![source],
             Vec::new(),

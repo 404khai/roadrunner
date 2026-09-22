@@ -46,6 +46,14 @@ distinct concepts until their generation rules are deliberately specified.
 - Globally stable dense IDs across rebuilds are rejected.
 - The exact CSR layout and `GraphSnapshotId` generation are deferred.
 
+## Phase 7 remediation amendment (2026-09-21)
+
+The authoritative durable identity is now a full SHA-256
+`GraphSnapshotDigest` over declared semantic metadata and canonical graph and
+provenance semantics. The 64-bit ID is derived convenience only. Provenance,
+manifests, durable routes, replay, and benchmark evidence bind to the full
+digest; compact-ID resolution must also compare that digest.
+
 ## Relationship to other ADRs
 
 ADR 0002 defines snapshot-owned segments and edges. ADR 0005 defines

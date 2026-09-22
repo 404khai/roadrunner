@@ -38,6 +38,14 @@ epsilon comparisons are prohibited in relaxation and heap ordering.
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+Static access is reason-specific. General edges are traversable; destination,
+delivery, customer, private, permit, and unknown-explicit restrictions are
+denied unless request context proves the particular supported authorization.
+There is no blanket contextual-access flag. An access denial is a normal
+`Forbidden` traversal outcome.
+
 - Traffic and time-dependent costs can use actual arrival time.
 - Distance, elapsed time, and composite objective values are not conflated.
 - Unsupported search problems fail explicitly rather than returning plausible

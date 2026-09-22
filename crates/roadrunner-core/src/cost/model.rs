@@ -1,5 +1,5 @@
 use crate::geo::Seconds;
-use crate::graph::{DirectedEdge, RoadSegment};
+use crate::graph::{AccessClass, DirectedEdge, RoadSegment};
 
 use super::{CostError, CostKind, RouteCost, RoutingContext};
 
@@ -88,6 +88,18 @@ pub trait TraversalEvaluator: Send + Sync {
     ) -> Result<TraversalEvaluation, CostError>;
 }
 
+fn access_allowed(access: AccessClass, context: &RoutingContext) -> bool {
+    match access {
+        AccessClass::General => true,
+        AccessClass::Private => context.has_private_access(),
+        AccessClass::PermitRequired => context.has_permit_access(),
+        AccessClass::Destination
+        | AccessClass::Delivery
+        | AccessClass::Customers
+        | AccessClass::UnknownExplicit => false,
+    }
+}
+
 /// Static physical-distance objective.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct DistanceCost;
@@ -110,8 +122,11 @@ impl TraversalEvaluator for DistanceCost {
         edge: &DirectedEdge,
         segment: &RoadSegment,
         _state: TraversalState,
-        _context: &RoutingContext,
+        context: &RoutingContext,
     ) -> Result<TraversalEvaluation, CostError> {
+        if !access_allowed(edge.properties().access(), context) {
+            return Ok(TraversalEvaluation::Forbidden);
+        }
         Ok(TraversalEvaluation::Traversable {
             objective_cost: RouteCost::from_distance(segment.distance()),
             travel_time: edge.free_flow_travel_time(),
@@ -141,8 +156,11 @@ impl TraversalEvaluator for TravelTimeCost {
         edge: &DirectedEdge,
         _segment: &RoadSegment,
         _state: TraversalState,
-        _context: &RoutingContext,
+        context: &RoutingContext,
     ) -> Result<TraversalEvaluation, CostError> {
+        if !access_allowed(edge.properties().access(), context) {
+            return Ok(TraversalEvaluation::Forbidden);
+        }
         let travel_time = edge.free_flow_travel_time();
         Ok(TraversalEvaluation::Traversable {
             objective_cost: RouteCost::from_travel_time(travel_time),

@@ -1019,6 +1019,93 @@ Routing should operate on Roadrunner's internal graph representation.
 
 ---
 
+# PHASE 7.5 — Maneuver-Aware Routing & Turn Restrictions
+
+## Goal
+
+Make routing aware of legal maneuvers whose validity depends on the incoming
+traversal. Enforce the supported turn restrictions preserved during Phase 7
+before beginning serious reference-engine route-validity comparison.
+
+## Initial supported subset
+
+Support applicable motorcycle-relevant node-via restrictions that can be
+deterministically resolved from imported OSM restriction relations, including:
+
+```text
+no_left_turn
+no_right_turn
+no_straight_on
+no_u_turn
+
+only_left_turn
+only_right_turn
+only_straight_on
+```
+
+## Search-state change
+
+Routing may need to move from:
+
+```text
+NodeId
+```
+
+to conceptually:
+
+```text
+(NodeId, IncomingEdgeId)
+```
+
+because permitted outgoing traversals can depend on how the current node was
+entered.
+
+## Requirements
+
+* consume restriction provenance preserved by Phase 7
+* resolve source OSM `from / via / to` members against normalized graph traversals
+* preserve deterministic compilation
+* reject forbidden maneuvers during routing
+* keep unsupported restriction forms diagnosable
+* test `no_*` and `only_*`
+* test motorcycle-qualified restrictions
+* test restrictions interacting with one-way topology
+* test route reconstruction with expanded search state
+* expose accurate graph capability metadata
+
+Until this phase is complete, graph metadata must continue to report:
+
+```text
+turn_restrictions_enforced: false
+```
+
+## Deferred
+
+Phase 7.5 does not need to solve every OSM restriction semantic. Complex cases
+such as:
+
+```text
+multi-way via paths
+conditional/time-dependent restrictions
+complex vehicle qualification
+unsupported relation forms
+```
+
+may remain preserved but unsupported, with explicit diagnostics.
+
+## Completion condition
+
+Phase 7.5 is complete only when the supported turn-restriction subset affects
+routing correctly and:
+
+```text
+turn_restrictions_enforced: true
+```
+
+accurately describes that supported capability.
+
+---
+
 # PHASE 8 — Baseline Validation
 
 ## Goal

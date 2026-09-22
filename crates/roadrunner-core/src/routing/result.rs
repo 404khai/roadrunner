@@ -18,6 +18,7 @@ pub enum RoutingAlgorithm {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct RouteResult {
     graph_snapshot_id: GraphSnapshotId,
+    graph_snapshot_digest: String,
     algorithm: RoutingAlgorithm,
     path: Vec<NodeId>,
     edges: Vec<EdgeId>,
@@ -38,6 +39,7 @@ pub(super) struct RouteMetrics {
 impl RouteResult {
     pub(super) fn new(
         graph_snapshot_id: GraphSnapshotId,
+        graph_snapshot_digest: String,
         algorithm: RoutingAlgorithm,
         path: Vec<NodeId>,
         edges: Vec<EdgeId>,
@@ -45,6 +47,7 @@ impl RouteResult {
     ) -> Self {
         Self {
             graph_snapshot_id,
+            graph_snapshot_digest,
             algorithm,
             path,
             edges,
@@ -58,6 +61,11 @@ impl RouteResult {
     #[must_use]
     pub const fn graph_snapshot_id(&self) -> GraphSnapshotId {
         self.graph_snapshot_id
+    }
+    /// Returns the authoritative semantic graph snapshot digest.
+    #[must_use]
+    pub fn graph_snapshot_digest(&self) -> &str {
+        &self.graph_snapshot_digest
     }
     /// Returns the algorithm.
     #[must_use]

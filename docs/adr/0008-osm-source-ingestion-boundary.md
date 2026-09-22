@@ -44,6 +44,15 @@ validation.
 
 ## Consequences
 
+## Phase 7 remediation amendment (2026-09-21)
+
+`osm_normalization_v2` preserves the routing-source schema independently of the
+selected profile: routing node semantics, connectors, ordered way identities,
+unsupported relevant values, and independent generic/qualified/conditional
+restriction variants survive extraction. `delivery_motorcycle_v2` plus `ng_v2`
+owns access precedence, conservative directionality, physical suitability, and
+explainable speed decisions. Old normalized artifacts require rebuilding.
+
 - Parsing, profile compilation, and routing can be tested independently.
 - Additional profiles can reuse source extraction.
 - Unsupported tags and restrictions remain observable.

@@ -20,8 +20,18 @@ pub enum Orientation {
 pub enum AccessClass {
     /// Unconditionally available under static profile rules.
     General,
-    /// Requires request-time authorization or endpoint semantics.
-    Contextual,
+    /// Available only when destination-area semantics are proven.
+    Destination,
+    /// Available only for a qualifying delivery endpoint.
+    Delivery,
+    /// Available only for a qualifying customer endpoint.
+    Customers,
+    /// Available only with explicit private-road authorization.
+    Private,
+    /// Available only with a supported permit authorization.
+    PermitRequired,
+    /// Explicit source value not understood by this policy version.
+    UnknownExplicit,
 }
 
 /// Compiled directional attributes supplied to graph construction.
