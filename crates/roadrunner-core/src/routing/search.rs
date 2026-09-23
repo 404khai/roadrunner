@@ -36,6 +36,9 @@ pub(super) fn validate_request(
             node_id: destination,
         });
     }
+    if !evaluator.supports_graph(graph) {
+        return Err(RoutingError::EvaluatorGraphMismatch);
+    }
     if matches!(
         evaluator.capability(),
         SearchCapability::RequiresExpandedState | SearchCapability::Unsupported

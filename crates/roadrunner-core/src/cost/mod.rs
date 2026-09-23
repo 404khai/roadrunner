@@ -4,6 +4,7 @@ mod context;
 mod error;
 mod model;
 mod route_cost;
+mod traffic;
 
 pub use context::RoutingContext;
 pub use error::CostError;
@@ -12,3 +13,6 @@ pub use model::{
     TraversalEvaluator, TraversalState,
 };
 pub use route_cost::{CostKind, RouteCost};
+pub use traffic::{
+    TrafficAwareCost, TrafficError, TrafficLevel, TrafficMultiplier, TrafficSnapshot,
+};
