@@ -10,6 +10,7 @@ use roadrunner_osm::{
 
 mod alternatives_command;
 mod reference_comparison;
+mod time_dependent_command;
 mod traffic_command;
 
 fn main() -> ExitCode {
@@ -87,6 +88,23 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
         ] if route == "route" && traffic == "traffic" && scenario_flag == "--scenario" => {
             traffic_command::run(snapshot, source, destination, scenario)
         }
+        [
+            route,
+            schedule,
+            snapshot,
+            source,
+            destination,
+            scenario_flag,
+            scenario,
+            depart_flag,
+            depart,
+        ] if route == "route"
+            && schedule == "schedule"
+            && scenario_flag == "--scenario"
+            && depart_flag == "--depart" =>
+        {
+            time_dependent_command::run(snapshot, source, destination, scenario, depart)
+        }
         [] => {
             print_help();
             Ok(())
@@ -120,6 +138,7 @@ fn print_help() {
          roadrunner graph verify <snapshot-directory> --deep\n  \
          roadrunner route corpus <snapshot-directory> <route-corpus.json>\n  \
          roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>\n  \
-         roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>"
+         roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>\n  \
+         roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>"
     );
 }

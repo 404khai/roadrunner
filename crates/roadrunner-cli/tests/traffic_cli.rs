@@ -13,25 +13,7 @@ static SEQUENCE: AtomicU64 = AtomicU64::new(0);
 #[test]
 fn pinned_traffic_scenario_selects_longer_faster_route() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let dataset = extract_pbf(
-        root.join("data/fixtures/phase-7/lagos-marina.osm.pbf"),
-        "phase10-lagos-marina",
-    )
-    .unwrap_or_else(|error| panic!("extract fixture: {error}"));
-    let decoded = decode_dataset_artifact(
-        &encode_dataset_artifact(&dataset)
-            .unwrap_or_else(|error| panic!("encode fixture: {error}")),
-    )
-    .unwrap_or_else(|error| panic!("decode fixture: {error}"));
-    let compiled = compile_motorcycle_graph(&decoded)
-        .unwrap_or_else(|error| panic!("compile fixture: {error}"));
-    let snapshot = std::env::temp_dir().join(format!(
-        "roadrunner-phase10-cli-{}-{}",
-        std::process::id(),
-        SEQUENCE.fetch_add(1, Ordering::Relaxed)
-    ));
-    write_snapshot_bundle_atomic(&snapshot, &compiled)
-        .unwrap_or_else(|error| panic!("write snapshot: {error}"));
+    let snapshot = fixture_snapshot(&root, "phase10-lagos-marina");
     let output = Command::new(env!("CARGO_BIN_EXE_roadrunner"))
         .args([
             "route",
@@ -75,4 +57,81 @@ fn pinned_traffic_scenario_selects_longer_faster_route() {
         result["shortest_distance"]["route"]["edges"],
         result["traffic_fastest"]["route"]["edges"]
     );
+}
+
+#[test]
+fn pinned_time_profile_changes_route_with_departure_time() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let snapshot = fixture_snapshot(&root, "phase11-lagos-marina");
+    let scenario = root.join("data/fixtures/phase-11/lagos-marina-profile.json");
+    let mut routes = Vec::new();
+    for departure in ["0", "600"] {
+        let output = Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args([
+                "route",
+                "schedule",
+                snapshot
+                    .to_str()
+                    .unwrap_or_else(|| panic!("snapshot path is not UTF-8")),
+                "5602610872",
+                "5594385916",
+                "--scenario",
+                scenario
+                    .to_str()
+                    .unwrap_or_else(|| panic!("scenario path is not UTF-8")),
+                "--depart",
+                departure,
+            ])
+            .output()
+            .unwrap_or_else(|error| panic!("run scheduled CLI: {error}"));
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let result: serde_json::Value = serde_json::from_slice(&output.stdout)
+            .unwrap_or_else(|error| panic!("parse scheduled output: {error}"));
+        routes.push(result);
+    }
+    std::fs::remove_dir_all(&snapshot)
+        .unwrap_or_else(|error| panic!("remove temporary snapshot: {error}"));
+    assert_ne!(
+        routes[0]["time_dependent_fastest"]["route"]["edges"],
+        routes[1]["time_dependent_fastest"]["route"]["edges"]
+    );
+    assert_eq!(
+        routes[1]["time_dependent_fastest"]["route"]["edges"],
+        routes[1]["free_flow_fastest"]["route"]["edges"]
+    );
+    assert!(
+        routes[0]["time_dependent_fastest"]["time_dependent_eta_seconds"]
+            .as_f64()
+            .unwrap_or_else(|| panic!("early ETA"))
+            < routes[0]["free_flow_fastest"]["time_dependent_eta_seconds"]
+                .as_f64()
+                .unwrap_or_else(|| panic!("early baseline ETA"))
+    );
+}
+
+fn fixture_snapshot(root: &std::path::Path, source_id: &str) -> std::path::PathBuf {
+    let dataset = extract_pbf(
+        root.join("data/fixtures/phase-7/lagos-marina.osm.pbf"),
+        source_id,
+    )
+    .unwrap_or_else(|error| panic!("extract fixture: {error}"));
+    let decoded = decode_dataset_artifact(
+        &encode_dataset_artifact(&dataset)
+            .unwrap_or_else(|error| panic!("encode fixture: {error}")),
+    )
+    .unwrap_or_else(|error| panic!("decode fixture: {error}"));
+    let compiled = compile_motorcycle_graph(&decoded)
+        .unwrap_or_else(|error| panic!("compile fixture: {error}"));
+    let snapshot = std::env::temp_dir().join(format!(
+        "roadrunner-traffic-cli-{}-{}",
+        std::process::id(),
+        SEQUENCE.fetch_add(1, Ordering::Relaxed)
+    ));
+    write_snapshot_bundle_atomic(&snapshot, &compiled)
+        .unwrap_or_else(|error| panic!("write snapshot: {error}"));
+    snapshot
 }

@@ -197,7 +197,8 @@ optimize assignments using complex SLA penalties.
 A dimensionless factor applied to free-flow travel time. `1.0` means unchanged travel
 time; a value greater than `1.0` means slower traversal. Phase 10 uses validated
 static factors in a graph-bound traffic overlay, with an implicit default of `1.0`.
-It does not use a production traffic feed.
+Phase 11 also supports deterministic time profiles on directed edges. Neither
+model uses a production traffic feed.
 
 ## Travel time
 

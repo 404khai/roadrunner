@@ -6,6 +6,9 @@ use crate::graph::EdgeId;
 /// Errors produced while constructing or combining route costs.
 #[derive(Debug, Clone, Copy, PartialEq, Error)]
 pub enum CostError {
+    /// Departure time plus elapsed route time is not representable.
+    #[error("time-dependent edge entry time is not finite")]
+    EdgeEntryTimeOverflow,
     /// Traffic overlay does not contain the requested directed edge.
     #[error("traffic overlay has no factor for edge {edge_id}")]
     MissingTrafficEdge {
