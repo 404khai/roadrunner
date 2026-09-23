@@ -3,6 +3,22 @@
 Roadrunner stores reproducible benchmark definitions in crate `benches/` directories and
 structured result snapshots in [`results/`](results/).
 
+## Rider spatial lookup
+
+Run the Phase 12 linear scan versus immutable 3D spatial-tree comparison with:
+
+```bash
+cargo bench -p roadrunner-core --bench rider_lookup --locked -- --sample-size 30 --measurement-time 1
+```
+
+The seeded synthetic dataset places 100, 1K, 10K, or 100K riders in a 0.25-degree
+square around Lagos. Each benchmark searches a 5 km great-circle radius around
+`6.5244,3.3792` and returns at most 10 riders. Both implementations are checked
+for identical results before measurement. Snapshot construction is outside the
+timed query; rebuild costs and moving-rider update rates are not included. See
+[`../docs/rider-spatial-index.md`](../docs/rider-spatial-index.md) for the API and
+the [recorded result](results/2026-09-23-apple-m3-rider-lookup.json).
+
 ## Dijkstra baseline
 
 Run the Phase 5 baseline with:

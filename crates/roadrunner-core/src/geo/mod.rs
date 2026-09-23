@@ -9,5 +9,6 @@ mod units;
 pub use bounding_box::{BoundingBox, BoundingBoxError};
 pub use canonical_coordinate::{CanonicalCoordinate, CanonicalCoordinateError, E7_SCALE};
 pub use coordinate::{Coordinate, CoordinateError};
+pub(crate) use haversine::MEAN_EARTH_RADIUS_METERS;
 pub use haversine::haversine_distance;
 pub use units::{Distance, KilometersPerHour, MeasurementUnit, Meters, Seconds, UnitError};
