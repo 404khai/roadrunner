@@ -19,7 +19,7 @@ Unspecified edges use `1.0`. A `TrafficMultiplier` must be finite and at least `
 | heavy | 1.6 |
 | severe | 2.5 |
 
-An overlay is bound to a graph snapshot ID, semantic digest, and edge count. Unknown and duplicate directed-edge overrides fail validation. Input order does not affect the overlay digest. A forward edge's factor does not implicitly apply to its reverse traversal. The overlay contains static values for one calculation; production traffic feeds and departure-time profiles are later phases.
+An overlay is bound to a graph snapshot ID, semantic digest, and edge count. Unknown and duplicate directed-edge overrides fail validation. Input order does not affect the overlay digest. A forward edge's factor does not implicitly apply to its reverse traversal. This overlay contains static values for one calculation. [Phase 11 profiles](time-dependent-routing.md) provide deterministic departure-time costs; production traffic feeds remain outside the current scope.
 
 ## Reproduce the pinned fixture
 
