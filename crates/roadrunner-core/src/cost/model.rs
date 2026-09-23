@@ -1,5 +1,5 @@
 use crate::geo::Seconds;
-use crate::graph::{AccessClass, DirectedEdge, RoadSegment};
+use crate::graph::{AccessClass, DirectedEdge, FrozenGraph, RoadSegment};
 
 use super::{CostError, CostKind, RouteCost, RoutingContext};
 
@@ -68,6 +68,10 @@ pub trait TraversalEvaluator: Send + Sync {
     fn kind(&self) -> CostKind;
     /// Returns the search contract required by this evaluator.
     fn capability(&self) -> SearchCapability;
+    /// Returns whether this evaluator belongs to the requested graph snapshot.
+    fn supports_graph(&self, _graph: &FrozenGraph) -> bool {
+        true
+    }
     /// Declares whether this evaluator preserves a named heuristic's lower bound.
     ///
     /// Custom evaluators are conservative by default and accept only zero.

@@ -10,6 +10,7 @@ use roadrunner_osm::{
 
 mod alternatives_command;
 mod reference_comparison;
+mod traffic_command;
 
 fn main() -> ExitCode {
     match run(std::env::args_os().skip(1).collect()) {
@@ -75,6 +76,17 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
         ] if route == "route" && alternatives == "alternatives" && count_flag == "--count" => {
             alternatives_command::run(snapshot, source, destination, count)
         }
+        [
+            route,
+            traffic,
+            snapshot,
+            source,
+            destination,
+            scenario_flag,
+            scenario,
+        ] if route == "route" && traffic == "traffic" && scenario_flag == "--scenario" => {
+            traffic_command::run(snapshot, source, destination, scenario)
+        }
         [] => {
             print_help();
             Ok(())
@@ -107,6 +119,7 @@ fn print_help() {
          roadrunner osm compile <input.rr-osm> <snapshot-directory>\n  \
          roadrunner graph verify <snapshot-directory> --deep\n  \
          roadrunner route corpus <snapshot-directory> <route-corpus.json>\n  \
-         roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>"
+         roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>\n  \
+         roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>"
     );
 }

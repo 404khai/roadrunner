@@ -1,10 +1,17 @@
 use thiserror::Error;
 
 use super::CostKind;
+use crate::graph::EdgeId;
 
 /// Errors produced while constructing or combining route costs.
 #[derive(Debug, Clone, Copy, PartialEq, Error)]
 pub enum CostError {
+    /// Traffic overlay does not contain the requested directed edge.
+    #[error("traffic overlay has no factor for edge {edge_id}")]
+    MissingTrafficEdge {
+        /// Missing directed edge.
+        edge_id: EdgeId,
+    },
     /// A cost is NaN or infinite.
     #[error("{kind} cost must be finite, got {value}")]
     NotFinite {

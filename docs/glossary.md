@@ -195,8 +195,9 @@ optimize assignments using complex SLA penalties.
 ## Traffic multiplier
 
 A dimensionless factor applied to free-flow travel time. `1.0` means unchanged travel
-time; a value greater than `1.0` means slower traversal. v0 stores a validated
-default multiplier of `1.0` but does not implement traffic-aware routing.
+time; a value greater than `1.0` means slower traversal. Phase 10 uses validated
+static factors in a graph-bound traffic overlay, with an implicit default of `1.0`.
+It does not use a production traffic feed.
 
 ## Travel time
 

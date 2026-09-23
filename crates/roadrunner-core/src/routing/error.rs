@@ -25,6 +25,9 @@ impl std::fmt::Display for RouteEndpoint {
 /// Errors produced while calculating or reconstructing a route.
 #[derive(Debug, Clone, PartialEq, Error)]
 pub enum RoutingError {
+    /// The selected evaluator is bound to a different graph snapshot.
+    #[error("traversal evaluator belongs to a different graph snapshot")]
+    EvaluatorGraphMismatch,
     /// Alternative-route options violate their required bounds.
     #[error("invalid alternative-route options: {reason}")]
     InvalidAlternativeOptions {

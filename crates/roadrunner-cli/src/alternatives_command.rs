@@ -61,7 +61,7 @@ pub(super) fn run(
     Ok(())
 }
 
-fn source_node(provenance: &GraphProvenance, osm_node: i64) -> Result<NodeId, String> {
+pub(crate) fn source_node(provenance: &GraphProvenance, osm_node: i64) -> Result<NodeId, String> {
     provenance
         .nodes
         .binary_search_by_key(&osm_node, |mapping| mapping.osm_node_id)
