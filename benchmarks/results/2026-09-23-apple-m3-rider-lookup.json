@@ -1,0 +1,98 @@
+{
+  "date": "2026-09-23",
+  "hardware": {
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "dataset": {
+    "kind": "seeded synthetic",
+    "seed": 12,
+    "region": "latitude 6.4..6.65, longitude 3.25..3.50",
+    "query": {
+      "latitude": 6.5244,
+      "longitude": 3.3792,
+      "radius_meters": 5000,
+      "limit": 10
+    },
+    "rider_counts": [
+      100,
+      1000,
+      10000,
+      100000
+    ]
+  },
+  "configuration": {
+    "benchmark": "cargo bench -p roadrunner-core --bench rider_lookup --locked -- --sample-size 30 --measurement-time 1",
+    "profile": "release",
+    "rustc": "1.96.0",
+    "criterion_samples": 30,
+    "sample_statistic": "total sample nanoseconds / iterations; percentile by linear interpolation of sorted sample means",
+    "construction_included": false
+  },
+  "results": [
+    {
+      "riders": 100,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 2843.36,
+      "p95_ns": 2950.13,
+      "p99_ns": 2983.47
+    },
+    {
+      "riders": 100,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 1137.42,
+      "p95_ns": 1632.55,
+      "p99_ns": 2260.18
+    },
+    {
+      "riders": 1000,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 30966.27,
+      "p95_ns": 31092.0,
+      "p99_ns": 31679.23
+    },
+    {
+      "riders": 1000,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 2598.28,
+      "p95_ns": 2620.39,
+      "p99_ns": 2645.43
+    },
+    {
+      "riders": 10000,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 366690.51,
+      "p95_ns": 454984.11,
+      "p99_ns": 492153.45
+    },
+    {
+      "riders": 10000,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 3878.78,
+      "p95_ns": 4388.81,
+      "p99_ns": 12173.18
+    },
+    {
+      "riders": 100000,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 3331202.07,
+      "p95_ns": 3537525.58,
+      "p99_ns": 5053562.3
+    },
+    {
+      "riders": 100000,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 4717.97,
+      "p95_ns": 4750.57,
+      "p99_ns": 4753.84
+    }
+  ]
+}
