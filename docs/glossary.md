@@ -1,7 +1,7 @@
 # Roadrunner Glossary
 
 Status: Normative for v0
-Last updated: 2026-09-19
+Last updated: 2026-10-03
 
 This glossary defines how Roadrunner uses domain terms. Code, API documentation,
 tests, and other design documents should use these meanings consistently.
@@ -13,9 +13,9 @@ algorithm is distinct from the cost model it optimizes.
 
 ## Assignment
 
-The decision that associates an order with a rider. An assignment includes the
-selected rider, evaluated candidates, score components, feasibility outcomes, and
-reason for selection. It is not the same as a delivery, which records execution.
+Current committed OrderId -> RiderId responsibility. It is distinct from an immutable
+AssignmentDecision, which proposes an exact responsibility and RiderPlan change and
+retains structured evaluation evidence. Commit applies both together or rejects.
 
 ## Bounding box
 
@@ -40,9 +40,8 @@ elapsed travel time unless the objective explicitly minimizes arrival time.
 
 ## Delivery
 
-The execution record for fulfilling an assigned order. It connects an order,
-rider, planned routes, estimated times, actual simulation times, and delivery
-status.
+The execution of an order, ending at completed dropoff. Execution records are not
+the fundamental planning result; RiderPlan describes intended remaining logical work.
 
 ## Dispatch
 
@@ -69,8 +68,8 @@ builder finalization or validated artifact loading.
 
 ## Graph snapshot ID
 
-The identity domain for snapshot-local node, segment, and edge IDs. It accompanies
-every durable or detached graph-element reference.
+A compact in-process convenience derived from the full graph digest. Durable or
+detached graph-element references carry the authoritative GraphSnapshotDigest.
 
 ## ETA
 
@@ -115,9 +114,9 @@ derived 64-bit snapshot ID is an in-process convenience.
 
 ## Order
 
-A request to move goods from one pickup node to one drop-off node. It includes
-creation and readiness times, optional deadline, priority, capacity requirement,
-and lifecycle status. In v0, one order is assigned to at most one rider.
+Fulfillment request facts: identity, validated pickup/dropoff coordinates, creation,
+optional deadline, and scalar capacity demand. Mutable expected/actual readiness,
+fulfillment progress, custody, and planning state are separate records keyed by OrderId.
 
 ## Path
 
@@ -127,9 +126,10 @@ costs, and metadata.
 
 ## Rider
 
-The delivery resource that can be assigned an order. A rider has a graph location,
-availability, capacity, vehicle type, and active orders. v0 assignment considers
-only available riders with no active order.
+A delivery resource with a stable RiderProfile (identity, supported routing profile,
+maximum scalar capacity) and mutable RiderState (coordinate, operational availability).
+Assignments, custody, and plans are separate authoritative records. Basic Dispatch
+considers only coherently idle available riders as an eligibility policy.
 
 ## Road class
 
@@ -164,9 +164,9 @@ as if they shared a unit.
 
 ## Routing context
 
-Immutable information available while evaluating a route, separate from graph
-topology and edge attributes. v0 context is deterministic; later contexts may
-include departure time or traffic state.
+Immutable per-route context including explicit logical departure time and access
+permissions. Phase 11 supports deterministic FIFO traffic profiles. Dispatch pins graph,
+traffic, and profile per decision and propagates each leg departure through stop timing.
 
 ## Traversal evaluation
 
@@ -214,11 +214,49 @@ continue after a route is recalculated.
 
 ## Vehicle type
 
-A rider's mode of transport, such as bicycle, motorcycle, car, or foot. It is
-modeled in v0 for future access and speed rules but does not alter v0 routing.
+The supported routing/capability profile on a RiderProfile. A rider cannot silently
+use a graph compiled for another profile; compatibility is enforced before routing.
 
 ## Zero heuristic
 
 An A* heuristic that always returns zero. It is the mandatory fallback when no
 stronger compatible lower bound has been proved and gives Dijkstra-equivalent
 guidance.
+
+## RiderPlan
+
+Ordered remaining logical Pickup/Dropoff work, validated against responsibility and
+fulfillment/custody. Road routes are derived legs. No permanent two-stop limit exists.
+
+## CapacityUnits
+
+One unit is an abstract normalized reference-parcel slot. Both order demand and
+rider maximum capacity are non-negative integer counts of this same slot. Caller
+inputs must use consistent normalization; this is not weight, volume, or package count.
+Onboard load derives from custody; validate load after every logical stop. It is not
+an active-order count. Multidimensional cargo is deferred.
+
+## DispatchSnapshot
+
+Coherent immutable world view with version, explicit evaluation instant, requests,
+readiness/fulfillment, profiles/states, assignments/plans, and pinned routing inputs.
+
+## DispatchInstant
+
+Explicit logical instant supplied by the caller, distinct from Seconds durations.
+RoutingEpoch defines a checked conversion to routing departure seconds.
+
+## RoutingAnchor
+
+Caller-supplied node projection of a stable coordinate on one graph digest. Coordinates
+remain authoritative location facts. Missing or mismatched anchors are input errors.
+
+## Candidate coverage
+
+Complete means every Basic Dispatch eligible rider is evaluated. PotentiallyIncomplete
+means bounded spatial screening; Unassigned then only claims no feasible evaluated rider.
+
+## SoftObserved
+
+Deadline treatment that records lateness at completed dropoff without rejecting a
+candidate or contributing to the Phase 13 baseline score.

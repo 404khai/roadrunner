@@ -645,6 +645,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "roadrunner-dispatch"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "roadrunner-core",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "roadrunner-osm"
 version = "0.1.0"
 dependencies = [

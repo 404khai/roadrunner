@@ -1,6 +1,7 @@
 use super::{Coordinate, Meters};
 
-pub(crate) const MEAN_EARTH_RADIUS_METERS: f64 = 6_371_008.8;
+/// Mean Earth radius used by all spherical geographic calculations, in meters.
+pub const MEAN_EARTH_RADIUS_METERS: f64 = 6_371_008.8;
 
 /// Calculates the great-circle distance between two WGS 84 coordinates.
 ///

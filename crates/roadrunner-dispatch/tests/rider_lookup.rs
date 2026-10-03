@@ -1,7 +1,7 @@
 //! Correctness checks for linear and indexed rider lookup.
 
 use roadrunner_core::geo::{Coordinate, KilometersPerHour, Meters};
-use roadrunner_core::spatial::{
+use roadrunner_dispatch::spatial::{
     IndexedRiderLocator, LinearRiderLocator, RiderId, RiderLocation, RiderLookup, RiderLookupError,
 };
 
@@ -131,4 +131,39 @@ fn configuration_validation_and_eta() {
     let hit = index.nearest_riders(coordinate(0.0, 0.0), meters(2_000.0), 1);
     assert_eq!(hit.len(), 1);
     assert!((hit[0].estimated_arrival.value() - hit[0].distance.value() / 10.0).abs() < 1.0e-9);
+}
+
+#[test]
+fn phase_12_migration_preserves_frozen_tie_radius_and_limit_results() {
+    // Frozen Phase 12 fixture: canonical IDs, inclusive zero radius, exact ETA,
+    // and lower-ID tie ordering must survive moving the API to dispatch.
+    let positions = vec![rider(9, 0.0, 0.0), rider(2, 0.0, 0.0), rider(7, 0.0, 0.01)];
+    let linear = LinearRiderLocator::new(positions.clone(), speed())
+        .unwrap_or_else(|error| panic!("linear: {error}"));
+    let index = IndexedRiderLocator::new(positions, speed())
+        .unwrap_or_else(|error| panic!("index: {error}"));
+    let expected = vec![
+        roadrunner_dispatch::spatial::RiderCandidate {
+            rider_id: RiderId::new(2),
+            distance: Meters::ZERO,
+            estimated_arrival: roadrunner_core::geo::Seconds::ZERO,
+        },
+        roadrunner_dispatch::spatial::RiderCandidate {
+            rider_id: RiderId::new(9),
+            distance: Meters::ZERO,
+            estimated_arrival: roadrunner_core::geo::Seconds::ZERO,
+        },
+    ];
+    assert_eq!(
+        linear.nearest_riders(coordinate(0.0, 0.0), Meters::ZERO, 10),
+        expected
+    );
+    assert_eq!(
+        index.nearest_riders(coordinate(0.0, 0.0), Meters::ZERO, 10),
+        expected
+    );
+    assert_eq!(
+        index.nearest_riders(coordinate(0.0, 0.0), meters(2000.0), 1),
+        expected[..1]
+    );
 }

@@ -34,7 +34,3 @@ harness = false
 [[bench]]
 name = "graph_lifecycle"
 harness = false
-
-[[bench]]
-name = "rider_lookup"
-harness = false

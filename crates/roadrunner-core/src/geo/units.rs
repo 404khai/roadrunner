@@ -147,14 +147,6 @@ impl Meters {
     }
 }
 
-impl Seconds {
-    pub(crate) fn from_calculation(value: f64) -> Self {
-        debug_assert!(value.is_finite());
-        debug_assert!(value >= 0.0);
-        Self(value)
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use serde_json::json;

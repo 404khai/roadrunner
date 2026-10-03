@@ -1,7 +1,7 @@
 # Roadrunner Architecture
 
-Status: Accepted through pre-Phase-7 review
-Last updated: 2026-09-19
+Status: Accepted through pre-Phase-13 dispatch architecture review
+Last updated: 2026-10-03
 
 ## 1. Architectural intent
 
@@ -75,7 +75,8 @@ this crate rather than delegated to a routing service or graph library.
 
 ### 3.2 `roadrunner-dispatch`
 
-Owns order, rider, assignment, delivery, candidate scoring, and rejection reasons.
+Owns request/state separation, RiderId, rider spatial projection, logical remaining
+plans, committed responsibility, evaluation evidence, and validated domain transitions.
 It depends on `roadrunner-core` through routing and domain types. It does not own a
 second graph representation and does not implement shortest-path algorithms.
 
@@ -119,7 +120,9 @@ all application crates. Business rules must not live in command handlers.
 | Frozen graph snapshot | `core::graph` | No | Validated and densely indexed |
 | Traversal evaluators and context | `core::cost` | No | Feasibility, objective, and elapsed time |
 | Routes and routing errors | `core::routing` | No | Route results are immutable |
-| Orders and riders | `dispatch` | Yes | State transitions are validated |
+| Order / RiderProfile | `dispatch` | Explicit amendments only | Stable request/capability facts |
+| Readiness / fulfillment / RiderState | `dispatch` | Yes | Shared validated transitions |
+| CommittedAssignment / RiderPlan | `dispatch` | Yes | Updated together; custody checked |
 | Assignment decisions | `dispatch` | No | Includes all candidate explanations |
 | Delivery state | `dispatch` | Yes | Simulation drives transitions |
 | Event queue and clock | `simulation` | Yes | Never exposed as wall-clock time |
@@ -200,22 +203,15 @@ interface and returns the same canonical `Route` type.
 
 ### 5.5 Dispatch routing dependency
 
-Dispatch needs travel-time routes for candidate legs but must not choose an API or
-global graph:
-
-```rust
-trait RouteProvider {
-    fn travel_time_route(
-        &self,
-        from: NodeId,
-        to: NodeId,
-        context: &RoutingContext,
-    ) -> Result<Route, RoutingError>;
-}
-```
-
-The application supplies an adapter backed by `roadrunner-core`. Test doubles are
-allowed for isolated scoring tests; integration tests exercise the real router.
+Dispatch receives a narrow read-only RouteProvider pinned to the actual FrozenGraph,
+graph digest, traffic identity, and supported profile. CoreRouteProvider adapts core
+Dijkstra with free-flow, static traffic, or FIFO time-dependent travel-time costs.
+Every request supplies graph-bound anchors and checked propagated routing departure.
+The initial core adapter uses conservative default access permissions; no private-road
+or permit authorization is inferred from rider availability.
+Returned graph/traffic/profile and endpoints are validated. RouteFound, NoRoute,
+and routing evaluation failure remain distinct. No batch, matrix, or cross-decision
+cache is introduced.
 
 ## 6. Runtime flows
 
@@ -238,18 +234,31 @@ violations remain distinct through the flow.
 ### 6.2 Assignment request
 
 ```text
-order + riders
-  -> reject unavailable riders
-  -> route rider to pickup
-  -> route pickup to drop-off
-  -> reject unroutable candidates
-  -> calculate deterministic scores
-  -> sort by (score, RiderId)
-  -> AssignmentDecision with candidate explanations
+DispatchSnapshot -> world validation -> BasicDispatch eligibility
+ -> candidate generation -> candidate logical plan -> feasibility
+ -> PlanEvaluation -> pure baseline strategy ranking
+ -> immutable AssignmentDecision -> explicit all-or-nothing commit
 ```
 
-The common pickup-to-drop-off leg may be reused within one assignment operation.
-Cross-request caching is deferred until measurements justify it.
+Basic Dispatch evaluates one new order and coherently idle riders, proposing
+Pickup(A) -> Dropoff(A). General RiderPlan, custody, scalar capacity, typed time,
+and stop timeline are domain contracts rather than single-order type restrictions.
+The exhaustive baseline is Complete; spatial radius/limit screening is
+PotentiallyIncomplete and claims only best/no feasible among evaluated candidates.
+
+Strategy consumes feasible evaluated plans only. Its score is exactly pickup road
+travel plus delivery road travel; exact ties use lower RiderId. SoftObserved deadlines
+record completed-dropoff lateness without score or feasibility effect. Waiting and
+service are explicit zero durations in Phase 13. Readiness-aware timing is Phase 14.
+
+Decisions carry compact structured provenance, policy configuration, canonical candidate
+evidence, outcome, and tie reason. Assigned proposes expected/proposed responsibility
+and plan. Evaluation errors never become Unassigned. Evaluation cannot mutate World.
+Commit checks world version and prior state, validates the complete resulting world,
+and swaps responsibility/plan together. Stale decisions require explicit reevaluation.
+
+World owns shared pickup, delivery, and readiness transitions. Simulation calls these
+operations; dispatch never depends on simulation. See ADRs 0011–0013.
 
 ### 6.3 Simulation run
 
@@ -379,3 +388,15 @@ node-via subset to forbidden directed-edge pairs. Dijkstra and A* use incoming
 edge search state when graph metadata enables the capability. Unsupported forms
 remain diagnosable in provenance; Phase 8 reference-engine comparison remains a
 separate milestone.
+
+## 15. Dispatch evolution boundary
+
+Stable order/rider locations are validated coordinates; caller-supplied anchors bind
+them to the decision graph. RiderId and rider-specific spatial lookup have one owner:
+roadrunner-dispatch. Core has no dispatch types or dependency.
+
+Phases 14–19 may extend policy and evaluation. Multi-order insertion compares whole-plan
+deltas; fleet planning remains separate from single-order ranking. Simulation fixes
+exogenous inputs across strategies and distinguishes observed from predicted metrics.
+Custody after pickup is a hard responsibility boundary. PlanId/PlanVersion, acceptance,
+handoffs, churn thresholds, persistence, and fleet optimizer APIs remain deferred.
