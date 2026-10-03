@@ -221,7 +221,10 @@ fn eligibility_filters_unavailable_and_coherent_busy_riders_before_screening() {
         &provider,
         &f.anchors,
     ));
-    assert!(ok(generate_candidates(&snapshot, order_id(), policy())).is_empty());
+    assert_eq!(
+        ok(generate_candidates(&snapshot, order_id(), policy())),
+        [] as [RiderId; 0]
+    );
 }
 
 #[test]
@@ -612,7 +615,7 @@ fn structured_unassigned_scope_differs_for_complete_and_bounded_search() {
         },
     ));
     assert_eq!(empty.outcome(), bounded.outcome());
-    assert!(empty.evidence().candidates.is_empty());
+    assert_eq!(empty.evidence().candidates, [] as [CandidateEvidence; 0]);
     let json = ok(serde_json::to_value(&complete));
     assert!(json["evidence"]["routing"]["graph_digest"].is_string());
     assert!(json["evidence"]["candidates"].is_array());
@@ -662,7 +665,7 @@ fn shared_transitions_advance_custody_and_remaining_plan_atomically() {
         ok(onboard_load(world.data(), fast())),
         CapacityUnits::new(0)
     );
-    assert!(world.data().plans[&fast()].stops.is_empty());
+    assert_eq!(world.data().plans[&fast()].stops, [] as [Stop; 0]);
     assert!(world.data().assignments.is_empty());
     assert_eq!(
         world.data().fulfillment[&order_id()],
