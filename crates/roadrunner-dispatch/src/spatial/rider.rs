@@ -3,28 +3,11 @@ use std::collections::{BinaryHeap, HashSet};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-use crate::geo::{
+use roadrunner_core::geo::{
     Coordinate, KilometersPerHour, MEAN_EARTH_RADIUS_METERS, Meters, Seconds, haversine_distance,
 };
 
-/// Stable identity of a rider within one lookup snapshot.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct RiderId(u64);
-
-impl RiderId {
-    /// Creates a rider identity.
-    #[must_use]
-    pub const fn new(value: u64) -> Self {
-        Self(value)
-    }
-
-    /// Returns the underlying identity.
-    #[must_use]
-    pub const fn value(self) -> u64 {
-        self.0
-    }
-}
+use crate::RiderId;
 
 /// One available rider's position at snapshot construction time.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -209,7 +192,8 @@ fn candidate(rider: RiderLocation, distance: Meters, speed: KilometersPerHour) -
     RiderCandidate {
         rider_id: rider.id,
         distance,
-        estimated_arrival: Seconds::from_calculation(distance.value() * 3.6 / speed.value()),
+        estimated_arrival: Seconds::new(distance.value() * 3.6 / speed.value())
+            .unwrap_or_else(|error| panic!("validated global ETA bound violated: {error}")),
     }
 }
 
@@ -312,9 +296,7 @@ impl TreeNode {
         } else {
             radius.value()
         };
-        if self.box_distance_squared(position)
-            > (chord_for_radius(Meters::from_calculation(threshold)) + 1.0e-12).powi(2)
-        {
+        if self.box_distance_squared(position) > (chord_for_radius(threshold) + 1.0e-12).powi(2) {
             return;
         }
         let distance = haversine_distance(location, self.point.rider.coordinate);
@@ -364,8 +346,8 @@ fn unit_position(coordinate: Coordinate) -> [f64; 3] {
     ]
 }
 
-fn chord_for_radius(radius: Meters) -> f64 {
+fn chord_for_radius(radius: f64) -> f64 {
     // Beyond half the Earth's circumference every position is eligible.
-    let angle = (radius.value() / MEAN_EARTH_RADIUS_METERS).min(std::f64::consts::PI);
+    let angle = (radius / MEAN_EARTH_RADIUS_METERS).min(std::f64::consts::PI);
     2.0 * (angle / 2.0).sin()
 }

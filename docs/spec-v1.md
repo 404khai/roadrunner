@@ -1,14 +1,14 @@
 # Roadrunner v0 Specification
 
-Status: Accepted; amended by pre-Phase-7 review
-Last updated: 2026-09-19
+Status: Accepted; amended by pre-Phase-13 dispatch architecture review
+Last updated: 2026-10-03
 
 ## 1. Purpose
 
 Roadrunner v0 is a deterministic, explainable baseline for last-mile routing and
 single-order rider assignment. It proves the core algorithms and their boundaries
-before the project adds real road data, persistence, live traffic, or distributed
-runtime concerns.
+with real road fixtures and deterministic FIFO traffic profiles already implemented.
+Persistence, production traffic, and distributed runtime remain deferred.
 
 Roadrunner is optimization infrastructure that can sit behind a mapping product.
 It is not a geocoder, turn-by-turn navigation client, or Google Maps replacement.
@@ -25,6 +25,7 @@ The v0 implementation must:
 - return the same optimal cost from Dijkstra and A* when the A* heuristic is
   admissible for the selected cost model;
 - compare a primary route with reasonable alternative routes;
+- route with deterministic graph-bound static and FIFO traffic profiles;
 - assign one available rider to one order using a documented deterministic score;
 - run reproducible, faster-than-wall-clock delivery simulations;
 - expose routing through an HTTP API and a command-line interface;
@@ -37,8 +38,8 @@ The following are explicitly excluded from v0:
 
 - machine-learning models or learned cost functions;
 - production or continuously updated traffic feeds;
-- time-dependent routing;
-- multi-order rider capacity, route insertion, or vehicle routing optimization;
+- non-FIFO and multi-label time-dependent routing;
+- multi-order assignment, route insertion, or vehicle routing optimization;
 - dynamic re-dispatch;
 - real road-network ingestion beyond small, documented fixtures;
 - multi-region or microservice deployment;
@@ -84,7 +85,8 @@ validated immutable `FrozenGraph`. It must support:
 - disconnected graphs and isolated nodes.
 
 Parallel directed edges are allowed. `NodeId`, `RoadSegmentId`, and `EdgeId` are
-snapshot-local; durable references also carry `GraphSnapshotId`.
+snapshot-local; durable references carry the full `GraphSnapshotDigest`
+(represented by the core digest string).
 
 ### 5.2 Geographic and unit types
 
@@ -170,27 +172,36 @@ with Phase 9 tests; these details do not cross the routing module boundary.
 
 ### 5.6 Basic rider assignment
 
-v0 assigns one order to at most one available rider. Candidate evaluation is:
+Basic Dispatch evaluates one new order against coherently idle riders. This is a
+policy restriction, not a permanent limit on rider plans or responsibility.
 
 ```text
-rider location -> pickup -> drop-off
+DispatchSnapshot -> world validation -> BasicDispatch eligibility
+ -> candidate generation -> Pickup(A), Dropoff(A) candidate plan
+ -> feasibility -> plan evaluation -> baseline ranking
+ -> immutable AssignmentDecision -> explicit all-or-nothing commit
 ```
 
-The baseline score is:
+Eligible riders are operationally available, with no active committed responsibility,
+no onboard custody, and an empty effective remaining plan. Contradictory assignment,
+plan, or custody facts are invalid world state, not ordinary ineligibility.
+Scalar order demand must fit rider capacity; unsupported routing profiles are rejected.
+Exhaustive eligible-rider generation has Complete coverage. Spatial radius/limit
+shortlisting is PotentiallyIncomplete: a winner is best among evaluated candidates,
+and failure cannot claim fleet-wide infeasibility.
 
-```text
-pickup travel time + delivery travel time
-```
+The baseline score is exactly pickup road travel plus delivery road travel, ordered
+by finite exact score then lower RiderId, without epsilon. Deadline treatment is
+SoftObserved: lateness uses completed dropoff, is recorded, and changes neither
+feasibility nor score. Phase 13 uses zero waiting and service durations while retaining
+the general leg -> arrival -> wait -> service -> departure timeline.
 
-Only available riders with routable pickup and delivery legs are candidates. The
-lowest score wins, with `RiderId` as the deterministic tie-breaker. The result must
-include the selected rider, both route references, pickup ETA, delivery ETA,
-estimated completion time, score, and a human-readable reason. If no candidate is
-feasible, the result explicitly remains unassigned and lists rejection reasons.
-
-Restaurant readiness, rider capacity, current orders, deadlines, and idle-time
-penalties are retained in the domain model where useful but do not affect the v0
-score.
+Completed decisions are Assigned or Unassigned, distinct from EvaluationError.
+Structured evidence retains source world version, instant, graph/traffic/profile,
+policy configurations, coverage, canonical candidate metrics or typed rejections,
+and the exact proposal and tie reason. Routes and ETA are evaluation details.
+Commit compares source version and exact expected assignment/plan, rechecks invariants,
+and atomically applies responsibility and plan or rejects with zero mutation.
 
 ### 5.7 Simulation
 
@@ -291,48 +302,44 @@ edge existence; contextual access remains evaluator input. Segment distance is
 derived by summing Haversine distance across canonical geometry. Free-flow travel
 time is a deterministic profile estimate, not a legal limit or live ETA.
 
-### 6.3 Order
+### 6.3 Order and fulfillment
 
-```rust
-struct Order {
-    id: OrderId,
-    pickup: NodeId,
-    dropoff: NodeId,
-    created_at: SimulationTime,
-    ready_at: SimulationTime,
-    deadline: Option<SimulationTime>,
-    priority: OrderPriority,
-    size: CapacityUnits,
-    status: OrderStatus,
-}
-```
+`Order` owns request facts: OrderId, validated pickup/dropoff Coordinates,
+DispatchInstant creation/deadline, and scalar CapacityUnits demand. Mutable readiness
+estimates, actual readiness observations, fulfillment progress, and custody are
+separate records keyed by OrderId. Request amendments, if later supported, are
+explicit domain transitions; dispatch does not mutate request facts.
 
-`pickup` and `dropoff` are graph nodes in v0. `ready_at` cannot precede
-`created_at`. Valid status transitions are:
+One CapacityUnit is one abstract normalized reference-parcel slot. Caller/scenario
+inputs express all demand and maximum capacity in this same unit; an order can consume
+several slots. These integers do not imply kilograms, volume, or physical package count.
+Zero capacity/demand is representable; custody remains an explicit fulfillment fact.
+Priority, nonzero service constraints, skills, and specialized cargo are outside the
+initial supported request contract and are not silently stored or ignored.
 
-```text
-Created -> Assigned -> PickedUp -> Delivered
-   \-----------> Unassigned
-```
+### 6.4 Rider and remaining work
 
-Cancellation is deferred.
+`RiderProfile` owns RiderId, routing profile, and maximum scalar capacity.
+`RiderState` owns coordinate and operational availability. Responsibility is a
+CommittedAssignment (OrderId -> RiderId); intended work is an ordered RiderPlan
+of logical Pickup/Dropoff stops. Plans can contain multiple orders; Phase 13
+eligibility restricts new assignment to an idle rider.
 
-### 6.4 Rider
+AwaitingPickup assigned work requires exactly one pickup before exactly one dropoff.
+PickedUp custody requires no pending pickup and exactly one dropoff with the same
+rider. Delivered work has no remaining stops or active responsibility. Current load
+is derived from custody demand, never active-order count; plan validation checks
+scalar load after each stop. No handoff model exists.
 
-```rust
-struct Rider {
-    id: RiderId,
-    location: NodeId,
-    availability: Availability,
-    capacity: CapacityUnits,
-    active_orders: Vec<OrderId>,
-    vehicle_type: VehicleType,
-}
-```
+Stable coordinates are independent of node-backed RoutingAnchors. Each anchor binds
+a location fact to the pinned graph digest and node; callers supply anchors until
+snapping exists. Missing, mismatched, or absent-node anchors are evaluation errors;
+valid anchors with no legal path yield candidate NoRoute infeasibility.
 
-v0 assignment only considers an available rider with no active order. Capacity
-and vehicle type are modeled for forward compatibility but do not alter routing
-or scoring in v0.
+DispatchInstant is distinct from Seconds durations. The caller supplies now and a
+scenario RoutingEpoch; checked conversion supplies each propagated leg departure.
+Every leg uses the same graph, traffic snapshot, and supported profile, and returned
+provenance is checked. No live stores or clocks enter DispatchSnapshot.
 
 ### 6.5 Route and trip
 
@@ -357,10 +364,16 @@ one node and no edges.
 
 ### 6.6 Assignment and delivery
 
-An `AssignmentDecision` records every evaluated candidate and its score, including
-rejections. A `Delivery` links an order, selected rider, pickup route, delivery
-route, estimated times, and actual simulation times. Assignment decisions are
-values returned by the engine in v0; durable audit storage is deferred.
+An immutable AssignmentDecision is evidence plus an exact proposal, not current
+responsibility. CommittedAssignment and RiderPlan are updated together through shared
+validated domain transitions. Pickup consumes the pending pickup, establishes custody;
+delivery consumes the dropoff and clears active responsibility. Simulation later calls
+these same operations. Delivery records summarize execution, not fundamental planning.
+
+Simulation compares strategies with identical fixed exogenous inputs and measures
+observed execution separately from predicted plan metrics. Future insertion evaluates
+whole-plan deltas. Fleet planning, PlanId/PlanVersion, acceptance, handoffs, and churn
+policy are deferred. See ADRs 0011–0013 for the normative evolution boundaries.
 
 ## 7. Quality requirements
 

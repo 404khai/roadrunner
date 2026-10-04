@@ -1,12 +1,12 @@
 # Rider spatial lookup (Phase 12)
 
-`roadrunner-core::spatial` provides `LinearRiderLocator` and `IndexedRiderLocator`. Both accept a snapshot of **available** riders and a positive, configured speed. Both expose `nearest_riders(location, radius, limit)` through `RiderLookup`. Results are sorted by increasing great-circle distance, then rider ID, and include the rider ID, distance in meters, and estimated arrival in seconds. A zero limit returns no riders; the radius boundary is inclusive.
+`roadrunner-dispatch::spatial` provides `LinearRiderLocator` and `IndexedRiderLocator`. Both accept a caller-selected immutable rider-position projection and a positive, configured speed. Both expose `nearest_riders(location, radius, limit)` through `RiderLookup`. Results are sorted by increasing great-circle distance, then rider ID, and include the rider ID, distance in meters, and estimated arrival in seconds. A zero limit returns no riders; the radius boundary is inclusive.
 
 ```text
 estimated_arrival_seconds = haversine_distance_meters × 3.6 / configured_speed_kph
 ```
 
-The ETA is a straight-line screening estimate. It does not account for roads, traffic, maneuvers, or rider availability changes. Dispatch can use routing later to score the short list. To reflect new locations or availability, build a new locator from current rider positions. IDs must be unique within a snapshot.
+The ETA is a straight-line screening estimate. It does not account for roads, traffic, maneuvers, or rider availability changes. Basic Dispatch routes each shortlisted candidate plan to obtain its score. To reflect new locations or availability, build a new locator from current rider positions. IDs must be unique within a snapshot.
 
 ## Index and correctness
 
@@ -16,7 +16,7 @@ The index is immutable. Building it takes extra time and memory, so it benefits 
 
 ## Benchmark
 
-The [benchmark definition](../crates/roadrunner-core/benches/rider_lookup.rs) compares query time at 100, 1K, 10K, and 100K riders. It uses seeded synthetic points in a small Lagos-area rectangle, one fixed origin, a 5 km radius, a 10-rider result limit, and 30 Criterion samples per case. The benchmark checks that results match before measuring and excludes construction time. Run the exact command in [benchmarks/README.md](../benchmarks/README.md). Results are specific to this dataset and query radius; broad radii may visit most of the index.
+The [benchmark definition](../crates/roadrunner-dispatch/benches/rider_lookup.rs) compares query time at 100, 1K, 10K, and 100K riders. It uses seeded synthetic points in a small Lagos-area rectangle, one fixed origin, a 5 km radius, a 10-rider result limit, and 30 Criterion samples per case. The benchmark checks that results match before measuring and excludes construction time. Run the exact command in [benchmarks/README.md](../benchmarks/README.md). Results are specific to this dataset and query radius; broad radii may visit most of the index.
 
 The [recorded Apple M3 run](../benchmarks/results/2026-09-23-apple-m3-rider-lookup.json) measured these median query times:
 
@@ -30,3 +30,13 @@ The [recorded Apple M3 run](../benchmarks/results/2026-09-23-apple-m3-rider-look
 The result file also records p95, p99, hardware, sample count, and configuration. These are repeated queries against one static synthetic snapshot, not end-to-end dispatch latency.
 
 Tests compare the index to the scan on seeded global queries and explicit antimeridian, pole, empty, zero-radius, tie, and configuration cases. No road ETA or live-location performance claim follows from these tests.
+
+## Dispatch ownership and coverage
+
+RiderId is canonically owned by dispatch and re-exported by its spatial module.
+The index is a projection, not operational truth or eligibility. Basic Dispatch builds
+it from authoritative eligible positions in the same immutable DispatchSnapshot.
+Radius/limit policy has PotentiallyIncomplete coverage even when all returned candidates
+fail. Exhaustive eligible-rider evaluation supplies the correctness oracle. Screening
+ETA never replaces routed plan evaluation. Historical Phase 12 measurements retain
+their original command; the current benchmark target moved to roadrunner-dispatch.

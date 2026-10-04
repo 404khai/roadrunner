@@ -485,8 +485,11 @@ fn generic_restriction_exception_for_motorcycles_is_diagnosed_not_enforced() {
     ));
     let provenance = &compiled.provenance.restrictions[0];
     assert_eq!(provenance.status, "not_applicable_to_motorcycle");
-    assert!(provenance.forbidden_maneuvers.is_empty());
-    assert!(compiled.graph.forbidden_maneuvers().is_empty());
+    assert_eq!(
+        provenance.forbidden_maneuvers,
+        [] as [roadrunner_osm::CompiledManeuverProvenance; 0]
+    );
+    assert_eq!(compiled.graph.forbidden_maneuvers(), []);
 }
 
 #[test]

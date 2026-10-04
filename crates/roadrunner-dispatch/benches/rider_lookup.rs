@@ -4,7 +4,7 @@ use std::hint::black_box;
 
 use criterion::{BenchmarkId, Criterion};
 use roadrunner_core::geo::{Coordinate, KilometersPerHour, Meters};
-use roadrunner_core::spatial::{
+use roadrunner_dispatch::spatial::{
     IndexedRiderLocator, LinearRiderLocator, RiderId, RiderLocation, RiderLookup,
 };
 

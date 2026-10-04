@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-03",
+  "purpose": "Phase 12 dispatch ownership migration validation",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "graph_size": "not applicable: geographic rider lookup",
+  "dataset": {
+    "kind": "seeded synthetic",
+    "seed": 12,
+    "region": "latitude 6.4..6.65, longitude 3.25..3.50",
+    "query": {
+      "latitude": 6.5244,
+      "longitude": 3.3792,
+      "radius_meters": 5000,
+      "limit": 10
+    },
+    "rider_counts": [
+      100,
+      1000,
+      10000,
+      100000
+    ]
+  },
+  "configuration": {
+    "benchmark": "cargo bench -p roadrunner-dispatch --bench rider_lookup --locked -- --sample-size 30 --measurement-time 1",
+    "profile": "release",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "criterion_samples": 30,
+    "construction_included": false,
+    "concurrent_workspace_validation": true,
+    "sample_statistic": "total sample nanoseconds / iterations; percentile by linear interpolation of sorted sample means"
+  },
+  "results": [
+    {
+      "riders": 100,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 13933.581735159818,
+      "p95_ns": 38412.945205479424,
+      "p99_ns": 57562.08891131941
+    },
+    {
+      "riders": 100,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 25728.903051450467,
+      "p95_ns": 64105.726252052526,
+      "p99_ns": 120824.39535714292
+    },
+    {
+      "riders": 1000,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 429334.8927865613,
+      "p95_ns": 1615840.3667792205,
+      "p99_ns": 2364233.2102435073
+    },
+    {
+      "riders": 1000,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 50332.70077410275,
+      "p95_ns": 164764.4306095237,
+      "p99_ns": 213680.2465986395
+    },
+    {
+      "riders": 10000,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 1196446.5,
+      "p95_ns": 2115985.7142857136,
+      "p99_ns": 3242123.8014285727
+    },
+    {
+      "riders": 10000,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 19348.604859187442,
+      "p95_ns": 76628.46422697368,
+      "p99_ns": 112744.0017034775
+    },
+    {
+      "riders": 100000,
+      "algorithm": "linear",
+      "runs": 30,
+      "median_ns": 14127062.5,
+      "p95_ns": 26064521.874999993,
+      "p99_ns": 28056332.055
+    },
+    {
+      "riders": 100000,
+      "algorithm": "indexed",
+      "runs": 30,
+      "median_ns": 18996.40549676661,
+      "p95_ns": 33510.429290123444,
+      "p99_ns": 81835.23417283955
+    }
+  ]
+}

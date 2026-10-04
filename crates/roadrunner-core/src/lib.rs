@@ -8,7 +8,6 @@ pub mod cost;
 pub mod geo;
 pub mod graph;
 pub mod routing;
-pub mod spatial;
 
 /// Returns the version of the Roadrunner core crate.
 #[must_use]

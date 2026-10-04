@@ -8,7 +8,16 @@ structured result snapshots in [`results/`](results/).
 Run the Phase 12 linear scan versus immutable 3D spatial-tree comparison with:
 
 ```bash
-cargo bench -p roadrunner-core --bench rider_lookup --locked -- --sample-size 30 --measurement-time 1
+cargo bench -p roadrunner-dispatch --bench rider_lookup --locked -- --sample-size 30 --measurement-time 1
+```
+
+The rider target moved from core to dispatch during the pre-Phase-13 remediation.
+Historical result commands remain unchanged. The [migration verification artifact](results/2026-10-03-dispatch-index-migration.json)
+records the current run, including its concurrent-validation limitation. Collect fresh
+Criterion samples after running the benchmark with:
+
+```bash
+python3 scripts/collect_rider_lookup_benchmark.py --output /tmp/rider-lookup.json
 ```
 
 The seeded synthetic dataset places 100, 1K, 10K, or 100K riders in a 0.25-degree
