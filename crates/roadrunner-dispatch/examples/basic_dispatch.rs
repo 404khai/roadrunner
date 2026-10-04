@@ -192,7 +192,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     );
     assert!(world.data().assignments.is_empty());
-    assert!(world.data().plans[&fast].stops.is_empty());
+    assert_eq!(world.data().plans[&fast], RiderPlan::default());
     assert_eq!(onboard_load(world.data(), fast)?, CapacityUnits::new(0));
     validate_world(world.data())?;
 
