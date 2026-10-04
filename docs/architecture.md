@@ -1,7 +1,7 @@
 # Roadrunner Architecture
 
-Status: Accepted through pre-Phase-13 dispatch architecture review
-Last updated: 2026-10-03
+Status: Accepted through Phase 13 Basic Dispatch
+Last updated: 2026-10-04
 
 ## 1. Architectural intent
 
@@ -400,3 +400,7 @@ deltas; fleet planning remains separate from single-order ranking. Simulation fi
 exogenous inputs across strategies and distinguishes observed from predicted metrics.
 Custody after pickup is a hard responsibility boundary. PlanId/PlanVersion, acceptance,
 handoffs, churn thresholds, persistence, and fleet optimizer APIs remain deferred.
+
+Phase 13 Basic Dispatch is complete. See [dispatch usage](dispatch.md) and
+[completion evidence](phase-13-completion.md) for the implemented pipeline and
+runnable assignment-to-delivery example.
