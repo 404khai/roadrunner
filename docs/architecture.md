@@ -1,6 +1,6 @@
 # Roadrunner Architecture
 
-Status: Accepted through Phase 14 preparation-aware dispatch
+Status: Accepted through Phase 15 deterministic simulation
 Last updated: 2026-10-04
 
 ## 1. Architectural intent
@@ -262,7 +262,8 @@ Commit checks world version and prior state, validates the complete resulting wo
 and swaps responsibility/plan together. Stale decisions require explicit reevaluation.
 
 World owns shared pickup, delivery, and readiness transitions. Simulation calls these
-operations; dispatch never depends on simulation. See ADRs 0011–0014.
+operations; dispatch never depends on simulation. World also owns atomic new-order
+registration. See ADRs 0011–0015.
 
 ### 6.3 Simulation run
 
@@ -414,3 +415,14 @@ PreparationAwareStrategy as a separate pure ranking policy. The small comparison
 example executes fixed synthetic scenarios through shared transitions; it does not
 introduce a simulation dependency. See [ADR 0014](adr/0014-preparation-aware-dispatch.md)
 and [Phase 14 completion evidence](phase-14-completion.md).
+
+## 16. Phase 15 simulation runtime
+
+`roadrunner-simulation` now owns the deterministic event queue, explicit horizon,
+seeded readiness generation, and recorded metrics. The CLI depends on this crate and
+loads inline synthetic graphs or validated core graph artifacts. Shared dispatch/world
+transitions remain responsible for domain invariants; no simulation dependency enters
+core or dispatch. Graph, traffic, time, readiness, and scalar-profile inputs are validated
+before execution. See [simulation usage and contracts](simulation.md),
+[ADR 0015](adr/0015-deterministic-simulation-runtime.md), and
+[completion evidence](phase-15-completion.md).

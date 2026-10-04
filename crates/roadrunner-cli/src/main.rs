@@ -10,6 +10,7 @@ use roadrunner_osm::{
 
 mod alternatives_command;
 mod reference_comparison;
+mod simulation_command;
 mod time_dependent_command;
 mod traffic_command;
 
@@ -105,6 +106,10 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
         {
             time_dependent_command::run(snapshot, source, destination, scenario, depart)
         }
+        [simulate, scenario] if simulate == "simulate" => simulation_command::run(scenario, false),
+        [simulate, scenario, json] if simulate == "simulate" && json == "--json" => {
+            simulation_command::run(scenario, true)
+        }
         [] => {
             print_help();
             Ok(())
@@ -139,6 +144,7 @@ fn print_help() {
          roadrunner route corpus <snapshot-directory> <route-corpus.json>\n  \
          roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>\n  \
          roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>\n  \
-         roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>"
+         roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>\n  \
+         roadrunner simulate <scenario.json> [--json]"
     );
 }

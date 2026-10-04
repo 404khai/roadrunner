@@ -14,6 +14,7 @@ path = "src/main.rs"
 workspace = true
 
 [dependencies]
+roadrunner-simulation = { path = "../roadrunner-simulation" }
 roadrunner-core = { path = "../roadrunner-core" }
 roadrunner-osm = { path = "../roadrunner-osm" }
 serde.workspace = true

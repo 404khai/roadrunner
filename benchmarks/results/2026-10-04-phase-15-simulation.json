@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-04",
+  "purpose": "Phase 15 small-fixture wall-clock replay validation, not a scalability claim",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "dataset": {
+    "path": "data/fixtures/phase-15/seeded-deliveries.json",
+    "sha256": "678be268e5c0e6544f4a80f3305d1693a23f2c44036bf37066c65e2bac26b76e",
+    "kind": "seeded synthetic",
+    "seed": 15,
+    "randomness": "splitmix64-upper53/v1",
+    "graph_digest": "5017e4b91bc6031d70113ac851341e77a954a628ba2234cbf0a94e946d56e24b",
+    "graph_nodes": 5,
+    "graph_directed_edges": 6,
+    "scheduled_orders": 6,
+    "created_orders": 5,
+    "riders": 2
+  },
+  "algorithm": {
+    "events": "BinaryHeap ordered by logical time then insertion sequence",
+    "routing": "Roadrunner Dijkstra",
+    "dispatch": {
+      "kind": "preparation_aware",
+      "idle_penalty_weight": 1.0
+    },
+    "coverage": "exhaustive eligible riders"
+  },
+  "configuration": {
+    "profile": "release",
+    "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
+    "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+    "command": "target/release/roadrunner simulate data/fixtures/phase-15/seeded-deliveries.json --json",
+    "warmup_runs": 1,
+    "measured_runs": 11,
+    "concurrent_workspace_validation": false,
+    "includes": "process launch, graph loading/validation, simulation, JSON serialization and output capture",
+    "percentiles": "linear interpolation of ordered elapsed process samples",
+    "memory": "not measured"
+  },
+  "observations": {
+    "logical_window_seconds": 600.0,
+    "processed_events": 50,
+    "delivered_orders": 4,
+    "future_events": 2,
+    "replay_sha256": "3f91000391d46280b94c493a5de23abb59a60f2ab7451de82007423e41eb9b7a"
+  },
+  "timing": {
+    "samples_ns": [
+      6373542,
+      4743458,
+      4515833,
+      4735042,
+      4546500,
+      4233916,
+      3953291,
+      4008042,
+      4021500,
+      4167250,
+      4089958
+    ],
+    "median_ns": 4233916,
+    "p95_ns": 5558500.0,
+    "p99_ns": 6210533.600000001
+  }
+}

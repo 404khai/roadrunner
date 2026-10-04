@@ -101,3 +101,10 @@ The 2026-09-19 result remains historical evidence for the superseded schema.
 using the pinned Lagos Marina PBF and source-node route corpus. Its structured result
 records reachability, distance, duration, route geometry differences, and failures.
 This is a correctness diagnostic, not a routing latency benchmark.
+
+## Simulation replay timing
+
+`collect_simulation_benchmark.py` measures one fixed Phase 15 CLI scenario and verifies
+byte-identical replay; it does not compare dispatch strategies. See
+[simulation documentation](../docs/simulation.md) and the
+[measured artifact](results/2026-10-04-phase-15-simulation.json).

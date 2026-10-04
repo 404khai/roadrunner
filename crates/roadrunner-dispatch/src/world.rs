@@ -3,8 +3,8 @@ use thiserror::Error;
 
 use crate::{
     AssignmentDecision, AssignmentProposal, Availability, CapacityUnits, DispatchDecisionOutcome,
-    DispatchEvaluationError, DispatchInstant, FulfillmentState, OrderId, RiderId, RiderPlan,
-    RiderState, Stop, WorldData, WorldVersion,
+    DispatchEvaluationError, DispatchInstant, FulfillmentState, Order, OrderId, OrderReadiness,
+    RiderId, RiderPlan, RiderState, Stop, WorldData, WorldVersion,
 };
 
 /// Invalid logical work or capacity/custody transition.
@@ -293,6 +293,26 @@ impl World {
             return Err(CommitError::InvalidTransition);
         }
         Ok(())
+    }
+
+    /// Registers a new request, readiness, and awaiting-pickup state atomically.
+    ///
+    /// # Errors
+    /// Rejects duplicate identities or an invalid resulting world without mutation.
+    pub fn register_order(
+        &mut self,
+        order: Order,
+        readiness: OrderReadiness,
+    ) -> Result<(), CommitError> {
+        if self.data.orders.contains_key(&order.id) {
+            return Err(CommitError::InvalidTransition);
+        }
+        let mut next = self.data.clone();
+        next.readiness.insert(order.id, readiness);
+        next.fulfillment
+            .insert(order.id, FulfillmentState::AwaitingPickup);
+        next.orders.insert(order.id, order);
+        self.publish(next)
     }
 
     /// Updates rider position/availability through the shared versioned boundary.
@@ -604,6 +624,39 @@ mod tests {
         let decision = AssignmentDecision::new(evidence, decision.outcome().clone());
         let before = world.data.clone();
         assert_eq!(world.commit(&decision), Err(CommitError::VersionOverflow));
+        assert_eq!(world.data, before);
+        assert_eq!(world.version, WorldVersion::new(u64::MAX));
+    }
+    #[test]
+    fn order_registration_is_atomic_and_rejects_duplicates_and_version_overflow() {
+        let (mut world, _) = world_and_decision();
+        let mut order = world.data.orders[&OrderId::new(1)].clone();
+        order.id = OrderId::new(2);
+        assert!(
+            world
+                .register_order(order.clone(), OrderReadiness::default())
+                .is_ok()
+        );
+        assert_eq!(world.version, WorldVersion::new(1));
+        assert_eq!(
+            world.data.fulfillment[&order.id],
+            FulfillmentState::AwaitingPickup
+        );
+        assert!(world.data.readiness.contains_key(&order.id));
+        assert!(validate_world(&world.data).is_ok());
+        let before = world.data.clone();
+        assert_eq!(
+            world.register_order(order.clone(), OrderReadiness::default()),
+            Err(CommitError::InvalidTransition)
+        );
+        assert_eq!(world.data, before);
+        assert_eq!(world.version, WorldVersion::new(1));
+        world.version = WorldVersion::new(u64::MAX);
+        order.id = OrderId::new(3);
+        assert_eq!(
+            world.register_order(order, OrderReadiness::default()),
+            Err(CommitError::VersionOverflow)
+        );
         assert_eq!(world.data, before);
         assert_eq!(world.version, WorldVersion::new(u64::MAX));
     }

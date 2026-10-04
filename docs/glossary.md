@@ -278,3 +278,15 @@ from its delivery_completed_at DispatchInstant and from order age since creation
 The Phase 14 preference contribution `idle_penalty_weight × pickup_waiting`, expressed
 in score seconds and added to completion duration. Weight defaults to 1.0 and is finite
 and non-negative. This penalty adds no physical travel or elapsed time.
+
+## Simulation horizon
+
+Inclusive logical end of a configured observation window. Events at that instant,
+including newly generated zero-duration actions, are processed. Uncreated and unfinished
+work is reported explicitly. The full configured window is used even if the queue empties early.
+
+## Responsibility utilization
+
+Assignment-to-delivery occupied rider-seconds, clipped at the horizon, divided by
+initially available rider-seconds. Includes pickup waiting; excludes unavailable riders.
+It does not represent productive movement alone. A zero denominator is unavailable.

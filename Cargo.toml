@@ -3,6 +3,7 @@ members = [
     "crates/roadrunner-cli",
     "crates/roadrunner-core",
     "crates/roadrunner-dispatch",
+    "crates/roadrunner-simulation",
     "crates/roadrunner-osm",
 ]
 resolver = "3"
