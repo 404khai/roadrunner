@@ -43,7 +43,7 @@ pub struct Order {
     pub dropoff: Coordinate,
     /// Creation instant.
     pub created_at: DispatchInstant,
-    /// Completed-dropoff commitment, soft-observed by Basic Dispatch.
+    /// Completed-dropoff commitment, soft-observed by both dispatch strategies.
     pub deadline: Option<DispatchInstant>,
     /// Scalar onboard demand.
     pub demand: CapacityUnits,
@@ -52,7 +52,7 @@ pub struct Order {
 /// Readiness prediction and observation are distinct facts.
 #[derive(Debug, Clone, Copy, PartialEq, Default, Serialize)]
 pub struct OrderReadiness {
-    /// Mutable estimate; unused by Phase 13 timing.
+    /// Mutable estimate; Phase 14 uses this only while no actual ready event exists.
     pub expected_at: Option<DispatchInstant>,
     /// Actual ready event; not overwritten by a prediction.
     pub observed_at: Option<DispatchInstant>,

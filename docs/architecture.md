@@ -1,6 +1,6 @@
 # Roadrunner Architecture
 
-Status: Accepted through Phase 13 Basic Dispatch
+Status: Accepted through Phase 14 preparation-aware dispatch
 Last updated: 2026-10-04
 
 ## 1. Architectural intent
@@ -249,7 +249,11 @@ PotentiallyIncomplete and claims only best/no feasible among evaluated candidate
 Strategy consumes feasible evaluated plans only. Its score is exactly pickup road
 travel plus delivery road travel; exact ties use lower RiderId. SoftObserved deadlines
 record completed-dropoff lateness without score or feasibility effect. Waiting and
-service are explicit zero durations in Phase 13. Readiness-aware timing is Phase 14.
+service are explicit zero durations in Phase 13. Phase 14 reuses this pipeline with
+readiness-aware pickup waiting and pure completion-duration plus waiting-penalty ranking.
+Observed readiness overrides forecasts; missing readiness is an evaluation error.
+Waiting advances the delivery routing departure and appears separately in evidence.
+Service remains zero. The original baseline remains callable without preparation timing.
 
 Decisions carry compact structured provenance, policy configuration, canonical candidate
 evidence, outcome, and tie reason. Assigned proposes expected/proposed responsibility
@@ -258,7 +262,7 @@ Commit checks world version and prior state, validates the complete resulting wo
 and swaps responsibility/plan together. Stale decisions require explicit reevaluation.
 
 World owns shared pickup, delivery, and readiness transitions. Simulation calls these
-operations; dispatch never depends on simulation. See ADRs 0011–0013.
+operations; dispatch never depends on simulation. See ADRs 0011–0014.
 
 ### 6.3 Simulation run
 
@@ -395,7 +399,7 @@ Stable order/rider locations are validated coordinates; caller-supplied anchors 
 them to the decision graph. RiderId and rider-specific spatial lookup have one owner:
 roadrunner-dispatch. Core has no dispatch types or dependency.
 
-Phases 14–19 may extend policy and evaluation. Multi-order insertion compares whole-plan
+Phases 15–19 may extend policy and evaluation. Multi-order insertion compares whole-plan
 deltas; fleet planning remains separate from single-order ranking. Simulation fixes
 exogenous inputs across strategies and distinguishes observed from predicted metrics.
 Custody after pickup is a hard responsibility boundary. PlanId/PlanVersion, acceptance,
@@ -404,3 +408,9 @@ handoffs, churn thresholds, persistence, and fleet optimizer APIs remain deferre
 Phase 13 Basic Dispatch is complete. See [dispatch usage](dispatch.md) and
 [completion evidence](phase-13-completion.md) for the implemented pipeline and
 runnable assignment-to-delivery example.
+
+Phase 14 is implemented by the same idle-order evaluator and commit boundary, with
+PreparationAwareStrategy as a separate pure ranking policy. The small comparison
+example executes fixed synthetic scenarios through shared transitions; it does not
+introduce a simulation dependency. See [ADR 0014](adr/0014-preparation-aware-dispatch.md)
+and [Phase 14 completion evidence](phase-14-completion.md).

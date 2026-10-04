@@ -259,4 +259,22 @@ means bounded spatial screening; Unassigned then only claims no feasible evaluat
 ## SoftObserved
 
 Deadline treatment that records lateness at completed dropoff without rejecting a
-candidate or contributing to the Phase 13 baseline score.
+candidate or contributing to Phase 13 or Phase 14 scores.
+
+## Effective readiness
+
+The actual observed ready instant when known, otherwise the current expected instant.
+Phase 14 requires one of these facts, records its source, and uses it to calculate pickup
+waiting. A forecast never authorizes actual pickup without a recorded ready event.
+
+## Completion duration
+
+Elapsed time from dispatch evaluation to completed dropoff, including road travel and
+stop waiting/service. PlanEvaluation.completion_time is a Seconds duration, distinct
+from its delivery_completed_at DispatchInstant and from order age since creation.
+
+## Rider idle penalty
+
+The Phase 14 preference contribution `idle_penalty_weight × pickup_waiting`, expressed
+in score seconds and added to completion duration. Weight defaults to 1.0 and is finite
+and non-negative. This penalty adds no physical travel or elapsed time.
