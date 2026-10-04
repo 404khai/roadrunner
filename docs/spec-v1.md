@@ -1,7 +1,7 @@
 # Roadrunner v0 Specification
 
-Status: Accepted; amended by pre-Phase-13 dispatch architecture review
-Last updated: 2026-10-03
+Status: Accepted; Basic Dispatch implemented through Phase 13
+Last updated: 2026-10-04
 
 ## 1. Purpose
 
@@ -202,6 +202,9 @@ policy configurations, coverage, canonical candidate metrics or typed rejections
 and the exact proposal and tie reason. Routes and ETA are evaluation details.
 Commit compares source version and exact expected assignment/plan, rechecks invariants,
 and atomically applies responsibility and plan or rejects with zero mutation.
+
+Phase 13 usage and verification are documented in [dispatch.md](dispatch.md) and
+[the completion report](phase-13-completion.md).
 
 ### 5.7 Simulation
 
