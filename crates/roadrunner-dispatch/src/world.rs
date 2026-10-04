@@ -535,6 +535,7 @@ mod tests {
                     profile: "test".into(),
                 },
                 strategy: "basic-road-travel/v1".into(),
+                preparation: None,
                 feasibility_policy: "test".into(),
                 eligibility_policy: "basic-idle/v1".into(),
                 deadline_policy: DeadlinePolicy::SoftObserved,

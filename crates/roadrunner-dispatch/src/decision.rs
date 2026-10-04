@@ -3,7 +3,8 @@ use serde::Serialize;
 
 use crate::{
     CommittedAssignment, DecisionId, DispatchInstant, OrderId, PlanEvaluation, PlanValidityError,
-    RiderId, RiderPlan, RoutingEpoch, RoutingProvenance, WorldVersion,
+    PreparationPolicyEvidence, PreparationScoreContributions, RiderId, RiderPlan, RoutingEpoch,
+    RoutingProvenance, WorldVersion,
 };
 
 /// Candidate-generation policy with recorded configuration.
@@ -65,21 +66,24 @@ impl From<PlanValidityError> for CandidateRejection {
     }
 }
 
-/// Explicit Phase 13 deadline semantics; no lateness penalty or hard rejection.
+/// Shared dispatch deadline semantics; no lateness penalty or hard rejection.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum DeadlinePolicy {
     /// Observe completed-dropoff lateness without affecting ranking or feasibility.
     SoftObserved,
 }
 
-/// Structured baseline contributions, all expressed in road travel seconds.
+/// Structured objective contributions, with an optional preparation-aware breakdown.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize)]
 pub struct ScoreContributions {
     /// Rider-to-pickup road movement.
     pub pickup_travel: Seconds,
     /// Pickup-to-dropoff road movement.
     pub delivery_travel: Seconds,
-    /// Exact checked sum used for ranking.
+    /// Completion and idle penalty for preparation-aware scoring; absent for baseline.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preparation: Option<PreparationScoreContributions>,
+    /// Exact checked objective used for ranking, expressed in seconds.
     pub total: Seconds,
 }
 
@@ -99,7 +103,7 @@ pub enum CandidateResult {
     Feasible {
         /// Timing and physical metrics, independent of strategy preference.
         evaluation: PlanEvaluation,
-        /// Structured baseline objective contributions.
+        /// Structured contributions for the recorded objective.
         score: ScoreContributions,
     },
     /// Structurally infeasible candidate.
@@ -147,7 +151,7 @@ pub enum DispatchDecisionOutcome {
 /// Structured reason for deterministic selection.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub enum SelectionReason {
-    /// Unique minimum baseline score among evaluated feasible candidates.
+    /// Unique minimum strategy score among evaluated feasible candidates.
     LowestScore,
     /// Exact minimum score tie resolved by lower rider identity.
     ExactScoreThenRiderId {
@@ -171,8 +175,11 @@ pub struct DecisionEvidence {
     pub routing_epoch: RoutingEpoch,
     /// Fixed graph, traffic, and profile.
     pub routing: RoutingProvenance,
-    /// Versioned pure ranking policy (no tunable baseline weights).
+    /// Versioned pure ranking policy; preparation configuration is recorded separately.
     pub strategy: String,
+    /// Readiness inputs and waiting-penalty configuration; absent for Phase 13.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preparation: Option<PreparationPolicyEvidence>,
     /// Versioned hard constraint policy.
     pub feasibility_policy: String,
     /// Versioned eligibility policy.
@@ -214,11 +221,18 @@ impl AssignmentDecision {
     #[must_use]
     pub fn explanation(&self) -> String {
         match &self.outcome {
-            DispatchDecisionOutcome::Assigned(p) => format!(
-                "Rider {} has the lowest pickup + delivery road travel score among evaluated candidates ({:?} coverage)",
-                p.rider.value(),
-                self.evidence.coverage
-            ),
+            DispatchDecisionOutcome::Assigned(p) => {
+                let objective = if self.evidence.preparation.is_some() {
+                    "completion time + rider waiting penalty"
+                } else {
+                    "pickup + delivery road travel"
+                };
+                format!(
+                    "Rider {} has the lowest {objective} score among evaluated candidates ({:?} coverage)",
+                    p.rider.value(),
+                    self.evidence.coverage
+                )
+            }
             DispatchDecisionOutcome::Unassigned { scope } => {
                 format!("No feasible rider in scope {scope:?}")
             }

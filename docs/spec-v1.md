@@ -1,6 +1,6 @@
 # Roadrunner v0 Specification
 
-Status: Accepted; Basic Dispatch implemented through Phase 13
+Status: Accepted; preparation-aware dispatch implemented through Phase 14
 Last updated: 2026-10-04
 
 ## 1. Purpose
@@ -205,6 +205,29 @@ and atomically applies responsibility and plan or rejects with zero mutation.
 
 Phase 13 usage and verification are documented in [dispatch.md](dispatch.md) and
 [the completion report](phase-13-completion.md).
+
+#### Preparation-aware dispatch (Phase 14)
+
+Preparation-aware dispatch uses the same idle eligibility, candidate coverage,
+feasibility, immutable decisions, and exact assignment/plan commit. Effective readiness
+is the observed ready instant, otherwise the expected instant from OrderReadiness.
+Missing both is an evaluation error, not an implicit ready state. Pickup waiting is
+`max(effective_ready_at - pickup_arrival, 0)`; the delivery leg departs after that waiting
+with zero service, including when using FIFO time-dependent traffic.
+
+The objective is elapsed completed-delivery time since evaluation plus weighted pickup
+waiting. The finite non-negative idle penalty weight defaults to 1.0; zero minimizes
+completion duration while preserving physical waiting. A positive weight may trade later
+completion for less rider idle time. Exact score/RiderId ordering and SoftObserved
+deadlines remain unchanged. Evidence records original readiness facts, effective source
+and instant, weight, completion duration, waiting, and penalty contributions.
+
+Readiness updates invalidate outstanding decisions through world versioning. Forecasts
+never authorize actual pickup; shared transitions require recorded readiness. The Phase 13
+zero-wait road-travel baseline remains independently callable. Deterministic comparisons
+execute fresh equivalent worlds against identical external ready events and distinguish
+predictions from recorded execution. See [dispatch.md](dispatch.md) and
+[ADR 0014](adr/0014-preparation-aware-dispatch.md).
 
 ### 5.7 Simulation
 

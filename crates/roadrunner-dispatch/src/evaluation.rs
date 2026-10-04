@@ -9,9 +9,10 @@ use crate::{
     AssignmentDecision, AssignmentProposal, CandidateEvidence, CandidatePolicy, CandidateRejection,
     CandidateResult, CommittedAssignment, DeadlinePolicy, DecisionEvidence, DecisionId,
     DispatchDecisionOutcome, DispatchInstant, DispatchTimeError, FulfillmentState, OrderId,
-    RiderId, RiderPlan, RouteOutcome, RouteProvider, RoutingAnchor, RoutingAnchors, RoutingEpoch,
-    RoutingProvenance, ScoreContributions, SelectionReason, Stop, UnassignedScope, World,
-    basic_dispatch_eligible, validate_plan, validate_world,
+    PreparationAwareStrategy, PreparationPolicyEvidence, RiderId, RiderPlan, RouteOutcome,
+    RouteProvider, RoutingAnchor, RoutingAnchors, RoutingEpoch, RoutingProvenance,
+    ScoreContributions, SelectionReason, Stop, UnassignedScope, World, basic_dispatch_eligible,
+    validate_plan, validate_world,
 };
 
 /// Failed decision evaluation, distinct from a completed Unassigned decision.
@@ -44,6 +45,9 @@ pub enum DispatchEvaluationError {
     /// Candidate generation failed to build its coherent position projection.
     #[error("invalid candidate projection")]
     CandidateGeneration,
+    /// Preparation-aware evaluation requires an estimate or an actual ready observation.
+    #[error("missing order readiness estimate or observation")]
+    MissingReadiness,
 }
 
 /// Coherent immutable evaluation view; no live store, DB handle, or clock.
@@ -172,7 +176,9 @@ pub struct PlanEvaluation {
     pub dropoff_arrival: DispatchInstant,
     /// Predicted completed dropoff, the deadline endpoint.
     pub delivery_completed_at: DispatchInstant,
-    /// Total stop waiting, zero in Phase 13.
+    /// Elapsed time from evaluation to completed delivery, including road and stop time.
+    pub completion_time: Seconds,
+    /// Total stop waiting, zero in Phase 13 and readiness-derived in Phase 14.
     pub waiting: Seconds,
     /// Total stop service, zero in Phase 13.
     pub service: Seconds,
@@ -220,6 +226,7 @@ impl BaselineStrategy {
                 ScoreContributions {
                     pickup_travel: c.evaluation.pickup_travel,
                     delivery_travel: c.evaluation.delivery_travel,
+                    preparation: None,
                     total: c
                         .evaluation
                         .pickup_travel
@@ -228,37 +235,44 @@ impl BaselineStrategy {
                 },
             ));
         }
-        scores.sort_by_key(|(rider, _)| *rider);
-        if scores.windows(2).any(|p| p[0].0 == p[1].0) {
-            return Err(DispatchEvaluationError::InvalidMetric);
-        }
-        let mut ranked = scores.clone();
-        ranked.sort_by(|(a, sa), (b, sb)| {
-            sa.total
-                .value()
-                .total_cmp(&sb.total.value())
-                .then_with(|| a.cmp(b))
-        });
-        let selected = ranked.first().map(|(rider, _)| *rider);
-        let reason = ranked.first().map(|(_, score)| {
-            let mut tied_riders: Vec<_> = ranked
-                .iter()
-                .filter(|(_, s)| s.total == score.total)
-                .map(|(r, _)| *r)
-                .collect();
-            tied_riders.sort();
-            if tied_riders.len() > 1 {
-                SelectionReason::ExactScoreThenRiderId { tied_riders }
-            } else {
-                SelectionReason::LowestScore
-            }
-        });
-        Ok(BaselineRanking {
-            scores,
-            selected,
-            reason,
-        })
+        rank_scores(scores)
     }
+}
+
+/// Shared exact ordering for the two single-order strategies.
+pub(crate) fn rank_scores(
+    mut scores: Vec<(RiderId, ScoreContributions)>,
+) -> Result<BaselineRanking, DispatchEvaluationError> {
+    scores.sort_by_key(|(rider, _)| *rider);
+    if scores.windows(2).any(|p| p[0].0 == p[1].0) {
+        return Err(DispatchEvaluationError::InvalidMetric);
+    }
+    let mut ranked = scores.clone();
+    ranked.sort_by(|(a, sa), (b, sb)| {
+        sa.total
+            .value()
+            .total_cmp(&sb.total.value())
+            .then_with(|| a.cmp(b))
+    });
+    let selected = ranked.first().map(|(rider, _)| *rider);
+    let reason = ranked.first().map(|(_, score)| {
+        let mut tied_riders: Vec<_> = ranked
+            .iter()
+            .filter(|(_, s)| s.total == score.total)
+            .map(|(r, _)| *r)
+            .collect();
+        tied_riders.sort();
+        if tied_riders.len() > 1 {
+            SelectionReason::ExactScoreThenRiderId { tied_riders }
+        } else {
+            SelectionReason::LowestScore
+        }
+    });
+    Ok(BaselineRanking {
+        scores,
+        selected,
+        reason,
+    })
 }
 
 /// Separate candidate-generation policy over Basic Dispatch eligible riders.
@@ -335,23 +349,25 @@ fn checked_leg(
     }
 }
 
-fn evaluate_basic_plan(
+fn evaluate_idle_plan(
     snapshot: &DispatchSnapshot<'_>,
     order: OrderId,
     plan: RiderPlan,
     pickup: &RoutingAnchor,
     dropoff: &RoutingAnchor,
     origin: &RoutingAnchor,
+    preparation: Option<&PreparationPolicyEvidence>,
 ) -> Result<Option<PlanEvaluation>, DispatchEvaluationError> {
     let Some(first) = checked_leg(snapshot, origin, pickup, snapshot.at)? else {
         return Ok(None);
     };
-    let pickup_timeline = StopTimeline::new(
-        Stop::Pickup(order),
-        snapshot.at.checked_add(first.route.elapsed_travel_time())?,
-        Seconds::ZERO,
-        Seconds::ZERO,
-    )?;
+    let arrival = snapshot.at.checked_add(first.route.elapsed_travel_time())?;
+    let waiting = preparation
+        .filter(|p| p.effective_ready_at > arrival)
+        .map_or(Ok(Seconds::ZERO), |p| {
+            p.effective_ready_at.duration_since(arrival)
+        })?;
+    let pickup_timeline = StopTimeline::new(Stop::Pickup(order), arrival, waiting, Seconds::ZERO)?;
     let Some(second) = checked_leg(snapshot, pickup, dropoff, pickup_timeline.departure)? else {
         return Ok(None);
     };
@@ -389,7 +405,8 @@ fn evaluate_basic_plan(
         pickup_departure: pickup_timeline.departure,
         dropoff_arrival: dropoff_timeline.arrival,
         delivery_completed_at: completed,
-        waiting: Seconds::ZERO,
+        completion_time: completed.duration_since(snapshot.at)?,
+        waiting,
         service: Seconds::ZERO,
         lateness,
     }))
@@ -402,6 +419,7 @@ fn evaluate_candidates(
     pickup: &RoutingAnchor,
     dropoff: &RoutingAnchor,
     riders: Vec<RiderId>,
+    preparation: Option<&PreparationPolicyEvidence>,
 ) -> Result<(Vec<CandidateEvidence>, Vec<FeasibleCandidate>), DispatchEvaluationError> {
     let mut evidence = Vec::new();
     let mut feasible = Vec::new();
@@ -425,13 +443,14 @@ fn evaluate_candidates(
             });
             continue;
         }
-        if let Some(evaluation) = evaluate_basic_plan(
+        if let Some(evaluation) = evaluate_idle_plan(
             snapshot,
             order,
             plan.clone(),
             pickup,
             dropoff,
             &snapshot.anchors.riders[&rider],
+            preparation,
         )? {
             feasible.push(FeasibleCandidate { rider, evaluation });
         } else {
@@ -454,6 +473,31 @@ pub fn basic_dispatch(
     order: OrderId,
     id: DecisionId,
     policy: CandidatePolicy,
+) -> Result<AssignmentDecision, DispatchEvaluationError> {
+    dispatch_idle_order(snapshot, order, id, policy, None)
+}
+
+/// Evaluates Phase 14 readiness-aware timing and completion plus waiting-penalty scoring.
+///
+/// # Errors
+/// Shares Basic Dispatch input/routing errors and additionally rejects missing readiness.
+/// Expected readiness is a forecast; it never substitutes for observed execution readiness.
+pub fn preparation_aware_dispatch(
+    snapshot: &DispatchSnapshot<'_>,
+    order: OrderId,
+    id: DecisionId,
+    policy: CandidatePolicy,
+    strategy: PreparationAwareStrategy,
+) -> Result<AssignmentDecision, DispatchEvaluationError> {
+    dispatch_idle_order(snapshot, order, id, policy, Some(strategy))
+}
+
+fn dispatch_idle_order(
+    snapshot: &DispatchSnapshot<'_>,
+    order: OrderId,
+    id: DecisionId,
+    policy: CandidatePolicy,
+    strategy: Option<PreparationAwareStrategy>,
 ) -> Result<AssignmentDecision, DispatchEvaluationError> {
     let data = snapshot.world.data();
     validate_world(data)?;
@@ -492,25 +536,23 @@ pub fn basic_dispatch(
     let plan = RiderPlan {
         stops: vec![Stop::Pickup(order), Stop::Dropoff(order)],
     };
-    let (mut evidence, feasible) =
-        evaluate_candidates(snapshot, order, &plan, pickup, dropoff, riders)?;
-    let ranking = BaselineStrategy.rank(&feasible)?;
-    for candidate in feasible {
-        let score = ranking
-            .scores
-            .iter()
-            .find(|(r, _)| *r == candidate.rider)
-            .ok_or(DispatchEvaluationError::InvalidMetric)?
-            .1;
-        evidence.push(CandidateEvidence {
-            rider: candidate.rider,
-            result: CandidateResult::Feasible {
-                evaluation: candidate.evaluation,
-                score,
-            },
-        });
-    }
-    evidence.sort_by_key(|c| c.rider);
+    let preparation = strategy
+        .map(|s| PreparationPolicyEvidence::new(data.readiness[&order], s))
+        .transpose()?;
+    let (evidence, feasible) = evaluate_candidates(
+        snapshot,
+        order,
+        &plan,
+        pickup,
+        dropoff,
+        riders,
+        preparation.as_ref(),
+    )?;
+    let ranking = match strategy {
+        None => BaselineStrategy.rank(&feasible)?,
+        Some(s) => s.rank(&feasible)?,
+    };
+    let evidence = candidate_evidence(evidence, feasible, &ranking)?;
     let outcome = if let Some(rider) = ranking.selected {
         DispatchDecisionOutcome::Assigned(AssignmentProposal {
             order,
@@ -536,7 +578,13 @@ pub fn basic_dispatch(
             evaluated_at: snapshot.at,
             routing_epoch: snapshot.epoch,
             routing: snapshot.provenance.clone(),
-            strategy: "basic-road-travel/v1".into(),
+            strategy: if strategy.is_some() {
+                "preparation-completion-wait/v1"
+            } else {
+                "basic-road-travel/v1"
+            }
+            .into(),
+            preparation,
             feasibility_policy: "scalar-capacity-plan-custody-profile/v1".into(),
             eligibility_policy: "basic-idle/v1".into(),
             deadline_policy: DeadlinePolicy::SoftObserved,
@@ -547,4 +595,28 @@ pub fn basic_dispatch(
         },
         outcome,
     ))
+}
+
+fn candidate_evidence(
+    mut evidence: Vec<CandidateEvidence>,
+    feasible: Vec<FeasibleCandidate>,
+    ranking: &BaselineRanking,
+) -> Result<Vec<CandidateEvidence>, DispatchEvaluationError> {
+    for candidate in feasible {
+        let score = ranking
+            .scores
+            .iter()
+            .find(|(r, _)| *r == candidate.rider)
+            .ok_or(DispatchEvaluationError::InvalidMetric)?
+            .1;
+        evidence.push(CandidateEvidence {
+            rider: candidate.rider,
+            result: CandidateResult::Feasible {
+                evaluation: candidate.evaluation,
+                score,
+            },
+        });
+    }
+    evidence.sort_by_key(|c| c.rider);
+    Ok(evidence)
 }
