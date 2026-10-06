@@ -139,3 +139,13 @@ python3 scripts/collect_simulation_benchmark.py --output /tmp/simulation-replay.
 The measured median process time is below the configured logical window, demonstrating
 execution without wall-clock pacing for this fixture. No fleet strategy or scalability
 conclusion follows. See [simulation contracts and metric populations](simulation.md).
+
+## Phase 16 dispatch strategy benchmarking
+
+`roadrunner benchmark dispatch <scenario.json> [--idle-penalty-weight <weight>] [--json]`
+replays identical inputs through four assignment policies and computes delivery durations,
+waiting/idle time, distance, lateness, utilization, and explicit unfinished populations.
+`scripts/collect_dispatch_strategy_benchmark.py` verifies paired/standalone replay and
+records per-policy process timings with complete reproducibility metadata. See
+[methodology](dispatch-strategy-benchmarks.md) and
+[completion evidence](phase-16-completion.md).

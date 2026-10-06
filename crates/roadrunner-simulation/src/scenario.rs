@@ -19,7 +19,7 @@ pub struct SimulationScenario {
     /// Optional exact graph binding, checked before any event is executed.
     #[serde(default)]
     pub graph_snapshot_digest: Option<String>,
-    /// Independently callable Phase 13 or Phase 14 single-order policy.
+    /// Independently callable single-order policy, including Phase 16 comparison objectives.
     pub dispatch: DispatchPolicy,
     /// Stable initial rider profiles and positions.
     pub riders: Vec<RiderInput>,
@@ -33,12 +33,18 @@ pub struct SimulationScenario {
     pub traffic_changes: Vec<TrafficChange>,
 }
 
-/// Dispatch choice for one run; fleet strategy benchmarking is a later phase.
+/// Dispatch choice for an independent deterministic run.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum DispatchPolicy {
     /// Pickup plus delivery road travel, ignoring preparation in predictions.
     Basic,
+    /// Nearest straight-line pickup distance among feasible riders.
+    NearestRider,
+    /// Lowest traffic-aware pickup road travel.
+    LowestPickupEta,
+    /// Lowest readiness-aware completion time, without a waiting penalty.
+    LowestCompletionTime,
     /// Readiness-aware completion plus weighted pickup waiting.
     PreparationAware {
         /// Finite non-negative score seconds per second of pickup waiting.

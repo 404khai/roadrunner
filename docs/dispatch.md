@@ -190,3 +190,8 @@ The [general simulation engine](simulation.md) is implemented in Phase 15.
 Fleet strategy benchmarking, multi-order insertion,
 HTTP dispatch endpoints, persistence, and UI remain later phases. The rider lookup
 benchmark is preserved; these phases make no new dispatch latency or scalability claim.
+
+## Phase 16 strategy comparison
+
+The shared evaluator now supports nearest feasible rider, lowest pickup ETA, readiness-aware
+completion time, and preparation-aware ranking. See [objectives and comparison contracts](dispatch-strategy-benchmarks.md).

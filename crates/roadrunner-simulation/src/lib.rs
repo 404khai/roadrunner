@@ -3,11 +3,13 @@
 //! No wall clock, sleeps, or live data are consulted. Graph and exogenous scenario
 //! inputs are fixed; static traffic changes affect only subsequently departing legs.
 
+mod comparison;
 mod engine;
 mod event;
 mod metrics;
 mod scenario;
 
+pub use comparison::{StrategyComparison, compare_strategies};
 pub use engine::simulate;
 pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};

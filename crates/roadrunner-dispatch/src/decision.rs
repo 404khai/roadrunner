@@ -83,7 +83,10 @@ pub struct ScoreContributions {
     /// Completion and idle penalty for preparation-aware scoring; absent for baseline.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preparation: Option<PreparationScoreContributions>,
-    /// Exact checked objective used for ranking, expressed in seconds.
+    /// Straight-line pickup distance used by nearest-rider ranking; absent otherwise.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nearest_distance: Option<Meters>,
+    /// Checked time objective in seconds; informational road travel for nearest ranking.
     pub total: Seconds,
 }
 
@@ -102,7 +105,7 @@ pub enum CandidateResult {
     /// Feasible, fully evaluated remaining plan.
     Feasible {
         /// Timing and physical metrics, independent of strategy preference.
-        evaluation: PlanEvaluation,
+        evaluation: Box<PlanEvaluation>,
         /// Structured contributions for the recorded objective.
         score: ScoreContributions,
     },
@@ -222,7 +225,13 @@ impl AssignmentDecision {
     pub fn explanation(&self) -> String {
         match &self.outcome {
             DispatchDecisionOutcome::Assigned(p) => {
-                let objective = if self.evidence.preparation.is_some() {
+                let objective = if self.evidence.strategy == "nearest-straight-line/v1" {
+                    "straight-line pickup distance"
+                } else if self.evidence.strategy == "lowest-pickup-eta/v1" {
+                    "pickup road travel"
+                } else if self.evidence.strategy == "lowest-completion-time/v1" {
+                    "readiness-aware completion time"
+                } else if self.evidence.preparation.is_some() {
                     "completion time + rider waiting penalty"
                 } else {
                     "pickup + delivery road travel"

@@ -1,6 +1,6 @@
 # Roadrunner v0 Specification
 
-Status: Accepted; deterministic simulation implemented through Phase 15
+Status: Accepted; dispatch strategy benchmarking implemented through Phase 16
 Last updated: 2026-10-04
 
 ## 1. Purpose
@@ -256,6 +256,13 @@ duration, completed pickup waiting, completed-leg distance, and responsibility u
 Future/uncreated and assigned-but-unfinished work remain explicit at the inclusive horizon.
 Empty populations and zero denominators are unavailable. See [simulation.md](simulation.md)
 and [ADR 0015](adr/0015-deterministic-simulation-runtime.md).
+
+Phase 16 replays the same scenario through nearest-feasible-rider, lowest-pickup-ETA,
+readiness-aware lowest-completion-time, and preparation-aware assignment policies.
+All use exhaustive eligible candidate evaluation, shared feasibility and atomic commit.
+Comparison artifacts preserve full execution evidence and horizon populations, while
+external timing artifacts record hardware, dataset/configuration, runs and percentiles.
+See [dispatch strategy benchmarking](dispatch-strategy-benchmarks.md).
 
 ### 5.8 HTTP route API
 

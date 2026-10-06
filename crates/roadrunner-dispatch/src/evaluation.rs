@@ -1,5 +1,5 @@
 use roadrunner_core::cost::RouteCost;
-use roadrunner_core::geo::{KilometersPerHour, Meters, Seconds};
+use roadrunner_core::geo::{KilometersPerHour, Meters, Seconds, haversine_distance};
 use roadrunner_core::routing::RoutingError;
 use serde::Serialize;
 use thiserror::Error;
@@ -224,6 +224,7 @@ impl BaselineStrategy {
             scores.push((
                 c.rider,
                 ScoreContributions {
+                    nearest_distance: None,
                     pickup_travel: c.evaluation.pickup_travel,
                     delivery_travel: c.evaluation.delivery_travel,
                     preparation: None,
@@ -247,18 +248,14 @@ pub(crate) fn rank_scores(
     if scores.windows(2).any(|p| p[0].0 == p[1].0) {
         return Err(DispatchEvaluationError::InvalidMetric);
     }
+    let value = |s: &ScoreContributions| s.nearest_distance.map_or(s.total.value(), Meters::value);
     let mut ranked = scores.clone();
-    ranked.sort_by(|(a, sa), (b, sb)| {
-        sa.total
-            .value()
-            .total_cmp(&sb.total.value())
-            .then_with(|| a.cmp(b))
-    });
+    ranked.sort_by(|(a, sa), (b, sb)| value(sa).total_cmp(&value(sb)).then_with(|| a.cmp(b)));
     let selected = ranked.first().map(|(rider, _)| *rider);
     let reason = ranked.first().map(|(_, score)| {
         let mut tied_riders: Vec<_> = ranked
             .iter()
-            .filter(|(_, s)| s.total == score.total)
+            .filter(|(_, s)| value(s).total_cmp(&value(score)).is_eq())
             .map(|(r, _)| *r)
             .collect();
         tied_riders.sort();
@@ -474,7 +471,7 @@ pub fn basic_dispatch(
     id: DecisionId,
     policy: CandidatePolicy,
 ) -> Result<AssignmentDecision, DispatchEvaluationError> {
-    dispatch_idle_order(snapshot, order, id, policy, None)
+    dispatch_idle_order(snapshot, order, id, policy, IdleStrategy::Basic)
 }
 
 /// Evaluates Phase 14 readiness-aware timing and completion plus waiting-penalty scoring.
@@ -489,7 +486,79 @@ pub fn preparation_aware_dispatch(
     policy: CandidatePolicy,
     strategy: PreparationAwareStrategy,
 ) -> Result<AssignmentDecision, DispatchEvaluationError> {
-    dispatch_idle_order(snapshot, order, id, policy, Some(strategy))
+    dispatch_idle_order(
+        snapshot,
+        order,
+        id,
+        policy,
+        IdleStrategy::Preparation(strategy),
+    )
+}
+
+/// Phase 16 deterministic single-order objectives over the same feasible fleet.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum DispatchStrategy {
+    /// Minimum Haversine distance to pickup among road-feasible candidates.
+    NearestRider,
+    /// Minimum traffic-aware road travel to pickup, ignoring preparation forecasts.
+    LowestPickupEta,
+    /// Readiness-aware evaluation-to-delivery duration, with no waiting penalty.
+    LowestCompletionTime,
+    /// Readiness-aware completion plus the configured waiting penalty.
+    PreparationAware(PreparationAwareStrategy),
+}
+
+#[derive(Clone, Copy)]
+enum IdleStrategy {
+    Basic,
+    Benchmark(DispatchStrategy),
+    Preparation(PreparationAwareStrategy),
+}
+
+impl IdleStrategy {
+    fn preparation(self) -> Option<PreparationAwareStrategy> {
+        match self {
+            Self::Preparation(s) | Self::Benchmark(DispatchStrategy::PreparationAware(s)) => {
+                Some(s)
+            }
+            Self::Benchmark(DispatchStrategy::LowestCompletionTime) => {
+                Some(PreparationAwareStrategy::default_zero())
+            }
+            _ => None,
+        }
+    }
+    fn identity(self) -> &'static str {
+        match self {
+            Self::Basic => "basic-road-travel/v1",
+            Self::Benchmark(DispatchStrategy::NearestRider) => "nearest-straight-line/v1",
+            Self::Benchmark(DispatchStrategy::LowestPickupEta) => "lowest-pickup-eta/v1",
+            Self::Benchmark(DispatchStrategy::LowestCompletionTime) => "lowest-completion-time/v1",
+            Self::Preparation(_) | Self::Benchmark(DispatchStrategy::PreparationAware(_)) => {
+                "preparation-completion-wait/v1"
+            }
+        }
+    }
+}
+
+/// Evaluates a comparison strategy with shared feasibility, routing, and commit evidence.
+/// Exact objective ties choose the lowest rider identity.
+///
+/// # Errors
+/// Shares Basic Dispatch errors; completion policies additionally require readiness.
+pub fn strategy_dispatch(
+    snapshot: &DispatchSnapshot<'_>,
+    order: OrderId,
+    id: DecisionId,
+    policy: CandidatePolicy,
+    strategy: DispatchStrategy,
+) -> Result<AssignmentDecision, DispatchEvaluationError> {
+    dispatch_idle_order(
+        snapshot,
+        order,
+        id,
+        policy,
+        IdleStrategy::Benchmark(strategy),
+    )
 }
 
 fn dispatch_idle_order(
@@ -497,7 +566,7 @@ fn dispatch_idle_order(
     order: OrderId,
     id: DecisionId,
     policy: CandidatePolicy,
-    strategy: Option<PreparationAwareStrategy>,
+    strategy: IdleStrategy,
 ) -> Result<AssignmentDecision, DispatchEvaluationError> {
     let data = snapshot.world.data();
     validate_world(data)?;
@@ -536,7 +605,8 @@ fn dispatch_idle_order(
     let plan = RiderPlan {
         stops: vec![Stop::Pickup(order), Stop::Dropoff(order)],
     };
-    let preparation = strategy
+    let preparation_strategy = strategy.preparation();
+    let preparation = preparation_strategy
         .map(|s| PreparationPolicyEvidence::new(data.readiness[&order], s))
         .transpose()?;
     let (evidence, feasible) = evaluate_candidates(
@@ -548,10 +618,7 @@ fn dispatch_idle_order(
         riders,
         preparation.as_ref(),
     )?;
-    let ranking = match strategy {
-        None => BaselineStrategy.rank(&feasible)?,
-        Some(s) => s.rank(&feasible)?,
-    };
+    let ranking = rank_idle_candidates(strategy, &feasible, data, request)?;
     let evidence = candidate_evidence(evidence, feasible, &ranking)?;
     let outcome = if let Some(rider) = ranking.selected {
         DispatchDecisionOutcome::Assigned(AssignmentProposal {
@@ -578,12 +645,7 @@ fn dispatch_idle_order(
             evaluated_at: snapshot.at,
             routing_epoch: snapshot.epoch,
             routing: snapshot.provenance.clone(),
-            strategy: if strategy.is_some() {
-                "preparation-completion-wait/v1"
-            } else {
-                "basic-road-travel/v1"
-            }
-            .into(),
+            strategy: strategy.identity().into(),
             preparation,
             feasibility_policy: "scalar-capacity-plan-custody-profile/v1".into(),
             eligibility_policy: "basic-idle/v1".into(),
@@ -595,6 +657,39 @@ fn dispatch_idle_order(
         },
         outcome,
     ))
+}
+
+fn rank_idle_candidates(
+    strategy: IdleStrategy,
+    feasible: &[FeasibleCandidate],
+    data: &crate::WorldData,
+    request: &crate::Order,
+) -> Result<BaselineRanking, DispatchEvaluationError> {
+    let mut ranking = match strategy.preparation() {
+        None => BaselineStrategy.rank(feasible)?,
+        Some(s) => s.rank(feasible)?,
+    };
+    if let IdleStrategy::Benchmark(objective) = strategy {
+        if matches!(
+            objective,
+            DispatchStrategy::NearestRider | DispatchStrategy::LowestPickupEta
+        ) {
+            for (rider, score) in &mut ranking.scores {
+                match objective {
+                    DispatchStrategy::NearestRider => {
+                        score.nearest_distance = Some(haversine_distance(
+                            data.riders[rider].coordinate,
+                            request.pickup,
+                        ));
+                    }
+                    DispatchStrategy::LowestPickupEta => score.total = score.pickup_travel,
+                    _ => unreachable!(),
+                }
+            }
+            ranking = rank_scores(ranking.scores)?;
+        }
+    }
+    Ok(ranking)
 }
 
 fn candidate_evidence(
@@ -612,7 +707,7 @@ fn candidate_evidence(
         evidence.push(CandidateEvidence {
             rider: candidate.rider,
             result: CandidateResult::Feasible {
-                evaluation: candidate.evaluation,
+                evaluation: Box::new(candidate.evaluation),
                 score,
             },
         });

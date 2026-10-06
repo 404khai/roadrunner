@@ -41,7 +41,7 @@ is a complete runnable example.
 | `start_seconds`, `end_seconds` | Inclusive observation window; end is no earlier than start |
 | `routing_epoch_seconds` | Dispatch instant corresponding to routing second zero; no later than start |
 | `graph_snapshot_digest` | Optional for inline graphs, mandatory for artifact loading |
-| `dispatch` | `{ "kind": "basic" }` or `{ "kind": "preparation_aware", "idle_penalty_weight": 1.0 }` |
+| `dispatch` | `basic`, `nearest_rider`, `lowest_pickup_eta`, `lowest_completion_time`, or `preparation_aware` (with `idle_penalty_weight`), as tagged `kind` objects |
 | `riders` | Initial `id`, graph `node`, scalar `capacity`, and operational `available` boolean |
 | `orders` | Scheduled request facts and independently generated actual readiness |
 | `initial_traffic` | Complete list of directed `edge_id`/`multiplier` overrides; defaults to normal |
@@ -68,7 +68,7 @@ Delay bounds must be ordered. The versioned `splitmix64-upper53/v1` generator pr
 seeded orders in canonical identity order before dispatch. Its discrete uniform source
 is in `[0, 1)`; rounding can place the resulting delay on an endpoint. Fixed actual
 readiness may precede creation for stock already ready. The observation is received at
-creation and retains its original ready timestamp. Preparation-aware orders need a
+creation and retains its original ready timestamp. Readiness-aware completion and preparation-aware orders need a
 forecast when the actual ready fact will only become known later. Basic Dispatch retains
 its zero-wait predicted baseline, but execution still waits for actual readiness.
 
@@ -174,7 +174,7 @@ hash are recorded. It is not a fleet strategy comparison or a scalability benchm
 
 ## Phase boundary
 
-Phase 16 owns strategy benchmarking. Multi-order plans, initially busy riders, dynamic
+Phase 16 implements [paired strategy benchmarking](dispatch-strategy-benchmarks.md). Multi-order plans, initially busy riders, dynamic
 availability/cancellation/re-dispatch, continuous location interpolation, per-edge traffic
 changes during movement, live data, UI replay controls, persistence, and production-scale
 claims remain later work. This engine deliberately shares current scalar idle-rider

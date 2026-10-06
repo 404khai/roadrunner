@@ -7,9 +7,10 @@ use roadrunner_core::graph::{EdgeId, FrozenGraph, NodeId};
 use roadrunner_dispatch::{
     AssignmentDecision, Availability, CandidatePolicy, CandidateResult, CapacityUnits,
     CoreRouteProvider, DecisionId, DispatchDecisionOutcome, DispatchInstant, DispatchSnapshot,
-    Order, OrderId, OrderReadiness, PreparationAwareStrategy, RiderId, RiderPlan, RiderProfile,
-    RiderState, RouteOutcome, RouteProvider, RoutingAnchor, RoutingAnchors, RoutingEpoch,
-    TrafficContext, TrafficIdentity, World, WorldData, basic_dispatch, preparation_aware_dispatch,
+    DispatchStrategy, Order, OrderId, OrderReadiness, PreparationAwareStrategy, RiderId, RiderPlan,
+    RiderProfile, RiderState, RouteOutcome, RouteProvider, RoutingAnchor, RoutingAnchors,
+    RoutingEpoch, TrafficContext, TrafficIdentity, World, WorldData, basic_dispatch,
+    preparation_aware_dispatch, strategy_dispatch,
 };
 
 use crate::metrics::summarize;
@@ -279,7 +280,7 @@ impl<'a> Engine<'a> {
             };
             if matches!(
                 self.scenario.dispatch,
-                DispatchPolicy::PreparationAware { .. }
+                DispatchPolicy::PreparationAware { .. } | DispatchPolicy::LowestCompletionTime
             ) && readiness.expected_at.is_none()
                 && actual_ready_at > created_at
             {
@@ -465,6 +466,19 @@ impl<'a> Engine<'a> {
                 DispatchPolicy::Basic => {
                     basic_dispatch(&snapshot, order, id, CandidatePolicy::Exhaustive)?
                 }
+                DispatchPolicy::NearestRider
+                | DispatchPolicy::LowestPickupEta
+                | DispatchPolicy::LowestCompletionTime => strategy_dispatch(
+                    &snapshot,
+                    order,
+                    id,
+                    CandidatePolicy::Exhaustive,
+                    match self.scenario.dispatch {
+                        DispatchPolicy::NearestRider => DispatchStrategy::NearestRider,
+                        DispatchPolicy::LowestPickupEta => DispatchStrategy::LowestPickupEta,
+                        _ => DispatchStrategy::LowestCompletionTime,
+                    },
+                )?,
                 DispatchPolicy::PreparationAware {
                     idle_penalty_weight,
                 } => preparation_aware_dispatch(

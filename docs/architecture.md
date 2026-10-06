@@ -1,6 +1,6 @@
 # Roadrunner Architecture
 
-Status: Accepted through Phase 15 deterministic simulation
+Status: Accepted through Phase 16 dispatch strategy benchmarking
 Last updated: 2026-10-04
 
 ## 1. Architectural intent
@@ -426,3 +426,13 @@ core or dispatch. Graph, traffic, time, readiness, and scalar-profile inputs are
 before execution. See [simulation usage and contracts](simulation.md),
 [ADR 0015](adr/0015-deterministic-simulation-runtime.md), and
 [completion evidence](phase-15-completion.md).
+
+## 17. Phase 16 paired strategy comparison
+
+The dispatch module exposes deterministic nearest-rider, pickup-ETA, readiness-aware
+completion, and preparation-aware objectives over its shared idle-order evaluator.
+Simulation owns the paired orchestration: four fresh worlds reuse identical graph and
+exogenous facts. The CLI loads a scenario once for `benchmark dispatch`; external Python
+collection records wall-clock timings and reproducibility metadata. There is no host clock
+in the Rust simulation results. See [strategy contracts](dispatch-strategy-benchmarks.md)
+and [completion evidence](phase-16-completion.md).
