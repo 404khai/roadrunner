@@ -108,3 +108,13 @@ This is a correctness diagnostic, not a routing latency benchmark.
 byte-identical replay; it does not compare dispatch strategies. See
 [simulation documentation](../docs/simulation.md) and the
 [measured artifact](results/2026-10-04-phase-15-simulation.json).
+
+## Phase 16 dispatch strategy benchmarking
+
+`roadrunner benchmark dispatch <scenario.json> [--idle-penalty-weight <weight>] [--json]`
+replays identical inputs through four assignment policies and computes delivery durations,
+waiting/idle time, distance, lateness, utilization, and explicit unfinished populations.
+`scripts/collect_dispatch_strategy_benchmark.py` verifies paired/standalone replay and
+records per-policy process timings with complete reproducibility metadata. See
+[methodology](../docs/dispatch-strategy-benchmarks.md) and
+[completion evidence](../docs/phase-16-completion.md).

@@ -106,6 +106,11 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
         {
             time_dependent_command::run(snapshot, source, destination, scenario, depart)
         }
+        [benchmark, dispatch, scenario, rest @ ..]
+            if benchmark == "benchmark" && dispatch == "dispatch" =>
+        {
+            simulation_command::compare_arguments(scenario, rest)
+        }
         [simulate, scenario] if simulate == "simulate" => simulation_command::run(scenario, false),
         [simulate, scenario, json] if simulate == "simulate" && json == "--json" => {
             simulation_command::run(scenario, true)
@@ -145,6 +150,7 @@ fn print_help() {
          roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>\n  \
          roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>\n  \
          roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>\n  \
-         roadrunner simulate <scenario.json> [--json]"
+         roadrunner simulate <scenario.json> [--json]\n\
+         roadrunner benchmark dispatch <scenario.json> [--idle-penalty-weight <weight>] [--json]"
     );
 }

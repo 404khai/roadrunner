@@ -79,6 +79,12 @@ impl Default for PreparationAwareStrategy {
 }
 
 impl PreparationAwareStrategy {
+    pub(crate) const fn default_zero() -> Self {
+        Self {
+            idle_penalty_weight: 0.0,
+        }
+    }
+
     /// Configures penalty seconds per second waiting at pickup; zero is allowed.
     ///
     /// # Errors
@@ -118,6 +124,7 @@ impl PreparationAwareStrategy {
             scores.push((
                 candidate.rider,
                 ScoreContributions {
+                    nearest_distance: None,
                     pickup_travel: evaluation.pickup_travel,
                     delivery_travel: evaluation.delivery_travel,
                     preparation: Some(PreparationScoreContributions {

@@ -1,0 +1,715 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-06",
+  "purpose": "Paired synthetic dispatch strategy comparison; no production scalability claim",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "dataset": {
+    "path": "data/fixtures/phase-15/seeded-deliveries.json",
+    "sha256": "678be268e5c0e6544f4a80f3305d1693a23f2c44036bf37066c65e2bac26b76e",
+    "kind": "synthetic",
+    "graph_artifact": null,
+    "seed": 15,
+    "randomness": "splitmix64-upper53/v1",
+    "graph_digest": "5017e4b91bc6031d70113ac851341e77a954a628ba2234cbf0a94e946d56e24b",
+    "graph_nodes": 5,
+    "graph_directed_edges": 6,
+    "riders": 2,
+    "scheduled_orders": 6
+  },
+  "algorithm": {
+    "routing": "Roadrunner Dijkstra with static traffic overlays",
+    "events": "BinaryHeap ordered by logical time and insertion sequence",
+    "coverage": "exhaustive eligible road-feasible riders",
+    "tie_break": "lowest RiderId"
+  },
+  "configuration": {
+    "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
+    "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+    "binary_sha256": "b02585359b10089e53dbc5481e42c93efc1f2ba9f90b6304c665a571ff248f74",
+    "profile": "release",
+    "comparison_command": [
+      "/Users/admin/Developer/roadrunner/target/release/roadrunner",
+      "benchmark",
+      "dispatch",
+      "/Users/admin/Developer/roadrunner/data/fixtures/phase-15/seeded-deliveries.json",
+      "--idle-penalty-weight",
+      "1.0",
+      "--json"
+    ],
+    "idle_penalty_weight": 1.0,
+    "warmup_runs_per_strategy": 1,
+    "measured_runs_per_strategy": 11,
+    "start_seconds": 0.0,
+    "end_seconds": 600.0,
+    "includes": "process startup, graph/scenario loading and validation, simulation, JSON serialization and capture",
+    "timing_percentiles": "linear interpolation of ordered elapsed process samples",
+    "outcome_percentiles": "nearest rank; even median midpoint",
+    "memory": "not measured",
+    "concurrent_workspace_validation": false
+  },
+  "comparison_replay_sha256": "34b21683855b5b1ffd152effb180f9dac2fe200bf885924348c27a171ed37b36",
+  "strategies": [
+    {
+      "dispatch": {
+        "kind": "nearest_rider"
+      },
+      "summary": {
+        "scheduled_orders": 6,
+        "created_orders": 5,
+        "uncreated_orders": 1,
+        "assigned_orders": 4,
+        "delivered_orders": 4,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 4,
+          "mean_seconds": 68.38497434362273,
+          "median_seconds": 71.16485134946106,
+          "p95_seconds": 86.73216258215567,
+          "p99_seconds": 86.73216258215567
+        },
+        "delivered_duration": {
+          "samples": 4,
+          "mean_seconds": 90.91893465396457,
+          "median_seconds": 92.87424790008487,
+          "p95_seconds": 122.32970269892212,
+          "p99_seconds": 122.32970269892212
+        },
+        "pickup_waiting": {
+          "samples": 4,
+          "mean_seconds": 10.007533628898468,
+          "median_seconds": 0.0,
+          "p95_seconds": 40.03013451559387,
+          "p99_seconds": 40.03013451559387
+        },
+        "completed_distance_meters": 2335.0966849041906,
+        "rider_utilization": 0.261308359908404,
+        "mean_rider_idle_seconds": 443.2149840549576
+      },
+      "orders": [
+        {
+          "order": 1,
+          "realized_ready_at": 51.14964253894716,
+          "created_at": 0.0,
+          "observed_ready_at": 51.14964253894716,
+          "assigned_at": 0.0,
+          "rider": 1,
+          "predicted_eta": 44.47803209341316,
+          "pickup_arrival": 11.119508023353294,
+          "picked_up_at": 51.14964253894716,
+          "delivered_at": 84.50816660900703,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 2,
+          "realized_ready_at": 40.0,
+          "created_at": 20.0,
+          "observed_ready_at": 40.0,
+          "assigned_at": 20.0,
+          "rider": 2,
+          "predicted_eta": 55.59754011676645,
+          "pickup_arrival": 42.23901604670658,
+          "picked_up_at": 42.23901604670658,
+          "delivered_at": 75.59754011676645,
+          "deadline": 60.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 3,
+          "realized_ready_at": 101.20611063887397,
+          "created_at": 40.0,
+          "observed_ready_at": 101.20611063887397,
+          "assigned_at": 75.59754011676645,
+          "rider": 2,
+          "predicted_eta": 86.73216258215567,
+          "pickup_arrival": 108.95606418682632,
+          "picked_up_at": 108.95606418682632,
+          "delivered_at": 162.32970269892212,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 4,
+          "realized_ready_at": 100.0,
+          "created_at": 70.0,
+          "observed_ready_at": 100.0,
+          "assigned_at": 84.50816660900703,
+          "rider": 1,
+          "predicted_eta": 86.73216258215565,
+          "pickup_arrival": 117.8666906790669,
+          "picked_up_at": 117.8666906790669,
+          "delivered_at": 171.2403291911627,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 5,
+          "realized_ready_at": 80.0,
+          "created_at": 80.0,
+          "observed_ready_at": 80.0,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 6,
+          "realized_ready_at": 700.0,
+          "created_at": null,
+          "observed_ready_at": null,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        }
+      ],
+      "riders": [
+        {
+          "rider": 1,
+          "available": true,
+          "busy_seconds": 171.2403291911627,
+          "idle_seconds": 428.7596708088373,
+          "completed_distance_meters": 1111.950802335329
+        },
+        {
+          "rider": 2,
+          "available": true,
+          "busy_seconds": 142.32970269892212,
+          "idle_seconds": 457.6702973010779,
+          "completed_distance_meters": 1223.145882568862
+        }
+      ],
+      "processed_events": 50,
+      "decision_count": 18,
+      "replay_sha256": "f64fb4926a8f3e65cfab85a603684dc2fc0d12fe286d32ce26bfb42c7dac1651",
+      "timing": {
+        "samples_ns": [
+          4341500,
+          4357292,
+          4287458,
+          4744833,
+          4886958,
+          4791042,
+          4922833,
+          4397417,
+          4337875,
+          4470125,
+          4494792
+        ],
+        "median_ns": 4470125,
+        "p95_ns": 4904895.5,
+        "p99_ns": 4919245.5
+      }
+    },
+    {
+      "dispatch": {
+        "kind": "lowest_pickup_eta"
+      },
+      "summary": {
+        "scheduled_orders": 6,
+        "created_orders": 5,
+        "uncreated_orders": 1,
+        "assigned_orders": 4,
+        "delivered_orders": 4,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 4,
+          "mean_seconds": 68.38497434362273,
+          "median_seconds": 71.16485134946106,
+          "p95_seconds": 86.73216258215567,
+          "p99_seconds": 86.73216258215567
+        },
+        "delivered_duration": {
+          "samples": 4,
+          "mean_seconds": 90.91893465396457,
+          "median_seconds": 92.87424790008487,
+          "p95_seconds": 122.32970269892212,
+          "p99_seconds": 122.32970269892212
+        },
+        "pickup_waiting": {
+          "samples": 4,
+          "mean_seconds": 10.007533628898468,
+          "median_seconds": 0.0,
+          "p95_seconds": 40.03013451559387,
+          "p99_seconds": 40.03013451559387
+        },
+        "completed_distance_meters": 2335.0966849041906,
+        "rider_utilization": 0.261308359908404,
+        "mean_rider_idle_seconds": 443.2149840549576
+      },
+      "orders": [
+        {
+          "order": 1,
+          "realized_ready_at": 51.14964253894716,
+          "created_at": 0.0,
+          "observed_ready_at": 51.14964253894716,
+          "assigned_at": 0.0,
+          "rider": 1,
+          "predicted_eta": 44.47803209341316,
+          "pickup_arrival": 11.119508023353294,
+          "picked_up_at": 51.14964253894716,
+          "delivered_at": 84.50816660900703,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 2,
+          "realized_ready_at": 40.0,
+          "created_at": 20.0,
+          "observed_ready_at": 40.0,
+          "assigned_at": 20.0,
+          "rider": 2,
+          "predicted_eta": 55.59754011676645,
+          "pickup_arrival": 42.23901604670658,
+          "picked_up_at": 42.23901604670658,
+          "delivered_at": 75.59754011676645,
+          "deadline": 60.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 3,
+          "realized_ready_at": 101.20611063887397,
+          "created_at": 40.0,
+          "observed_ready_at": 101.20611063887397,
+          "assigned_at": 75.59754011676645,
+          "rider": 2,
+          "predicted_eta": 86.73216258215567,
+          "pickup_arrival": 108.95606418682632,
+          "picked_up_at": 108.95606418682632,
+          "delivered_at": 162.32970269892212,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 4,
+          "realized_ready_at": 100.0,
+          "created_at": 70.0,
+          "observed_ready_at": 100.0,
+          "assigned_at": 84.50816660900703,
+          "rider": 1,
+          "predicted_eta": 86.73216258215565,
+          "pickup_arrival": 117.8666906790669,
+          "picked_up_at": 117.8666906790669,
+          "delivered_at": 171.2403291911627,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 5,
+          "realized_ready_at": 80.0,
+          "created_at": 80.0,
+          "observed_ready_at": 80.0,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 6,
+          "realized_ready_at": 700.0,
+          "created_at": null,
+          "observed_ready_at": null,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        }
+      ],
+      "riders": [
+        {
+          "rider": 1,
+          "available": true,
+          "busy_seconds": 171.2403291911627,
+          "idle_seconds": 428.7596708088373,
+          "completed_distance_meters": 1111.950802335329
+        },
+        {
+          "rider": 2,
+          "available": true,
+          "busy_seconds": 142.32970269892212,
+          "idle_seconds": 457.6702973010779,
+          "completed_distance_meters": 1223.145882568862
+        }
+      ],
+      "processed_events": 50,
+      "decision_count": 18,
+      "replay_sha256": "c023a56bf6a60f726e10970a391a3cc4ddf2a2fee91dbce4e70eed3bfdddfe94",
+      "timing": {
+        "samples_ns": [
+          4384042,
+          4117666,
+          4128792,
+          4450750,
+          4527959,
+          4434000,
+          4240167,
+          4172000,
+          4135541,
+          4454875,
+          4291500
+        ],
+        "median_ns": 4291500,
+        "p95_ns": 4491417.0,
+        "p99_ns": 4520650.6
+      }
+    },
+    {
+      "dispatch": {
+        "kind": "lowest_completion_time"
+      },
+      "summary": {
+        "scheduled_orders": 6,
+        "created_orders": 5,
+        "uncreated_orders": 1,
+        "assigned_orders": 4,
+        "delivered_orders": 4,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 4,
+          "mean_seconds": 80.60509733778441,
+          "median_seconds": 86.73216258215567,
+          "p95_seconds": 93.35852407005987,
+          "p99_seconds": 93.35852407005987
+        },
+        "delivered_duration": {
+          "samples": 4,
+          "mean_seconds": 90.91893465396457,
+          "median_seconds": 92.87424790008487,
+          "p95_seconds": 122.32970269892212,
+          "p99_seconds": 122.32970269892212
+        },
+        "pickup_waiting": {
+          "samples": 4,
+          "mean_seconds": 10.007533628898468,
+          "median_seconds": 0.0,
+          "p95_seconds": 40.03013451559387,
+          "p99_seconds": 40.03013451559387
+        },
+        "completed_distance_meters": 2335.0966849041906,
+        "rider_utilization": 0.261308359908404,
+        "mean_rider_idle_seconds": 443.2149840549576
+      },
+      "orders": [
+        {
+          "order": 1,
+          "realized_ready_at": 51.14964253894716,
+          "created_at": 0.0,
+          "observed_ready_at": 51.14964253894716,
+          "assigned_at": 0.0,
+          "rider": 1,
+          "predicted_eta": 93.35852407005987,
+          "pickup_arrival": 11.119508023353294,
+          "picked_up_at": 51.14964253894716,
+          "delivered_at": 84.50816660900703,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 2,
+          "realized_ready_at": 40.0,
+          "created_at": 20.0,
+          "observed_ready_at": 40.0,
+          "assigned_at": 20.0,
+          "rider": 2,
+          "predicted_eta": 55.59754011676645,
+          "pickup_arrival": 42.23901604670658,
+          "picked_up_at": 42.23901604670658,
+          "delivered_at": 75.59754011676645,
+          "deadline": 60.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 3,
+          "realized_ready_at": 101.20611063887397,
+          "created_at": 40.0,
+          "observed_ready_at": 101.20611063887397,
+          "assigned_at": 75.59754011676645,
+          "rider": 2,
+          "predicted_eta": 86.73216258215567,
+          "pickup_arrival": 108.95606418682632,
+          "picked_up_at": 108.95606418682632,
+          "delivered_at": 162.32970269892212,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 4,
+          "realized_ready_at": 100.0,
+          "created_at": 70.0,
+          "observed_ready_at": 100.0,
+          "assigned_at": 84.50816660900703,
+          "rider": 1,
+          "predicted_eta": 86.73216258215565,
+          "pickup_arrival": 117.8666906790669,
+          "picked_up_at": 117.8666906790669,
+          "delivered_at": 171.2403291911627,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 5,
+          "realized_ready_at": 80.0,
+          "created_at": 80.0,
+          "observed_ready_at": 80.0,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 6,
+          "realized_ready_at": 700.0,
+          "created_at": null,
+          "observed_ready_at": null,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        }
+      ],
+      "riders": [
+        {
+          "rider": 1,
+          "available": true,
+          "busy_seconds": 171.2403291911627,
+          "idle_seconds": 428.7596708088373,
+          "completed_distance_meters": 1111.950802335329
+        },
+        {
+          "rider": 2,
+          "available": true,
+          "busy_seconds": 142.32970269892212,
+          "idle_seconds": 457.6702973010779,
+          "completed_distance_meters": 1223.145882568862
+        }
+      ],
+      "processed_events": 50,
+      "decision_count": 18,
+      "replay_sha256": "81ccde8ed1111dd4a7a0d167429b350039db8c7e3f452de03fb4e2f1ef68dea7",
+      "timing": {
+        "samples_ns": [
+          4291625,
+          4424333,
+          4164500,
+          4108792,
+          4032625,
+          4212834,
+          4356042,
+          4470250,
+          4107292,
+          4562542,
+          4876375
+        ],
+        "median_ns": 4291625,
+        "p95_ns": 4719458.5,
+        "p99_ns": 4844991.7
+      }
+    },
+    {
+      "dispatch": {
+        "kind": "preparation_aware",
+        "idle_penalty_weight": 1.0
+      },
+      "summary": {
+        "scheduled_orders": 6,
+        "created_orders": 5,
+        "uncreated_orders": 1,
+        "assigned_orders": 4,
+        "delivered_orders": 4,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 4,
+          "mean_seconds": 80.04534332610777,
+          "median_seconds": 86.73216258215567,
+          "p95_seconds": 93.35852407005987,
+          "p99_seconds": 93.35852407005987
+        },
+        "delivered_duration": {
+          "samples": 4,
+          "mean_seconds": 89.79942663061128,
+          "median_seconds": 92.87424790008487,
+          "p95_seconds": 120.09068665221554,
+          "p99_seconds": 120.09068665221554
+        },
+        "pickup_waiting": {
+          "samples": 4,
+          "mean_seconds": 9.447779617221821,
+          "median_seconds": 4.440245988323353,
+          "p95_seconds": 28.910626492240578,
+          "p99_seconds": 28.910626492240578
+        },
+        "completed_distance_meters": 2335.0966849041906,
+        "rider_utilization": 0.2594425132028152,
+        "mean_rider_idle_seconds": 444.33449207831086
+      },
+      "orders": [
+        {
+          "order": 1,
+          "realized_ready_at": 51.14964253894716,
+          "created_at": 0.0,
+          "observed_ready_at": 51.14964253894716,
+          "assigned_at": 0.0,
+          "rider": 2,
+          "predicted_eta": 93.35852407005987,
+          "pickup_arrival": 22.239016046706585,
+          "picked_up_at": 51.14964253894716,
+          "delivered_at": 84.50816660900703,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 2,
+          "realized_ready_at": 40.0,
+          "created_at": 20.0,
+          "observed_ready_at": 40.0,
+          "assigned_at": 20.0,
+          "rider": 1,
+          "predicted_eta": 53.35852407005987,
+          "pickup_arrival": 31.119508023353294,
+          "picked_up_at": 40.0,
+          "delivered_at": 73.35852407005987,
+          "deadline": 60.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 3,
+          "realized_ready_at": 101.20611063887397,
+          "created_at": 40.0,
+          "observed_ready_at": 101.20611063887397,
+          "assigned_at": 73.35852407005987,
+          "rider": 1,
+          "predicted_eta": 86.73216258215567,
+          "pickup_arrival": 106.71704814011974,
+          "picked_up_at": 106.71704814011974,
+          "delivered_at": 160.09068665221554,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 4,
+          "realized_ready_at": 100.0,
+          "created_at": 70.0,
+          "observed_ready_at": 100.0,
+          "assigned_at": 84.50816660900703,
+          "rider": 2,
+          "predicted_eta": 86.73216258215565,
+          "pickup_arrival": 117.8666906790669,
+          "picked_up_at": 117.8666906790669,
+          "delivered_at": 171.2403291911627,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 5,
+          "realized_ready_at": 80.0,
+          "created_at": 80.0,
+          "observed_ready_at": 80.0,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        },
+        {
+          "order": 6,
+          "realized_ready_at": 700.0,
+          "created_at": null,
+          "observed_ready_at": null,
+          "assigned_at": null,
+          "rider": null,
+          "predicted_eta": null,
+          "pickup_arrival": null,
+          "picked_up_at": null,
+          "delivered_at": null,
+          "deadline": 200.0,
+          "partial_wait_seconds": null
+        }
+      ],
+      "riders": [
+        {
+          "rider": 1,
+          "available": true,
+          "busy_seconds": 140.09068665221554,
+          "idle_seconds": 459.90931334778446,
+          "completed_distance_meters": 1111.950802335329
+        },
+        {
+          "rider": 2,
+          "available": true,
+          "busy_seconds": 171.2403291911627,
+          "idle_seconds": 428.7596708088373,
+          "completed_distance_meters": 1223.145882568862
+        }
+      ],
+      "processed_events": 50,
+      "decision_count": 18,
+      "replay_sha256": "3f91000391d46280b94c493a5de23abb59a60f2ab7451de82007423e41eb9b7a",
+      "timing": {
+        "samples_ns": [
+          4260917,
+          4175375,
+          4169292,
+          4016459,
+          4075250,
+          4161541,
+          4087000,
+          4184250,
+          4083417,
+          4092000,
+          4057500
+        ],
+        "median_ns": 4092000,
+        "p95_ns": 4222583.5,
+        "p99_ns": 4253250.3
+      }
+    }
+  ]
+}

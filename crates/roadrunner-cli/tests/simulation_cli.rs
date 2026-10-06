@@ -153,3 +153,106 @@ fn inline_coordinates_and_geometry_are_validated_at_the_json_boundary() {
     }
     ok(std::fs::remove_dir_all(directory));
 }
+
+#[test]
+fn comparison_cli_replays_four_policies_and_exposes_metrics_and_configuration() {
+    let path = fixture();
+    let args = [
+        "benchmark",
+        "dispatch",
+        ok(path.to_str().ok_or("path")),
+        "--idle-penalty-weight",
+        "2",
+        "--json",
+    ];
+    let first = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(args)
+        .output());
+    let second = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(args)
+        .output());
+    assert!(
+        first.status.success(),
+        "{}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+    assert!(second.status.success());
+    assert_eq!(first.stdout, second.stdout);
+    let result: serde_json::Value = ok(serde_json::from_slice(&first.stdout));
+    assert_eq!(result["schema_version"], 1);
+    let runs = ok(result["runs"].as_array().ok_or("runs"));
+    assert_eq!(runs.len(), 4);
+    assert_eq!(runs[0]["dispatch"]["kind"], "nearest_rider");
+    assert_eq!(runs[1]["dispatch"]["kind"], "lowest_pickup_eta");
+    assert_eq!(runs[2]["dispatch"]["kind"], "lowest_completion_time");
+    assert_eq!(runs[3]["dispatch"]["idle_penalty_weight"], 2.0);
+    for run in runs {
+        assert_eq!(run["seed"], 15);
+        assert_eq!(run["summary"]["created_orders"], 5);
+        assert_eq!(run["summary"]["uncreated_orders"], 1);
+        assert_eq!(
+            run["orders"][0]["realized_ready_at"],
+            runs[0]["orders"][0]["realized_ready_at"]
+        );
+        assert!(run["summary"]["delivered_duration"]["mean_seconds"].is_number());
+    }
+    let text = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(["benchmark", "dispatch", ok(path.to_str().ok_or("path"))])
+        .output());
+    assert!(text.status.success());
+    let text = ok(String::from_utf8(text.stdout));
+    assert_eq!(text.matches("Strategy:").count(), 4);
+    assert!(text.contains("Mean delivered duration:"));
+    assert!(text.contains("Mean rider idle time:"));
+    assert!(text.contains("Unassigned:"));
+}
+
+#[test]
+fn invalid_comparison_arguments_do_not_emit_success_output() {
+    let path = fixture();
+    for rest in [
+        vec!["--idle-penalty-weight", "-1"],
+        vec!["--idle-penalty-weight", "NaN"],
+        vec!["--idle-penalty-weight"],
+        vec!["--unknown"],
+    ] {
+        let mut args = vec!["benchmark", "dispatch", ok(path.to_str().ok_or("path"))];
+        args.extend(rest);
+        let output = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        assert!(!output.status.success());
+        assert_eq!(output.stdout, [] as [u8; 0]);
+    }
+}
+
+#[test]
+fn phase16_fixture_preserves_disconnected_and_future_orders_across_policies() {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../data/fixtures/phase-16/paired-strategies.json");
+    let output = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args([
+            "benchmark",
+            "dispatch",
+            ok(path.to_str().ok_or("path")),
+            "--json",
+        ])
+        .output());
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: serde_json::Value = ok(serde_json::from_slice(&output.stdout));
+    let runs = ok(result["runs"].as_array().ok_or("runs"));
+    for run in runs {
+        assert_eq!(run["summary"]["scheduled_orders"], 14);
+        assert_eq!(run["summary"]["delivered_orders"], 12);
+        assert_eq!(run["summary"]["unassigned_orders"], 1);
+        assert_eq!(run["summary"]["uncreated_orders"], 1);
+        assert!(run["orders"][12]["rider"].is_null());
+        assert!(run["orders"][13]["created_at"].is_null());
+    }
+    assert_eq!(runs[0]["orders"][0]["rider"], 1);
+    assert_eq!(runs[1]["orders"][0]["rider"], 2);
+}

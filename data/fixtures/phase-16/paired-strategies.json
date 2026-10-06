@@ -1,0 +1,287 @@
+{
+  "graph": {
+    "kind": "inline",
+    "profile": "simulation-motorcycle/v1",
+    "nodes": [
+      {
+        "id": 0,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 0
+        }
+      },
+      {
+        "id": 1,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 10000
+        }
+      },
+      {
+        "id": 2,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 20000
+        }
+      },
+      {
+        "id": 3,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 30000
+        }
+      },
+      {
+        "id": 4,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 40000
+        }
+      }
+    ],
+    "roads": [
+      {
+        "id": 0,
+        "from": 0,
+        "to": 1,
+        "speed_kph": 6,
+        "bidirectional": true
+      },
+      {
+        "id": 1,
+        "from": 0,
+        "to": 2,
+        "speed_kph": 36,
+        "bidirectional": true
+      },
+      {
+        "id": 2,
+        "from": 0,
+        "to": 3,
+        "speed_kph": 36,
+        "bidirectional": true
+      }
+    ]
+  },
+  "scenario": {
+    "schema_version": 1,
+    "seed": 16,
+    "start_seconds": 0,
+    "end_seconds": 900,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "basic"
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 1,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 2,
+        "node": 2,
+        "capacity": 2,
+        "available": true
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 0,
+        "expected_ready_at_seconds": 80,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 100,
+        "demand": 1
+      },
+      {
+        "id": 2,
+        "pickup_node": 1,
+        "dropoff_node": 3,
+        "created_at_seconds": 30,
+        "expected_ready_at_seconds": 50,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 10,
+          "max_seconds": 30
+        },
+        "deadline_seconds": 130,
+        "demand": 1
+      },
+      {
+        "id": 3,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 60,
+        "expected_ready_at_seconds": 140,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 160,
+        "demand": 1
+      },
+      {
+        "id": 4,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 90,
+        "expected_ready_at_seconds": 170,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 190,
+        "demand": 1
+      },
+      {
+        "id": 5,
+        "pickup_node": 1,
+        "dropoff_node": 3,
+        "created_at_seconds": 120,
+        "expected_ready_at_seconds": 140,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 10,
+          "max_seconds": 30
+        },
+        "deadline_seconds": 220,
+        "demand": 1
+      },
+      {
+        "id": 6,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 150,
+        "expected_ready_at_seconds": 230,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 250,
+        "demand": 1
+      },
+      {
+        "id": 7,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 180,
+        "expected_ready_at_seconds": 260,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 280,
+        "demand": 1
+      },
+      {
+        "id": 8,
+        "pickup_node": 1,
+        "dropoff_node": 3,
+        "created_at_seconds": 210,
+        "expected_ready_at_seconds": 230,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 10,
+          "max_seconds": 30
+        },
+        "deadline_seconds": 310,
+        "demand": 1
+      },
+      {
+        "id": 9,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 240,
+        "expected_ready_at_seconds": 320,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 340,
+        "demand": 1
+      },
+      {
+        "id": 10,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 270,
+        "expected_ready_at_seconds": 350,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 370,
+        "demand": 1
+      },
+      {
+        "id": 11,
+        "pickup_node": 1,
+        "dropoff_node": 3,
+        "created_at_seconds": 300,
+        "expected_ready_at_seconds": 320,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 10,
+          "max_seconds": 30
+        },
+        "deadline_seconds": 400,
+        "demand": 1
+      },
+      {
+        "id": 12,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 330,
+        "expected_ready_at_seconds": 410,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 70,
+          "max_seconds": 90
+        },
+        "deadline_seconds": 430,
+        "demand": 1
+      },
+      {
+        "id": 13,
+        "pickup_node": 4,
+        "dropoff_node": 0,
+        "created_at_seconds": 100,
+        "expected_ready_at_seconds": 100,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 100
+        },
+        "deadline_seconds": 200,
+        "demand": 1
+      },
+      {
+        "id": 14,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 950,
+        "expected_ready_at_seconds": 950,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 950
+        },
+        "demand": 1
+      }
+    ],
+    "initial_traffic": [],
+    "traffic_changes": []
+  }
+}
