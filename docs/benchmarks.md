@@ -119,3 +119,23 @@ compilation. These values are historical evidence for the superseded v1
 normalization/profile and must not be compared as current output. They are
 regression evidence for that exact small fixture;
 they make no claim about city, country, or planet-scale ingestion.
+
+## Phase 15 discrete-event simulation replay
+
+The [Phase 15 process timing artifact](../benchmarks/results/2026-10-04-phase-15-simulation.json)
+measures the versioned [synthetic scenario](../data/fixtures/phase-15/seeded-deliveries.json):
+five nodes, six directed edges, two riders, six scheduled orders, and a 600-second logical
+window. [The collector](../scripts/collect_simulation_benchmark.py) records hardware,
+dataset/graph hashes, seed/generator, algorithm/policy, compiler/build, one warmup,
+11 measured process samples, median/p95/p99, and replay output hash. It includes startup,
+loading/validation, simulation, and JSON output capture. All replays are byte-identical;
+collection ran after workspace validation finished.
+
+```bash
+cargo +1.99.0 build -p roadrunner-cli --release --locked
+python3 scripts/collect_simulation_benchmark.py --output /tmp/simulation-replay.json
+```
+
+The measured median process time is below the configured logical window, demonstrating
+execution without wall-clock pacing for this fixture. No fleet strategy or scalability
+conclusion follows. See [simulation contracts and metric populations](simulation.md).

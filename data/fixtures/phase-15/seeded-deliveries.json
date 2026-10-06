@@ -1,0 +1,189 @@
+{
+  "graph": {
+    "kind": "inline",
+    "profile": "simulation-motorcycle/v1",
+    "nodes": [
+      {
+        "id": 0,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 0
+        }
+      },
+      {
+        "id": 1,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 10000
+        }
+      },
+      {
+        "id": 2,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 20000
+        }
+      },
+      {
+        "id": 3,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 30000
+        }
+      },
+      {
+        "id": 4,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 40000
+        }
+      }
+    ],
+    "roads": [
+      {
+        "id": 0,
+        "from": 0,
+        "to": 1,
+        "speed_kph": 36,
+        "bidirectional": true
+      },
+      {
+        "id": 1,
+        "from": 0,
+        "to": 2,
+        "speed_kph": 36,
+        "bidirectional": true
+      },
+      {
+        "id": 2,
+        "from": 0,
+        "to": 3,
+        "speed_kph": 36,
+        "bidirectional": true
+      }
+    ]
+  },
+  "scenario": {
+    "schema_version": 1,
+    "seed": 15,
+    "start_seconds": 0,
+    "end_seconds": 600,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "preparation_aware",
+      "idle_penalty_weight": 1
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 1,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 2,
+        "node": 2,
+        "capacity": 2,
+        "available": true
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 30,
+          "max_seconds": 70
+        },
+        "deadline_seconds": 200,
+        "demand": 1
+      },
+      {
+        "id": 2,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 20,
+        "expected_ready_at_seconds": 40,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 40
+        },
+        "deadline_seconds": 60,
+        "demand": 1
+      },
+      {
+        "id": 3,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 40,
+        "expected_ready_at_seconds": 100,
+        "actual_readiness": {
+          "kind": "seeded_delay",
+          "min_seconds": 30,
+          "max_seconds": 70
+        },
+        "deadline_seconds": 200,
+        "demand": 1
+      },
+      {
+        "id": 4,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 70,
+        "expected_ready_at_seconds": 100,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 100
+        },
+        "deadline_seconds": 200,
+        "demand": 1
+      },
+      {
+        "id": 5,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 80,
+        "expected_ready_at_seconds": 80,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 80
+        },
+        "deadline_seconds": 200,
+        "demand": 3
+      },
+      {
+        "id": 6,
+        "pickup_node": 0,
+        "dropoff_node": 3,
+        "created_at_seconds": 700,
+        "expected_ready_at_seconds": 700,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 700
+        },
+        "deadline_seconds": 200,
+        "demand": 1
+      }
+    ],
+    "initial_traffic": [],
+    "traffic_changes": [
+      {
+        "at_seconds": 60,
+        "overrides": [
+          {
+            "edge_id": 2,
+            "multiplier": 1.6
+          }
+        ]
+      },
+      {
+        "at_seconds": 120,
+        "overrides": []
+      }
+    ]
+  }
+}

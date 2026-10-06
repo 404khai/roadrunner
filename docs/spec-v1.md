@@ -1,6 +1,6 @@
 # Roadrunner v0 Specification
 
-Status: Accepted; preparation-aware dispatch implemented through Phase 14
+Status: Accepted; deterministic simulation implemented through Phase 15
 Last updated: 2026-10-04
 
 ## 1. Purpose
@@ -239,11 +239,23 @@ The simulator is a deterministic, discrete-event system. It must:
 - run independently of wall-clock time; and
 - produce machine-readable results.
 
-The v0 event set is limited to order creation, rider assignment, rider arrival at
-pickup, order pickup, and order delivery. Required summary metrics are total,
-assigned, delivered, unassigned, and late orders; median and p95 delivery time;
-total distance; and rider utilization. A metric without enough observations must
-be reported as unavailable, not invented.
+Phase 15 supports ORDER_CREATED, ORDER_READY, RIDER_MOVED, RIDER_ASSIGNED,
+RIDER_ARRIVED_PICKUP, ORDER_PICKED_UP, ORDER_DELIVERED, and TRAFFIC_CHANGED, plus
+DISPATCH_UNASSIGNED for valid completed infeasibility. Shared World transitions own
+registration, assignment, readiness, custody, and plan progression. Pending orders are
+retried on external order/readiness/traffic changes and delivery freeing a rider.
+
+Static traffic replacements affect subsequently departing legs; in-flight route/cost
+and provenance are frozen. Rider movement records whole-leg endpoint arrival. Seeded
+actual preparation times are materialized independently of dispatch in canonical order.
+Every run starts from a fresh equivalent world, with no host clocks or sleeps.
+
+Summary metrics declare scheduled/created/assigned/delivered/unassigned/unfinished
+populations, completed and outstanding lateness, predicted ETA versus observed delivery
+duration, completed pickup waiting, completed-leg distance, and responsibility utilization.
+Future/uncreated and assigned-but-unfinished work remain explicit at the inclusive horizon.
+Empty populations and zero denominators are unavailable. See [simulation.md](simulation.md)
+and [ADR 0015](adr/0015-deterministic-simulation-runtime.md).
 
 ### 5.8 HTTP route API
 

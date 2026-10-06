@@ -160,7 +160,8 @@ stock is ready, both select the nearer rider. With a late actual ready event, ob
 completion differs from the forecast in the decision.
 
 These small caller-driven scenario executions satisfy Phase 14's comparison requirement.
-The general event queue and scalable simulation runtime belong to Phase 15. There is
+The general event queue and horizon-aware runtime are implemented in
+[Phase 15 simulation](simulation.md). There is
 no randomness, performance comparison, or production dataset in this demonstration.
 
 ## Verification and scope
@@ -185,6 +186,7 @@ readiness precedence/absence, waiting boundaries, traffic after waiting, exact t
 configuration/overflow, soft deadlines, stale readiness updates, shared execution,
 and forecast-versus-observed comparisons. See the [Phase 14 completion report](phase-14-completion.md).
 
-The general simulation engine, fleet strategy benchmarking, multi-order insertion,
+The [general simulation engine](simulation.md) is implemented in Phase 15.
+Fleet strategy benchmarking, multi-order insertion,
 HTTP dispatch endpoints, persistence, and UI remain later phases. The rider lookup
 benchmark is preserved; these phases make no new dispatch latency or scalability claim.
