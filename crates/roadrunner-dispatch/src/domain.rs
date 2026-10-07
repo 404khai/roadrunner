@@ -120,7 +120,7 @@ pub struct CommittedAssignment {
 }
 
 /// Logical remaining work; location is resolved through the referenced request.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
 pub enum Stop {
     /// Complete pickup and establish onboard custody.
     Pickup(OrderId),
@@ -146,7 +146,7 @@ pub struct RiderPlan {
 }
 
 /// Value input to a world; published state is validated and exposed read-only.
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize)]
 pub struct WorldData {
     /// Stable requests.
     pub orders: BTreeMap<OrderId, Order>,
@@ -160,6 +160,8 @@ pub struct WorldData {
     pub riders: BTreeMap<RiderId, RiderState>,
     /// Active responsibility keyed by order.
     pub assignments: BTreeMap<OrderId, CommittedAssignment>,
+    /// Authentic acceptance-time terms; absent entries retain legacy compatibility.
+    pub accepted: BTreeMap<OrderId, crate::AcceptedTerms>,
     /// Effective remaining plan keyed by rider.
     pub plans: BTreeMap<RiderId, RiderPlan>,
 }

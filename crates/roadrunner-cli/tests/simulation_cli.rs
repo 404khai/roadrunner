@@ -256,3 +256,76 @@ fn phase16_fixture_preserves_disconnected_and_future_orders_across_policies() {
     assert_eq!(runs[0]["orders"][0]["rider"], 1);
     assert_eq!(runs[1]["orders"][0]["rider"], 2);
 }
+
+#[test]
+fn phase17_pooled_cli_replays_success_rejections_and_prediction_failure() {
+    let root =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/fixtures/phase-17");
+    for name in [
+        "successful-pooling",
+        "capacity-prefix",
+        "complete-infeasibility",
+        "hard-deadline",
+        "cumulative-repeat",
+        "budget-exhaustion",
+        "frozen-wait",
+        "frozen-service",
+        "realized-readiness-violation",
+        "baseline-predicted-breach",
+    ] {
+        let path = root.join(format!("{name}.json"));
+        let args = ["simulate", ok(path.to_str().ok_or("path")), "--json"];
+        let first = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        let second = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        assert!(
+            first.status.success(),
+            "{name}: {}",
+            String::from_utf8_lossy(&first.stderr)
+        );
+        assert_eq!(first.stdout, second.stdout);
+        let json: serde_json::Value = ok(serde_json::from_slice(&first.stdout));
+        assert_eq!(json["schema_version"], 2);
+        assert!(json["insertions"].is_array());
+        if name == "successful-pooling" {
+            assert_eq!(json["summary"]["delivered_orders"], 2);
+            assert_eq!(json["insertions"][1]["committed"], true);
+        }
+        if name == "hard-deadline" || name == "complete-infeasibility" {
+            assert_eq!(json["summary"]["delivered_orders"], 1);
+            assert_eq!(json["insertions"][1]["committed"], false);
+        }
+        if name == "budget-exhaustion" {
+            assert_eq!(
+                json["insertions"][1]["decision"]["evidence"]["termination"],
+                "SearchIncomplete"
+            );
+        }
+    }
+    let path = root.join("unavailable-forecast.json");
+    let output = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(["simulate", ok(path.to_str().ok_or("path")), "--json"])
+        .output());
+    assert!(output.status.success());
+    let json: serde_json::Value = ok(serde_json::from_slice(&output.stdout));
+    assert!(
+        json["prediction_failures"]
+            .as_array()
+            .is_some_and(|f| !f.is_empty())
+    );
+    assert_eq!(json["prediction_failures"][0]["committed"], false);
+    assert_eq!(
+        json["prediction_failures"][0]["coverage"]["input_complete"],
+        false
+    );
+    let path = root.join("successful-pooling.json");
+    let output = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(["simulate", ok(path.to_str().ok_or("path"))])
+        .output());
+    assert!(output.status.success());
+    assert!(String::from_utf8_lossy(&output.stdout).contains("incremental road"));
+    assert!(String::from_utf8_lossy(&output.stdout).contains("search_complete=true"));
+}

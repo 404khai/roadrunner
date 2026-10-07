@@ -13,11 +13,15 @@ use roadrunner_dispatch::{
     preparation_aware_dispatch, strategy_dispatch,
 };
 
-use crate::metrics::summarize;
+use crate::metrics::{SimulationInsertionRecord, summarize};
 use crate::scenario::ReadinessRng;
 use crate::{
     ActualReadiness, DispatchPolicy, ExecutedLeg, OrderOutcome, RecordedEvent, RiderMetrics,
     SimulationError, SimulationEvent, SimulationResult, SimulationScenario, TrafficOverride,
+};
+use roadrunner_dispatch::{
+    FrozenPrefix, InsertionDecision, PoolingContext, PoolingInputs, PredictionIdentity,
+    ReadinessForecast, Stop, StopTimeline, effective_readiness, insert_order, project_execution,
 };
 
 fn invalid(message: &str) -> SimulationError {
@@ -38,10 +42,11 @@ enum Action {
         rider: RiderId,
         leg: ExecutedLeg,
         pickup: bool,
+        execution_id: u64,
     },
-    Arrive(OrderId, RiderId),
-    Pickup(OrderId, RiderId),
-    Deliver(OrderId, RiderId),
+    Arrive(OrderId, RiderId, u64),
+    Pickup(OrderId, RiderId, u64),
+    Deliver(OrderId, RiderId, u64),
 }
 
 #[derive(Debug)]
@@ -79,6 +84,16 @@ struct PreparedOrder {
     actual_ready_at: DispatchInstant,
 }
 
+#[derive(Clone)]
+struct ActiveStop {
+    id: u64,
+    stop: Stop,
+    arrival: DispatchInstant,
+    service_end: Option<DispatchInstant>,
+    service_wait: Option<Seconds>,
+    anchor: RoutingAnchor,
+}
+
 struct Engine<'a> {
     graph: &'a FrozenGraph,
     scenario: &'a SimulationScenario,
@@ -100,6 +115,10 @@ struct Engine<'a> {
     outcomes: BTreeMap<OrderId, OrderOutcome>,
     events: Vec<RecordedEvent>,
     decisions: Vec<AssignmentDecision>,
+    insertions: Vec<SimulationInsertionRecord>,
+    active: BTreeMap<RiderId, ActiveStop>,
+    next_execution: u64,
+    prediction_failures: Vec<crate::SimulationPredictionFailure>,
 }
 
 /// Executes a validated fixed scenario through its inclusive horizon without sleeping.
@@ -150,9 +169,15 @@ impl<'a> Engine<'a> {
         let start = instant(scenario.start_seconds)?;
         let end = instant(scenario.end_seconds)?;
         let epoch = RoutingEpoch(instant(scenario.routing_epoch_seconds)?);
-        if scenario.schema_version != 1 || end < start {
+        let pooling = matches!(scenario.dispatch, DispatchPolicy::MultiOrder { .. });
+        if scenario.schema_version != if pooling { 2 } else { 1 } || end < start {
             return Err(invalid(
-                "schema must be 1 and horizon must not precede start",
+                "schema must be 2 for multi_order, 1 for legacy, and horizon must not precede start",
+            ));
+        }
+        if pooling && scenario.scenario_id.as_ref().is_none_or(String::is_empty) {
+            return Err(invalid(
+                "pooling scenarios require a named versioned scenario_id",
             ));
         }
         epoch.departure_seconds(start)?;
@@ -191,6 +216,10 @@ impl<'a> Engine<'a> {
             outcomes: BTreeMap::new(),
             events: Vec::new(),
             decisions: Vec::new(),
+            insertions: Vec::new(),
+            active: BTreeMap::new(),
+            next_execution: 0,
+            prediction_failures: Vec::new(),
         };
         engine.initialize_riders()?;
         engine.initialize_orders()?;
@@ -245,6 +274,33 @@ impl<'a> Engine<'a> {
         Ok(())
     }
 
+    fn validate_admission(&self, input: &crate::OrderInput) -> Result<(), SimulationError> {
+        if matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. })
+            && input.admission.is_none()
+        {
+            return Err(invalid(
+                "multi_order requires explicit per-order admission policies",
+            ));
+        }
+        if let Some(policy) = &input.admission {
+            if !matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. }) {
+                return Err(invalid(
+                    "legacy schema cannot apply Phase 17 admission terms",
+                ));
+            }
+            policy.validate()?;
+            if policy.readiness == roadrunner_dispatch::ReadinessRule::LegacyV1
+                || (policy.deadline == roadrunner_dispatch::AdmissionDeadline::Hard
+                    && input.deadline_seconds.is_none())
+            {
+                return Err(invalid(
+                    "new pooling policies require explicit readiness and hard deadline data",
+                ));
+            }
+        }
+        Ok(())
+    }
+
     fn initialize_orders(&mut self) -> Result<(), SimulationError> {
         let mut inputs: Vec<_> = self.scenario.orders.iter().collect();
         inputs.sort_by_key(|o| o.id);
@@ -274,6 +330,7 @@ impl<'a> Engine<'a> {
                     created_at.checked_add(delay)?
                 }
             };
+            self.validate_admission(input)?;
             let readiness = OrderReadiness {
                 expected_at: input.expected_ready_at_seconds.map(instant).transpose()?,
                 observed_at: None,
@@ -442,13 +499,40 @@ impl<'a> Engine<'a> {
         self.world.observe_ready(id, at)?;
         self.outcome(id)?.observed_ready_at = Some(at);
         if let Some(rider) = self.waiting.remove(&id) {
-            self.push(self.now, Action::Pickup(id, rider))?;
+            self.schedule_service(id, rider, true)?;
         }
         self.queue_pending()?;
         Ok(SimulationEvent::OrderReady {
             order: id,
             ready_at: at,
         })
+    }
+
+    fn record_prediction_failure(
+        &mut self,
+        order: OrderId,
+        unavailable_order: OrderId,
+    ) -> SimulationEvent {
+        self.prediction_failures
+            .push(crate::SimulationPredictionFailure {
+                order,
+                unavailable_order,
+                at: self.now,
+                world_identity: self.world.identity(),
+                world_version: self.world.version(),
+                coverage: crate::PredictionFailureCoverage {
+                    input_complete: false,
+                    riders_complete: false,
+                    search_complete: false,
+                },
+                work: 0,
+                reason: "PredictionUnavailable/v1".into(),
+                committed: false,
+            });
+        SimulationEvent::DispatchPredictionFailed {
+            order,
+            unavailable_order,
+        }
     }
 
     fn assign(&mut self, order: OrderId) -> Result<SimulationEvent, SimulationError> {
@@ -458,11 +542,22 @@ impl<'a> Engine<'a> {
             .next_decision
             .checked_add(1)
             .ok_or(SimulationError::SequenceExhausted)?;
+        if matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. }) {
+            return match self.assign_pooled(order, id) {
+                Err(SimulationError::Pooling(
+                    roadrunner_dispatch::PoolingError::PredictionUnavailable(unavailable_order),
+                )) => Ok(self.record_prediction_failure(order, unavailable_order)),
+                other => other,
+            };
+        }
         let decision = {
             let provider = self.provider()?;
             let snapshot =
                 DispatchSnapshot::new(&self.world, self.now, self.epoch, &provider, &self.anchors)?;
             match self.scenario.dispatch {
+                DispatchPolicy::MultiOrder { .. } => {
+                    return Err(invalid("pooling branch invariant"));
+                }
                 DispatchPolicy::Basic => {
                     basic_dispatch(&snapshot, order, id, CandidatePolicy::Exhaustive)?
                 }
@@ -505,15 +600,13 @@ impl<'a> Engine<'a> {
                 .ok_or_else(|| invalid("missing selected evaluation"))?;
             self.world.commit(&decision)?;
             self.pending.remove(&order);
-            self.busy_since.insert(rider, self.now);
+            self.busy_since.entry(rider).or_insert(self.now);
             let now = self.now;
             let outcome = self.outcome(order)?;
             outcome.assigned_at = Some(now);
             outcome.rider = Some(rider);
             outcome.predicted_eta = Some(predicted);
-            let from = self.anchors.riders[&rider].node;
-            let to = self.anchors.pickups[&order].node;
-            self.schedule_leg(order, rider, from, to, true)?;
+            self.schedule_next(rider)?;
             SimulationEvent::RiderAssigned {
                 order,
                 rider,
@@ -527,6 +620,236 @@ impl<'a> Engine<'a> {
         };
         self.decisions.push(decision);
         Ok(event)
+    }
+
+    fn frozen_projection(
+        &self,
+        active: &ActiveStop,
+        inputs: &PoolingInputs,
+    ) -> Result<FrozenPrefix, SimulationError> {
+        let p = &inputs.policies[&active.stop.order()];
+        let (wait, service) = match active.stop {
+            Stop::Pickup(o) => {
+                let (ready, _) = effective_readiness(self.world.data(), inputs, o, self.now)?;
+                (
+                    if ready > active.arrival {
+                        ready.duration_since(active.arrival)?
+                    } else {
+                        Seconds::ZERO
+                    },
+                    p.pickup_service,
+                )
+            }
+            Stop::Dropoff(_) => (Seconds::ZERO, p.dropoff_service),
+        };
+        let mut timeline = StopTimeline::new(active.stop, active.arrival, wait, service)?;
+        // Service already started is pinned to its actual completion, including forecast error.
+        if let Some(end) = active.service_end {
+            timeline.waiting = active
+                .service_wait
+                .ok_or_else(|| invalid("missing frozen service wait"))?;
+            timeline.departure = end;
+        }
+        if timeline.departure < self.now {
+            return Err(roadrunner_dispatch::PoolingError::PredictionUnavailable(
+                active.stop.order(),
+            )
+            .into());
+        }
+        Ok(FrozenPrefix {
+            execution_id: active.id,
+            timeline,
+            anchor: active.anchor.clone(),
+        })
+    }
+
+    fn pooling_inputs(&self) -> Result<PoolingInputs, SimulationError> {
+        let DispatchPolicy::MultiOrder {
+            work_budget,
+            forecast_validity_seconds,
+        } = self.scenario.dispatch
+        else {
+            return Err(invalid("not a pooling scenario"));
+        };
+        let identity = PredictionIdentity {
+            prediction: format!(
+                "{}:readiness/v1",
+                self.scenario.scenario_id.as_deref().unwrap_or("legacy")
+            ),
+            service: "per-order-deterministic/v1".into(),
+            optimizer: "exhaustive-insertion/v1".into(),
+            routing: self.provider()?.provenance(),
+        };
+        let mut inputs = PoolingInputs {
+            identity,
+            policies: BTreeMap::new(),
+            forecasts: BTreeMap::new(),
+            projections: BTreeMap::new(),
+            work_budget,
+        };
+        for input in &self.scenario.orders {
+            let o = OrderId::new(input.id);
+            if !self.world.data().orders.contains_key(&o) {
+                continue;
+            }
+            inputs.policies.insert(
+                o,
+                input
+                    .admission
+                    .clone()
+                    .ok_or_else(|| invalid("missing admission policy"))?,
+            );
+            if let Some(expected_at) = self.world.data().readiness[&o].expected_at {
+                let generated_at = self.world.data().orders[&o].created_at;
+                inputs.forecasts.insert(
+                    o,
+                    ReadinessForecast {
+                        id: format!("scenario-order-{}/v1", input.id),
+                        generated_at,
+                        valid_until: generated_at.checked_add(forecast_validity_seconds)?,
+                        expected_at,
+                    },
+                );
+            }
+        }
+        for rider in self.world.data().profiles.keys().copied() {
+            if self.world.data().riders[&rider].availability != Availability::Available {
+                continue;
+            }
+            let frozen = if let Some(active) = self.active.get(&rider) {
+                Some(self.frozen_projection(active, &inputs)?)
+            } else {
+                None
+            };
+            inputs.projections.insert(
+                rider,
+                project_execution(
+                    self.world.data(),
+                    rider,
+                    self.now,
+                    self.anchors.riders[&rider].clone(),
+                    frozen,
+                )?,
+            );
+        }
+        Ok(inputs)
+    }
+
+    fn assign_pooled(
+        &mut self,
+        order: OrderId,
+        id: DecisionId,
+    ) -> Result<SimulationEvent, SimulationError> {
+        let inputs = self.pooling_inputs()?;
+        let decision: InsertionDecision = {
+            let provider = self.provider()?;
+            let snapshot =
+                DispatchSnapshot::new(&self.world, self.now, self.epoch, &provider, &self.anchors)?;
+            insert_order(&snapshot, order, inputs)?
+        };
+        let event = if let Some(p) = decision.proposal() {
+            let rider = p.rider();
+            let predicted = p.evaluation().completions[&order].duration_since(self.now)?;
+            // Rebuild the current complete context, rather than echoing the proposal binding.
+            let current = {
+                let provider = self.provider()?;
+                let snapshot = DispatchSnapshot::new(
+                    &self.world,
+                    self.now,
+                    self.epoch,
+                    &provider,
+                    &self.anchors,
+                )?;
+                PoolingContext::new(&snapshot, self.pooling_inputs()?)?
+            };
+            self.world.commit_insertion(&decision, &current)?;
+            self.pending.remove(&order);
+            self.busy_since.entry(rider).or_insert(self.now);
+            let now = self.now;
+            let outcome = self.outcome(order)?;
+            outcome.assigned_at = Some(now);
+            outcome.rider = Some(rider);
+            outcome.predicted_eta = Some(predicted);
+            if !self.active.contains_key(&rider) {
+                self.schedule_next(rider)?;
+            }
+            SimulationEvent::RiderAssigned {
+                order,
+                rider,
+                decision: id,
+            }
+        } else {
+            SimulationEvent::DispatchUnassigned {
+                order,
+                decision: id,
+            }
+        };
+        self.insertions.push(SimulationInsertionRecord {
+            committed: decision.proposal().is_some(),
+            world_version_after: self.world.version(),
+            decision,
+        });
+        Ok(event)
+    }
+
+    fn schedule_next(&mut self, rider: RiderId) -> Result<(), SimulationError> {
+        if self.active.contains_key(&rider) {
+            return Err(invalid("active execution already exists"));
+        }
+        let Some(stop) = self.world.data().plans[&rider].stops.first().copied() else {
+            return Ok(());
+        };
+        let (to, pickup) = match stop {
+            Stop::Pickup(o) => (self.anchors.pickups[&o].node, true),
+            Stop::Dropoff(o) => (self.anchors.dropoffs[&o].node, false),
+        };
+        self.schedule_leg(
+            stop.order(),
+            rider,
+            self.anchors.riders[&rider].node,
+            to,
+            pickup,
+        )
+    }
+
+    fn schedule_service(
+        &mut self,
+        order: OrderId,
+        rider: RiderId,
+        pickup: bool,
+    ) -> Result<(), SimulationError> {
+        let service = if matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. }) {
+            let p = self
+                .scenario
+                .orders
+                .iter()
+                .find(|o| o.id == order.value())
+                .and_then(|o| o.admission.as_ref())
+                .ok_or_else(|| invalid("missing service policy"))?;
+            if pickup {
+                p.pickup_service
+            } else {
+                p.dropoff_service
+            }
+        } else {
+            Seconds::ZERO
+        };
+        let end = self.now.checked_add(service)?;
+        let active = self
+            .active
+            .get_mut(&rider)
+            .ok_or_else(|| invalid("missing active execution"))?;
+        active.service_end = Some(end);
+        active.service_wait = Some(self.now.duration_since(active.arrival)?);
+        let id = active.id;
+        self.push(
+            end,
+            if pickup {
+                Action::Pickup(order, rider, id)
+            } else {
+                Action::Deliver(order, rider, id)
+            },
+        )
     }
 
     fn schedule_leg(
@@ -554,6 +877,26 @@ impl<'a> Engine<'a> {
             edges: leg.route.edges().to_vec(),
             routing: leg.provenance,
         };
+        let execution_id = self.next_execution;
+        self.next_execution = self
+            .next_execution
+            .checked_add(1)
+            .ok_or(SimulationError::SequenceExhausted)?;
+        self.active.insert(
+            rider,
+            ActiveStop {
+                id: execution_id,
+                stop: if pickup {
+                    Stop::Pickup(order)
+                } else {
+                    Stop::Dropoff(order)
+                },
+                arrival,
+                service_end: None,
+                service_wait: None,
+                anchor: self.anchor(to.value())?,
+            },
+        );
         self.push(
             arrival,
             Action::Move {
@@ -561,6 +904,7 @@ impl<'a> Engine<'a> {
                 rider,
                 leg: executed,
                 pickup,
+                execution_id,
             },
         )
     }
@@ -589,14 +933,12 @@ impl<'a> Engine<'a> {
         metrics.completed_distance_meters = metrics
             .completed_distance_meters
             .checked_add(leg.distance)?;
-        self.push(
-            self.now,
-            if pickup {
-                Action::Arrive(order, rider)
-            } else {
-                Action::Deliver(order, rider)
-            },
-        )?;
+        if pickup {
+            let id = self.active[&rider].id;
+            self.push(self.now, Action::Arrive(order, rider, id))?;
+        } else {
+            self.schedule_service(order, rider, false)?;
+        }
         Ok(SimulationEvent::RiderMoved { order, rider, leg })
     }
 
@@ -607,7 +949,7 @@ impl<'a> Engine<'a> {
     ) -> Result<SimulationEvent, SimulationError> {
         self.outcome(order)?.pickup_arrival = Some(self.now);
         if self.world.data().readiness[&order].observed_at.is_some() {
-            self.push(self.now, Action::Pickup(order, rider))?;
+            self.schedule_service(order, rider, true)?;
         } else {
             self.waiting.insert(order, rider);
         }
@@ -621,13 +963,8 @@ impl<'a> Engine<'a> {
     ) -> Result<SimulationEvent, SimulationError> {
         self.world.pickup(rider, order, self.now)?;
         self.outcome(order)?.picked_up_at = Some(self.now);
-        self.schedule_leg(
-            order,
-            rider,
-            self.anchors.pickups[&order].node,
-            self.anchors.dropoffs[&order].node,
-            false,
-        )?;
+        self.active.remove(&rider);
+        self.schedule_next(rider)?;
         Ok(SimulationEvent::OrderPickedUp { order, rider })
     }
 
@@ -638,23 +975,44 @@ impl<'a> Engine<'a> {
     ) -> Result<SimulationEvent, SimulationError> {
         self.world.deliver(rider, order, self.now)?;
         self.outcome(order)?.delivered_at = Some(self.now);
-        let began = self
-            .busy_since
-            .remove(&rider)
-            .ok_or_else(|| invalid("missing responsibility interval"))?;
-        let metrics = self
-            .rider_metrics
-            .get_mut(&rider)
-            .ok_or_else(|| invalid("absent rider"))?;
-        metrics.busy_seconds = metrics
-            .busy_seconds
-            .checked_add(self.now.duration_since(began)?)?;
+        self.active.remove(&rider);
+        if self.world.data().plans[&rider].stops.is_empty() {
+            let began = self
+                .busy_since
+                .remove(&rider)
+                .ok_or_else(|| invalid("missing responsibility interval"))?;
+            let metrics = self
+                .rider_metrics
+                .get_mut(&rider)
+                .ok_or_else(|| invalid("absent rider"))?;
+            metrics.busy_seconds = metrics
+                .busy_seconds
+                .checked_add(self.now.duration_since(began)?)?;
+        } else {
+            self.schedule_next(rider)?;
+        }
         self.queue_pending()?;
         Ok(SimulationEvent::OrderDelivered { order, rider })
     }
 
-    fn process(&mut self, action: Action) -> Result<SimulationEvent, SimulationError> {
-        match action {
+    fn process(&mut self, action: Action) -> Result<Option<SimulationEvent>, SimulationError> {
+        // Only started work is queued. Its identity survives replacement plans.
+        // A duplicate/superseded action cannot mutate any domain or metrics state.
+        let execution = match &action {
+            Action::Move {
+                rider,
+                execution_id,
+                ..
+            } => Some((*rider, *execution_id)),
+            Action::Arrive(_, rider, id)
+            | Action::Pickup(_, rider, id)
+            | Action::Deliver(_, rider, id) => Some((*rider, *id)),
+            _ => None,
+        };
+        if execution.is_some_and(|(r, id)| self.active.get(&r).is_none_or(|a| a.id != id)) {
+            return Ok(None);
+        }
+        let event = match action {
             Action::Traffic(snapshot) => {
                 self.traffic = snapshot;
                 self.queue_pending()?;
@@ -672,11 +1030,13 @@ impl<'a> Engine<'a> {
                 rider,
                 leg,
                 pickup,
+                execution_id: _,
             } => self.moved(order, rider, leg, pickup),
-            Action::Arrive(order, rider) => self.arrived(order, rider),
-            Action::Pickup(order, rider) => self.pickup(order, rider),
-            Action::Deliver(order, rider) => self.deliver(order, rider),
-        }
+            Action::Arrive(order, rider, _) => self.arrived(order, rider),
+            Action::Pickup(order, rider, _) => self.pickup(order, rider),
+            Action::Deliver(order, rider, _) => self.deliver(order, rider),
+        }?;
+        Ok(Some(event))
     }
 
     fn run(mut self) -> Result<SimulationResult, SimulationError> {
@@ -684,11 +1044,13 @@ impl<'a> Engine<'a> {
             let event = self.queue.pop().ok_or_else(|| invalid("queue invariant"))?;
             self.now = event.at;
             let processed = self.process(event.action)?;
-            self.events.push(RecordedEvent {
-                at: self.now,
-                sequence: event.sequence,
-                event: processed,
-            });
+            if let Some(processed) = processed {
+                self.events.push(RecordedEvent {
+                    at: self.now,
+                    sequence: event.sequence,
+                    event: processed,
+                });
+            }
         }
         self.finish()
     }
@@ -723,7 +1085,8 @@ impl<'a> Engine<'a> {
         let riders: Vec<_> = self.rider_metrics.into_values().collect();
         let summary = summarize(&orders, &riders, start, self.end)?;
         Ok(SimulationResult {
-            schema_version: 1,
+            scenario_id: self.scenario.scenario_id.clone(),
+            schema_version: self.scenario.schema_version,
             randomness: "splitmix64-upper53/v1".into(),
             seed: self.scenario.seed,
             graph_snapshot_digest: self.graph.metadata().snapshot_digest().to_owned(),
@@ -735,6 +1098,10 @@ impl<'a> Engine<'a> {
             future_events: self.queue.len(),
             events: self.events,
             decisions: self.decisions,
+            prediction_failures: self.prediction_failures,
+            realized_protections: crate::metrics::realized_protections(self.world.data()),
+            insertions: self.insertions,
+            final_state: (self.scenario.schema_version == 2).then(|| self.world.data().clone()),
             orders,
             riders,
             summary,
@@ -748,6 +1115,46 @@ mod tests {
     use roadrunner_core::graph::{
         GraphBuildIdentity, GraphBuilder, GraphMetadata, GraphSnapshotId,
     };
+
+    #[test]
+    fn obsolete_execution_identity_cannot_mutate_world_or_execution() {
+        let graph = GraphBuilder::new(
+            GraphSnapshotId::new(17),
+            GraphMetadata::new(
+                "test",
+                "test",
+                GraphBuildIdentity::new("test", "v1", "v1", "synthetic"),
+            ),
+        )
+        .finalize()
+        .unwrap_or_else(|e| panic!("{e}"));
+        let scenario: SimulationScenario = serde_json::from_value(serde_json::json!({
+            "schema_version":1,"seed":17,"start_seconds":0,"end_seconds":100,
+            "routing_epoch_seconds":0,"dispatch":{"kind":"basic"},"riders":[],"orders":[]
+        }))
+        .unwrap_or_else(|e| panic!("{e}"));
+        let mut engine = Engine::new(&graph, &scenario).unwrap_or_else(|e| panic!("{e}"));
+        let before = engine.world.data().clone();
+        let version = engine.world.version();
+        for action in [
+            Action::Pickup(OrderId::new(1), RiderId::new(1), 999),
+            Action::Deliver(OrderId::new(1), RiderId::new(1), 999),
+            Action::Arrive(OrderId::new(1), RiderId::new(1), 999),
+        ] {
+            assert!(
+                engine
+                    .process(action)
+                    .unwrap_or_else(|e| panic!("{e}"))
+                    .is_none()
+            );
+            assert_eq!(engine.world.data(), &before);
+            assert_eq!(engine.world.version(), version);
+            assert!(engine.queue.is_empty());
+            assert!(engine.waiting.is_empty());
+            assert!(engine.active.is_empty());
+            assert_eq!(engine.events, [] as [RecordedEvent; 0]);
+        }
+    }
 
     #[test]
     fn queue_rejects_reversed_time_and_exhausted_sequences_without_insertion() {

@@ -1,6 +1,6 @@
 # Roadrunner Architecture
 
-Status: Accepted through Phase 16 dispatch strategy benchmarking
+Status: Accepted through Phase 17 multi-order admission
 Last updated: 2026-10-04
 
 ## 1. Architectural intent
@@ -436,3 +436,14 @@ exogenous facts. The CLI loads a scenario once for `benchmark dispatch`; externa
 collection records wall-clock timings and reproducibility metadata. There is no host clock
 in the Rust simulation results. See [strategy contracts](dispatch-strategy-benchmarks.md)
 and [completion evidence](phase-16-completion.md).
+
+## 18. Phase 17 multi-order admission
+
+[ADR 0016](adr/0016-multi-order-normative-audit.md) records the confirmed normative
+audit, including deferred Phase 18 contracts. [Multi-order architecture and API](multi-order.md)
+defines dispatch-owned whole-plan evaluation, explicit frozen execution projection,
+immutable accepted protection terms, exhaustive one-order insertion, separate coverage
+and exact atomic publication. Simulation executes current rider plans, with active
+execution identities and one union responsibility interval. No editable future actions
+are queued. Core remains unchanged and ignorant of delivery policies. Phase 18 is deferred
+until explicit user confirmation of the [Phase 17 completion report](phase-17-completion.md).

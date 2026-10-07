@@ -34,7 +34,7 @@ pub struct RoutingProvenance {
 }
 
 /// Caller-supplied node-backed projection of an authoritative location fact.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct RoutingAnchor {
     /// Stable coordinate to which this projection belongs.
     pub coordinate: Coordinate,
@@ -65,7 +65,7 @@ impl RoutingAnchor {
 }
 
 /// Decision-scoped projections supplied by callers until coordinate snapping exists.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize)]
 pub struct RoutingAnchors {
     /// Rider current locations.
     pub riders: BTreeMap<RiderId, RoutingAnchor>,

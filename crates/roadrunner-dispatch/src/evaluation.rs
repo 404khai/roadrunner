@@ -314,7 +314,7 @@ pub fn generate_candidates(
     Ok(eligible)
 }
 
-fn checked_leg(
+pub(crate) fn checked_leg(
     snapshot: &DispatchSnapshot<'_>,
     from: &RoutingAnchor,
     to: &RoutingAnchor,

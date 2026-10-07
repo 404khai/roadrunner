@@ -6,7 +6,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimulationScenario {
-    /// Must be 1.
+    /// Stable scenario/version identity, required for schema 2 pooling.
+    #[serde(default)]
+    pub scenario_id: Option<String>,
+    /// 1 for legacy execution; 2 for explicit multi-order policy.
     pub schema_version: u32,
     /// Explicit seed for the versioned readiness generator, even for fixed scenarios.
     pub seed: u64,
@@ -37,6 +40,13 @@ pub struct SimulationScenario {
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum DispatchPolicy {
+    /// Phase 17 exhaustive one-order insertion (requires scenario schema 2).
+    MultiOrder {
+        /// Complete candidate submissions permitted per admission attempt.
+        work_budget: u64,
+        /// Explicit forecast validity since order creation.
+        forecast_validity_seconds: Seconds,
+    },
     /// Pickup plus delivery road travel, ignoring preparation in predictions.
     Basic,
     /// Nearest straight-line pickup distance among feasible riders.
@@ -70,6 +80,9 @@ pub struct RiderInput {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct OrderInput {
+    /// Required per-order service/protection policy for schema 2 pooling.
+    #[serde(default)]
+    pub admission: Option<roadrunner_dispatch::OrderPolicy>,
     /// Canonical dispatch order identity.
     pub id: u64,
     /// Store/restaurant node.

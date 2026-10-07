@@ -13,6 +13,10 @@ pub use comparison::{StrategyComparison, compare_strategies};
 pub use engine::simulate;
 pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};
+pub use metrics::{
+    PredictionFailureCoverage, RealizedProtectionOutcome, SimulationInsertionRecord,
+    SimulationPredictionFailure,
+};
 pub use scenario::{
     ActualReadiness, DispatchPolicy, OrderInput, RiderInput, SimulationScenario, TrafficChange,
     TrafficOverride,
@@ -26,6 +30,9 @@ use thiserror::Error;
 /// Scenario validation or deterministic execution failure; never a fabricated result.
 #[derive(Debug, Error)]
 pub enum SimulationError {
+    /// Required Phase 17 planning input or whole-plan evaluation failed.
+    #[error(transparent)]
+    Pooling(#[from] roadrunner_dispatch::PoolingError),
     /// Invalid schema, identities, node references, configuration, or time bounds.
     #[error("invalid simulation scenario: {0}")]
     InvalidScenario(String),

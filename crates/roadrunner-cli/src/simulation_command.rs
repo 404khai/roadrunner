@@ -199,6 +199,48 @@ pub(super) fn run(path: &str, json: bool) -> Result<(), String> {
 }
 
 fn print_summary(result: &roadrunner_simulation::SimulationResult) {
+    for failure in &result.prediction_failures {
+        println!(
+            "Insertion order {}: PredictionUnavailable for order {}; inputs_complete=false; committed=false",
+            failure.order.value(),
+            failure.unavailable_order.value()
+        );
+    }
+    for record in &result.insertions {
+        let evidence = record.decision.evidence();
+        println!(
+            "Insertion order {}: {:?}; committed={}; inputs_complete={}; riders_complete={}; search_complete={}; work={}",
+            evidence.order.value(),
+            evidence.termination,
+            record.committed,
+            evidence.input_complete,
+            evidence.riders_complete,
+            evidence.search_complete,
+            evidence.work
+        );
+        if let Some(proposal) = record.decision.proposal() {
+            println!(
+                "  rider {}: incremental road {:.3} s, {:.3} m; plan {:?}",
+                proposal.rider().value(),
+                proposal.incremental_travel(),
+                proposal.incremental_distance(),
+                proposal.evaluation().plan.stops
+            );
+        }
+        for rider in &evidence.riders {
+            println!(
+                "  rider {}: suffix={}, pairs={}, evaluated={}, excluded={}, feasible={}, breaches={:?}, rejected={:?}",
+                rider.rider.value(),
+                rider.suffix_length,
+                rider.pairs_total,
+                rider.evaluated,
+                rider.pruned,
+                rider.feasible,
+                rider.baseline.breaches,
+                rider.rejections
+            );
+        }
+    }
     let s = &result.summary;
     println!(
         "Orders: {} (scheduled: {}, uncreated: {})\nAssigned: {}\nDelivered: {}\nUnassigned: {}\nAssigned unfinished: {}\nLate deliveries: {}\nOutstanding past deadline: {}",
