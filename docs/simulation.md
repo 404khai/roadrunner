@@ -174,8 +174,19 @@ hash are recorded. It is not a fleet strategy comparison or a scalability benchm
 
 ## Phase boundary
 
-Phase 16 implements [paired strategy benchmarking](dispatch-strategy-benchmarks.md). Multi-order plans, initially busy riders, dynamic
+Phase 16 implements [paired strategy benchmarking](dispatch-strategy-benchmarks.md). Phase 17 adds multi-order plans (see below). Initially busy scenario inputs, dynamic
 availability/cancellation/re-dispatch, continuous location interpolation, per-edge traffic
 changes during movement, live data, UI replay controls, persistence, and production-scale
 claims remain later work. This engine deliberately shares current scalar idle-rider
 policy and evaluates one active order per rider.
+
+## Phase 17 pooled execution
+
+[Schema 2 multi-order scenarios and execution](multi-order.md) require a versioned
+scenario identity, per-order policies and explicit forecast validity. Rider plans now
+drive each next stop after the current active execution completes. Active road/wait/service
+identities survive plan replacement; no editable future work is queued. Each delivery
+releases only its own responsibility/custody. Utilization uses the union busy interval.
+JSON distinguishes insertion evidence/publication from observed outcomes and realized
+protection violations. [Fixtures](../data/fixtures/phase-17/README.md) are runnable through
+the same simulate CLI; schema 1 historical scenarios remain supported.

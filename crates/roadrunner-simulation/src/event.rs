@@ -58,6 +58,13 @@ pub enum SimulationEvent {
         /// Completed Unassigned decision.
         decision: DecisionId,
     },
+    /// Required readiness input prevented this admission; existing execution continues.
+    DispatchPredictionFailed {
+        /// New request whose admission was blocked.
+        order: OrderId,
+        /// Request with unavailable prediction (may be existing committed work).
+        unavailable_order: OrderId,
+    },
     /// Rider reached a road-leg endpoint; no interpolated positions are invented.
     RiderMoved {
         /// Request being executed.

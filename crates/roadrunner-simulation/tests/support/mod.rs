@@ -54,6 +54,7 @@ pub fn graph() -> FrozenGraph {
 }
 pub fn order(id: u64, created: f64, ready: f64) -> OrderInput {
     OrderInput {
+        admission: None,
         id,
         pickup_node: 0,
         dropoff_node: 3,
@@ -68,6 +69,7 @@ pub fn order(id: u64, created: f64, ready: f64) -> OrderInput {
 }
 pub fn scenario() -> SimulationScenario {
     SimulationScenario {
+        scenario_id: None,
         schema_version: 1,
         seed: 15,
         start_seconds: Seconds::ZERO,

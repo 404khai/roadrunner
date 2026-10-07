@@ -128,6 +128,7 @@ pub fn onboard_load(data: &WorldData, rider: RiderId) -> Result<CapacityUnits, P
 /// Every contradiction is `InvalidWorldState`, not ordinary rider ineligibility.
 pub fn validate_world(data: &WorldData) -> Result<(), DispatchEvaluationError> {
     let invalid = || DispatchEvaluationError::InvalidWorldState;
+    crate::pooling::validate_accepted(data).map_err(|_| invalid())?;
     if !data.orders.keys().eq(data.fulfillment.keys())
         || !data.orders.keys().eq(data.readiness.keys())
         || !data.profiles.keys().eq(data.riders.keys())
@@ -236,7 +237,7 @@ impl World {
         &self.data
     }
 
-    fn publish(&mut self, data: WorldData) -> Result<(), CommitError> {
+    pub(crate) fn publish(&mut self, data: WorldData) -> Result<(), CommitError> {
         validate_world(&data).map_err(|_| CommitError::InvalidTransition)?;
         let version = self
             .version

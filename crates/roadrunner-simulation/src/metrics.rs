@@ -149,6 +149,9 @@ pub struct SimulationSummary {
 /// Full deterministic artifact; contains no wall-clock timing or machine-specific values.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct SimulationResult {
+    /// Named schema 2 scenario identity; absent for historical schema 1 fixtures.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scenario_id: Option<String>,
     /// Output schema version.
     pub schema_version: u32,
     /// Stable seeded generator identifier.
@@ -173,6 +176,18 @@ pub struct SimulationResult {
     pub events: Vec<RecordedEvent>,
     /// All completed evaluations, including valid Unassigned attempts.
     pub decisions: Vec<AssignmentDecision>,
+    /// Phase 17 typed unavailable-input attempts; no proposal or domain mutation.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub prediction_failures: Vec<SimulationPredictionFailure>,
+    /// Phase 17 evaluated attempts and atomic publication outcome.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub insertions: Vec<SimulationInsertionRecord>,
+    /// Realized outcomes against admission terms, distinct from predicted feasibility.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub realized_protections: Vec<RealizedProtectionOutcome>,
+    /// Final domain state for schema 2, including authentic accepted protections.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub final_state: Option<roadrunner_dispatch::WorldData>,
     /// Canonical order outcomes, sorted by `OrderId`.
     pub orders: Vec<OrderOutcome>,
     /// Canonical rider metrics, sorted by `RiderId`.
@@ -260,4 +275,99 @@ pub(crate) fn summarize(
             None
         },
     })
+}
+
+/// Planning evidence and actual atomic publication result, distinct from delivery outcomes.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct SimulationInsertionRecord {
+    /// Read-only complete/incomplete search decision.
+    pub decision: roadrunner_dispatch::InsertionDecision,
+    /// Whether this exact proposed insertion was committed.
+    pub committed: bool,
+    /// Authoritative world version after this attempt.
+    pub world_version_after: roadrunner_dispatch::WorldVersion,
+}
+
+/// Actual completed-dropoff comparison with immutable terms; admission is not a guarantee.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct RealizedProtectionOutcome {
+    /// Accepted order identity.
+    pub order: OrderId,
+    /// Authentic acceptance-time completed-dropoff prediction.
+    pub accepted_completion: DispatchInstant,
+    /// Actual completed dropoff, unavailable for unfinished work.
+    pub actual_completion: Option<DispatchInstant>,
+    /// Signed realized completion delay relative to acceptance.
+    pub signed_delay_seconds: Option<f64>,
+    /// Realized miss of the accepted hard deadline, unavailable if unfinished or soft.
+    pub hard_deadline_missed: Option<bool>,
+    /// Realized consumption exceeding accepted cumulative allowance, when configured.
+    pub cumulative_allowance_exceeded: Option<bool>,
+}
+
+pub(crate) fn realized_protections(
+    data: &roadrunner_dispatch::WorldData,
+) -> Vec<RealizedProtectionOutcome> {
+    data.accepted
+        .iter()
+        .map(|(order, terms)| {
+            let actual = match data.fulfillment[order] {
+                roadrunner_dispatch::FulfillmentState::Delivered { at, .. } => Some(at),
+                _ => None,
+            };
+            let signed_delay = actual.map(|at| at.value() - terms.completion_reference.value());
+            RealizedProtectionOutcome {
+                order: *order,
+                accepted_completion: terms.completion_reference,
+                actual_completion: actual,
+                signed_delay_seconds: signed_delay,
+                hard_deadline_missed: if terms.policy.deadline
+                    == roadrunner_dispatch::AdmissionDeadline::Hard
+                {
+                    actual
+                        .zip(terms.deadline)
+                        .map(|(at, deadline)| at > deadline)
+                } else {
+                    None
+                },
+                cumulative_allowance_exceeded: signed_delay
+                    .zip(terms.policy.max_completion_delay)
+                    .map(|(delay, allowance)| delay.max(0.0) > allowance.value()),
+            }
+        })
+        .collect()
+}
+
+/// A typed failed admission with incomplete inputs; not completed infeasibility.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct SimulationPredictionFailure {
+    /// New order blocked from admission.
+    pub order: OrderId,
+    /// Order whose required prediction is unavailable.
+    pub unavailable_order: OrderId,
+    /// Exact logical evaluation instant.
+    pub at: DispatchInstant,
+    /// Coherent world identity.
+    pub world_identity: u64,
+    /// Unchanged authoritative world version.
+    pub world_version: roadrunner_dispatch::WorldVersion,
+    /// Independent input, rider and placement coverage for the failed attempt.
+    pub coverage: PredictionFailureCoverage,
+    /// Baseline/input failures occur before any placement submission.
+    pub work: u64,
+    /// Explicit failure kind/version.
+    pub reason: String,
+    /// Atomic publication never occurred.
+    pub committed: bool,
+}
+
+/// Independent coverage dimensions for a failed admission, never feasibility.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct PredictionFailureCoverage {
+    /// Required input sufficiency was not established.
+    pub input_complete: bool,
+    /// Complete eligible-rider health was not established.
+    pub riders_complete: bool,
+    /// Complete placement search was not established.
+    pub search_complete: bool,
 }

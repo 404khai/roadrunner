@@ -195,3 +195,13 @@ benchmark is preserved; these phases make no new dispatch latency or scalability
 
 The shared evaluator now supports nearest feasible rider, lowest pickup ETA, readiness-aware
 completion time, and preparation-aware ranking. See [objectives and comparison contracts](dispatch-strategy-benchmarks.md).
+
+## Phase 17 multiple orders per rider
+
+The [multi-order API contract](multi-order.md) adds `insert_order`,
+`evaluate_whole_plan`, `project_execution`, `PoolingInputs`/`PoolingContext`,
+`InsertionDecision` and `World::commit_insertion`. Every supported available rider and
+order-preserving insertion pair is evaluated under explicit service/readiness/protection
+policies. Existing accepted obligations are mandatory; the objective is incremental
+road seconds, road distance and canonical identity. Incomplete search cannot publish.
+Phase 13–16 APIs retain their existing named idle-rider compatibility behavior.

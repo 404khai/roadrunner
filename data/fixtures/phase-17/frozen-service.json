@@ -1,0 +1,98 @@
+{
+  "graph": {
+    "kind": "inline",
+    "profile": "motorcycle-pooling/v1",
+    "nodes": [
+      {
+        "id": 0,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 0
+        }
+      },
+      {
+        "id": 1,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 10000
+        }
+      }
+    ],
+    "roads": [
+      {
+        "id": 0,
+        "from": 0,
+        "to": 1,
+        "speed_kph": 40,
+        "bidirectional": true
+      }
+    ]
+  },
+  "scenario": {
+    "schema_version": 2,
+    "seed": 17,
+    "start_seconds": 0,
+    "end_seconds": 200,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "multi_order",
+      "work_budget": 1000,
+      "forecast_validity_seconds": 1000
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 1,
+        "capacity": 2,
+        "available": true
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 1,
+        "created_at_seconds": 0,
+        "expected_ready_at_seconds": 25,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 25
+        },
+        "deadline_seconds": null,
+        "demand": 1,
+        "admission": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 2,
+          "dropoff_service": 3,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 2,
+        "pickup_node": 0,
+        "dropoff_node": 1,
+        "created_at_seconds": 26,
+        "expected_ready_at_seconds": 25,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 25
+        },
+        "deadline_seconds": null,
+        "demand": 1,
+        "admission": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 2,
+          "dropoff_service": 3,
+          "readiness": "ValidForecastV1"
+        }
+      }
+    ],
+    "scenario_id": "phase17/frozen-service/v1"
+  }
+}
