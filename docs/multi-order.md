@@ -2,7 +2,8 @@
 
 The normative contract is [ADR 0016](adr/0016-multi-order-normative-audit.md).
 Phase 17 admits exactly one unassigned order per invocation. Committed owners remain
-fixed. Phase 18 batch allocation/resequencing and Phase 19 recovery are deferred.
+fixed. [Phase 18 batch allocation/resequencing](fleet-optimization.md) is implemented
+separately; Phase 19 recovery remains deferred.
 
 ## Module and API contract
 

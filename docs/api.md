@@ -37,3 +37,14 @@ comparisons. Readable output includes search coverage, work, typed rejections an
 chosen plan/road deltas. Missing required forecasts produce typed incomplete-input nonpublication records while
 existing execution continues; observations may allow a later fresh admission. Invalid
 policies or structural corruption produce a nonzero exit without a success artifact. See [runnable examples](../data/fixtures/phase-17/README.md).
+
+## Phase 18 fleet batch extension
+
+Joint new-order allocation and editable suffix resequencing preserve committed owners,
+accepted terms and frozen execution. Dispatch uses `optimize_fleet`, `FleetInputs`,
+`FleetContext`, `evaluate_batch_plan`, and atomic `World::commit_fleet`. Simulation schema
+3 selects `fleet_batch` with a named deterministic algorithm. Explicit unknown-input and
+baseline-breach isolation differ from Phase 17 complete-input insertion. See
+[fleet optimization](fleet-optimization.md) for API, objective, neighborhood, coverage,
+execution, oracle and measurement contracts, and [completion](phase-18-completion.md)
+for verified results. Phase 19 recovery remains deferred.

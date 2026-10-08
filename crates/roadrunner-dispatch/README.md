@@ -37,7 +37,8 @@ are typed evaluation failures; budget exhaustion is SearchIncomplete with no com
 Proposals bind whole-world version and exact external policy/prediction/routing/execution/
 clock context. Rebuild the **current** context before committing; never echo the old
 proposal context as a substitute for checking authoritative sources. No reassignment,
-mid-leg diversion, fleet batch optimization or acceptance-baseline reset is implemented.
+mid-leg diversion or acceptance-baseline reset is implemented. Fleet batch optimization
+is available through the separate Phase 18 APIs.
 See [dispatch](../../docs/dispatch.md), [multi-order API](../../docs/multi-order.md),
 [normative audit](../../docs/adr/0016-multi-order-normative-audit.md) and
 [Phase 17 completion](../../docs/phase-17-completion.md).
@@ -98,3 +99,14 @@ Depends on `roadrunner-core`, Serde and typed errors. Execution scheduling belon
 [simulation](../roadrunner-simulation/README.md); raw OSM ingestion belongs to
 [OSM](../roadrunner-osm/README.md). The package is a workspace path dependency and is
 currently marked `publish = false`.
+
+## Phase 18 fleet batches
+
+Schema 3 `fleet_batch` jointly allocates current new work and resequences healthy editable
+suffixes, preserving committed owners, accepted terms and active execution. Read
+[fleet contracts](../../docs/fleet-optimization.md) for exact API, isolation and heuristic
+coverage. Run the pooled fleet example from the repository root:
+
+```bash
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-18/greedy-trap.json --json
+```

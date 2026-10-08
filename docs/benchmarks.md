@@ -149,3 +149,14 @@ waiting/idle time, distance, lateness, utilization, and explicit unfinished popu
 records per-policy process timings with complete reproducibility metadata. See
 [methodology](dispatch-strategy-benchmarks.md) and
 [completion evidence](phase-16-completion.md).
+
+## Phase 18 fleet batch extension
+
+Joint new-order allocation and editable suffix resequencing preserve committed owners,
+accepted terms and frozen execution. Dispatch uses `optimize_fleet`, `FleetInputs`,
+`FleetContext`, `evaluate_batch_plan`, and atomic `World::commit_fleet`. Simulation schema
+3 selects `fleet_batch` with a named deterministic algorithm. Explicit unknown-input and
+baseline-breach isolation differ from Phase 17 complete-input insertion. See
+[fleet optimization](fleet-optimization.md) for API, objective, neighborhood, coverage,
+execution, oracle and measurement contracts, and [completion](phase-18-completion.md)
+for verified results. Phase 19 recovery remains deferred.
