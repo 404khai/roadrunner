@@ -160,3 +160,19 @@ baseline-breach isolation differ from Phase 17 complete-input insertion. See
 [fleet optimization](fleet-optimization.md) for API, objective, neighborhood, coverage,
 execution, oracle and measurement contracts, and [completion](phase-18-completion.md)
 for verified results. Phase 19 recovery remains deferred.
+
+## Phase 19 dynamic recovery baseline (2026-10-08)
+
+[Versioned measurements](../benchmarks/results/2026-10-08-phase-19-recovery.json)
+cover 13 tiny schema 4 scenarios, one warmup and 11 measured exact replays each.
+The Apple M3/16 GiB Rust 1.99.0 release run measures process launch, graph loading,
+simulation and JSON capture; optimizer-only time and memory are unmeasured.
+Offline recovery median/p95/p99 is 2.614/2.728/2.767 ms, with five deterministic
+recovery submissions and one commit. No global VRP quality or scalability claim.
+See [completion report](phase-19-completion.md) for all gate results and limitations.
+
+```bash
+cargo +1.99.0 test -p roadrunner-dispatch --test recovery --locked -- --nocapture > target/phase19-oracle.log
+cargo +1.99.0 build -p roadrunner-cli --release --locked
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/collect_recovery_benchmark.py --oracle-log target/phase19-oracle.log --output target/recovery-benchmark.json
+```
