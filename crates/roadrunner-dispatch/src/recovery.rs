@@ -75,6 +75,8 @@ pub enum RecoveryTermination {
     Cooldown,
     /// No complete single neighborhood move repairs the unhealthy baseline.
     NoRecovery,
+    /// A changed local incumbent did not meet the configured positive saving threshold.
+    BelowThreshold,
     /// Budget ended; no proposal may publish.
     SearchIncomplete,
 }
@@ -107,9 +109,9 @@ impl RecoveryProposal {
     }
 }
 
-/// Versioned semantic evidence and private publication guard.
+/// Versioned semantic evidence, exposed read-only by its decision.
 #[derive(Debug, Clone, PartialEq, Serialize)]
-pub struct RecoveryDecision {
+pub struct RecoveryEvidence {
     /// Evidence contract version.
     pub schema_version: u32,
     /// Exact coherent source identity.
@@ -136,14 +138,38 @@ pub struct RecoveryDecision {
     pub locked_orders: Vec<crate::OrderId>,
     /// Proven precedence-invalid single-stop relocations pruned before evaluation.
     pub precedence_exclusions: u64,
+    /// Signed baseline saving after explicit penalties for a changed local incumbent.
+    /// Negative values may still repair mandatory hard/unavailable-owner health.
+    pub optional_saving_seconds: Option<f64>,
     /// Complete best-improvement rounds.
     pub rounds: u64,
     /// Declared neighborhood termination.
     pub termination: RecoveryTermination,
+}
+
+/// Immutable evaluated decision and private atomic-publication guard.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct RecoveryDecision {
+    #[serde(flatten)]
+    evidence: RecoveryEvidence,
     expected: WorldData,
     proposal: Option<RecoveryProposal>,
 }
 impl RecoveryDecision {
+    /// Read-only physical, policy, coverage and source-context evidence.
+    /// Callers cannot rebind an evaluated proposal to a different clock or policy.
+    ///
+    /// ```compile_fail
+    /// use roadrunner_dispatch::{DispatchInstant, RecoveryDecision};
+    /// fn rebind(decision: &mut RecoveryDecision, at: DispatchInstant) {
+    ///     decision.evidence().context.pooling.at = at;
+    /// }
+    /// ```
+    #[must_use]
+    pub const fn evidence(&self) -> &RecoveryEvidence {
+        &self.evidence
+    }
+
     /// Only a complete successful decision offers a publication proposal.
     #[must_use]
     pub const fn proposal(&self) -> Option<&RecoveryProposal> {
@@ -285,40 +311,43 @@ pub fn recover_fleet(
     }
     let repair = !reasons.is_empty();
     let mut decision = RecoveryDecision {
-        schema_version: 1,
-        world_identity: snapshot.world.identity(),
-        world_version: snapshot.world.version(),
-        baseline_requires_repair: repair,
-        baseline: baseline.evaluations.clone(),
-        evaluated: 0,
-        feasible: 0,
-        rejections: BTreeMap::new(),
-        riders: data.profiles.keys().copied().collect(),
-        movable_orders: data
-            .assignments
-            .keys()
-            .copied()
-            .filter(|o| !locked(data, &context, *o))
-            .collect(),
-        locked_orders: data
-            .assignments
-            .keys()
-            .copied()
-            .filter(|o| locked(data, &context, *o))
-            .collect(),
-        precedence_exclusions: 0,
-        rounds: 0,
-        termination: RecoveryTermination::LocalMinimum,
+        evidence: RecoveryEvidence {
+            schema_version: 1,
+            world_identity: snapshot.world.identity(),
+            world_version: snapshot.world.version(),
+            baseline_requires_repair: repair,
+            baseline: baseline.evaluations.clone(),
+            evaluated: 0,
+            feasible: 0,
+            rejections: BTreeMap::new(),
+            riders: data.profiles.keys().copied().collect(),
+            movable_orders: data
+                .assignments
+                .keys()
+                .copied()
+                .filter(|o| !locked(data, &context, *o))
+                .collect(),
+            locked_orders: data
+                .assignments
+                .keys()
+                .copied()
+                .filter(|o| locked(data, &context, *o))
+                .collect(),
+            precedence_exclusions: 0,
+            optional_saving_seconds: None,
+            rounds: 0,
+            termination: RecoveryTermination::LocalMinimum,
+            context,
+        },
         expected: data.clone(),
         proposal: None,
-        context,
     };
     if !repair
-        && decision.context.last_applied.is_some_and(|t| {
-            snapshot.at.value() - t.value() < decision.context.policy.cooldown.value()
+        && decision.evidence.context.last_applied.is_some_and(|t| {
+            snapshot.at.value() - t.value() < decision.evidence.context.policy.cooldown.value()
         })
     {
-        decision.termination = RecoveryTermination::Cooldown;
+        decision.evidence.termination = RecoveryTermination::Cooldown;
         return Ok(decision);
     }
     let mut incumbent = baseline;
@@ -328,7 +357,7 @@ pub fn recover_fleet(
         // Enumerate semantic moves, never spatially shortlist recipients.
         let mut candidates = Vec::new();
         for (order, owner) in &incumbent.assignments {
-            if locked(data, &decision.context, *order) {
+            if locked(data, &decision.evidence.context, *order) {
                 continue;
             }
             let mut base = incumbent.plans.clone();
@@ -343,7 +372,7 @@ pub fn recover_fleet(
                 .filter(|r| data.riders[r].availability == Availability::Available)
             {
                 let prefix = usize::from(
-                    decision.context.pooling.inputs.projections[&target]
+                    decision.evidence.context.pooling.inputs.projections[&target]
                         .frozen
                         .is_some(),
                 );
@@ -375,7 +404,7 @@ pub fn recover_fleet(
         }
         for (rider, plan) in &incumbent.plans {
             let prefix = usize::from(
-                decision.context.pooling.inputs.projections[rider]
+                decision.evidence.context.pooling.inputs.projections[rider]
                     .frozen
                     .is_some(),
             );
@@ -403,35 +432,36 @@ pub fn recover_fleet(
                     if valid {
                         candidates.push((plans, incumbent.assignments.clone()));
                     } else {
-                        decision.precedence_exclusions += 1;
+                        decision.evidence.precedence_exclusions += 1;
                     }
                 }
             }
         }
         for (plans, assignments) in candidates {
-            if decision.evaluated == decision.context.pooling.inputs.work_budget {
-                decision.termination = RecoveryTermination::SearchIncomplete;
+            if decision.evidence.evaluated == decision.evidence.context.pooling.inputs.work_budget {
+                decision.evidence.termination = RecoveryTermination::SearchIncomplete;
                 return Ok(decision);
             }
-            decision.evaluated += 1;
-            let (candidate, reasons) = evaluate(snapshot, &decision.context, plans, assignments)?;
+            decision.evidence.evaluated += 1;
+            let (candidate, reasons) =
+                evaluate(snapshot, &decision.evidence.context, plans, assignments)?;
             if !reasons.is_empty() {
                 for reason in reasons {
-                    *decision.rejections.entry(reason).or_default() += 1;
+                    *decision.evidence.rejections.entry(reason).or_default() += 1;
                 }
                 continue;
             }
-            decision.feasible += 1;
+            decision.evidence.feasible += 1;
             if (unhealthy || better(&candidate, &incumbent))
                 && best.as_ref().is_none_or(|b| better(&candidate, b))
             {
                 best = Some(candidate);
             }
         }
-        decision.rounds += 1;
+        decision.evidence.rounds += 1;
         let Some(best) = best else {
             if unhealthy {
-                decision.termination = RecoveryTermination::NoRecovery;
+                decision.evidence.termination = RecoveryTermination::NoRecovery;
             }
             break;
         };
@@ -439,9 +469,17 @@ pub fn recover_fleet(
         unhealthy = false;
     }
     if !unhealthy && incumbent.plans != data.plans {
-        let baseline_travel: f64 = decision.baseline.values().map(|e| e.travel.value()).sum();
+        let baseline_travel: f64 = decision
+            .evidence
+            .baseline
+            .values()
+            .map(|e| e.travel.value())
+            .sum();
         let saving = baseline_travel - incumbent.travel_seconds - incumbent.penalty_seconds;
-        if repair || (saving > 0.0 && saving >= decision.context.policy.minimum_improvement.value())
+        decision.evidence.optional_saving_seconds = Some(saving);
+        if repair
+            || (saving > 0.0
+                && saving >= decision.evidence.context.policy.minimum_improvement.value())
         {
             let baseline_all = WholePlanEvaluation {
                 plan: RiderPlan::default(),
@@ -449,6 +487,7 @@ pub fn recover_fleet(
                 distance: roadrunner_core::geo::Meters::ZERO,
                 stops: Vec::new(),
                 completions: decision
+                    .evidence
                     .baseline
                     .values()
                     .flat_map(|e| e.completions.clone())
@@ -460,10 +499,12 @@ pub fn recover_fleet(
                     data,
                     &baseline_all,
                     evaluation,
-                    &decision.context.pooling.inputs,
+                    &decision.evidence.context.pooling.inputs,
                 ));
             }
             decision.proposal = Some(incumbent);
+        } else {
+            decision.evidence.termination = RecoveryTermination::BelowThreshold;
         }
     }
     Ok(decision)
@@ -478,9 +519,9 @@ impl World {
         decision: &RecoveryDecision,
         current: &RecoveryContext,
     ) -> Result<(), CommitError> {
-        if self.identity() != decision.world_identity
-            || self.version() != decision.world_version
-            || *current != decision.context
+        if self.identity() != decision.evidence.world_identity
+            || self.version() != decision.evidence.world_version
+            || *current != decision.evidence.context
             || *self.data() != decision.expected
         {
             return Err(CommitError::Stale);
@@ -489,7 +530,7 @@ impl World {
             .proposal
             .as_ref()
             .ok_or(CommitError::InvalidTransition)?;
-        if decision.termination != RecoveryTermination::LocalMinimum {
+        if decision.evidence.termination != RecoveryTermination::LocalMinimum {
             return Err(CommitError::InvalidTransition);
         }
         let mut next = self.data().clone();

@@ -345,7 +345,10 @@ fn budget_prediction_and_churn_failures_publish_nothing() {
     let mut ctx = context(&f, &world, churn());
     ctx.pooling.inputs.work_budget = 0;
     let d = ok(recovery(&f, &world, ctx));
-    assert_eq!(d.termination, RecoveryTermination::SearchIncomplete);
+    assert_eq!(
+        d.evidence().termination,
+        RecoveryTermination::SearchIncomplete
+    );
     assert!(d.proposal().is_none());
     let mut ctx = context(&f, &world, churn());
     ctx.pooling.inputs.forecasts.remove(&OrderId::new(1));
@@ -360,11 +363,24 @@ fn budget_prediction_and_churn_failures_publish_nothing() {
             .proposal()
             .is_none()
     );
+    let mut policy = churn();
+    policy.minimum_improvement = secs(100.0);
+    let d = ok(recovery(&f, &world, context(&f, &world, policy)));
+    assert_eq!(
+        d.evidence().termination,
+        RecoveryTermination::BelowThreshold
+    );
+    assert!(
+        d.evidence()
+            .optional_saving_seconds
+            .is_some_and(|s| s > 0.0)
+    );
+    assert!(d.proposal().is_none());
     let mut ctx = context(&f, &world, churn());
     ctx.policy.cooldown = secs(100.0);
     ctx.last_applied = Some(at(0.0));
     assert_eq!(
-        ok(recovery(&f, &world, ctx)).termination,
+        ok(recovery(&f, &world, ctx)).evidence().termination,
         RecoveryTermination::Cooldown
     );
     assert_eq!(*world.data(), before);
@@ -425,10 +441,10 @@ fn unavailable_owner_repair_bypasses_cooldown_but_never_accepted_protections() {
     ctx.policy.cooldown = secs(100.0);
     ctx.last_applied = Some(at(0.0));
     let d = ok(recovery(&f, &world, ctx));
-    assert!(d.baseline_requires_repair);
+    assert!(d.evidence().baseline_requires_repair);
     assert!(d.proposal().is_some());
     let terms = world.data().accepted.clone();
-    let ctx = d.context.clone();
+    let ctx = d.evidence().context.clone();
     ok(world.commit_recovery(&d, &ctx));
     assert_eq!(world.data().accepted, terms);
 }
@@ -559,8 +575,8 @@ fn hard_baseline_breach_can_repair_but_cumulative_reference_never_resets() {
     let mut ctx = context(&f, &world, churn());
     ctx.policy.assignment_stability_penalty = secs(100.0);
     let d = ok(recovery(&f, &world, ctx.clone()));
-    assert!(d.baseline_requires_repair);
-    assert_ne!(d.baseline[&rider].breaches.len(), 0);
+    assert!(d.evidence().baseline_requires_repair);
+    assert_ne!(d.evidence().baseline[&rider].breaches.len(), 0);
     let proposal = d.proposal().unwrap_or_else(|| panic!("repair"));
     assert!(
         proposal
@@ -581,8 +597,8 @@ fn hard_baseline_breach_can_repair_but_cumulative_reference_never_resets() {
         .riders
         .insert(r, f.anchors.dropoffs[&order].clone());
     let d = ok(recovery(&f, &world, context(&f, &world, churn())));
-    assert!(d.baseline_requires_repair);
-    assert_eq!(d.termination, RecoveryTermination::NoRecovery);
+    assert!(d.evidence().baseline_requires_repair);
+    assert_eq!(d.evidence().termination, RecoveryTermination::NoRecovery);
     assert!(d.proposal().is_none());
     assert_eq!(world.data().accepted, terms);
 }

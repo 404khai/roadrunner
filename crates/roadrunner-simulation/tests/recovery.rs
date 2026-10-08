@@ -84,6 +84,7 @@ fn offline_recovery_moves_only_unstarted_work_and_both_execute() {
             .decision
             .as_ref()
             .unwrap_or_else(|| panic!("decision"))
+            .evidence()
             .baseline_requires_repair
     );
     let initial = r.fleets[0]
@@ -224,7 +225,7 @@ fn no_recovery_is_scoped_and_does_not_implicitly_abandon_offline_obligations() {
     assert!(r.recoveries.iter().any(|r| {
         r.decision
             .as_ref()
-            .is_some_and(|d| d.termination == RecoveryTermination::NoRecovery)
+            .is_some_and(|d| d.evidence().termination == RecoveryTermination::NoRecovery)
     }));
     assert_eq!(r.summary.delivered_orders, 2);
     let state = r.final_state.as_ref().unwrap_or_else(|| panic!("state"));
@@ -264,12 +265,14 @@ fn forecast_update_is_fresh_and_never_overwrites_actual_observation() {
         r.recoveries
             .iter()
             .filter_map(|r| r.decision.as_ref())
-            .any(|d| (d.context.pooling.inputs.forecasts[&OrderId::new(1)]
-                .generated_at
-                .value()
-                - 15.0)
-                .abs()
-                < 1e-9)
+            .any(
+                |d| (d.evidence().context.pooling.inputs.forecasts[&OrderId::new(1)]
+                    .generated_at
+                    .value()
+                    - 15.0)
+                    .abs()
+                    < 1e-9
+            )
     );
 }
 

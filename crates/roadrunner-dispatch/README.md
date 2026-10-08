@@ -129,7 +129,7 @@ cargo +1.99.0 test -p roadrunner-simulation --test recovery --locked
 ```
 
 Dispatch APIs: `RecoveryPolicy`, `RecoveryContext`, `recover_fleet`,
-`RecoveryDecision`, `RecoveryTermination`, `evaluate_recovery_plan`,
+`RecoveryDecision`, `RecoveryEvidence`, `RecoveryTermination`, `evaluate_recovery_plan`,
 `World::commit_recovery`, `World::cancel_order`, `CancellationRefusal` and
 `FulfillmentState::Cancelled`. Simulation adds `DynamicEvent`, `DynamicChange`,
 `DispatchPolicy::Dynamic` and `SimulationRecoveryRecord`.

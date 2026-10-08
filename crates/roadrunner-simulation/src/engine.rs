@@ -996,7 +996,7 @@ impl<'a> Engine<'a> {
                     self.last_recovery = Some(self.now);
                     self.reconcile_responsibility()?;
                 }
-                let result = format!("{:?}", decision.termination);
+                let result = format!("{:?}", decision.evidence().termination);
                 (Some(decision), None, committed, result)
             }
             Err(SimulationError::Pooling(

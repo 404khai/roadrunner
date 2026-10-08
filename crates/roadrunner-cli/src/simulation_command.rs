@@ -288,12 +288,12 @@ fn print_recoveries(result: &roadrunner_simulation::SimulationResult) {
         if let Some(d) = &record.decision {
             println!(
                 "Recovery {}: {:?}; committed: {}; work: {}/{}; repair required: {}",
-                d.context.trigger,
-                d.termination,
+                d.evidence().context.trigger,
+                d.evidence().termination,
                 record.committed,
-                d.evaluated,
-                d.context.pooling.inputs.work_budget,
-                d.baseline_requires_repair
+                d.evidence().evaluated,
+                d.evidence().context.pooling.inputs.work_budget,
+                d.evidence().baseline_requires_repair
             );
             if let Some(p) = d.proposal() {
                 println!(
