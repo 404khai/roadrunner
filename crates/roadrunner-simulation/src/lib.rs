@@ -14,8 +14,8 @@ pub use engine::simulate;
 pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};
 pub use metrics::{
-    PredictionFailureCoverage, RealizedProtectionOutcome, SimulationInsertionRecord,
-    SimulationPredictionFailure,
+    PredictionFailureCoverage, RealizedProtectionOutcome, SimulationFleetRecord,
+    SimulationInsertionRecord, SimulationPredictionFailure,
 };
 pub use scenario::{
     ActualReadiness, DispatchPolicy, OrderInput, RiderInput, SimulationScenario, TrafficChange,

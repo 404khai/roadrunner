@@ -40,6 +40,7 @@ cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-17/
 | --- | --- |
 | Schema 1 | Historical single-order policies; soft observed deadlines and zero service |
 | Schema 2 / `multi_order` | Named/versioned scenario, explicit per-order admission/service policy, forecast validity and deterministic insertion work budget |
+| Schema 3 / `fleet_batch` | Joint batch/suffix heuristic with named algorithm, work budget and explicit isolation |
 
 The Phase 15 fixture includes seeded readiness, changing traffic, infeasible and future
 orders. The Phase 17 fixture admits B while A is active and correctly executes both.
@@ -105,3 +106,14 @@ cargo +1.99.0 doc -p roadrunner-simulation --no-deps --locked
 API docs: `target/doc/roadrunner_simulation/index.html`. This crate has no Criterion target;
 its external collectors exercise the CLI/library workflow. It depends on core, dispatch,
 Serde and typed errors and is currently marked `publish = false`.
+
+## Phase 18 fleet batches
+
+Schema 3 `fleet_batch` jointly allocates current new work and resequences healthy editable
+suffixes, preserving committed owners, accepted terms and active execution. Read
+[fleet contracts](../../docs/fleet-optimization.md) for exact API, isolation and heuristic
+coverage. Run the pooled fleet example from the repository root:
+
+```bash
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-18/greedy-trap.json --json
+```

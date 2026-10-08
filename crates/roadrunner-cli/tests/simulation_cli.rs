@@ -329,3 +329,59 @@ fn phase17_pooled_cli_replays_success_rejections_and_prediction_failure() {
     assert!(String::from_utf8_lossy(&output.stdout).contains("incremental road"));
     assert!(String::from_utf8_lossy(&output.stdout).contains("search_complete=true"));
 }
+
+#[test]
+fn phase18_fleet_cli_replays_joint_publication_isolation_and_incomplete_search() {
+    let root =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/fixtures/phase-18");
+    for entry in ok(std::fs::read_dir(&root)) {
+        let path = ok(entry).path();
+        if path.extension().is_none_or(|e| e != "json") {
+            continue;
+        }
+        let args = ["simulate", ok(path.to_str().ok_or("path")), "--json"];
+        let first = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        let replay = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        assert!(
+            first.status.success(),
+            "{}: {}",
+            path.display(),
+            String::from_utf8_lossy(&first.stderr)
+        );
+        assert_eq!(first.stdout, replay.stdout);
+        let json: serde_json::Value = ok(serde_json::from_slice(&first.stdout));
+        assert_eq!(json["schema_version"], 3);
+        assert!(json["fleets"].is_array());
+        if path
+            .file_stem()
+            .is_some_and(|s| s == "joint-pooling" || s == "greedy-trap")
+        {
+            assert_eq!(json["summary"]["delivered_orders"], 2);
+            assert_eq!(
+                json["fleets"][0]["decision"]["proposal"]["objective"]["admitted_orders"],
+                2
+            );
+        }
+        if path.file_stem().is_some_and(|s| s == "budget-exhaustion") {
+            assert_eq!(json["summary"]["assigned_orders"], 0);
+            assert_eq!(json["fleets"][0]["committed"], false);
+            assert_eq!(
+                json["fleets"][0]["decision"]["evidence"]["termination"],
+                "SearchIncomplete"
+            );
+        }
+    }
+    let path = root.join("greedy-trap.json");
+    let output = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(["simulate", ok(path.to_str().ok_or("path"))])
+        .output());
+    assert!(output.status.success());
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert!(text.contains("Fleet batch"));
+    assert!(text.contains("admitted=2"));
+    assert!(text.contains("Delivered: 2"));
+}

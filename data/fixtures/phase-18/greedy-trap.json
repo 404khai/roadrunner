@@ -1,0 +1,119 @@
+{
+  "graph": {
+    "kind": "inline",
+    "profile": "motorcycle-pooling/v1",
+    "nodes": [
+      {
+        "id": 0,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 0
+        }
+      },
+      {
+        "id": 1,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 10000
+        }
+      },
+      {
+        "id": 2,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 20000
+        }
+      }
+    ],
+    "roads": [
+      {
+        "id": 0,
+        "from": 0,
+        "to": 1,
+        "speed_kph": 40,
+        "bidirectional": true
+      },
+      {
+        "id": 1,
+        "from": 0,
+        "to": 2,
+        "speed_kph": 40,
+        "bidirectional": true
+      }
+    ]
+  },
+  "scenario": {
+    "schema_version": 3,
+    "seed": 17,
+    "start_seconds": 0,
+    "end_seconds": 200,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "fleet_batch",
+      "work_budget": 100000,
+      "forecast_validity_seconds": 1000,
+      "algorithm": "MultiStartLocal"
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 0,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 2,
+        "node": 1,
+        "capacity": 1,
+        "available": true
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 1,
+        "created_at_seconds": 0,
+        "expected_ready_at_seconds": 0,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 0
+        },
+        "deadline_seconds": 20.1,
+        "demand": 1,
+        "admission": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "Hard",
+          "max_completion_delay": null,
+          "pickup_service": 0,
+          "dropoff_service": 0,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 2,
+        "pickup_node": 0,
+        "dropoff_node": 2,
+        "created_at_seconds": 0,
+        "expected_ready_at_seconds": 0,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 0
+        },
+        "deadline_seconds": 20.1,
+        "demand": 1,
+        "admission": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "Hard",
+          "max_completion_delay": null,
+          "pickup_service": 0,
+          "dropoff_service": 0,
+          "readiness": "ValidForecastV1"
+        }
+      }
+    ],
+    "scenario_id": "phase18/greedy-trap/v1"
+  }
+}

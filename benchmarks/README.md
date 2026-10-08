@@ -118,3 +118,7 @@ waiting/idle time, distance, lateness, utilization, and explicit unfinished popu
 records per-policy process timings with complete reproducibility metadata. See
 [methodology](../docs/dispatch-strategy-benchmarks.md) and
 [completion evidence](../docs/phase-16-completion.md).
+
+Phase 18: `scripts/collect_fleet_benchmark.py` compares greedy/local/multi-start fleet
+search, verifies replay/isolation/publication and records independent exact-oracle quality.
+See [fleet methodology](../docs/fleet-optimization.md).

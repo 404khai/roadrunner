@@ -37,7 +37,7 @@ Route commands already emit JSON; they do not accept an extra `--json`. Routing 
 are source **OSM node identities**, not local graph IDs or geographic coordinate strings.
 Departure seconds are logical scenario time, not ISO timestamps. CLI parsing uses the
 listed positional order. Planned `serve`, generic `route --from/--to`, `graph stats`,
-interactive map and fleet-optimization commands do not exist yet.
+interactive map commands do not exist yet. Fleet optimization uses schema 3 simulation.
 
 ## Offline OSM routing walkthrough
 
@@ -77,7 +77,7 @@ Using a generic snapshot here with those bound overlays produces a digest mismat
 Simulation documents contain a graph source plus a versioned scenario. Inline graphs
 are self-contained; artifact paths resolve relative to the document and require a graph
 digest binding. Schema 1 is legacy single-order behavior. Schema 2 is explicit pooled
-admission with named scenario/policies and forecast validity. See the
+admission with named scenario/policies and forecast validity. Schema 3 supports joint fleet batches with a pinned algorithm. See the
 [simulation README](../roadrunner-simulation/README.md) for schema, event ordering,
 replay commands and output populations.
 
@@ -100,3 +100,14 @@ The package is a binary adapter, with no public integration library or Criterion
 The underlying APIs live in core/OSM/dispatch/simulation. External CLI benchmark collectors
 and the optional Docker/OSRM comparison are listed in the
 [root benchmark guide](../../README.md#benchmarks-and-replay-evidence).
+
+## Phase 18 fleet batches
+
+Schema 3 `fleet_batch` jointly allocates current new work and resequences healthy editable
+suffixes, preserving committed owners, accepted terms and active execution. Read
+[fleet contracts](../../docs/fleet-optimization.md) for exact API, isolation and heuristic
+coverage. Run the pooled fleet example from the repository root:
+
+```bash
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-18/greedy-trap.json --json
+```

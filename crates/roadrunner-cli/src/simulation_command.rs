@@ -241,6 +241,7 @@ fn print_summary(result: &roadrunner_simulation::SimulationResult) {
             );
         }
     }
+    print_fleets(result);
     let s = &result.summary;
     println!(
         "Orders: {} (scheduled: {}, uncreated: {})\nAssigned: {}\nDelivered: {}\nUnassigned: {}\nAssigned unfinished: {}\nLate deliveries: {}\nOutstanding past deadline: {}",
@@ -273,4 +274,35 @@ fn print_summary(result: &roadrunner_simulation::SimulationResult) {
         result.ended_at.value(),
         result.seed
     );
+}
+
+fn print_fleets(result: &roadrunner_simulation::SimulationResult) {
+    for record in &result.fleets {
+        let e = record.decision.evidence();
+        println!(
+            "Fleet batch {:?}: {:?}; committed={}; inputs_complete={}; riders_complete={}; search_complete={}; work={}",
+            e.batch,
+            e.termination,
+            record.committed,
+            e.input_complete,
+            e.riders_complete,
+            e.search_complete,
+            e.work.total()
+        );
+        if let Some(objective) = &e.selected_objective {
+            println!(
+                "  admitted={}; remaining road={:.3} s, {:.3} m",
+                objective.admitted_orders, objective.road_seconds, objective.road_meters
+            );
+        }
+        for rider in &e.riders {
+            println!(
+                "  rider {}: isolation={:?}; suffix={}; plan={:?}",
+                rider.rider.value(),
+                rider.isolation,
+                rider.suffix_length,
+                rider.selected.as_ref().map(|p| &p.plan.stops)
+            );
+        }
+    }
 }

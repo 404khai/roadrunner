@@ -20,8 +20,9 @@ use crate::{
     SimulationError, SimulationEvent, SimulationResult, SimulationScenario, TrafficOverride,
 };
 use roadrunner_dispatch::{
-    FrozenPrefix, InsertionDecision, PoolingContext, PoolingInputs, PredictionIdentity,
-    ReadinessForecast, Stop, StopTimeline, effective_readiness, insert_order, project_execution,
+    FleetContext, FleetInputs, FrozenPrefix, InsertionDecision, PoolingContext, PoolingInputs,
+    PredictionIdentity, ReadinessForecast, Stop, StopTimeline, effective_readiness, insert_order,
+    optimize_fleet, project_execution,
 };
 
 fn invalid(message: &str) -> SimulationError {
@@ -37,6 +38,7 @@ enum Action {
     Create(OrderId),
     Ready(OrderId),
     Assign(OrderId),
+    Fleet,
     Move {
         order: OrderId,
         rider: RiderId,
@@ -116,6 +118,8 @@ struct Engine<'a> {
     events: Vec<RecordedEvent>,
     decisions: Vec<AssignmentDecision>,
     insertions: Vec<SimulationInsertionRecord>,
+    fleets: Vec<crate::SimulationFleetRecord>,
+    fleet_queued: bool,
     active: BTreeMap<RiderId, ActiveStop>,
     next_execution: u64,
     prediction_failures: Vec<crate::SimulationPredictionFailure>,
@@ -169,10 +173,20 @@ impl<'a> Engine<'a> {
         let start = instant(scenario.start_seconds)?;
         let end = instant(scenario.end_seconds)?;
         let epoch = RoutingEpoch(instant(scenario.routing_epoch_seconds)?);
-        let pooling = matches!(scenario.dispatch, DispatchPolicy::MultiOrder { .. });
-        if scenario.schema_version != if pooling { 2 } else { 1 } || end < start {
+        let pooling = matches!(
+            scenario.dispatch,
+            DispatchPolicy::MultiOrder { .. } | DispatchPolicy::FleetBatch { .. }
+        );
+        let schema = if matches!(scenario.dispatch, DispatchPolicy::FleetBatch { .. }) {
+            3
+        } else if pooling {
+            2
+        } else {
+            1
+        };
+        if scenario.schema_version != schema || end < start {
             return Err(invalid(
-                "schema must be 2 for multi_order, 1 for legacy, and horizon must not precede start",
+                "schema must be 3 for fleet_batch, 2 for multi_order, 1 for legacy, and horizon must not precede start",
             ));
         }
         if pooling && scenario.scenario_id.as_ref().is_none_or(String::is_empty) {
@@ -217,6 +231,8 @@ impl<'a> Engine<'a> {
             events: Vec::new(),
             decisions: Vec::new(),
             insertions: Vec::new(),
+            fleets: Vec::new(),
+            fleet_queued: false,
             active: BTreeMap::new(),
             next_execution: 0,
             prediction_failures: Vec::new(),
@@ -275,15 +291,20 @@ impl<'a> Engine<'a> {
     }
 
     fn validate_admission(&self, input: &crate::OrderInput) -> Result<(), SimulationError> {
-        if matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. })
-            && input.admission.is_none()
+        if matches!(
+            self.scenario.dispatch,
+            DispatchPolicy::MultiOrder { .. } | DispatchPolicy::FleetBatch { .. }
+        ) && input.admission.is_none()
         {
             return Err(invalid(
                 "multi_order requires explicit per-order admission policies",
             ));
         }
         if let Some(policy) = &input.admission {
-            if !matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. }) {
+            if !matches!(
+                self.scenario.dispatch,
+                DispatchPolicy::MultiOrder { .. } | DispatchPolicy::FleetBatch { .. }
+            ) {
                 return Err(invalid(
                     "legacy schema cannot apply Phase 17 admission terms",
                 ));
@@ -442,6 +463,13 @@ impl<'a> Engine<'a> {
     }
 
     fn queue_pending(&mut self) -> Result<(), SimulationError> {
+        if matches!(self.scenario.dispatch, DispatchPolicy::FleetBatch { .. }) {
+            if !self.pending.is_empty() && !self.fleet_queued {
+                self.fleet_queued = true;
+                self.push(self.now, Action::Fleet)?;
+            }
+            return Ok(());
+        }
         let pending: Vec<_> = self.pending.iter().copied().collect();
         for order in pending {
             if self.queued_assignments.insert(order) {
@@ -555,7 +583,7 @@ impl<'a> Engine<'a> {
             let snapshot =
                 DispatchSnapshot::new(&self.world, self.now, self.epoch, &provider, &self.anchors)?;
             match self.scenario.dispatch {
-                DispatchPolicy::MultiOrder { .. } => {
+                DispatchPolicy::MultiOrder { .. } | DispatchPolicy::FleetBatch { .. } => {
                     return Err(invalid("pooling branch invariant"));
                 }
                 DispatchPolicy::Basic => {
@@ -664,20 +692,43 @@ impl<'a> Engine<'a> {
     }
 
     fn pooling_inputs(&self) -> Result<PoolingInputs, SimulationError> {
-        let DispatchPolicy::MultiOrder {
-            work_budget,
-            forecast_validity_seconds,
-        } = self.scenario.dispatch
-        else {
-            return Err(invalid("not a pooling scenario"));
+        Ok(self.planning_inputs()?.0)
+    }
+
+    fn planning_inputs(
+        &self,
+    ) -> Result<
+        (
+            PoolingInputs,
+            BTreeMap<RiderId, roadrunner_dispatch::UnavailableExecution>,
+        ),
+        SimulationError,
+    > {
+        let (work_budget, forecast_validity_seconds, fleet) = match self.scenario.dispatch {
+            DispatchPolicy::MultiOrder {
+                work_budget,
+                forecast_validity_seconds,
+            } => (work_budget, forecast_validity_seconds, false),
+            DispatchPolicy::FleetBatch {
+                work_budget,
+                forecast_validity_seconds,
+                ..
+            } => (work_budget, forecast_validity_seconds, true),
+            _ => return Err(invalid("not a pooling scenario")),
         };
+        let mut unavailable = BTreeMap::new();
         let identity = PredictionIdentity {
             prediction: format!(
                 "{}:readiness/v1",
                 self.scenario.scenario_id.as_deref().unwrap_or("legacy")
             ),
             service: "per-order-deterministic/v1".into(),
-            optimizer: "exhaustive-insertion/v1".into(),
+            optimizer: if fleet {
+                "fleet-greedy-local/v1"
+            } else {
+                "exhaustive-insertion/v1"
+            }
+            .into(),
             routing: self.provider()?.provenance(),
         };
         let mut inputs = PoolingInputs {
@@ -717,7 +768,24 @@ impl<'a> Engine<'a> {
                 continue;
             }
             let frozen = if let Some(active) = self.active.get(&rider) {
-                Some(self.frozen_projection(active, &inputs)?)
+                match self.frozen_projection(active, &inputs) {
+                    Ok(frozen) => Some(frozen),
+                    Err(SimulationError::Pooling(
+                        roadrunner_dispatch::PoolingError::PredictionUnavailable(o),
+                    )) if fleet => {
+                        unavailable.insert(
+                            rider,
+                            roadrunner_dispatch::UnavailableExecution {
+                                execution_id: active.id,
+                                order: o,
+                                arrival: active.arrival,
+                                anchor: active.anchor.clone(),
+                            },
+                        );
+                        continue;
+                    }
+                    Err(e) => return Err(e),
+                }
             } else {
                 None
             };
@@ -732,7 +800,76 @@ impl<'a> Engine<'a> {
                 )?,
             );
         }
-        Ok(inputs)
+        Ok((inputs, unavailable))
+    }
+
+    fn fleet_inputs(&self) -> Result<FleetInputs, SimulationError> {
+        let DispatchPolicy::FleetBatch { algorithm, .. } = self.scenario.dispatch else {
+            return Err(invalid("not a fleet scenario"));
+        };
+        let (pooling, unavailable_projections) = self.planning_inputs()?;
+        Ok(FleetInputs {
+            pooling,
+            unavailable_projections,
+            algorithm,
+        })
+    }
+
+    fn plan_fleet(&mut self) -> Result<SimulationEvent, SimulationError> {
+        self.fleet_queued = false;
+        let batch: Vec<_> = self.pending.iter().copied().collect();
+        let inputs = self.fleet_inputs()?;
+        let decision = {
+            let provider = self.provider()?;
+            let snapshot =
+                DispatchSnapshot::new(&self.world, self.now, self.epoch, &provider, &self.anchors)?;
+            optimize_fleet(&snapshot, &batch, inputs)?
+        };
+        let mut admitted = Vec::new();
+        let committed = decision.proposal().is_some();
+        if let Some(proposal) = decision.proposal() {
+            let current = {
+                let provider = self.provider()?;
+                let snapshot = DispatchSnapshot::new(
+                    &self.world,
+                    self.now,
+                    self.epoch,
+                    &provider,
+                    &self.anchors,
+                )?;
+                FleetContext::new(&snapshot, self.fleet_inputs()?)?
+            };
+            self.world.commit_fleet(&decision, &current)?;
+            for (order, assignment) in proposal.assignments() {
+                self.pending.remove(order);
+                self.busy_since.entry(assignment.rider).or_insert(self.now);
+                let predicted = proposal.evaluations()[&assignment.rider].completions[order]
+                    .duration_since(self.now)?;
+                let now = self.now;
+                let outcome = self.outcome(*order)?;
+                outcome.assigned_at = Some(now);
+                outcome.rider = Some(assignment.rider);
+                outcome.predicted_eta = Some(predicted);
+                admitted.push(*assignment);
+            }
+            for rider in proposal.plans().keys() {
+                if !self.active.contains_key(rider)
+                    && !self.world.data().plans[rider].stops.is_empty()
+                {
+                    self.schedule_next(*rider)?;
+                }
+            }
+        }
+        self.fleets.push(crate::SimulationFleetRecord {
+            decision,
+            committed,
+            world_version_after: self.world.version(),
+        });
+        Ok(SimulationEvent::FleetPlanned {
+            batch,
+            admitted,
+            committed,
+        })
     }
 
     fn assign_pooled(
@@ -818,7 +955,10 @@ impl<'a> Engine<'a> {
         rider: RiderId,
         pickup: bool,
     ) -> Result<(), SimulationError> {
-        let service = if matches!(self.scenario.dispatch, DispatchPolicy::MultiOrder { .. }) {
+        let service = if matches!(
+            self.scenario.dispatch,
+            DispatchPolicy::MultiOrder { .. } | DispatchPolicy::FleetBatch { .. }
+        ) {
             let p = self
                 .scenario
                 .orders
@@ -1025,6 +1165,7 @@ impl<'a> Engine<'a> {
             Action::Create(id) => self.create(id),
             Action::Ready(id) => self.ready(id),
             Action::Assign(id) => self.assign(id),
+            Action::Fleet => self.plan_fleet(),
             Action::Move {
                 order,
                 rider,
@@ -1101,7 +1242,8 @@ impl<'a> Engine<'a> {
             prediction_failures: self.prediction_failures,
             realized_protections: crate::metrics::realized_protections(self.world.data()),
             insertions: self.insertions,
-            final_state: (self.scenario.schema_version == 2).then(|| self.world.data().clone()),
+            fleets: self.fleets,
+            final_state: (self.scenario.schema_version >= 2).then(|| self.world.data().clone()),
             orders,
             riders,
             summary,

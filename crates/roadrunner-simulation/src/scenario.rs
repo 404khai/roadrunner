@@ -2,14 +2,14 @@ use roadrunner_core::cost::TrafficMultiplier;
 use roadrunner_core::geo::Seconds;
 use serde::{Deserialize, Serialize};
 
-/// Version 1 immutable simulation inputs; numeric times are logical seconds.
+/// Versioned immutable simulation inputs; numeric times are logical seconds.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimulationScenario {
-    /// Stable scenario/version identity, required for schema 2 pooling.
+    /// Stable scenario/version identity, required for schema 2/3 pooled policies.
     #[serde(default)]
     pub scenario_id: Option<String>,
-    /// 1 for legacy execution; 2 for explicit multi-order policy.
+    /// 1 for legacy; 2 for one-order insertion; 3 for joint fleet batch search.
     pub schema_version: u32,
     /// Explicit seed for the versioned readiness generator, even for fixed scenarios.
     pub seed: u64,
@@ -40,6 +40,15 @@ pub struct SimulationScenario {
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum DispatchPolicy {
+    /// Phase 18 joint batch allocation/resequencing (requires scenario schema 3).
+    FleetBatch {
+        /// Complete fleet submissions permitted per decision.
+        work_budget: u64,
+        /// Explicit forecast validity since creation.
+        forecast_validity_seconds: Seconds,
+        /// Deterministic construction/local-search variant.
+        algorithm: roadrunner_dispatch::FleetAlgorithm,
+    },
     /// Phase 17 exhaustive one-order insertion (requires scenario schema 2).
     MultiOrder {
         /// Complete candidate submissions permitted per admission attempt.
@@ -80,7 +89,7 @@ pub struct RiderInput {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct OrderInput {
-    /// Required per-order service/protection policy for schema 2 pooling.
+    /// Required per-order service/protection policy for schema 2/3 pooled policies.
     #[serde(default)]
     pub admission: Option<roadrunner_dispatch::OrderPolicy>,
     /// Canonical dispatch order identity.

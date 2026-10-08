@@ -404,7 +404,8 @@ Phases 15–19 may extend policy and evaluation. Multi-order insertion compares 
 deltas; fleet planning remains separate from single-order ranking. Simulation fixes
 exogenous inputs across strategies and distinguishes observed from predicted metrics.
 Custody after pickup is a hard responsibility boundary. PlanId/PlanVersion, acceptance,
-handoffs, churn thresholds, persistence, and fleet optimizer APIs remain deferred.
+handoffs, churn thresholds and persistence remain deferred. Fleet optimizer APIs are
+implemented in the separate Phase 18 extension below.
 
 Phase 13 Basic Dispatch is complete. See [dispatch usage](dispatch.md) and
 [completion evidence](phase-13-completion.md) for the implemented pipeline and
@@ -440,10 +441,21 @@ and [completion evidence](phase-16-completion.md).
 ## 18. Phase 17 multi-order admission
 
 [ADR 0016](adr/0016-multi-order-normative-audit.md) records the confirmed normative
-audit, including deferred Phase 18 contracts. [Multi-order architecture and API](multi-order.md)
+audit, including the fixed-owner Phase 18 contracts. [Multi-order architecture and API](multi-order.md)
 defines dispatch-owned whole-plan evaluation, explicit frozen execution projection,
 immutable accepted protection terms, exhaustive one-order insertion, separate coverage
 and exact atomic publication. Simulation executes current rider plans, with active
 execution identities and one union responsibility interval. No editable future actions
-are queued. Core remains unchanged and ignorant of delivery policies. Phase 18 is deferred
-until explicit user confirmation of the [Phase 17 completion report](phase-17-completion.md).
+are queued. Core remains unchanged and ignorant of delivery policies. Phase 18 was
+authorized after the [Phase 17 completion report](phase-17-completion.md); its extension follows.
+
+## Phase 18 fleet batch extension
+
+Joint new-order allocation and editable suffix resequencing preserve committed owners,
+accepted terms and frozen execution. Dispatch uses `optimize_fleet`, `FleetInputs`,
+`FleetContext`, `evaluate_batch_plan`, and atomic `World::commit_fleet`. Simulation schema
+3 selects `fleet_batch` with a named deterministic algorithm. Explicit unknown-input and
+baseline-breach isolation differ from Phase 17 complete-input insertion. See
+[fleet optimization](fleet-optimization.md) for API, objective, neighborhood, coverage,
+execution, oracle and measurement contracts, and [completion](phase-18-completion.md)
+for verified results. Phase 19 recovery remains deferred.

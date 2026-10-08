@@ -10,7 +10,7 @@ traffic changes the route, and whether another delivery fits an existing rider p
 
 ## Current capabilities
 
-Implemented through **Phase 17 — Multiple Orders per Rider**:
+Implemented through **Phase 18 — Fleet Batch Optimization**:
 
 - Deterministic graph construction, geographic units, Haversine distance, validated
   graph artifacts, and provenance-addressed OSM ingestion.
@@ -22,11 +22,13 @@ Implemented through **Phase 17 — Multiple Orders per Rider**:
 - Whole-plan multi-order insertion with capacity checks at every stop, explicit
   readiness/service timing, hard admission policies, immutable acceptance protections,
   frozen execution preservation, and atomic publication.
+- Joint fleet batch allocation, editable suffix resequencing, fixed committed owners,
+  deterministic greedy/multi-start/local search, and all-or-nothing fleet publication.
 - Seeded discrete-event delivery simulation, deterministic replay, CLI workflows,
   correctness oracles, and reproducible benchmark artifacts.
 
-[Phase 17 completion](docs/phase-17-completion.md) records the implementation gate.
-Phase 18 fleet optimization is deferred pending confirmation. HTTP serving, databases,
+[Phase 17 completion](docs/phase-17-completion.md) and [Phase 18 completion](docs/phase-18-completion.md)
+record implementation gates. Phase 19 recovery remains deferred. HTTP serving, databases,
 Redis/Kafka, live traffic, machine learning, and a map UI are future phases. The current
 workspace runs locally without those services; there is no `serve` or `demo` command.
 
@@ -83,7 +85,7 @@ cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-17/
 Readable output contains delivery populations, waiting, utilization and distance; pooled
 runs also show insertion coverage, rejections and selected plans. JSON distinguishes
 predicted plans, successful publication, actual execution and realized policy violations.
-Schema 1 preserves legacy single-order semantics; schema 2 requires a scenario identity
+Schema 3 enables joint fleet batches; schema 1 preserves legacy single-order semantics; schema 2 requires a scenario identity
 and explicit per-order admission policies. See [simulation](docs/simulation.md) and
 [multi-order contracts](docs/multi-order.md) before authoring a scenario.
 
@@ -98,6 +100,19 @@ cargo +1.99.0 run -p roadrunner-cli --locked -- benchmark dispatch data/fixtures
 The four-policy comparison is a schema 1 workflow, separate from Phase 17 pooling.
 [Phase 17 fixtures](data/fixtures/phase-17/README.md) also exercise capacity, hard deadlines,
 cumulative delay, unavailable forecasts, budget exhaustion, and frozen wait/service.
+
+
+Jointly allocate a fleet batch and compare against greedy/local baselines:
+
+```bash
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-18/greedy-trap.json --json
+cargo +1.99.0 test -p roadrunner-dispatch --test fleet --locked -- --nocapture > target/phase18-oracle.log
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/collect_fleet_benchmark.py --oracle-log target/phase18-oracle.log --output target/readme-results/fleet.json
+```
+
+The collector needs the release CLI built below. [Fleet contracts](docs/fleet-optimization.md)
+define heuristic/local coverage and isolation; [Phase 18 fixtures](data/fixtures/phase-18/README.md)
+cover joint publication, greedy traps and rejection. No global VRP optimum is claimed.
 
 ## Build the CLI once
 
