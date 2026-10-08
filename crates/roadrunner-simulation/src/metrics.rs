@@ -182,6 +182,9 @@ pub struct SimulationResult {
     /// Phase 17 evaluated attempts and atomic publication outcome.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub insertions: Vec<SimulationInsertionRecord>,
+    /// Phase 18 joint proposals, isolation/coverage and all-or-nothing publication.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub fleets: Vec<SimulationFleetRecord>,
     /// Realized outcomes against admission terms, distinct from predicted feasibility.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub realized_protections: Vec<RealizedProtectionOutcome>,
@@ -370,4 +373,15 @@ pub struct PredictionFailureCoverage {
     pub riders_complete: bool,
     /// Complete placement search was not established.
     pub search_complete: bool,
+}
+
+/// One read-only fleet decision and its atomic publication outcome.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct SimulationFleetRecord {
+    /// Immutable search/evaluation/isolation evidence.
+    pub decision: roadrunner_dispatch::FleetDecision,
+    /// Whether all replacements were published together.
+    pub committed: bool,
+    /// Authoritative world version after the attempt.
+    pub world_version_after: roadrunner_dispatch::WorldVersion,
 }

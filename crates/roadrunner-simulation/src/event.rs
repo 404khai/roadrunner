@@ -30,6 +30,15 @@ pub struct ExecutedLeg {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum SimulationEvent {
+    /// One fleet decision may admit many requests through one atomic publication.
+    FleetPlanned {
+        /// Canonical original batch, including isolated requests.
+        batch: Vec<OrderId>,
+        /// Newly committed request-to-rider ownership.
+        admitted: Vec<roadrunner_dispatch::CommittedAssignment>,
+        /// Exact joint publication occurred.
+        committed: bool,
+    },
     /// Shared order registration completed.
     OrderCreated {
         /// Registered identity.
