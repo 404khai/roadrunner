@@ -88,6 +88,9 @@ pub struct OrderOutcome {
     pub picked_up_at: Option<DispatchInstant>,
     /// Actual shared dropoff completion.
     pub delivered_at: Option<DispatchInstant>,
+    /// Accepted pre-pickup cancellation, distinct from fulfillment.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancelled_at: Option<DispatchInstant>,
     /// Soft deadline, separate from completion predictions.
     pub deadline: Option<DispatchInstant>,
     /// Observed waiting after arrival but before horizon for an unfinished pickup.
@@ -99,7 +102,7 @@ pub struct OrderOutcome {
 pub struct RiderMetrics {
     /// Rider identity.
     pub rider: RiderId,
-    /// Operational availability throughout the configured window.
+    /// Measurement-window eligibility; schema 4 includes every configured rider.
     pub available: bool,
     /// Assignment-to-delivery responsibility intervals, clipped at the horizon.
     pub busy_seconds: Seconds,
@@ -118,15 +121,18 @@ pub struct SimulationSummary {
     pub created_orders: usize,
     /// Requests scheduled beyond the horizon.
     pub uncreated_orders: usize,
-    /// Requests assigned at least once; this phase permits one responsibility.
+    /// Requests assigned at least once; reassignment does not increment this count.
     pub assigned_orders: usize,
     /// Completed dropoffs.
     pub delivered_orders: usize,
+    /// Terminal cancellations, never delivered orders.
+    #[serde(skip_serializing_if = "is_zero")]
+    pub cancelled_orders: usize,
     /// Created requests without an assignment at the horizon.
     pub unassigned_orders: usize,
-    /// Assigned requests not delivered by the horizon.
+    /// Assigned requests neither delivered nor cancelled by the horizon.
     pub assigned_unfinished_orders: usize,
-    /// All created requests not delivered, including never-assigned work.
+    /// All created requests neither delivered nor cancelled, including never-assigned work.
     pub outstanding_orders: usize,
     /// Delivered requests whose observed completed dropoff missed the deadline.
     pub late_deliveries: usize,
@@ -166,6 +172,9 @@ pub struct SimulationResult {
     pub graph_edges: usize,
     /// Policy used for all assignments.
     pub dispatch: DispatchPolicy,
+    /// Schema 4 uses responsibility exposure over the entire configured fleet window.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utilization_basis: Option<String>,
     /// Configured measurement start.
     pub started_at: DispatchInstant,
     /// Inclusive configured horizon, even when the queue becomes empty earlier.
@@ -185,6 +194,9 @@ pub struct SimulationResult {
     /// Phase 18 joint proposals, isolation/coverage and all-or-nothing publication.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub fleets: Vec<SimulationFleetRecord>,
+    /// Phase 19 recovery evidence, including unavailable input and publication result.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub recoveries: Vec<SimulationRecoveryRecord>,
     /// Realized outcomes against admission terms, distinct from predicted feasibility.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub realized_protections: Vec<RealizedProtectionOutcome>,
@@ -250,9 +262,25 @@ pub(crate) fn summarize(
         uncreated_orders: orders.len() - created,
         assigned_orders: assigned,
         delivered_orders: delivered,
-        unassigned_orders: created - assigned,
-        assigned_unfinished_orders: assigned - delivered,
-        outstanding_orders: created - delivered,
+        cancelled_orders: orders.iter().filter(|o| o.cancelled_at.is_some()).count(),
+        unassigned_orders: orders
+            .iter()
+            .filter(|o| {
+                o.created_at.is_some() && o.assigned_at.is_none() && o.cancelled_at.is_none()
+            })
+            .count(),
+        assigned_unfinished_orders: orders
+            .iter()
+            .filter(|o| {
+                o.assigned_at.is_some() && o.delivered_at.is_none() && o.cancelled_at.is_none()
+            })
+            .count(),
+        outstanding_orders: orders
+            .iter()
+            .filter(|o| {
+                o.created_at.is_some() && o.delivered_at.is_none() && o.cancelled_at.is_none()
+            })
+            .count(),
         late_deliveries: orders
             .iter()
             .filter(|o| o.delivered_at.zip(o.deadline).is_some_and(|(at, d)| at > d))
@@ -262,6 +290,7 @@ pub(crate) fn summarize(
             .filter(|o| {
                 o.created_at.is_some()
                     && o.delivered_at.is_none()
+                    && o.cancelled_at.is_none()
                     && o.deadline.is_some_and(|d| end > d)
             })
             .count(),
@@ -383,5 +412,24 @@ pub struct SimulationFleetRecord {
     /// Whether all replacements were published together.
     pub committed: bool,
     /// Authoritative world version after the attempt.
+    pub world_version_after: roadrunner_dispatch::WorldVersion,
+}
+
+// Serde skip_serializing_if requires a borrowed field callback.
+#[allow(clippy::trivially_copy_pass_by_ref)]
+fn is_zero(value: &usize) -> bool {
+    *value == 0
+}
+
+/// Semantic recovery artifact; timing measurements belong outside this record.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct SimulationRecoveryRecord {
+    /// Fully evaluated decision when predictions are available.
+    pub decision: Option<roadrunner_dispatch::RecoveryDecision>,
+    /// Typed input failure without a provisional commitment.
+    pub failure: Option<String>,
+    /// Atomic publication succeeded.
+    pub committed: bool,
+    /// World version after publication or refusal.
     pub world_version_after: roadrunner_dispatch::WorldVersion,
 }

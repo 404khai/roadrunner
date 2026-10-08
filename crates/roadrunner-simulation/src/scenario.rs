@@ -6,10 +6,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimulationScenario {
-    /// Stable scenario/version identity, required for schema 2/3 pooled policies.
+    /// Stable scenario/version identity, required for schema 2/3/4 pooled policies.
     #[serde(default)]
     pub scenario_id: Option<String>,
-    /// 1 for legacy; 2 for one-order insertion; 3 for joint fleet batch search.
+    /// 1 legacy; 2 insertion; 3 fleet batches; 4 dynamic committed recovery.
     pub schema_version: u32,
     /// Explicit seed for the versioned readiness generator, even for fixed scenarios.
     pub seed: u64,
@@ -34,12 +34,26 @@ pub struct SimulationScenario {
     /// Each update replaces the complete overlay, without changing in-flight legs.
     #[serde(default)]
     pub traffic_changes: Vec<TrafficChange>,
+    /// Schema 4 logical-time recovery triggers, ordered by input index at equal times.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub dynamic_events: Vec<DynamicEvent>,
 }
 
 /// Dispatch choice for an independent deterministic run.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum DispatchPolicy {
+    /// Phase 19 committed recovery followed by Phase 18 admission (schema 4).
+    Dynamic {
+        /// Deterministic complete candidate submission budget per decision.
+        work_budget: u64,
+        /// Explicit forecast freshness duration.
+        forecast_validity_seconds: Seconds,
+        /// Admission algorithm; recovery uses its separately named neighborhood.
+        algorithm: roadrunner_dispatch::FleetAlgorithm,
+        /// Versioned explicit churn policy.
+        recovery: roadrunner_dispatch::RecoveryPolicy,
+    },
     /// Phase 18 joint batch allocation/resequencing (requires scenario schema 3).
     FleetBatch {
         /// Complete fleet submissions permitted per decision.
@@ -81,7 +95,7 @@ pub struct RiderInput {
     pub node: u32,
     /// Normalized reference-parcel slots.
     pub capacity: u64,
-    /// Initial operational availability; fixed throughout this phase's run.
+    /// Initial new-work availability; schema 4 supports explicit updates.
     pub available: bool,
 }
 
@@ -167,6 +181,47 @@ impl ReadinessRng {
         let exact = (value >> 11) as f64;
         exact / 9_007_199_254_740_992.0
     }
+}
+
+/// Explicit externally supplied logical-time dynamic input.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DynamicEvent {
+    /// Event receipt time, never host time.
+    pub at_seconds: Seconds,
+    /// Domain change or execution observation.
+    pub change: DynamicChange,
+}
+/// Supported recovery inputs; unsupported cancellation/delay is recorded as refusal.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum DynamicChange {
+    /// New-work availability, not physical immobilization.
+    Availability {
+        /// Rider identity.
+        rider: u64,
+        /// Eligibility for new assignments.
+        available: bool,
+    },
+    /// Replace readiness estimate; never overwrite an actual observation.
+    Forecast {
+        /// Order identity.
+        order: u64,
+        /// New forecast ready instant.
+        expected_at_seconds: Seconds,
+    },
+    /// Cancel only unstarted awaiting-pickup work.
+    Cancel {
+        /// Order identity.
+        order: u64,
+    },
+    /// Observed delay of a currently departed road leg; retain its path/destination.
+    RoadDelay {
+        /// Rider identity.
+        rider: u64,
+        /// Observed additional duration on the pinned leg.
+        additional_seconds: Seconds,
+    },
 }
 
 #[cfg(test)]

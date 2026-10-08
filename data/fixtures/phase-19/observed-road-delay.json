@@ -1,0 +1,100 @@
+{
+  "graph": {
+    "kind": "inline",
+    "profile": "motorcycle-pooling/v1",
+    "nodes": [
+      {
+        "id": 0,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 0
+        }
+      },
+      {
+        "id": 1,
+        "coordinate": {
+          "latitude_e7": 0,
+          "longitude_e7": 10000
+        }
+      }
+    ],
+    "roads": [
+      {
+        "id": 0,
+        "from": 0,
+        "to": 1,
+        "speed_kph": 40,
+        "bidirectional": true
+      }
+    ]
+  },
+  "scenario": {
+    "schema_version": 4,
+    "seed": 17,
+    "start_seconds": 0,
+    "end_seconds": 200,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "dynamic",
+      "work_budget": 100000,
+      "forecast_validity_seconds": 1000,
+      "algorithm": "MultiStartLocal",
+      "recovery": {
+        "version": 1,
+        "reroute_penalty": 1,
+        "assignment_stability_penalty": 2,
+        "minimum_improvement": 1,
+        "cooldown": 10
+      }
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 1,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 2,
+        "node": 0,
+        "capacity": 2,
+        "available": false
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 1,
+        "created_at_seconds": 0,
+        "expected_ready_at_seconds": 0,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 0
+        },
+        "deadline_seconds": null,
+        "demand": 1,
+        "admission": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": 0,
+          "pickup_service": 2,
+          "dropoff_service": 3,
+          "readiness": "ValidForecastV1"
+        }
+      }
+    ],
+    "scenario_id": "phase19/observed-road-delay/v1",
+    "dynamic_events": [
+      {
+        "at_seconds": 1,
+        "change": {
+          "kind": "road_delay",
+          "rider": 1,
+          "additional_seconds": 20
+        }
+      }
+    ]
+  }
+}

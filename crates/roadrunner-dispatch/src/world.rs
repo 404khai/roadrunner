@@ -149,6 +149,11 @@ pub fn validate_world(data: &WorldData) -> Result<(), DispatchEvaluationError> {
         }
         match data.fulfillment[id] {
             FulfillmentState::AwaitingPickup => {}
+            FulfillmentState::Cancelled { at } => {
+                if at < order.created_at || data.assignments.contains_key(id) {
+                    return Err(invalid());
+                }
+            }
             FulfillmentState::PickedUp { rider, at } => {
                 if at < order.created_at
                     || data.assignments.get(id).is_none_or(|a| a.rider != rider)

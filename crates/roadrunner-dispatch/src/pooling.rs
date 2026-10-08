@@ -814,6 +814,48 @@ pub fn evaluate_batch_plan(
     plan: &RiderPlan,
     new_orders: &[OrderId],
 ) -> Result<Result<WholePlanEvaluation, InsertionRejection>, PoolingError> {
+    let provisional = match provisional_plan(snapshot, rider, plan, new_orders)? {
+        Ok(data) => data,
+        Err(reason) => return Ok(Err(reason)),
+    };
+    evaluate_provisional_plan(snapshot, inputs, rider, plan, &provisional)
+}
+
+/// Evaluate a recovery plan against provisional owners while retaining authentic
+/// protections and validating execution projections against the original world.
+///
+/// # Errors
+/// Invalid ownership/projection inputs fail; capacity is a physical rejection.
+pub fn evaluate_recovery_plan(
+    snapshot: &DispatchSnapshot<'_>,
+    inputs: &PoolingInputs,
+    rider: RiderId,
+    plan: &RiderPlan,
+    assignments: &BTreeMap<OrderId, CommittedAssignment>,
+) -> Result<Result<WholePlanEvaluation, InsertionRejection>, PoolingError> {
+    if !assignments
+        .keys()
+        .eq(snapshot.world.data().assignments.keys())
+    {
+        return Err(DispatchEvaluationError::InvalidRequest.into());
+    }
+    let mut provisional = snapshot.world.data().clone();
+    provisional.assignments = assignments.clone();
+    match validate_plan(&provisional, rider, plan) {
+        Ok(()) => {}
+        Err(PlanValidityError::CapacityExceeded) => return Ok(Err(InsertionRejection::Capacity)),
+        Err(_) => return Err(DispatchEvaluationError::InvalidWorldState.into()),
+    }
+    evaluate_provisional_plan(snapshot, inputs, rider, plan, &provisional)
+}
+
+fn evaluate_provisional_plan(
+    snapshot: &DispatchSnapshot<'_>,
+    inputs: &PoolingInputs,
+    rider: RiderId,
+    plan: &RiderPlan,
+    provisional: &WorldData,
+) -> Result<Result<WholePlanEvaluation, InsertionRejection>, PoolingError> {
     let p = inputs
         .projections
         .get(&rider)
@@ -821,10 +863,6 @@ pub fn evaluate_batch_plan(
     validate_projection(snapshot, rider, p)?;
     validate_plan_inputs(snapshot, inputs, plan)?;
     validate_frozen(snapshot, inputs, p)?;
-    let provisional = match provisional_plan(snapshot, rider, plan, new_orders)? {
-        Ok(data) => data,
-        Err(reason) => return Ok(Err(reason)),
-    };
     let mut editable = plan.stops.as_slice();
     let mut completions = BTreeMap::new();
     if let Some(f) = &p.frozen {
@@ -860,7 +898,7 @@ pub fn evaluate_batch_plan(
         let arrival = at.checked_add(road)?;
         let (waiting, service, source) = match stop {
             Stop::Pickup(_) => {
-                let (ready, source) = effective_readiness(&provisional, inputs, o, snapshot.at)?;
+                let (ready, source) = effective_readiness(provisional, inputs, o, snapshot.at)?;
                 (
                     if ready > arrival {
                         ready.duration_since(arrival)?

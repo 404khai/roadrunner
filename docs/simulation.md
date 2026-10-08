@@ -201,3 +201,20 @@ baseline-breach isolation differ from Phase 17 complete-input insertion. See
 [fleet optimization](fleet-optimization.md) for API, objective, neighborhood, coverage,
 execution, oracle and measurement contracts, and [completion](phase-18-completion.md)
 for verified results. Phase 19 recovery remains deferred.
+
+## Phase 19 committed recovery extension
+
+Dispatch's separate `recovery.rs` owns deterministic recovery neighborhoods,
+whole-fleet feasibility, explicit churn policy, evidence and atomic replacement
+of existing responsibility/plans. Authentic acceptance terms remain immutable;
+custody and active frozen stops cannot change owner. Simulation schema 4 supplies
+logical-time events/projections, supersedes a delayed leg's old arrival generation,
+and selects the next current-plan stop after recovery. Core remains unchanged.
+
+Recovery and admission are two explicitly separate transactions. Required unknown
+health blocks recovery, while accepted execution continues. Availability means
+eligibility for new work, not immobilization. Schema 4 utilization uses each
+configured rider's whole-window responsibility exposure, including overlapping
+multi-order work once per rider; schemas 1–3 retain historical denominators.
+See [API/search contracts](dynamic-redispatch.md), [fixtures](../data/fixtures/phase-19/README.md)
+and [completion report](phase-19-completion.md).

@@ -1,0 +1,1250 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-08",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "purpose": "Tiny synthetic committed recovery and process measurements; no global optimum or scalability claim",
+  "compiler": "rustc 1.99.0 (b940084d7 2026-09-28)",
+  "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
+  "binary_sha256": "77b47fb143d66a21873c7a30f3155ae9a7896de05d8bae6ceaef14d9b58b97c7",
+  "source_commit": "c45dacf2d571946cfa8462226d4a23046e7e9eab",
+  "source_diff_sha256": "e613ce2016ba940a3f83c7922b224402dcfdbf97d7f4fd8b2df6527505d4e1a5",
+  "warmups_per_configuration": 1,
+  "measured_runs_per_configuration": 11,
+  "measurement": "process launch + graph loading/validation + simulation + JSON capture",
+  "percentiles": "linear interpolation",
+  "concurrent_workspace_validation": false,
+  "memory": "unmeasured",
+  "oracle": {
+    "single_order_seeds": 32,
+    "matched": 32
+  },
+  "oracle_test_sha256": "15be52d8bf100a656ffb66db1e4bded22be89e6fa6e0e27a52ec77d3ede38804",
+  "datasets": [
+    {
+      "path": "data/fixtures/phase-19/budget-exhaustion.json",
+      "sha256": "c6b66b79b3496755714aba3589b9fe4a2da6c2f2921c4c609839995a58ad7da1",
+      "scenario_id": "phase19/budget-exhaustion/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 7,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 4,
+      "orders": 2,
+      "work": {
+        "attempts": 7,
+        "commits": 0,
+        "work": 23,
+        "feasible": 11,
+        "precedence_exclusions": 12,
+        "terminations": [
+          "LocalMinimum",
+          "SearchIncomplete",
+          "SearchIncomplete",
+          "SearchIncomplete",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.056259446526272454,
+        "mean_rider_idle_seconds": 188.7481106947455
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/budget-exhaustion.json",
+      "semantic_sha256": "1fcebe05207d9d20e70b9adbfddac84c74dbc1c2a6a05492d9af252fe9ae72b8",
+      "timing": {
+        "raw_ns": [
+          8145459,
+          5763250,
+          5349542,
+          4067750,
+          4297542,
+          4457042,
+          3865833,
+          3915542,
+          3854208,
+          3791167,
+          3471250
+        ],
+        "median_ns": 4067750,
+        "p95_ns": 6954354.5,
+        "p99_ns": 7907238.1000000015
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/cancellation.json",
+      "sha256": "8f741ff77fb515c8f77607ccf4840005348de59bf7795b1ee6b789286ec9e7f6",
+      "scenario_id": "phase19/cancellation/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 5,
+        "commits": 0,
+        "work": 0,
+        "feasible": 0,
+        "precedence_exclusions": 0,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 1,
+        "cancelled_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.10001889305254491,
+        "mean_rider_idle_seconds": 179.996221389491
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/cancellation.json",
+      "semantic_sha256": "a25ff23f3f3e1cb0ef1e638193130eafe0d45dcb5c8029751115b693dd49e7a2",
+      "timing": {
+        "raw_ns": [
+          2933875,
+          3037084,
+          2857416,
+          2798541,
+          2644500,
+          2799916,
+          2586875,
+          2743708,
+          2563625,
+          2696250,
+          2797583
+        ],
+        "median_ns": 2797583,
+        "p95_ns": 2985479.5,
+        "p99_ns": 3026763.1
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/churn-suppression.json",
+      "sha256": "73644ef07aa6ff072817cb88aac1a1c77c4ded2cee323da5b8048e9c50ec3a2f",
+      "scenario_id": "phase19/churn-suppression/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 100,
+          "assignment_stability_penalty": 100,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 3,
+      "directed_edges": 4,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 7,
+        "commits": 0,
+        "work": 19,
+        "feasible": 19,
+        "precedence_exclusions": 11,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 57.518893052544904,
+          "median_seconds": 57.518893052544904,
+          "p95_seconds": 75.03022888407185,
+          "p99_seconds": 75.03022888407185
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 57.518893052544904,
+          "median_seconds": 57.518893052544904,
+          "p95_seconds": 75.03022888407185,
+          "p99_seconds": 75.03022888407185
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 555.9754011676646,
+        "rider_utilization": 0.18757557221017962,
+        "mean_rider_idle_seconds": 162.48488555796408
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/churn-suppression.json",
+      "semantic_sha256": "9192896279518a8181d724022b0d53927877e61e9915707476c4610556b9b0fa",
+      "timing": {
+        "raw_ns": [
+          2869125,
+          3087416,
+          2904917,
+          2821208,
+          2728916,
+          2710375,
+          2732167,
+          2798416,
+          2674334,
+          2508916,
+          2669334
+        ],
+        "median_ns": 2732167,
+        "p95_ns": 2996166.5,
+        "p99_ns": 3069166.1
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/forecast-update.json",
+      "sha256": "e6db0b5949ae0ef425b064c37bfcf10ebd2199f122070954b2479cdc1fb13d2d",
+      "scenario_id": "phase19/forecast-update/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 7,
+        "commits": 0,
+        "work": 20,
+        "feasible": 20,
+        "precedence_exclusions": 6,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.11251889305254491,
+        "mean_rider_idle_seconds": 177.496221389491
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/forecast-update.json",
+      "semantic_sha256": "c2de14403d10d4bae877e474ef06fc7ee8c66bd01b9cb4a842814489c55a081d",
+      "timing": {
+        "raw_ns": [
+          2838125,
+          2906167,
+          2944875,
+          2942917,
+          2776458,
+          2853250,
+          2777250,
+          2859125,
+          2834042,
+          2774167,
+          2930541
+        ],
+        "median_ns": 2853250,
+        "p95_ns": 2943896.0,
+        "p99_ns": 2944679.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/frozen-service.json",
+      "sha256": "4f86e7bb6e8d91402dbeaec4cb113a373090a68e6cb34d9fc069fc17cd9599f2",
+      "scenario_id": "phase19/frozen-service/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 7,
+        "commits": 1,
+        "work": 11,
+        "feasible": 7,
+        "precedence_exclusions": 6,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "Cooldown",
+          "Cooldown",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 40.50755722101796,
+          "median_seconds": 40.50755722101796,
+          "p95_seconds": 41.00755722101796,
+          "p99_seconds": 41.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 333.5852407005988,
+        "rider_utilization": 0.13753778610508982,
+        "mean_rider_idle_seconds": 172.49244277898202
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/frozen-service.json",
+      "semantic_sha256": "3ccf242c0572432aa98fdd10be6afb2d5df34d2c21ab69d83778ee104fae622b",
+      "timing": {
+        "raw_ns": [
+          2908833,
+          3007459,
+          2701458,
+          2641750,
+          2777000,
+          2760750,
+          2757667,
+          2811667,
+          2796416,
+          2735708,
+          2571000
+        ],
+        "median_ns": 2760750,
+        "p95_ns": 2958146.0,
+        "p99_ns": 2997596.4
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/frozen-wait.json",
+      "sha256": "cea7c19272ca9998730f5e088533b10a481e8ab95094dc0e1f9b8a4efc1b58fe",
+      "scenario_id": "phase19/frozen-wait/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 5,
+        "commits": 1,
+        "work": 5,
+        "feasible": 1,
+        "precedence_exclusions": 4,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 14.496221389491017,
+          "median_seconds": 14.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 333.5852407005988,
+        "rider_utilization": 0.16253778610508982,
+        "mean_rider_idle_seconds": 167.49244277898202
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/frozen-wait.json",
+      "semantic_sha256": "1eae387482c5f2ba3c95cef779543effa1bda970fc9c782beab54447f34d83bb",
+      "timing": {
+        "raw_ns": [
+          2654666,
+          2666000,
+          2596375,
+          2641459,
+          2695750,
+          2484916,
+          2440416,
+          2417084,
+          2692792,
+          2438125,
+          2666542
+        ],
+        "median_ns": 2641459,
+        "p95_ns": 2694271.0,
+        "p99_ns": 2695454.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/hard-deadline-breach.json",
+      "sha256": "cf368f81f7f6cda421eabbce707020b3e441cfc516cf0bfffafb896bc6634dc2",
+      "scenario_id": "phase19/hard-deadline-breach/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 1,
+      "work": {
+        "attempts": 4,
+        "commits": 0,
+        "work": 0,
+        "feasible": 0,
+        "precedence_exclusions": 0,
+        "terminations": [
+          "LocalMinimum",
+          "NoRecovery",
+          "NoRecovery",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 1,
+        "created_orders": 1,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 25.01511444203593,
+          "median_seconds": 25.01511444203593,
+          "p95_seconds": 25.01511444203593,
+          "p99_seconds": 25.01511444203593
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 45.01511444203592,
+          "median_seconds": 45.01511444203592,
+          "p95_seconds": 45.01511444203592,
+          "p99_seconds": 45.01511444203592
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 1.9999999999999964,
+          "median_seconds": 1.9999999999999964,
+          "p95_seconds": 1.9999999999999964,
+          "p99_seconds": 1.9999999999999964
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.11253778610508981,
+        "mean_rider_idle_seconds": 177.49244277898202
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/hard-deadline-breach.json",
+      "semantic_sha256": "fde10bdeb2e006b33c40f0a4eb9ef3ad533964c6e9200c720bb3212a80f5ecc9",
+      "timing": {
+        "raw_ns": [
+          2260917,
+          2425875,
+          2253958,
+          2495333,
+          2445000,
+          2336125,
+          2363666,
+          2182166,
+          2280458,
+          2132000,
+          2314709
+        ],
+        "median_ns": 2314709,
+        "p95_ns": 2470166.5,
+        "p99_ns": 2490299.7
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/no-recovery.json",
+      "sha256": "9e9a305f8f41f23a23b2d012ec345720c12f3cf75d225e3f43a37bfb402d79f0",
+      "scenario_id": "phase19/no-recovery/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 7,
+        "commits": 0,
+        "work": 14,
+        "feasible": 2,
+        "precedence_exclusions": 6,
+        "terminations": [
+          "LocalMinimum",
+          "NoRecovery",
+          "NoRecovery",
+          "NoRecovery",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.11251889305254491,
+        "mean_rider_idle_seconds": 177.496221389491
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/no-recovery.json",
+      "semantic_sha256": "bec52b46adca198c88777dcb4d09de9484bfb0910a6015b2f7284558f875821a",
+      "timing": {
+        "raw_ns": [
+          2666708,
+          2778666,
+          2717875,
+          2733916,
+          2490250,
+          2687708,
+          2683375,
+          2592583,
+          2740375,
+          2545042,
+          2745375
+        ],
+        "median_ns": 2687708,
+        "p95_ns": 2762020.5,
+        "p99_ns": 2775336.9
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/observed-road-delay.json",
+      "sha256": "b9148058553d2b5336a75aed6ff70d8e71945705d62f7617a3093da4c92b9dfb",
+      "scenario_id": "phase19/observed-road-delay/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 1,
+      "work": {
+        "attempts": 4,
+        "commits": 0,
+        "work": 0,
+        "feasible": 0,
+        "precedence_exclusions": 0,
+        "terminations": [
+          "LocalMinimum",
+          "NoRecovery",
+          "NoRecovery",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 1,
+        "created_orders": 1,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 25.01511444203593,
+          "median_seconds": 25.01511444203593,
+          "p95_seconds": 25.01511444203593,
+          "p99_seconds": 25.01511444203593
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 45.01511444203592,
+          "median_seconds": 45.01511444203592,
+          "p95_seconds": 45.01511444203592,
+          "p99_seconds": 45.01511444203592
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 1.9999999999999964,
+          "median_seconds": 1.9999999999999964,
+          "p95_seconds": 1.9999999999999964,
+          "p99_seconds": 1.9999999999999964
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.11253778610508981,
+        "mean_rider_idle_seconds": 177.49244277898202
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/observed-road-delay.json",
+      "semantic_sha256": "9e2eee1b552a89965d5ecdb964b42ca86514bb4fea16ed36bff56e52372be39e",
+      "timing": {
+        "raw_ns": [
+          2454000,
+          2384125,
+          2311709,
+          2406583,
+          2170292,
+          2230417,
+          2331500,
+          2339834,
+          2318209,
+          2323792,
+          2320917
+        ],
+        "median_ns": 2323792,
+        "p95_ns": 2430291.5,
+        "p99_ns": 2449258.3
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/offline-recovery.json",
+      "sha256": "c42b8d60e88228fecd18fcf3de0da13b94c5ad3f9e0bb14e791fd5da7ead1f78",
+      "scenario_id": "phase19/offline-recovery/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 5,
+        "commits": 1,
+        "work": 5,
+        "feasible": 1,
+        "precedence_exclusions": 4,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 21.49622138949102,
+          "median_seconds": 21.49622138949102,
+          "p95_seconds": 26.0,
+          "p99_seconds": 26.0
+        },
+        "completed_distance_meters": 333.5852407005988,
+        "rider_utilization": 0.19753778610508982,
+        "mean_rider_idle_seconds": 160.49244277898202
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/offline-recovery.json",
+      "semantic_sha256": "d89a5a9f9cb06985f240471bc30ad8d215bea6c47e61138be8e74764c6e56eb6",
+      "timing": {
+        "raw_ns": [
+          2680542,
+          2776292,
+          2640667,
+          2569875,
+          2458750,
+          2615583,
+          2395292,
+          2457583,
+          2626750,
+          2613500,
+          2610292
+        ],
+        "median_ns": 2613500,
+        "p95_ns": 2728417.0,
+        "p99_ns": 2766717.0
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/optional-recovery.json",
+      "sha256": "e26b4dd66bf345656d47410e16f811562099410f524cc31929ddab0c8d6f129a",
+      "scenario_id": "phase19/optional-recovery/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 3,
+      "directed_edges": 4,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 6,
+        "commits": 1,
+        "work": 9,
+        "feasible": 9,
+        "precedence_exclusions": 5,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 57.518893052544904,
+          "median_seconds": 57.518893052544904,
+          "p95_seconds": 75.03022888407185,
+          "p99_seconds": 75.03022888407185
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 35.00377861050898,
+          "median_seconds": 35.00377861050898,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 21.49622138949102,
+          "median_seconds": 21.49622138949102,
+          "p95_seconds": 26.0,
+          "p99_seconds": 26.0
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.1725188930525449,
+        "mean_rider_idle_seconds": 165.496221389491
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/optional-recovery.json",
+      "semantic_sha256": "ea9881c639567e7ea44dd9f139f4347b9b06ee6ee62735b5b1067b04f5bafc5a",
+      "timing": {
+        "raw_ns": [
+          3472667,
+          3098167,
+          2845708,
+          2755791,
+          2800250,
+          2779708,
+          2849250,
+          2657750,
+          2689375,
+          2685000,
+          2664416
+        ],
+        "median_ns": 2779708,
+        "p95_ns": 3285417.0,
+        "p99_ns": 3435217.0
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/traffic-change.json",
+      "sha256": "13053d9c6eaf96ee3b0c7db421be04b7d1fa8c74e107af8c6ce602f4441f9709",
+      "scenario_id": "phase19/traffic-change/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 7,
+        "commits": 0,
+        "work": 20,
+        "feasible": 20,
+        "precedence_exclusions": 6,
+        "terminations": [
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 63.5226716630539,
+          "median_seconds": 63.5226716630539,
+          "p95_seconds": 65.0226716630539,
+          "p99_seconds": 65.0226716630539
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.16255667915763475,
+        "mean_rider_idle_seconds": 167.48866416847306
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/traffic-change.json",
+      "semantic_sha256": "5f85e034a41fbb9be1d3b9782c232f1b90a12d3f6312fb33c5c5a72bb97cd7c2",
+      "timing": {
+        "raw_ns": [
+          2634833,
+          2559417,
+          2776167,
+          2794916,
+          2762750,
+          2580958,
+          2799000,
+          2725166,
+          2714500,
+          2715083,
+          2712375
+        ],
+        "median_ns": 2715083,
+        "p95_ns": 2796958.0,
+        "p99_ns": 2798591.6
+      }
+    },
+    {
+      "path": "data/fixtures/phase-19/unavailable-readiness.json",
+      "sha256": "6351e5cab3641cf8731e7307316c5e471bd7e4bd085bb944aa2f735e9ee9d89d",
+      "scenario_id": "phase19/unavailable-readiness/v1",
+      "configuration": {
+        "kind": "dynamic",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal",
+        "recovery": {
+          "version": 1,
+          "reroute_penalty": 1,
+          "assignment_stability_penalty": 2,
+          "minimum_improvement": 1,
+          "cooldown": 10
+        }
+      },
+      "graph_digest": "4124d17e487195c3386ee9b452231096bf6711fe849cc13501c6261afd671373",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 2,
+      "orders": 1,
+      "work": {
+        "attempts": 5,
+        "commits": 0,
+        "work": 0,
+        "feasible": 0,
+        "precedence_exclusions": 0,
+        "terminations": [
+          "LocalMinimum",
+          "PredictionUnavailable(OrderId(1))",
+          "LocalMinimum",
+          "LocalMinimum",
+          "LocalMinimum"
+        ]
+      },
+      "summary": {
+        "scheduled_orders": 1,
+        "created_orders": 1,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 75.00755722101796,
+          "median_seconds": 75.00755722101796,
+          "p95_seconds": 75.00755722101796,
+          "p99_seconds": 75.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 51.99244277898204,
+          "median_seconds": 51.99244277898204,
+          "p95_seconds": 51.99244277898204,
+          "p99_seconds": 51.99244277898204
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.1875188930525449,
+        "mean_rider_idle_seconds": 162.496221389491
+      },
+      "semantic_artifact": "benchmarks/results/phase-19-replays/unavailable-readiness.json",
+      "semantic_sha256": "580de4ced934285340007a209f3ef551a8eb26f688f2ed082a92aa29992200da",
+      "timing": {
+        "raw_ns": [
+          2338792,
+          2431083,
+          2564000,
+          2204125,
+          2199083,
+          2324291,
+          2270542,
+          2421083,
+          2414709,
+          2151333,
+          2372542
+        ],
+        "median_ns": 2338792,
+        "p95_ns": 2497541.5,
+        "p99_ns": 2550708.3
+      }
+    }
+  ]
+}

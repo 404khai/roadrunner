@@ -30,6 +30,24 @@ pub struct ExecutedLeg {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum SimulationEvent {
+    /// Committed-work recovery result, including keep/incomplete/failure.
+    RecoveryPlanned {
+        /// Semantic logical-time trigger.
+        trigger: String,
+        /// Atomic publication result.
+        committed: bool,
+        /// Typed failure or termination text.
+        result: String,
+    },
+    /// External dynamic change and explicit application/refusal outcome.
+    DynamicChanged {
+        /// Exact configured input.
+        change: crate::DynamicChange,
+        /// No implicit cancellation or execution abandonment.
+        applied: bool,
+        /// Human-readable typed refusal/application reason.
+        reason: String,
+    },
     /// One fleet decision may admit many requests through one atomic publication.
     FleetPlanned {
         /// Canonical original batch, including isolated requests.

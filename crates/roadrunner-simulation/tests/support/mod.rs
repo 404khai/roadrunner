@@ -87,6 +87,7 @@ pub fn scenario() -> SimulationScenario {
         }],
         orders: vec![order(1, 0.0, 25.0)],
         initial_traffic: vec![],
+        dynamic_events: Vec::new(),
         traffic_changes: vec![],
     }
 }

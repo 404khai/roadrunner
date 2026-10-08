@@ -10,7 +10,7 @@ traffic changes the route, and whether another delivery fits an existing rider p
 
 ## Current capabilities
 
-Implemented through **Phase 18 — Fleet Batch Optimization**:
+Implemented through **Phase 19 — Dynamic Re-dispatch**:
 
 - Deterministic graph construction, geographic units, Haversine distance, validated
   graph artifacts, and provenance-addressed OSM ingestion.
@@ -24,11 +24,13 @@ Implemented through **Phase 18 — Fleet Batch Optimization**:
   frozen execution preservation, and atomic publication.
 - Joint fleet batch allocation, editable suffix resequencing, fixed committed owners,
   deterministic greedy/multi-start/local search, and all-or-nothing fleet publication.
+- Explicit dynamic recovery of unstarted committed orders, immutable custody/frozen
+  execution, churn penalties/cooldown, pre-pickup cancellation and observed road delays.
 - Seeded discrete-event delivery simulation, deterministic replay, CLI workflows,
   correctness oracles, and reproducible benchmark artifacts.
 
-[Phase 17 completion](docs/phase-17-completion.md) and [Phase 18 completion](docs/phase-18-completion.md)
-record implementation gates. Phase 19 recovery remains deferred. HTTP serving, databases,
+[Phase 17 completion](docs/phase-17-completion.md), [Phase 18 completion](docs/phase-18-completion.md)
+and [Phase 19 completion](docs/phase-19-completion.md) record implementation gates. HTTP serving, databases,
 Redis/Kafka, live traffic, machine learning, and a map UI are future phases. The current
 workspace runs locally without those services; there is no `serve` or `demo` command.
 
@@ -317,3 +319,19 @@ optimization, and record reproducible evidence for quantitative claims. OpenStre
 fixture data is © OpenStreetMap contributors under ODbL 1.0; source provenance lives with
 the fixtures. Cargo packages currently set `publish = false`; no project-wide license
 file is present in this checkout.
+
+## Dynamic recovery (Phase 19)
+
+```bash
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-19/offline-recovery.json
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-19/cancellation.json --json
+cargo +1.99.0 test -p roadrunner-dispatch --test recovery --locked -- --nocapture > target/phase19-oracle.log
+cargo +1.99.0 build -p roadrunner-cli --release --locked
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/collect_recovery_benchmark.py --oracle-log target/phase19-oracle.log --output target/readme-results/recovery.json
+```
+
+[Recovery contracts](docs/dynamic-redispatch.md) define movable commitments,
+explicit churn policy, input failures and atomic publication. [Schema 4 fixtures](data/fixtures/phase-19/README.md)
+cover successful recovery, pinned execution, cancellation refusals, incomplete
+search and realized violations after valid admission. Custody handoffs, returns and
+physically immobilized vehicles remain outside this runtime.
