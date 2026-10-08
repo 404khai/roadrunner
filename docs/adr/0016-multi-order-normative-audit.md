@@ -1,8 +1,8 @@
 # ADR 0016: Normative multi-order admission and deferred fleet optimization
 
 Status: Accepted. Source: user-confirmed seven-round architecture audit, 2026-10-07.
-This contract supersedes earlier ADR deferrals only for Phase 17. Phase 18 requires
-explicit user confirmation after the Phase 17 completion report.
+This contract supersedes earlier ADR deferrals for Phases 17–18. Phase 18 was explicitly
+authorized after the Phase 17 completion report on 2026-10-08. Phase 19 remains deferred.
 
 ## Phase 17 flow and boundary
 
@@ -98,7 +98,7 @@ traces optional. Hardware/time/memory are external measurements, never semantic 
 Benchmarks record hardware, dataset/hash, graph/scenario size, algorithm/config, compiler/
 build, run count, raw/median/p95/p99, deterministic work and memory or unmeasured.
 
-## Phase 18 contracts retained, implementation deferred
+## Phase 18 contracts (implementation authorized 2026-10-08)
 
 Jointly allocate a current unassigned batch and resequence editable suffixes, retaining
 committed owners. Maximize newly admitted order count, then remaining fleet road seconds,
@@ -112,3 +112,6 @@ Phase 19 owns committed reassignment/recovery. No speculative optimizer framewor
 Core remains ignorant of orders/plans/custody/protection. Dispatch owns authoritative
 evaluation/domain/proposals/publication. Simulation owns time, queue, prediction and
 observations/outcomes. CLI owns loading/workflow/adapters. Tests own independent oracle.
+
+The Phase 18 implementation and qualified heuristic coverage are documented in
+[fleet optimization](../fleet-optimization.md).

@@ -200,10 +200,18 @@ impl PoolingContext {
         snapshot: &DispatchSnapshot<'_>,
         inputs: PoolingInputs,
     ) -> Result<Self, PoolingError> {
+        Self::bind(snapshot, inputs, "exhaustive-insertion/v1")
+    }
+
+    pub(crate) fn bind(
+        snapshot: &DispatchSnapshot<'_>,
+        inputs: PoolingInputs,
+        optimizer: &str,
+    ) -> Result<Self, PoolingError> {
         if inputs.identity.routing != snapshot.provenance
             || inputs.identity.prediction.is_empty()
             || inputs.identity.service.is_empty()
-            || inputs.identity.optimizer != "exhaustive-insertion/v1"
+            || inputs.identity.optimizer != optimizer
         {
             return Err(PoolingError::InvalidContext);
         }
@@ -457,7 +465,7 @@ pub(crate) fn validate_accepted(data: &WorldData) -> Result<(), PoolingError> {
     Ok(())
 }
 
-fn policy(inputs: &PoolingInputs, order: OrderId) -> Result<&OrderPolicy, PoolingError> {
+pub(crate) fn policy(inputs: &PoolingInputs, order: OrderId) -> Result<&OrderPolicy, PoolingError> {
     let p = inputs
         .policies
         .get(&order)
@@ -748,21 +756,21 @@ fn provisional_plan(
     snapshot: &DispatchSnapshot<'_>,
     rider: RiderId,
     plan: &RiderPlan,
-    new_order: Option<OrderId>,
+    new_orders: &[OrderId],
 ) -> Result<Result<WorldData, InsertionRejection>, PoolingError> {
-    if let Some(order) = new_order {
-        if snapshot.world.data().assignments.contains_key(&order)
-            || snapshot.world.data().fulfillment.get(&order)
+    for order in new_orders {
+        if snapshot.world.data().assignments.contains_key(order)
+            || snapshot.world.data().fulfillment.get(order)
                 != Some(&FulfillmentState::AwaitingPickup)
         {
             return Err(DispatchEvaluationError::InvalidRequest.into());
         }
     }
     let mut provisional = snapshot.world.data().clone();
-    if let Some(o) = new_order {
+    for o in new_orders {
         provisional
             .assignments
-            .insert(o, CommittedAssignment { order: o, rider });
+            .insert(*o, CommittedAssignment { order: *o, rider });
     }
     match validate_plan(&provisional, rider, plan) {
         Ok(()) => {}
@@ -785,6 +793,27 @@ pub fn evaluate_whole_plan(
     plan: &RiderPlan,
     new_order: Option<OrderId>,
 ) -> Result<Result<WholePlanEvaluation, InsertionRejection>, PoolingError> {
+    evaluate_batch_plan(
+        snapshot,
+        inputs,
+        rider,
+        plan,
+        &new_order.into_iter().collect::<Vec<_>>(),
+    )
+}
+
+/// Shared physical evaluator for a plan containing several provisional new assignments.
+/// Existing owners and accepted references remain authoritative in the source snapshot.
+///
+/// # Errors
+/// Same structural/input errors as `evaluate_whole_plan`; infeasibility is the inner result.
+pub fn evaluate_batch_plan(
+    snapshot: &DispatchSnapshot<'_>,
+    inputs: &PoolingInputs,
+    rider: RiderId,
+    plan: &RiderPlan,
+    new_orders: &[OrderId],
+) -> Result<Result<WholePlanEvaluation, InsertionRejection>, PoolingError> {
     let p = inputs
         .projections
         .get(&rider)
@@ -792,7 +821,7 @@ pub fn evaluate_whole_plan(
     validate_projection(snapshot, rider, p)?;
     validate_plan_inputs(snapshot, inputs, plan)?;
     validate_frozen(snapshot, inputs, p)?;
-    let provisional = match provisional_plan(snapshot, rider, plan, new_order)? {
+    let provisional = match provisional_plan(snapshot, rider, plan, new_orders)? {
         Ok(data) => data,
         Err(reason) => return Ok(Err(reason)),
     };
@@ -878,7 +907,7 @@ pub fn evaluate_whole_plan(
     }))
 }
 
-fn impact(
+pub(crate) fn impact(
     data: &WorldData,
     baseline: &WholePlanEvaluation,
     candidate: &WholePlanEvaluation,
