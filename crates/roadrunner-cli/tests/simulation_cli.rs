@@ -385,3 +385,54 @@ fn phase18_fleet_cli_replays_joint_publication_isolation_and_incomplete_search()
     assert!(text.contains("admitted=2"));
     assert!(text.contains("Delivered: 2"));
 }
+
+#[test]
+fn phase19_cli_replays_recovery_refusals_and_incomplete_publication() {
+    let root =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/fixtures/phase-19");
+    for entry in ok(std::fs::read_dir(&root)) {
+        let path = ok(entry).path();
+        if path.extension().is_none_or(|e| e != "json") {
+            continue;
+        }
+        let args = ["simulate", ok(path.to_str().ok_or("path")), "--json"];
+        let first = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        let replay = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+            .args(args)
+            .output());
+        assert!(
+            first.status.success(),
+            "{}: {}",
+            path.display(),
+            String::from_utf8_lossy(&first.stderr)
+        );
+        assert_eq!(first.stdout, replay.stdout);
+        let json: serde_json::Value = ok(serde_json::from_slice(&first.stdout));
+        assert_eq!(json["schema_version"], 4);
+        for record in ok(json["recoveries"].as_array().ok_or("recoveries")) {
+            if record["decision"]["termination"] == "SearchIncomplete" {
+                assert_eq!(record["committed"], false);
+                assert!(record["decision"]["proposal"].is_null());
+            }
+        }
+        if path.file_stem().is_some_and(|s| s == "offline-recovery") {
+            assert_eq!(json["summary"]["delivered_orders"], 2);
+            assert_eq!(json["orders"][1]["rider"], 2);
+        }
+        if path.file_stem().is_some_and(|s| s == "cancellation") {
+            assert_eq!(json["summary"]["cancelled_orders"], 1);
+            assert_eq!(json["summary"]["outstanding_orders"], 0);
+        }
+    }
+    let path = root.join("offline-recovery.json");
+    let output = ok(Command::new(env!("CARGO_BIN_EXE_roadrunner"))
+        .args(["simulate", ok(path.to_str().ok_or("path"))])
+        .output());
+    assert!(output.status.success());
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert!(text.contains("Recovery availability"));
+    assert!(text.contains("committed: true"));
+    assert!(text.contains("Delivered: 2"));
+}

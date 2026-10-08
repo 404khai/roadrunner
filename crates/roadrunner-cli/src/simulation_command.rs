@@ -242,6 +242,13 @@ fn print_summary(result: &roadrunner_simulation::SimulationResult) {
         }
     }
     print_fleets(result);
+    print_recoveries(result);
+    if let Some(basis) = &result.utilization_basis {
+        println!("Utilization basis: {basis}");
+    }
+    if result.summary.cancelled_orders > 0 {
+        println!("Cancelled: {}", result.summary.cancelled_orders);
+    }
     let s = &result.summary;
     println!(
         "Orders: {} (scheduled: {}, uncreated: {})\nAssigned: {}\nDelivered: {}\nUnassigned: {}\nAssigned unfinished: {}\nLate deliveries: {}\nOutstanding past deadline: {}",
@@ -274,6 +281,33 @@ fn print_summary(result: &roadrunner_simulation::SimulationResult) {
         result.ended_at.value(),
         result.seed
     );
+}
+
+fn print_recoveries(result: &roadrunner_simulation::SimulationResult) {
+    for record in &result.recoveries {
+        if let Some(d) = &record.decision {
+            println!(
+                "Recovery {}: {:?}; committed: {}; work: {}/{}; repair required: {}",
+                d.context.trigger,
+                d.termination,
+                record.committed,
+                d.evaluated,
+                d.context.pooling.inputs.work_budget,
+                d.baseline_requires_repair
+            );
+            if let Some(p) = d.proposal() {
+                println!(
+                    "  Remaining road: {:.3} s / {:.3} m; churn penalty: {:.3} s",
+                    p.travel_seconds, p.distance_meters, p.penalty_seconds
+                );
+            }
+        } else {
+            println!(
+                "Recovery failed: {}",
+                record.failure.as_deref().unwrap_or("unknown")
+            );
+        }
+    }
 }
 
 fn print_fleets(result: &roadrunner_simulation::SimulationResult) {

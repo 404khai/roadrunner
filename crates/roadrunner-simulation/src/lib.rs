@@ -15,11 +15,11 @@ pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};
 pub use metrics::{
     PredictionFailureCoverage, RealizedProtectionOutcome, SimulationFleetRecord,
-    SimulationInsertionRecord, SimulationPredictionFailure,
+    SimulationInsertionRecord, SimulationPredictionFailure, SimulationRecoveryRecord,
 };
 pub use scenario::{
-    ActualReadiness, DispatchPolicy, OrderInput, RiderInput, SimulationScenario, TrafficChange,
-    TrafficOverride,
+    ActualReadiness, DispatchPolicy, DynamicChange, DynamicEvent, OrderInput, RiderInput,
+    SimulationScenario, TrafficChange, TrafficOverride,
 };
 
 use roadrunner_core::cost::TrafficError;

@@ -86,7 +86,8 @@ impl<'a> DispatchSnapshot<'a> {
             let future_state = match data.fulfillment[id] {
                 FulfillmentState::AwaitingPickup => false,
                 FulfillmentState::PickedUp { at: t, .. }
-                | FulfillmentState::Delivered { at: t, .. } => t > at,
+                | FulfillmentState::Delivered { at: t, .. }
+                | FulfillmentState::Cancelled { at: t } => t > at,
             };
             if order.created_at > at
                 || future_state

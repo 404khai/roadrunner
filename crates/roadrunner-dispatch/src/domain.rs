@@ -70,6 +70,11 @@ pub enum FulfillmentState {
         /// Observed pickup completion.
         at: DispatchInstant,
     },
+    /// Cancelled before pickup; no responsibility or stops remain.
+    Cancelled {
+        /// Explicit cancellation instant.
+        at: DispatchInstant,
+    },
     /// Completed dropoff, with no active responsibility or remaining stops.
     Delivered {
         /// Rider that completed fulfillment.

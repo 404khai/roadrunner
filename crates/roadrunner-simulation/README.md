@@ -117,3 +117,29 @@ coverage. Run the pooled fleet example from the repository root:
 ```bash
 cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-18/greedy-trap.json --json
 ```
+
+## Phase 19 dynamic recovery
+
+Schema 4 `dynamic` runs committed recovery before a separate Phase 18 admission
+publication. Configure `RecoveryPolicy` version 1 with explicit reroute/stability
+penalties, minimum improvement and cooldown. Active execution and custody stay
+pinned; unstarted pickup/dropoff pairs may change owner without resetting terms.
+Availability, forecast, cancellation and observed road-delay inputs use logical
+timestamps; traffic, creation, actual readiness and stop completion also trigger
+recovery. Refused cancellation and incomplete recovery preserve mandatory work.
+
+```bash
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-19/offline-recovery.json
+cargo +1.99.0 run -p roadrunner-cli --locked -- simulate data/fixtures/phase-19/budget-exhaustion.json --json
+cargo +1.99.0 test -p roadrunner-dispatch --test recovery --locked -- --nocapture
+cargo +1.99.0 test -p roadrunner-simulation --test recovery --locked
+```
+
+Dispatch APIs: `RecoveryPolicy`, `RecoveryContext`, `recover_fleet`,
+`RecoveryDecision`, `RecoveryTermination`, `evaluate_recovery_plan`,
+`World::commit_recovery`, `World::cancel_order`, `CancellationRefusal` and
+`FulfillmentState::Cancelled`. Simulation adds `DynamicEvent`, `DynamicChange`,
+`DispatchPolicy::Dynamic` and `SimulationRecoveryRecord`.
+See [full recovery contracts](../../docs/dynamic-redispatch.md),
+[scenario fixtures](../../data/fixtures/phase-19/README.md) and
+[completion evidence](../../docs/phase-19-completion.md).
