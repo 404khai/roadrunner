@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "crates/roadrunner-api",
     "crates/roadrunner-cli",
     "crates/roadrunner-core",
     "crates/roadrunner-dispatch",

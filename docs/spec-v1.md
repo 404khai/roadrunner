@@ -262,11 +262,11 @@ Comparison artifacts preserve full execution evidence and horizon populations, w
 external timing artifacts record hardware, dataset/configuration, runs and percentiles.
 See [dispatch strategy benchmarking](dispatch-strategy-benchmarks.md).
 
-### 5.8 Phase 20 operational HTTP API (future)
+### 5.8 Phase 20 operational HTTP API
 
-Phase 20 begins only after the prerequisite gates and explicit user confirmation.
+Phase 20 is implemented after merged prerequisite gates and explicit user authorization.
 The approved runtime-boundary audit supersedes the original routing-only scope.
-No HTTP server currently exists. Phase 20 exposes read-only snapshot-qualified
+The Axum adapter, generated OpenAPI and vendored Swagger UI expose read-only snapshot-qualified
 routing, coherent operational queries, order/rider creation, supported lifecycle
 commands, single-order admission, fleet optimization, recovery, cancellation,
 authorized observations, command-outcome lookup and isolated simulation.

@@ -184,3 +184,19 @@ finalization/verified loading, 101 operational-boundary samples and Phase 15–1
 scenario replays. The [completion report](pre-phase-20-remediation-completion.md)
 records commands, environment, evidence and supported temporal-policy limits.
 HTTP, storage, contention and process memory remain unmeasured.
+
+## Phase 20 HTTP adapter baseline
+
+Build the API release binary and run:
+
+```bash
+cargo +1.99.0 build -p roadrunner-api --release --locked
+python3 scripts/collect_http_api_benchmark.py
+```
+
+[Recorded results](../benchmarks/results/phase-20-http.json) contain 30 raw loopback
+HTTP samples per Dijkstra/A* query, rider creation and recognized retry. Hardware,
+verified dataset/hash/graph size, compiler/binary, configuration, warmups and median/
+p95/p99 are recorded. The fixed one-edge pair measures client/network/serialization
+and adapter overhead; it is not a search-space or production scalability comparison.
+CPU usage and memory are explicitly unmeasured. See [Phase 20 completion](phase-20-completion.md).

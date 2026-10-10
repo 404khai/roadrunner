@@ -1,7 +1,7 @@
 # Runtime boundary foundation
 
-Status: pre-Phase-20 implementation. HTTP, credentials, durable storage and event
-transport are future phases. The approved [Q1–Q33 audit](runtime-boundary-audit.md)
+Status: prerequisite library foundation plus the [Phase 20 HTTP adapter](../crates/roadrunner-api/README.md).
+Durable storage and event transport are future phases. The approved [Q1–Q33 audit](runtime-boundary-audit.md)
 is normative. The [completion report](pre-phase-20-remediation-completion.md)
 records verification and remaining limits.
 
@@ -92,8 +92,8 @@ implicit graph migration or mid-leg diversion is provided.
 
 `OperationalClock` supplies a named time domain and authoritative instant;
 dispatch never reads a host clock. `LogicalOperationalClock` is a checked monotonic
-implementation for tests/simulation/explicit adapter conversion. A live host-clock
-conversion/epoch policy belongs to Phase 20. Evaluation, publication and commit
+implementation for tests/simulation/explicit adapter conversion. The Phase 20 adapter implements a UNIX-origin monotonic host-clock
+conversion; its local run guide specifies epoch and trust policy. Evaluation, publication and commit
 samples are recorded separately.
 
 Lifecycle:

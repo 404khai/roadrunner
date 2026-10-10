@@ -122,3 +122,12 @@ records per-policy process timings with complete reproducibility metadata. See
 Phase 18: `scripts/collect_fleet_benchmark.py` compares greedy/local/multi-start fleet
 search, verifies replay/isolation/publication and records independent exact-oracle quality.
 See [fleet methodology](../docs/fleet-optimization.md).
+
+## HTTP adapter
+
+`python3 scripts/collect_http_api_benchmark.py` starts a fresh release API on loopback,
+measures route/creation/recognized-retry requests, and verifies original retry outcomes
+and effect counts. Build `roadrunner-api --release --locked` first. See
+[Phase 20 evidence](../docs/phase-20-completion.md) and
+[raw results](results/phase-20-http.json). This tiny sequential baseline includes client,
+HTTP and serialization overhead and has no production SLO claim.

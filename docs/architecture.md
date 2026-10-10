@@ -102,9 +102,15 @@ mapping, request limits, and server lifecycle. It translates external identifier
 and values into validated domain types, calls library APIs, and translates results
 back to versioned response types.
 
-This crate is future Phase 20 work and does not yet exist. Its approved scope
-includes operational commands/queries as well as routing. It will depend on core
-and dispatch; domain crates never depend on API DTOs. See ADRs 0017–0019.
+This Phase 20 crate implements operational commands/queries and snapshot-qualified
+routing. It depends on core, dispatch and simulation; domain crates never depend on
+API DTOs. One coordinator mutex jointly serializes authority, projections/prediction
+inputs, command recognition and observation ordering. Detached planning, routing and
+isolated simulation run on bounded blocking workers; exact temporal publication and
+terminal command recognition occur under the same writer. Bearer credentials map to
+stable principals/capabilities/resource scope; the CLI entry point is explicitly
+trusted-local and loopback only. See the [adapter guide](../crates/roadrunner-api/README.md)
+and ADRs 0017–0019.
 
 ### 3.5 `roadrunner-cli`
 
