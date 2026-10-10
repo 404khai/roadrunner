@@ -1,12 +1,12 @@
 # Roadrunner v0 Specification
 
-Status: Accepted; dispatch strategy benchmarking implemented through Phase 16
-Last updated: 2026-10-04
+Status: Accepted, amended through Phase 19 and pre-Phase-20 foundations
+Last updated: 2026-10-10
 
 ## 1. Purpose
 
 Roadrunner v0 is a deterministic, explainable baseline for last-mile routing and
-single-order rider assignment. It proves the core algorithms and their boundaries
+multi-order rider assignment, fleet planning and recovery. It proves the core algorithms and their boundaries
 with real road fixtures and deterministic FIFO traffic profiles already implemented.
 Persistence, production traffic, and distributed runtime remain deferred.
 
@@ -39,14 +39,12 @@ The following are explicitly excluded from v0:
 - machine-learning models or learned cost functions;
 - production or continuously updated traffic feeds;
 - non-FIFO and multi-label time-dependent routing;
-- multi-order assignment, route insertion, or vehicle routing optimization;
-- dynamic re-dispatch;
 - real road-network ingestion beyond small, documented fixtures;
 - multi-region or microservice deployment;
 - Kafka, Redpanda, or another event broker;
 - PostgreSQL, PostGIS, Redis, or durable application state;
 - mobile applications;
-- authentication, authorization, accounts, or billing; and
+- accounts, billing and credential infrastructure before Phase 20; and
 - a production maps or delivery-operations UI.
 
 OSRM, GraphHopper, and similar systems may later validate results, but v0 does
@@ -264,23 +262,30 @@ Comparison artifacts preserve full execution evidence and horizon populations, w
 external timing artifacts record hardware, dataset/configuration, runs and percentiles.
 See [dispatch strategy benchmarking](dispatch-strategy-benchmarks.md).
 
-### 5.8 HTTP route API
+### 5.8 Phase 20 operational HTTP API (future)
 
-The v0 server exposes:
+Phase 20 begins only after the prerequisite gates and explicit user confirmation.
+The approved runtime-boundary audit supersedes the original routing-only scope.
+No HTTP server currently exists. Phase 20 exposes read-only snapshot-qualified
+routing, coherent operational queries, order/rider creation, supported lifecycle
+commands, single-order admission, fleet optimization, recovery, cancellation,
+authorized observations, command-outcome lookup and isolated simulation.
 
-```text
-GET  /health
-POST /v1/routes
-```
+Creation and admission are separate. Operational commands receive authorized
+intent, not client-asserted custody/accepted terms/current snapshots. The coordinator
+assembles context; dispatch validates; one namespace publication lane commits.
+Mandatory scoped idempotency keys reserve canonical intent and return the original
+status/outcome on retries. Conflicting payload reuse fails. Explicit pending,
+noncommit, stale, unavailable-prediction, incomplete-search, expired-context and
+infrastructure outcomes are distinct. Authentication/resource/observation trust
+are required, except an explicitly restricted local demonstration mode.
 
-`POST /v1/routes` accepts graph node identifiers, algorithm, cost model, and an
-optional alternatives count. It returns the primary route, alternatives when
-requested, cost breakdown, and routing metadata. Graph loading is process-level
-configuration; the request does not upload an arbitrary graph.
-
-The API uses JSON and stable error codes. It holds no durable order, rider, or
-delivery state. Coordinate-based routing and GeoJSON geometry are deferred until
-road ingestion and snapping semantics exist.
+Phase 20 is volatile: no durable restart-safe idempotency or multi-process authority
+claim. Phase 21 separately establishes storage transactions, fencing, restoration,
+recognition and outbox obligations. Phase 22 separately implements reliable delivery
+and consumption. Framework/database/transport choice cannot override these contracts.
+See [runtime boundary](runtime-boundary.md), [approved audit](runtime-boundary-audit.md)
+and ADRs 0017–0019 for exact invariants and completion gates.
 
 ### 5.9 CLI
 

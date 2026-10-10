@@ -2942,3 +2942,16 @@ Make it measurable.
 Then make it fast.
 
 Then make it visible.
+
+
+# Approved Runtime Boundary Contract
+
+The signed Q1–Q33 [runtime-boundary audit](docs/runtime-boundary-audit.md) and ADRs
+0017–0019 govern Phases 20–22 and their prerequisites. They supersede earlier
+routing-only HTTP scope and unqualified roadmap technology suggestions. Prerequisite
+implementation does not authorize HTTP, storage, credentials or broker work.
+Require all [pre-Phase-20 gates](docs/pre-phase-20-remediation-completion.md) and
+explicit user confirmation before Phase 20. Preserve namespace/revision/action/
+generation/effect distinctions, coherent operational authority, immutable graph and
+accepted-reference provenance, exact stale rejection and usable temporal validity.
+Future durable/event guarantees must not be described as implemented prerequisites.

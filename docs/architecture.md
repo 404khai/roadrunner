@@ -1,7 +1,7 @@
 # Roadrunner Architecture
 
-Status: Accepted through Phase 17 multi-order admission
-Last updated: 2026-10-04
+Status: Accepted through Phase 19 and pre-Phase-20 authority foundations
+Last updated: 2026-10-10
 
 ## 1. Architectural intent
 
@@ -87,7 +87,8 @@ routing behavior.
 ### 3.3 `roadrunner-simulation`
 
 Owns simulation time, scenarios, events, event ordering, seeded randomness,
-mutable simulation state, and aggregate metrics. It depends on `core` and
+synthetic observations and aggregate metrics. Dispatch OperationalState owns
+coherent domain/execution state; the driver schedules shared transitions. It depends on `core` and
 `dispatch`. Neither dependency imports simulation types.
 
 Simulation time is distinct from wall-clock time. Equal-time events are ordered
@@ -101,9 +102,9 @@ mapping, request limits, and server lifecycle. It translates external identifier
 and values into validated domain types, calls library APIs, and translates results
 back to versioned response types.
 
-The v0 API exposes routing only and depends on `core`. Later order and dispatch
-endpoints may add a dependency on `dispatch`, but domain crates never depend on
-API DTOs.
+This crate is future Phase 20 work and does not yet exist. Its approved scope
+includes operational commands/queries as well as routing. It will depend on core
+and dispatch; domain crates never depend on API DTOs. See ADRs 0017–0019.
 
 ### 3.5 `roadrunner-cli`
 
@@ -476,3 +477,20 @@ configured rider's whole-window responsibility exposure, including overlapping
 multi-order work once per rider; schemas 1–3 retain historical denominators.
 See [API/search contracts](dynamic-redispatch.md), [fixtures](../data/fixtures/phase-19/README.md)
 and [completion report](phase-19-completion.md).
+
+## Pre-Phase-20 operational foundations
+
+The implemented [runtime boundary](runtime-boundary.md) jointly governs World,
+active execution, frozen route provenance, typed action/generation/effect identity,
+plan revisions, adopted context revisions and recovery metadata. Expensive decisions
+use read-only coherent snapshots; publication validates and replaces the complete
+volatile authority. Simulation uses the same domain execution transitions with its
+separate logical event heap and synthetic observations.
+
+Named static-road temporal certification supports useful nonzero evaluation time;
+unproven time-dependent selection claims cannot publish operationally. This is an
+in-memory foundation, not an HTTP, storage or event runtime. The approved future
+contracts and separate phase gates are recorded in [the audit](runtime-boundary-audit.md)
+and ADRs [0017](adr/0017-operational-authority-and-publication.md),
+[0018](adr/0018-planning-time-and-historical-provenance.md),
+[0019](adr/0019-durable-authority-and-event-contracts.md).

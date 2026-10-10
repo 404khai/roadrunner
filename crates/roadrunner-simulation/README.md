@@ -143,3 +143,21 @@ Dispatch APIs: `RecoveryPolicy`, `RecoveryContext`, `recover_fleet`,
 See [full recovery contracts](../../docs/dynamic-redispatch.md),
 [scenario fixtures](../../data/fixtures/phase-19/README.md) and
 [completion evidence](../../docs/phase-19-completion.md).
+
+## Pre-Phase-20 foundation
+
+Graph artifact schema 4/compiler v4 verify canonical compiled semantic identities;
+older identity claims remain historical. Dispatch OperationalState owns coherent
+volatile World/execution, distinct plan/action/schedule/effect identities and atomic
+publication. Simulation drives shared validated transitions and declares its
+`shared-execution/v2` evidence contract. Named static-road temporal certification
+supports delayed publication; time-dependent operational certification is unsupported.
+HTTP, persistence and event transport remain separate future phases.
+
+See [runtime boundary](../../docs/runtime-boundary.md) and
+[prerequisite verification](../../docs/pre-phase-20-remediation-completion.md).
+
+```bash
+cargo +1.99.0 test -p roadrunner-core --test semantic_identity --locked
+cargo +1.99.0 test -p roadrunner-dispatch --test operational --locked
+```
