@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-10",
+  "purpose": "Phase 15 small-fixture wall-clock replay validation, not a scalability claim",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "dataset": {
+    "path": "data/fixtures/phase-15/seeded-deliveries.json",
+    "sha256": "678be268e5c0e6544f4a80f3305d1693a23f2c44036bf37066c65e2bac26b76e",
+    "kind": "seeded synthetic",
+    "seed": 15,
+    "randomness": "splitmix64-upper53/v1",
+    "graph_digest": "c2897aed399330e27acd1ac8122fb59dbea722edd981815498ebe6dd23cff7c8",
+    "graph_nodes": 5,
+    "graph_directed_edges": 6,
+    "scheduled_orders": 6,
+    "created_orders": 5,
+    "riders": 2
+  },
+  "algorithm": {
+    "events": "BinaryHeap ordered by logical time then insertion sequence",
+    "routing": "Roadrunner Dijkstra",
+    "dispatch": {
+      "kind": "preparation_aware",
+      "idle_penalty_weight": 1.0
+    },
+    "coverage": "exhaustive eligible riders"
+  },
+  "configuration": {
+    "binary_sha256": "45f92db34f5e6c8741c6ef971fae568725925d728293f15bb9fb3b438c1700c5",
+    "profile": "release",
+    "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
+    "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+    "command": "target/release/roadrunner simulate data/fixtures/phase-15/seeded-deliveries.json --json",
+    "warmup_runs": 1,
+    "measured_runs": 11,
+    "concurrent_workspace_validation": false,
+    "includes": "process launch, graph loading/validation, simulation, JSON serialization and output capture",
+    "percentiles": "linear interpolation of ordered elapsed process samples",
+    "memory": "not measured"
+  },
+  "observations": {
+    "logical_window_seconds": 600.0,
+    "processed_events": 50,
+    "delivered_orders": 4,
+    "future_events": 2,
+    "replay_sha256": "3a73b2b4048a008d43e831dd3e083de6967b2d9f3dcc040611ae85a47a1b25a5"
+  },
+  "timing": {
+    "samples_ns": [
+      9792500,
+      6349791,
+      5568125,
+      5400167,
+      4532583,
+      4583875,
+      4734125,
+      4515458,
+      4433833,
+      4548250,
+      4387250
+    ],
+    "median_ns": 4583875,
+    "p95_ns": 8071145.5,
+    "p99_ns": 9448229.100000001
+  }
+}

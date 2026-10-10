@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "workspace_tests": {
+    "passed": 217,
+    "failed": 0,
+    "ignored_measurement_test": 1,
+    "measurement_test_executed_separately": true
+  },
+  "replay_fixtures": 38,
+  "baseline_commit": "4271ddd",
+  "current_release_binary_sha256": "45f92db34f5e6c8741c6ef971fae568725925d728293f15bb9fb3b438c1700c5",
+  "checks": {
+    "clippy.log": "d9a4918c7af031ab673968cf29d2dec6b22203ee554370b3132a6286b2ce1f14",
+    "documentation-build.log": "e2909a6541d1f175c05a1df41d9cd5502ebbf50307f55c848a404335cf9ee00f",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "graph-benchmark.log": "44669b749febac508ac26e3dde39f217f7b70eec0a67383f87fde87a4f5535c4",
+    "graph-verified-load.log": "425e56e4731e51fac3b6286a236569597805c8f13df63fc8ef3323a97720518d",
+    "oracles.log": "4d8ffd668bdde09f5807c154109281296ba95293ae9fd2dff503d6c78295bb9d",
+    "release-build.log": "8c81b4193cc293c603a5ca517916aa6cc3288d9fb9fad8d3116ffcf44212caf3",
+    "replay.log": "3a7fad013a67339d332c8c33c2a0b8490366043dcb85dc2e1f3b18baa51eece2",
+    "workspace-tests.log": "ab458b47ae671ac7b751dd77edc4b1908bbda642171a0a972878f5113ba3138a"
+  },
+  "scope": "pre-Phase-20 only; no HTTP/storage/credential/broker implementation"
+}

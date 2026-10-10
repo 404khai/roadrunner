@@ -1,0 +1,7 @@
+    Checking roadrunner-dispatch v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-dispatch)
+ Documenting roadrunner-dispatch v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-dispatch)
+    Checking roadrunner-simulation v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-simulation)
+ Documenting roadrunner-simulation v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-simulation)
+ Documenting roadrunner-cli v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.88s
+   Generated /Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/target/doc/roadrunner/index.html and 4 other files

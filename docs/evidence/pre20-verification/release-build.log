@@ -1,0 +1,4 @@
+   Compiling roadrunner-dispatch v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-dispatch)
+   Compiling roadrunner-simulation v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-simulation)
+   Compiling roadrunner-cli v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-cli)
+    Finished `release` profile [optimized] target(s) in 18.67s

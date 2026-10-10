@@ -1,0 +1,6293 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-10",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "purpose": "Small synthetic fleet heuristic/greedy quality and process measurements; no global optimum or production scalability claim",
+  "algorithms": [
+    "Greedy",
+    "LocalSearch",
+    "MultiStartLocal"
+  ],
+  "compiler": "rustc 1.99.0 (b940084d7 2026-09-28)",
+  "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
+  "binary_sha256": "45f92db34f5e6c8741c6ef971fae568725925d728293f15bb9fb3b438c1700c5",
+  "warmups_per_configuration": 1,
+  "measured_runs_per_configuration": 11,
+  "measurement": "process launch + graph loading/validation + simulation + JSON capture",
+  "percentiles": "linear interpolation",
+  "concurrent_workspace_validation": false,
+  "memory": "unmeasured",
+  "oracle": {
+    "cases": [
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 0,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 2,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              9
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 0,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 4,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              55
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 0,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 33,
+          "feasible": 8,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              73
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 1,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 11,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              8
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 1,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 30,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              "Capacity",
+              29
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              8
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 1,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 51,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              "Capacity",
+              50
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              12
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 2,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 11,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              4
+            ],
+            [
+              "Capacity",
+              4
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 2,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 29,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              9
+            ],
+            [
+              "Capacity",
+              19
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              3
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 2,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 49,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              14
+            ],
+            [
+              "Capacity",
+              34
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              16
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 3,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 4,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              11
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 3,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 8,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              260
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 3,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 48,
+          "feasible": 16,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              282
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 4,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 7,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              12
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 4,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 14,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              44
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 4,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 27,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              72
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 5,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 8,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 5,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 26,
+          "neighborhood": 266,
+          "precedence_exclusions": 6,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              165
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              85
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              67
+            ],
+            [
+              "Capacity",
+              81
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 5,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 52,
+          "feasible": 42,
+          "neighborhood": 266,
+          "precedence_exclusions": 6,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              179
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              90
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              74
+            ],
+            [
+              "Capacity",
+              90
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 6,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 2,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              9
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 6,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 4,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              55
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 6,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 33,
+          "feasible": 8,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              73
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 7,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 11,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ],
+            [
+              "Capacity",
+              8
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 7,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 32,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              6
+            ],
+            [
+              "Capacity",
+              29
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 7,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 53,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              10
+            ],
+            [
+              "Capacity",
+              50
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 8,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 8,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              4
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              3
+            ],
+            [
+              "Capacity",
+              4
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 8,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 23,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              9
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              9
+            ],
+            [
+              "Capacity",
+              19
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              10
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 8,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 40,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              14
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              15
+            ],
+            [
+              "Capacity",
+              34
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 9,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 4,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              11
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 9,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 8,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              260
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 9,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 48,
+          "feasible": 16,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              282
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 10,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 5,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              12
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              2
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 10,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 9,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              44
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 10,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 63,
+          "feasible": 19,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              68
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 11,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 8,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 11,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 26,
+          "neighborhood": 266,
+          "precedence_exclusions": 6,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              165
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              85
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              67
+            ],
+            [
+              "Capacity",
+              81
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 11,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 52,
+          "feasible": 42,
+          "neighborhood": 266,
+          "precedence_exclusions": 6,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              179
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              90
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              74
+            ],
+            [
+              "Capacity",
+              90
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 12,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 2,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              9
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 12,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 4,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              55
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 12,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 33,
+          "feasible": 8,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              73
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 13,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 11,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ],
+            [
+              "Capacity",
+              8
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 13,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 32,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              6
+            ],
+            [
+              "Capacity",
+              29
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 13,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 53,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              10
+            ],
+            [
+              "Capacity",
+              50
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 14,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 8,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              4
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              3
+            ],
+            [
+              "Capacity",
+              4
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 14,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 23,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              9
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              9
+            ],
+            [
+              "Capacity",
+              19
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              10
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 14,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 40,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              14
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              15
+            ],
+            [
+              "Capacity",
+              34
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 15,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 4,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              11
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 15,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 8,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              260
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 15,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 48,
+          "feasible": 16,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              282
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 16,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 5,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              12
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              2
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 16,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 9,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              44
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 16,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 63,
+          "feasible": 19,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              68
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 20.0,
+        "seed": 17,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 667.1704814011975,
+          "road_seconds": 60.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 25,
+          "feasible": 7,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              4
+            ],
+            [
+              "Capacity",
+              9
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 17,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 2,
+          "completed_starts": 1,
+          "construction": 25,
+          "feasible": 49,
+          "neighborhood": 92,
+          "precedence_exclusions": 16,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 2
+              },
+              27
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              9
+            ],
+            [
+              "Capacity",
+              27
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              14
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 17,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 75,
+          "feasible": 48,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 2
+              },
+              21
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              10
+            ],
+            [
+              "Capacity",
+              36
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 18,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 2,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              9
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 18,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 11,
+          "feasible": 4,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              55
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 18,
+        "selected": {
+          "admitted_orders": 1,
+          "road_meters": 111.19508023353293,
+          "road_seconds": 10.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 33,
+          "feasible": 8,
+          "neighborhood": 48,
+          "precedence_exclusions": 2,
+          "rejections": [
+            [
+              "Capacity",
+              73
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 19,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 11,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ],
+            [
+              "Capacity",
+              8
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 19,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 31,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              6
+            ],
+            [
+              "Capacity",
+              29
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 19,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 51,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              10
+            ],
+            [
+              "Capacity",
+              50
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 20,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 10,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              4
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              3
+            ],
+            [
+              "Capacity",
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 20,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 30,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              9
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              9
+            ],
+            [
+              "Capacity",
+              19
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              3
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 20,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 67,
+          "feasible": 50,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 1
+              },
+              14
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              15
+            ],
+            [
+              "Capacity",
+              34
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 21,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 4,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              11
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              1
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 21,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 16,
+          "feasible": 8,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              260
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 21,
+        "selected": {
+          "admitted_orders": 2,
+          "road_meters": 333.5852407005988,
+          "road_seconds": 30.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 48,
+          "feasible": 16,
+          "neighborhood": 256,
+          "precedence_exclusions": 4,
+          "rejections": [
+            [
+              "Capacity",
+              282
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 22,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 5,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              "Capacity",
+              12
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              2
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 22,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 1,
+          "construction": 21,
+          "feasible": 9,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              44
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 22,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 555.9754011676646,
+          "road_seconds": 50.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 63,
+          "feasible": 19,
+          "neighborhood": 44,
+          "precedence_exclusions": 10,
+          "rejections": [
+            [
+              "Capacity",
+              68
+            ],
+            [
+              {
+                "HardDeadline": 2
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              10
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              2
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "Greedy",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 20.0,
+        "seed": 23,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 667.1704814011975,
+          "road_seconds": 60.0
+        },
+        "termination": "ConstructionComplete",
+        "work": {
+          "completed_rounds": 0,
+          "completed_starts": 1,
+          "construction": 25,
+          "feasible": 7,
+          "neighborhood": 0,
+          "precedence_exclusions": 0,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 2
+              },
+              6
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              4
+            ],
+            [
+              "Capacity",
+              9
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              3
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "LocalSearch",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 23,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 2,
+          "completed_starts": 1,
+          "construction": 25,
+          "feasible": 49,
+          "neighborhood": 92,
+          "precedence_exclusions": 16,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 2
+              },
+              27
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              9
+            ],
+            [
+              "Capacity",
+              27
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              17
+            ]
+          ]
+        }
+      },
+      {
+        "admission_gap": 0,
+        "algorithm": "MultiStartLocal",
+        "oracle": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "road_seconds_gap_if_equal_count": 0.0,
+        "seed": 23,
+        "selected": {
+          "admitted_orders": 3,
+          "road_meters": 444.78032093413174,
+          "road_seconds": 40.0
+        },
+        "termination": "LocalOptimum",
+        "work": {
+          "completed_rounds": 1,
+          "completed_starts": 3,
+          "construction": 75,
+          "feasible": 48,
+          "neighborhood": 46,
+          "precedence_exclusions": 8,
+          "rejections": [
+            [
+              {
+                "HardDeadline": 2
+              },
+              21
+            ],
+            [
+              {
+                "HardDeadline": 1
+              },
+              10
+            ],
+            [
+              "Capacity",
+              36
+            ],
+            [
+              {
+                "HardDeadline": 3
+              },
+              22
+            ]
+          ]
+        }
+      }
+    ],
+    "dataset": "seeded-star-three-orders-two-riders/v1",
+    "enumeration": "independent ownership/unplaced Cartesian product and all precedence-valid stop permutations",
+    "schema_version": 1,
+    "seed_range": [
+      0,
+      24
+    ]
+  },
+  "local_minimum": {
+    "committed_owner": 1,
+    "dataset": "directed-four-onboard-stops-relocation-trap/v1",
+    "initial_stop_order": [
+      2,
+      4,
+      1,
+      3
+    ],
+    "matrix_road_seconds": [
+      [
+        0,
+        4,
+        11,
+        10,
+        19
+      ],
+      [
+        13,
+        0,
+        18,
+        6,
+        25
+      ],
+      [
+        13,
+        8,
+        0,
+        6,
+        8
+      ],
+      [
+        7,
+        11,
+        12,
+        0,
+        19
+      ],
+      [
+        17,
+        7,
+        25,
+        13,
+        0
+      ]
+    ],
+    "oracle": {
+      "admitted_orders": 0,
+      "road_meters": 667.1704814011975,
+      "road_seconds": 30.0
+    },
+    "road_seconds_gap": 2.0,
+    "schema_version": 1,
+    "selected": {
+      "admitted_orders": 0,
+      "road_meters": 1000.7557221017962,
+      "road_seconds": 32.0
+    },
+    "termination": "LocalOptimum",
+    "work": {
+      "completed_rounds": 1,
+      "completed_starts": 1,
+      "construction": 0,
+      "feasible": 12,
+      "neighborhood": 12,
+      "precedence_exclusions": 0,
+      "rejections": []
+    }
+  },
+  "oracle_test_sha256": "36a65ebd423e9afd6993320c15628b5474c38ab06b0d09786339dfc701704b5e",
+  "datasets": [
+    {
+      "path": "data/fixtures/phase-18/baseline-breach.json",
+      "sha256": "36e7850d0810001b9137462151609d393cfcc9946cd490270e208e29d701c281",
+      "scenario_id": "phase18/baseline-breach/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "065952827c38fad499f91bf2cd9ce4cfe4fa6914051ba7fc874fda74b9c152a8",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 2,
+        "candidate_submissions": 2,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 72.54156471559881,
+          "median_seconds": 72.54156471559881,
+          "p95_seconds": 105.07557221017964,
+          "p99_seconds": 105.07557221017964
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 125.07557221017964,
+          "median_seconds": 125.07557221017964,
+          "p95_seconds": 170.11335831526947,
+          "p99_seconds": 170.11335831526947
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.9255667915763474,
+        "mean_rider_idle_seconds": 14.886641684730535
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/baseline-breach-Greedy.json",
+      "semantic_sha256": "1b6a512ea132b7cd25f8a05f21bea2457df3f6d61b6a641ec333ca894ac8746d",
+      "timing": {
+        "raw_ns": [
+          4659917,
+          4825041,
+          4262583,
+          4254041,
+          4113542,
+          4254208,
+          4223541,
+          4211292,
+          4215917,
+          4031541,
+          4165500
+        ],
+        "median_ns": 4223541,
+        "p95_ns": 4742479.0,
+        "p99_ns": 4808528.6
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/baseline-breach.json",
+      "sha256": "36e7850d0810001b9137462151609d393cfcc9946cd490270e208e29d701c281",
+      "scenario_id": "phase18/baseline-breach/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "f1386323e3a4c0a88105ebc02384b8312772f5021cea81d8ac5ef2fb07f32ecc",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 2,
+        "candidate_submissions": 4,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 72.54156471559881,
+          "median_seconds": 72.54156471559881,
+          "p95_seconds": 105.07557221017964,
+          "p99_seconds": 105.07557221017964
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 125.07557221017964,
+          "median_seconds": 125.07557221017964,
+          "p95_seconds": 170.11335831526947,
+          "p99_seconds": 170.11335831526947
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.9255667915763474,
+        "mean_rider_idle_seconds": 14.886641684730535
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/baseline-breach-LocalSearch.json",
+      "semantic_sha256": "d2c2acc99ff9669afc3e5101fc96f2bec69767a5bb0f42e76f393a3d6813de86",
+      "timing": {
+        "raw_ns": [
+          4274333,
+          4259625,
+          4278416,
+          4281833,
+          4231292,
+          4091916,
+          4306166,
+          4753791,
+          4730375,
+          4255250,
+          4304834
+        ],
+        "median_ns": 4278416,
+        "p95_ns": 4742083.0,
+        "p99_ns": 4751449.4
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/baseline-breach.json",
+      "sha256": "36e7850d0810001b9137462151609d393cfcc9946cd490270e208e29d701c281",
+      "scenario_id": "phase18/baseline-breach/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "aa5eded4ff974b0e94209dd051ff441e0f24be48227e50df8fef2cbef02b03d0",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 2,
+        "candidate_submissions": 4,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 72.54156471559881,
+          "median_seconds": 72.54156471559881,
+          "p95_seconds": 105.07557221017964,
+          "p99_seconds": 105.07557221017964
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 125.07557221017964,
+          "median_seconds": 125.07557221017964,
+          "p95_seconds": 170.11335831526947,
+          "p99_seconds": 170.11335831526947
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.9255667915763474,
+        "mean_rider_idle_seconds": 14.886641684730535
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/baseline-breach-MultiStartLocal.json",
+      "semantic_sha256": "61e92fd97d12226e8bef570afa09e78cc4c58fdc80ac310e8b427110f278b52e",
+      "timing": {
+        "raw_ns": [
+          4445750,
+          4321042,
+          4523250,
+          4242292,
+          4159000,
+          4265292,
+          4208334,
+          4376000,
+          4283334,
+          4356084,
+          4200291
+        ],
+        "median_ns": 4283334,
+        "p95_ns": 4484500.0,
+        "p99_ns": 4515500.0
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/budget-exhaustion.json",
+      "sha256": "af24c90196c2169f80118cad02e1e3e7b67fac71c314346ff33d60747f9b3714",
+      "scenario_id": "phase18/budget-exhaustion/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 0,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "592bfb535a9e5b52632364b0c99dfc40e0347fb61cf2e428bffbf3f810dc1264",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 3,
+        "commits": 0,
+        "candidate_submissions": 0,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "SearchIncomplete",
+          "SearchIncomplete",
+          "SearchIncomplete"
+        ],
+        "first_batch_objective": null
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 0,
+        "delivered_orders": 0,
+        "unassigned_orders": 2,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 2,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "delivered_duration": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "pickup_waiting": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "completed_distance_meters": 0.0,
+        "rider_utilization": 0.0,
+        "mean_rider_idle_seconds": 200.0
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/budget-exhaustion-Greedy.json",
+      "semantic_sha256": "c0f30b368b7e5815a36057772c59b81ce5688b501964db2fa27312e8cc1245f6",
+      "timing": {
+        "raw_ns": [
+          3966584,
+          3723791,
+          3900458,
+          3764875,
+          3963666,
+          3866875,
+          3826125,
+          3861625,
+          3822459,
+          3836458,
+          3818125
+        ],
+        "median_ns": 3836458,
+        "p95_ns": 3965125.0,
+        "p99_ns": 3966292.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/budget-exhaustion.json",
+      "sha256": "af24c90196c2169f80118cad02e1e3e7b67fac71c314346ff33d60747f9b3714",
+      "scenario_id": "phase18/budget-exhaustion/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 0,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "d64ce2667ea0eaa4a743011b26da691407ef69e1cc8dd90b756f6df2754c3fa1",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 3,
+        "commits": 0,
+        "candidate_submissions": 0,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "SearchIncomplete",
+          "SearchIncomplete",
+          "SearchIncomplete"
+        ],
+        "first_batch_objective": null
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 0,
+        "delivered_orders": 0,
+        "unassigned_orders": 2,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 2,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "delivered_duration": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "pickup_waiting": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "completed_distance_meters": 0.0,
+        "rider_utilization": 0.0,
+        "mean_rider_idle_seconds": 200.0
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/budget-exhaustion-LocalSearch.json",
+      "semantic_sha256": "a8194a0c3083ab232fd4a22e2eb57817c6908f7e266cf4069d2e58ed55fa3874",
+      "timing": {
+        "raw_ns": [
+          4118167,
+          3883166,
+          4502291,
+          3905208,
+          4029417,
+          3873459,
+          4060417,
+          3919750,
+          3825917,
+          3882416,
+          3928750
+        ],
+        "median_ns": 3919750,
+        "p95_ns": 4310229.0,
+        "p99_ns": 4463878.600000001
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/budget-exhaustion.json",
+      "sha256": "af24c90196c2169f80118cad02e1e3e7b67fac71c314346ff33d60747f9b3714",
+      "scenario_id": "phase18/budget-exhaustion/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 0,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "0bed31775a1b0dbab3d5c5c1ff1f9fc952e64d98d579110e908f059079b872f7",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 3,
+        "commits": 0,
+        "candidate_submissions": 0,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "SearchIncomplete",
+          "SearchIncomplete",
+          "SearchIncomplete"
+        ],
+        "first_batch_objective": null
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 0,
+        "delivered_orders": 0,
+        "unassigned_orders": 2,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 2,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "delivered_duration": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "pickup_waiting": {
+          "samples": 0,
+          "mean_seconds": null,
+          "median_seconds": null,
+          "p95_seconds": null,
+          "p99_seconds": null
+        },
+        "completed_distance_meters": 0.0,
+        "rider_utilization": 0.0,
+        "mean_rider_idle_seconds": 200.0
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/budget-exhaustion-MultiStartLocal.json",
+      "semantic_sha256": "a36a50c71d5747fe377e59840b2c11b9610eb6326a14081b465de4acc79929b1",
+      "timing": {
+        "raw_ns": [
+          4585542,
+          3763583,
+          4038375,
+          3959000,
+          3982209,
+          3908708,
+          3928375,
+          3967584,
+          4027458,
+          3904083,
+          3932542
+        ],
+        "median_ns": 3959000,
+        "p95_ns": 4311958.5,
+        "p99_ns": 4530825.3
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/capacity-prefix.json",
+      "sha256": "c49aaabf45cbcf596c57307f4c90c8cc8ac5c37a4cc46e5e2860a401160c740e",
+      "scenario_id": "phase18/capacity-prefix/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "fca907b0eeb33c581385260d17ede71f1d9d7b74e2305afa9e133bc483dae10e",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 4,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 52.01511444203592,
+          "median_seconds": 52.01511444203592,
+          "p95_seconds": 64.02267166305388,
+          "p99_seconds": 64.02267166305388
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 52.01511444203592,
+          "median_seconds": 52.01511444203592,
+          "p95_seconds": 64.02267166305388,
+          "p99_seconds": 64.02267166305388
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.32511335831526944,
+        "mean_rider_idle_seconds": 134.97732833694613
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/capacity-prefix-Greedy.json",
+      "semantic_sha256": "d04ec59165017bb7d15069b4cd31535002f47d4639689d1b5e1ab04335e7963c",
+      "timing": {
+        "raw_ns": [
+          4284791,
+          4213750,
+          4121209,
+          5339625,
+          4480459,
+          4221334,
+          4227791,
+          4253292,
+          4146917,
+          4225042,
+          4275000
+        ],
+        "median_ns": 4227791,
+        "p95_ns": 4910042.0,
+        "p99_ns": 5253708.4
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/capacity-prefix.json",
+      "sha256": "c49aaabf45cbcf596c57307f4c90c8cc8ac5c37a4cc46e5e2860a401160c740e",
+      "scenario_id": "phase18/capacity-prefix/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "0e049108223301cc04841da87ed5b379bd54693f9bea0383f02c4910cfcbd092",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 11,
+        "precedence_exclusions": 5,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 52.01511444203592,
+          "median_seconds": 52.01511444203592,
+          "p95_seconds": 64.02267166305388,
+          "p99_seconds": 64.02267166305388
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 52.01511444203592,
+          "median_seconds": 52.01511444203592,
+          "p95_seconds": 64.02267166305388,
+          "p99_seconds": 64.02267166305388
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.32511335831526944,
+        "mean_rider_idle_seconds": 134.97732833694613
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/capacity-prefix-LocalSearch.json",
+      "semantic_sha256": "719a4b94b32c789698ddcfc0b48e88d9137326500cf0960cde218e13634d0507",
+      "timing": {
+        "raw_ns": [
+          4270834,
+          4265959,
+          4442500,
+          4248209,
+          4368875,
+          4387875,
+          4283125,
+          4304542,
+          4274500,
+          4161666,
+          4334958
+        ],
+        "median_ns": 4283125,
+        "p95_ns": 4415187.5,
+        "p99_ns": 4437037.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/capacity-prefix.json",
+      "sha256": "c49aaabf45cbcf596c57307f4c90c8cc8ac5c37a4cc46e5e2860a401160c740e",
+      "scenario_id": "phase18/capacity-prefix/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "b837df2a4c6a1f1fa19b5507b9ec65c8422c64eb6f3f648fc7e1fc2cbdc8c622",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 11,
+        "precedence_exclusions": 5,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 52.01511444203592,
+          "median_seconds": 52.01511444203592,
+          "p95_seconds": 64.02267166305388,
+          "p99_seconds": 64.02267166305388
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 52.01511444203592,
+          "median_seconds": 52.01511444203592,
+          "p95_seconds": 64.02267166305388,
+          "p99_seconds": 64.02267166305388
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.32511335831526944,
+        "mean_rider_idle_seconds": 134.97732833694613
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/capacity-prefix-MultiStartLocal.json",
+      "semantic_sha256": "cdcb8ba548ab12e418a732fdc5d0c743a0074e0bf580d25556d0ce40cc0794c6",
+      "timing": {
+        "raw_ns": [
+          4254750,
+          4242750,
+          4092875,
+          4269208,
+          4318542,
+          4331750,
+          4214125,
+          4173708,
+          4238458,
+          4193042,
+          4180333
+        ],
+        "median_ns": 4238458,
+        "p95_ns": 4325146.0,
+        "p99_ns": 4330429.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/complete-infeasibility.json",
+      "sha256": "e5df46d5546adb6bdae861b000c1fe8b8877b34859bb447b7ba911c50d34fa39",
+      "scenario_id": "phase18/complete-infeasibility/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "09f6b6052d34147c6291ae3e0ebbdc21d573cef015d4a1648cfbdbb765baf36c",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 1,
+        "candidate_submissions": 8,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.20003778610508982,
+        "mean_rider_idle_seconds": 159.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/complete-infeasibility-Greedy.json",
+      "semantic_sha256": "5905c0f11bd20ba029b2511d0714d372ab766271bb894b617734ea8e4129ea99",
+      "timing": {
+        "raw_ns": [
+          4210916,
+          4068833,
+          4078459,
+          3958458,
+          4084333,
+          4052709,
+          4047833,
+          4035208,
+          4091875,
+          3974584,
+          4118708
+        ],
+        "median_ns": 4068833,
+        "p95_ns": 4164812.0,
+        "p99_ns": 4201695.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/complete-infeasibility.json",
+      "sha256": "e5df46d5546adb6bdae861b000c1fe8b8877b34859bb447b7ba911c50d34fa39",
+      "scenario_id": "phase18/complete-infeasibility/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "f2a8a8539edb66069056014f3d65f1d9b1bbe02798aa639b089d70416b5b26a3",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 1,
+        "candidate_submissions": 16,
+        "precedence_exclusions": 2,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.20003778610508982,
+        "mean_rider_idle_seconds": 159.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/complete-infeasibility-LocalSearch.json",
+      "semantic_sha256": "4245762a85f6c4a13324d1c0650ea8c1fa1e9bd49dd6ad29bcddc733b34293fe",
+      "timing": {
+        "raw_ns": [
+          4045833,
+          4136459,
+          3994709,
+          3927208,
+          4058125,
+          3936166,
+          4137875,
+          3973625,
+          4164000,
+          4113333,
+          3938208
+        ],
+        "median_ns": 4045833,
+        "p95_ns": 4150937.5,
+        "p99_ns": 4161387.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/complete-infeasibility.json",
+      "sha256": "e5df46d5546adb6bdae861b000c1fe8b8877b34859bb447b7ba911c50d34fa39",
+      "scenario_id": "phase18/complete-infeasibility/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "4eff91919431cd7281e3cba34fcb7867bcddc0541600379551738f49abe52cdc",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 1,
+        "candidate_submissions": 16,
+        "precedence_exclusions": 2,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.20003778610508982,
+        "mean_rider_idle_seconds": 159.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/complete-infeasibility-MultiStartLocal.json",
+      "semantic_sha256": "255ad5dbf0baa04d27177b8c89dddc59c04edaa5cf5b277fbbcaacbf4fac258c",
+      "timing": {
+        "raw_ns": [
+          4182333,
+          4189792,
+          4174458,
+          4055792,
+          4084958,
+          4056125,
+          4053709,
+          3926333,
+          4070292,
+          4178542,
+          3969500
+        ],
+        "median_ns": 4070292,
+        "p95_ns": 4186062.5,
+        "p99_ns": 4189046.1
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/cumulative-repeat.json",
+      "sha256": "a577873aee99259382e1bf83bd4ab54b400044a71778fde51193d9b6151ce657",
+      "scenario_id": "phase18/cumulative-repeat/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "d7b5d4f25e4a60f3c0a8e533bb7792d18782b485dd2b11906643f4cc45206bd2",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 3,
+      "work": {
+        "attempts": 3,
+        "commits": 3,
+        "candidate_submissions": 14,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 3,
+        "created_orders": 3,
+        "uncreated_orders": 0,
+        "assigned_orders": 3,
+        "delivered_orders": 3,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 3,
+          "mean_seconds": 57.3509668490419,
+          "median_seconds": 64.02267166305388,
+          "p95_seconds": 68.02267166305388,
+          "p99_seconds": 68.02267166305388
+        },
+        "delivered_duration": {
+          "samples": 3,
+          "mean_seconds": 58.017633515708575,
+          "median_seconds": 66.02267166305388,
+          "p95_seconds": 68.02267166305388,
+          "p99_seconds": 68.02267166305388
+        },
+        "pickup_waiting": {
+          "samples": 3,
+          "mean_seconds": 6.997480926327345,
+          "median_seconds": 2.0,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.3501133583152694,
+        "mean_rider_idle_seconds": 129.97732833694613
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/cumulative-repeat-Greedy.json",
+      "semantic_sha256": "5d5c1fddda2b02fd21b78f762bf5a4413e36b9329936e57c0923e0ca6a4c2b35",
+      "timing": {
+        "raw_ns": [
+          4607916,
+          4444625,
+          4480875,
+          4557000,
+          4507250,
+          4453292,
+          4471291,
+          4568375,
+          4380417,
+          4488917,
+          4478875
+        ],
+        "median_ns": 4480875,
+        "p95_ns": 4588145.5,
+        "p99_ns": 4603961.9
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/cumulative-repeat.json",
+      "sha256": "a577873aee99259382e1bf83bd4ab54b400044a71778fde51193d9b6151ce657",
+      "scenario_id": "phase18/cumulative-repeat/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "ca3ccba7f17977b43c549c65bbc91f732142865604a233c56fbfb0623113cb8d",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 3,
+      "work": {
+        "attempts": 3,
+        "commits": 3,
+        "candidate_submissions": 43,
+        "precedence_exclusions": 13,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 3,
+        "created_orders": 3,
+        "uncreated_orders": 0,
+        "assigned_orders": 3,
+        "delivered_orders": 3,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 3,
+          "mean_seconds": 57.3509668490419,
+          "median_seconds": 64.02267166305388,
+          "p95_seconds": 68.02267166305388,
+          "p99_seconds": 68.02267166305388
+        },
+        "delivered_duration": {
+          "samples": 3,
+          "mean_seconds": 58.017633515708575,
+          "median_seconds": 66.02267166305388,
+          "p95_seconds": 68.02267166305388,
+          "p99_seconds": 68.02267166305388
+        },
+        "pickup_waiting": {
+          "samples": 3,
+          "mean_seconds": 6.997480926327345,
+          "median_seconds": 2.0,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.3501133583152694,
+        "mean_rider_idle_seconds": 129.97732833694613
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/cumulative-repeat-LocalSearch.json",
+      "semantic_sha256": "e8ec761b70fa67ad62df1f792ffddd9eb2b52c7a685778d16907d046026c1317",
+      "timing": {
+        "raw_ns": [
+          4849000,
+          4660791,
+          4737375,
+          4678959,
+          4754875,
+          4718708,
+          4776875,
+          4576208,
+          4745833,
+          4690292,
+          4684500
+        ],
+        "median_ns": 4718708,
+        "p95_ns": 4812937.5,
+        "p99_ns": 4841787.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/cumulative-repeat.json",
+      "sha256": "a577873aee99259382e1bf83bd4ab54b400044a71778fde51193d9b6151ce657",
+      "scenario_id": "phase18/cumulative-repeat/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "358f02fce242e6056c226ce7e8f5720c26e3904771aa53ee28b517d9fb0d0b04",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 3,
+      "work": {
+        "attempts": 3,
+        "commits": 3,
+        "candidate_submissions": 43,
+        "precedence_exclusions": 13,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 3,
+        "created_orders": 3,
+        "uncreated_orders": 0,
+        "assigned_orders": 3,
+        "delivered_orders": 3,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 3,
+          "mean_seconds": 57.3509668490419,
+          "median_seconds": 64.02267166305388,
+          "p95_seconds": 68.02267166305388,
+          "p99_seconds": 68.02267166305388
+        },
+        "delivered_duration": {
+          "samples": 3,
+          "mean_seconds": 58.017633515708575,
+          "median_seconds": 66.02267166305388,
+          "p95_seconds": 68.02267166305388,
+          "p99_seconds": 68.02267166305388
+        },
+        "pickup_waiting": {
+          "samples": 3,
+          "mean_seconds": 6.997480926327345,
+          "median_seconds": 2.0,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.3501133583152694,
+        "mean_rider_idle_seconds": 129.97732833694613
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/cumulative-repeat-MultiStartLocal.json",
+      "semantic_sha256": "b86ec9e09d2612e98f81f7c6f31265fe256c49bf38364dbe542841958d1832b3",
+      "timing": {
+        "raw_ns": [
+          4717750,
+          4730125,
+          4563750,
+          4624125,
+          4625917,
+          4640875,
+          4666458,
+          4826375,
+          4713125,
+          4753375,
+          4769500
+        ],
+        "median_ns": 4713125,
+        "p95_ns": 4797937.5,
+        "p99_ns": 4820687.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/frozen-service.json",
+      "sha256": "eae252c6a777d64e017049c545a505b573e4b1445420a6b63830c055c5ee4a78",
+      "scenario_id": "phase18/frozen-service/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "b6b656f803eddcdda08b1d1faf8bc19e4465852c8036cd961c1939487afc991f",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 4,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 29.50755722101796,
+          "median_seconds": 29.50755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 30.50755722101796,
+          "median_seconds": 30.50755722101796,
+          "p95_seconds": 42.00755722101796,
+          "p99_seconds": 42.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/frozen-service-Greedy.json",
+      "semantic_sha256": "a5a9d6b7f3789fbbf1a99d2185f8d3bd618232199c25a0d285a32679162822d7",
+      "timing": {
+        "raw_ns": [
+          4133584,
+          4247542,
+          4312042,
+          4248583,
+          4099625,
+          4328500,
+          4258917,
+          4042792,
+          4320125,
+          4298000,
+          4178000
+        ],
+        "median_ns": 4248583,
+        "p95_ns": 4324312.5,
+        "p99_ns": 4327662.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/frozen-service.json",
+      "sha256": "eae252c6a777d64e017049c545a505b573e4b1445420a6b63830c055c5ee4a78",
+      "scenario_id": "phase18/frozen-service/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "237bfa47feab2fced4421519d0801fadcd5ccdd8d14bb9772e9e9188cf8df96e",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 12,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 29.50755722101796,
+          "median_seconds": 29.50755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 30.50755722101796,
+          "median_seconds": 30.50755722101796,
+          "p95_seconds": 42.00755722101796,
+          "p99_seconds": 42.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/frozen-service-LocalSearch.json",
+      "semantic_sha256": "5542254619b4eefae34ad012d4c3fea2f06d6cbd095a7cf7429e5b9577e3001b",
+      "timing": {
+        "raw_ns": [
+          4546292,
+          4612791,
+          4230625,
+          4340625,
+          4359584,
+          4341791,
+          4732958,
+          5200875,
+          4822458,
+          4297292,
+          4454792
+        ],
+        "median_ns": 4454792,
+        "p95_ns": 5011666.5,
+        "p99_ns": 5163033.3
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/frozen-service.json",
+      "sha256": "eae252c6a777d64e017049c545a505b573e4b1445420a6b63830c055c5ee4a78",
+      "scenario_id": "phase18/frozen-service/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "3e85ffed513eb7a6e499d6472450204102ec452f4ccedd99df582f5702ba6043",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 12,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 29.50755722101796,
+          "median_seconds": 29.50755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 30.50755722101796,
+          "median_seconds": 30.50755722101796,
+          "p95_seconds": 42.00755722101796,
+          "p99_seconds": 42.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/frozen-service-MultiStartLocal.json",
+      "semantic_sha256": "aab6c9f05549523146d1716043a9948ad81ffa03473257627f68c8255c3476b2",
+      "timing": {
+        "raw_ns": [
+          4683167,
+          4580416,
+          4377000,
+          4362708,
+          4271625,
+          4497500,
+          4417042,
+          4438791,
+          4454875,
+          4408167,
+          4334292
+        ],
+        "median_ns": 4417042,
+        "p95_ns": 4631791.5,
+        "p99_ns": 4672891.9
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/frozen-wait.json",
+      "sha256": "65c1f4b1bb2e5f2770ceb40d148b592670769065ae8e723bab299a1a1df42aa1",
+      "scenario_id": "phase18/frozen-wait/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "6b3dc0c6d05fb8ed2fbfb5af11c29f10a1cd3cbeb27750ae956d12e0f3dfee86",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 4,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 35.00755722101796,
+          "median_seconds": 35.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 36.00755722101796,
+          "median_seconds": 36.00755722101796,
+          "p95_seconds": 42.00755722101796,
+          "p99_seconds": 42.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/frozen-wait-Greedy.json",
+      "semantic_sha256": "0c481d7bb126106f82183c23b381609ba3414de97e7e33d47227667371c3449d",
+      "timing": {
+        "raw_ns": [
+          4403750,
+          4346083,
+          4318959,
+          4439083,
+          4415000,
+          4240541,
+          4323083,
+          4259792,
+          4261458,
+          4210250,
+          4355125
+        ],
+        "median_ns": 4323083,
+        "p95_ns": 4427041.5,
+        "p99_ns": 4436674.7
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/frozen-wait.json",
+      "sha256": "65c1f4b1bb2e5f2770ceb40d148b592670769065ae8e723bab299a1a1df42aa1",
+      "scenario_id": "phase18/frozen-wait/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "a760f90282b5804ef1660d5a5502143007c63684b6aab18b4354fc0a7ce28d9e",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 12,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 35.00755722101796,
+          "median_seconds": 35.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 36.00755722101796,
+          "median_seconds": 36.00755722101796,
+          "p95_seconds": 42.00755722101796,
+          "p99_seconds": 42.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/frozen-wait-LocalSearch.json",
+      "semantic_sha256": "da802c4a766ce8c03e416d36de9a2e0aa9cfc86d5e47234f0eb4ad303f8725f4",
+      "timing": {
+        "raw_ns": [
+          4519875,
+          4403458,
+          4524208,
+          4222667,
+          4396084,
+          4257375,
+          4380292,
+          4333208,
+          4393458,
+          4585417,
+          4495166
+        ],
+        "median_ns": 4396084,
+        "p95_ns": 4554812.5,
+        "p99_ns": 4579296.1
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/frozen-wait.json",
+      "sha256": "65c1f4b1bb2e5f2770ceb40d148b592670769065ae8e723bab299a1a1df42aa1",
+      "scenario_id": "phase18/frozen-wait/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "de2f512af54e9bd1f46a9f41ea6a46322312cbbd4284785040bbaf04bd61d4ad",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 2,
+        "candidate_submissions": 12,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 35.00755722101796,
+          "median_seconds": 35.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 36.00755722101796,
+          "median_seconds": 36.00755722101796,
+          "p95_seconds": 42.00755722101796,
+          "p99_seconds": 42.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/frozen-wait-MultiStartLocal.json",
+      "semantic_sha256": "37b017e39623bb4ab2035d820e4a4b8f9ee851b18a32220cc0afb6748116352e",
+      "timing": {
+        "raw_ns": [
+          4594750,
+          4589500,
+          4323500,
+          4681792,
+          4671584,
+          4992334,
+          4236834,
+          4514208,
+          4741958,
+          4591500,
+          4525709
+        ],
+        "median_ns": 4591500,
+        "p95_ns": 4867146.0,
+        "p99_ns": 4967296.4
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/greedy-trap.json",
+      "sha256": "c499ef54f88339365f31166a5748bf98e14438bfe3df43ca8db626d7bd606903",
+      "scenario_id": "phase18/greedy-trap/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "641a649e568d8c060c5d35f16b5fafdd49710cab997b153bc1681d3d8f13e8f1",
+      "graph_digest": "c14c06966637b94907ba9386d84b1b66e1903ec25ef1a0365569d176d6b7d808",
+      "graph_nodes": 3,
+      "directed_edges": 4,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 2,
+        "commits": 1,
+        "candidate_submissions": 11,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 10.007557221017965,
+          "road_meters": 111.19508023353293
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 10.007557221017965,
+          "median_seconds": 10.007557221017965,
+          "p95_seconds": 10.007557221017965,
+          "p99_seconds": 10.007557221017965
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 10.007557221017965,
+          "median_seconds": 10.007557221017965,
+          "p95_seconds": 10.007557221017965,
+          "p99_seconds": 10.007557221017965
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 0.0,
+          "median_seconds": 0.0,
+          "p95_seconds": 0.0,
+          "p99_seconds": 0.0
+        },
+        "completed_distance_meters": 111.19508023353293,
+        "rider_utilization": 0.025018893052544913,
+        "mean_rider_idle_seconds": 194.996221389491
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/greedy-trap-Greedy.json",
+      "semantic_sha256": "72361d3a2342c8bb7d5fb97130869aeb6af604d74cb3a0c340152a57905df704",
+      "timing": {
+        "raw_ns": [
+          4496250,
+          4258292,
+          4360875,
+          4398083,
+          4419375,
+          4306167,
+          4281292,
+          4385625,
+          4108125,
+          4186625,
+          4222792
+        ],
+        "median_ns": 4306167,
+        "p95_ns": 4457812.5,
+        "p99_ns": 4488562.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/greedy-trap.json",
+      "sha256": "c499ef54f88339365f31166a5748bf98e14438bfe3df43ca8db626d7bd606903",
+      "scenario_id": "phase18/greedy-trap/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "c04ac8d41b0269b2179a944d83eaa4717d749ff9038b4fb672432822ac01c3cb",
+      "graph_digest": "c14c06966637b94907ba9386d84b1b66e1903ec25ef1a0365569d176d6b7d808",
+      "graph_nodes": 3,
+      "directed_edges": 4,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 48,
+        "precedence_exclusions": 6,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 2,
+          "road_seconds": 40.03022888407186,
+          "road_meters": 444.78032093413174
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 20.01511444203593,
+          "median_seconds": 20.01511444203593,
+          "p95_seconds": 20.01511444203593,
+          "p99_seconds": 20.01511444203593
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 20.01511444203593,
+          "median_seconds": 20.01511444203593,
+          "p95_seconds": 20.01511444203593,
+          "p99_seconds": 20.01511444203593
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 0.0,
+          "median_seconds": 0.0,
+          "p95_seconds": 0.0,
+          "p99_seconds": 0.0
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.10007557221017965,
+        "mean_rider_idle_seconds": 179.98488555796408
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/greedy-trap-LocalSearch.json",
+      "semantic_sha256": "638f29c895076283f1d3a90a3989fc87f5498c3c998ea83186c6f78d390f8fa6",
+      "timing": {
+        "raw_ns": [
+          4506000,
+          4526375,
+          4520334,
+          4464500,
+          4295291,
+          4530458,
+          4467375,
+          4379667,
+          4303208,
+          4434833,
+          4282500
+        ],
+        "median_ns": 4464500,
+        "p95_ns": 4528416.5,
+        "p99_ns": 4530049.7
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/greedy-trap.json",
+      "sha256": "c499ef54f88339365f31166a5748bf98e14438bfe3df43ca8db626d7bd606903",
+      "scenario_id": "phase18/greedy-trap/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "a650369d9ca28b813f2993579881cbd08e53002f4452ca2a1fdc9688ecd466c6",
+      "graph_digest": "c14c06966637b94907ba9386d84b1b66e1903ec25ef1a0365569d176d6b7d808",
+      "graph_nodes": 3,
+      "directed_edges": 4,
+      "riders": 2,
+      "orders": 2,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 32,
+        "precedence_exclusions": 4,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 2,
+          "road_seconds": 40.03022888407186,
+          "road_meters": 444.78032093413174
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 20.01511444203593,
+          "median_seconds": 20.01511444203593,
+          "p95_seconds": 20.01511444203593,
+          "p99_seconds": 20.01511444203593
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 20.01511444203593,
+          "median_seconds": 20.01511444203593,
+          "p95_seconds": 20.01511444203593,
+          "p99_seconds": 20.01511444203593
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 0.0,
+          "median_seconds": 0.0,
+          "p95_seconds": 0.0,
+          "p99_seconds": 0.0
+        },
+        "completed_distance_meters": 444.78032093413174,
+        "rider_utilization": 0.10007557221017965,
+        "mean_rider_idle_seconds": 179.98488555796408
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/greedy-trap-MultiStartLocal.json",
+      "semantic_sha256": "49d78d4f66b76f51df93d2731ed7587a6c79ce89ea617fda56f333e02657faf8",
+      "timing": {
+        "raw_ns": [
+          4298959,
+          4438625,
+          4460000,
+          4732500,
+          4619167,
+          4681750,
+          4511000,
+          4486959,
+          4389292,
+          4347459,
+          4323709
+        ],
+        "median_ns": 4460000,
+        "p95_ns": 4707125.0,
+        "p99_ns": 4727425.0
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/hard-deadline.json",
+      "sha256": "b517789668c40053b99f33e649a9042788f9e1276223557b6ae84cfc49697f1b",
+      "scenario_id": "phase18/hard-deadline/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "acd67297e912aacf8b6d7e5418a08df2f70b8abf604426b3883bbc201f6652c5",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 1,
+        "candidate_submissions": 8,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.20003778610508982,
+        "mean_rider_idle_seconds": 159.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/hard-deadline-Greedy.json",
+      "semantic_sha256": "4ca3213f02d8e90e4e036253ce434c47df50242fda1bce7ef7eabf89eb5266f7",
+      "timing": {
+        "raw_ns": [
+          4263791,
+          4288833,
+          4176959,
+          4292833,
+          4190292,
+          4273875,
+          4442042,
+          4453375,
+          4213875,
+          4298167,
+          4260084
+        ],
+        "median_ns": 4273875,
+        "p95_ns": 4447708.5,
+        "p99_ns": 4452241.7
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/hard-deadline.json",
+      "sha256": "b517789668c40053b99f33e649a9042788f9e1276223557b6ae84cfc49697f1b",
+      "scenario_id": "phase18/hard-deadline/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "e7fb128dd1c9f5b6b419cbcc76f1f753425ff0889069c8df2c91445a011e66a9",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 1,
+        "candidate_submissions": 16,
+        "precedence_exclusions": 2,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.20003778610508982,
+        "mean_rider_idle_seconds": 159.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/hard-deadline-LocalSearch.json",
+      "semantic_sha256": "5e026261010462b4570ee6a760df559dc5c4754f9234e9bfb93d929eb185071a",
+      "timing": {
+        "raw_ns": [
+          4337583,
+          4234084,
+          4276125,
+          4048208,
+          4208583,
+          4078458,
+          4019042,
+          4166833,
+          4282166,
+          4158750,
+          4262083
+        ],
+        "median_ns": 4208583,
+        "p95_ns": 4309874.5,
+        "p99_ns": 4332041.3
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/hard-deadline.json",
+      "sha256": "b517789668c40053b99f33e649a9042788f9e1276223557b6ae84cfc49697f1b",
+      "scenario_id": "phase18/hard-deadline/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "2345c14f8db0c24d5e4178f9abcc861de9914ea10dad37d6a5f89fe18c3440f3",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 4,
+        "commits": 1,
+        "candidate_submissions": 16,
+        "precedence_exclusions": 2,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 1,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 1,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 1,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 16.992442778982035,
+          "median_seconds": 16.992442778982035,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.20003778610508982,
+        "mean_rider_idle_seconds": 159.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/hard-deadline-MultiStartLocal.json",
+      "semantic_sha256": "b418c1ebb5f06e098de7111fe4c2bc3fcbb9323c556b9dcafa09e662fb7dd146",
+      "timing": {
+        "raw_ns": [
+          4171250,
+          4173917,
+          4197666,
+          4158583,
+          4073917,
+          4245292,
+          4186541,
+          4203042,
+          4064541,
+          4091667,
+          4411000
+        ],
+        "median_ns": 4173917,
+        "p95_ns": 4328146.0,
+        "p99_ns": 4394429.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/input-isolation.json",
+      "sha256": "26548db54dd1ee6781759aa85bf76513cb585e46334f50165829c85e0776c8c1",
+      "scenario_id": "phase18/input-isolation/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "64e4ada1bc2f611797cd33c2c5779c86e701166ffb6bfc7f11776c834d1177e7",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 3,
+        "commits": 2,
+        "candidate_submissions": 4,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 2,
+        "terminations": [
+          "ConstructionComplete",
+          "ConstructionComplete",
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 0,
+          "road_seconds": 0.0,
+          "road_meters": 0.0
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 28.00755722101796,
+          "median_seconds": 28.00755722101796,
+          "p95_seconds": 39.00755722101796,
+          "p99_seconds": 39.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.00755722101796,
+          "median_seconds": 43.00755722101796,
+          "p95_seconds": 44.00755722101796,
+          "p99_seconds": 44.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 8.996221389491017,
+          "median_seconds": 8.996221389491017,
+          "p95_seconds": 15.992442778982035,
+          "p99_seconds": 15.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.2200377861050898,
+        "mean_rider_idle_seconds": 155.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/input-isolation-Greedy.json",
+      "semantic_sha256": "4f06fb378114df64e7622377020eb813175e0a1a60655014203ae7e6c11fdfec",
+      "timing": {
+        "raw_ns": [
+          4054625,
+          4081583,
+          4228958,
+          4190666,
+          4206292,
+          4175458,
+          4044958,
+          4126375,
+          4141708,
+          4127250,
+          4159625
+        ],
+        "median_ns": 4141708,
+        "p95_ns": 4217625.0,
+        "p99_ns": 4226691.4
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/input-isolation.json",
+      "sha256": "26548db54dd1ee6781759aa85bf76513cb585e46334f50165829c85e0776c8c1",
+      "scenario_id": "phase18/input-isolation/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "96f9faa7803820053f0816915316569ba64b204565b6b3cd4f1b6958531f0830",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 3,
+        "commits": 2,
+        "candidate_submissions": 11,
+        "precedence_exclusions": 5,
+        "incomplete_input_attempts": 2,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 0,
+          "road_seconds": 0.0,
+          "road_meters": 0.0
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 28.00755722101796,
+          "median_seconds": 28.00755722101796,
+          "p95_seconds": 39.00755722101796,
+          "p99_seconds": 39.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.00755722101796,
+          "median_seconds": 43.00755722101796,
+          "p95_seconds": 44.00755722101796,
+          "p99_seconds": 44.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 8.996221389491017,
+          "median_seconds": 8.996221389491017,
+          "p95_seconds": 15.992442778982035,
+          "p99_seconds": 15.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.2200377861050898,
+        "mean_rider_idle_seconds": 155.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/input-isolation-LocalSearch.json",
+      "semantic_sha256": "cc8bc40698e8abe8716f0001b7a2414bf9b682ae27605b9080a5afe3a4530762",
+      "timing": {
+        "raw_ns": [
+          4173917,
+          4389959,
+          4361042,
+          4233000,
+          4163042,
+          4247792,
+          4272459,
+          4348625,
+          4256917,
+          4158333,
+          4177458
+        ],
+        "median_ns": 4247792,
+        "p95_ns": 4375500.5,
+        "p99_ns": 4387067.3
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/input-isolation.json",
+      "sha256": "26548db54dd1ee6781759aa85bf76513cb585e46334f50165829c85e0776c8c1",
+      "scenario_id": "phase18/input-isolation/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "a6e1765407b57c23628254c4c1fab9756c84fdc467d02aaaf9e85e5896db596c",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 3,
+        "commits": 2,
+        "candidate_submissions": 11,
+        "precedence_exclusions": 5,
+        "incomplete_input_attempts": 2,
+        "terminations": [
+          "LocalOptimum",
+          "LocalOptimum",
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 0,
+          "road_seconds": 0.0,
+          "road_meters": 0.0
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 28.00755722101796,
+          "median_seconds": 28.00755722101796,
+          "p95_seconds": 39.00755722101796,
+          "p99_seconds": 39.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.00755722101796,
+          "median_seconds": 43.00755722101796,
+          "p95_seconds": 44.00755722101796,
+          "p99_seconds": 44.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 8.996221389491017,
+          "median_seconds": 8.996221389491017,
+          "p95_seconds": 15.992442778982035,
+          "p99_seconds": 15.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.2200377861050898,
+        "mean_rider_idle_seconds": 155.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/input-isolation-MultiStartLocal.json",
+      "semantic_sha256": "7948fda79769fbd9aab2bb9ce9a7b434a1afaa9bda880833cf2384049778213d",
+      "timing": {
+        "raw_ns": [
+          4489000,
+          4349792,
+          4239875,
+          4307875,
+          4398333,
+          4420667,
+          4459833,
+          4693500,
+          4577375,
+          4555000,
+          4310917
+        ],
+        "median_ns": 4420667,
+        "p95_ns": 4635437.5,
+        "p99_ns": 4681887.5
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/joint-pooling.json",
+      "sha256": "070b1915684a535357acfd8ff74845eec099e70e8089154eee4bd608341e9f3b",
+      "scenario_id": "phase18/joint-pooling/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "2ad381fffaddd37f8ec7cd94bbfcacf37d1298d2330feac3f8e5e20ae79f736b",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 7,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 2,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/joint-pooling-Greedy.json",
+      "semantic_sha256": "da3cf062775bd29e47f7714af89e48ebf367df8385f946f5acc16dbfd68e9804",
+      "timing": {
+        "raw_ns": [
+          4370750,
+          4305375,
+          4394834,
+          4219084,
+          4177708,
+          4187792,
+          4159375,
+          4221041,
+          4235666,
+          4247583,
+          4299500
+        ],
+        "median_ns": 4235666,
+        "p95_ns": 4382792.0,
+        "p99_ns": 4392425.6
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/joint-pooling.json",
+      "sha256": "070b1915684a535357acfd8ff74845eec099e70e8089154eee4bd608341e9f3b",
+      "scenario_id": "phase18/joint-pooling/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "62a353a94805916b7be4960d33417e4a861efa9704fd4a73f877d17791c72096",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 25,
+        "precedence_exclusions": 6,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 2,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/joint-pooling-LocalSearch.json",
+      "semantic_sha256": "75f666a25bc0e5a2e753eeecc4451d3b358c857bcadb3399da6bf0324a315613",
+      "timing": {
+        "raw_ns": [
+          4321250,
+          4523125,
+          4279375,
+          4334333,
+          4229541,
+          4242084,
+          4311041,
+          4214666,
+          4326125,
+          4405208,
+          4219750
+        ],
+        "median_ns": 4311041,
+        "p95_ns": 4464166.5,
+        "p99_ns": 4511333.3
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/joint-pooling.json",
+      "sha256": "070b1915684a535357acfd8ff74845eec099e70e8089154eee4bd608341e9f3b",
+      "scenario_id": "phase18/joint-pooling/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "43270ac43ccfb3b6cfacfda1bf0393ac52bd8acba4c94747744c1f0b20fd8943",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 2,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 32,
+        "precedence_exclusions": 6,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 2,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 2,
+        "created_orders": 2,
+        "uncreated_orders": 0,
+        "assigned_orders": 2,
+        "delivered_orders": 2,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 0,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 2,
+          "mean_seconds": 43.50755722101796,
+          "median_seconds": 43.50755722101796,
+          "p95_seconds": 45.00755722101796,
+          "p99_seconds": 45.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 2,
+          "mean_seconds": 9.496221389491017,
+          "median_seconds": 9.496221389491017,
+          "p95_seconds": 16.992442778982035,
+          "p99_seconds": 16.992442778982035
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.22503778610508982,
+        "mean_rider_idle_seconds": 154.99244277898202
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/joint-pooling-MultiStartLocal.json",
+      "semantic_sha256": "c8392d585311b1a22cd088911527db9eec6db52fbc226beb34adcaac1b076544",
+      "timing": {
+        "raw_ns": [
+          4425250,
+          4450584,
+          4328708,
+          4496417,
+          4325000,
+          4393958,
+          4458375,
+          4459291,
+          4336875,
+          4543375,
+          4407667
+        ],
+        "median_ns": 4425250,
+        "p95_ns": 4519896.0,
+        "p99_ns": 4538679.2
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/realized-violation.json",
+      "sha256": "ddcd4ed63a6fff97d991e5ff616596fb3feb4c61cf028a23c6534d69228d12c7",
+      "scenario_id": "phase18/realized-violation/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "Greedy"
+      },
+      "configured_input_sha256": "bccfebfef225bc085db2ba781f8dffa62100db401b5f174b9a01028bd3c95215",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 1,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 1,
+        "precedence_exclusions": 0,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "ConstructionComplete"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 1,
+        "created_orders": 1,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 95.00755722101796,
+          "median_seconds": 95.00755722101796,
+          "p95_seconds": 95.00755722101796,
+          "p99_seconds": 95.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 71.99244277898204,
+          "median_seconds": 71.99244277898204,
+          "p95_seconds": 71.99244277898204,
+          "p99_seconds": 71.99244277898204
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.4750377861050898,
+        "mean_rider_idle_seconds": 104.99244277898204
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/realized-violation-Greedy.json",
+      "semantic_sha256": "8f7a9ea5579ebe8a1514d38f4a92f98d7ccffd1cf25bd094a2a82ed7d082c6b1",
+      "timing": {
+        "raw_ns": [
+          4075791,
+          3942834,
+          4127625,
+          4118666,
+          4109417,
+          4009042,
+          4169833,
+          4139958,
+          4907791,
+          4706125,
+          4626584
+        ],
+        "median_ns": 4127625,
+        "p95_ns": 4806958.0,
+        "p99_ns": 4887624.4
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/realized-violation.json",
+      "sha256": "ddcd4ed63a6fff97d991e5ff616596fb3feb4c61cf028a23c6534d69228d12c7",
+      "scenario_id": "phase18/realized-violation/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "LocalSearch"
+      },
+      "configured_input_sha256": "88f235d7d941529c0a956d760f1738a129109682765fadc77778fe885bfc9714",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 1,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 2,
+        "precedence_exclusions": 2,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 1,
+        "created_orders": 1,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 95.00755722101796,
+          "median_seconds": 95.00755722101796,
+          "p95_seconds": 95.00755722101796,
+          "p99_seconds": 95.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 71.99244277898204,
+          "median_seconds": 71.99244277898204,
+          "p95_seconds": 71.99244277898204,
+          "p99_seconds": 71.99244277898204
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.4750377861050898,
+        "mean_rider_idle_seconds": 104.99244277898204
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/realized-violation-LocalSearch.json",
+      "semantic_sha256": "2a565846e31e21c7906f33ec52327aa0bf3d928b48b0169c7a8bd58776e0c951",
+      "timing": {
+        "raw_ns": [
+          6695750,
+          14250334,
+          5161667,
+          4729375,
+          5125750,
+          4194709,
+          4059625,
+          4419750,
+          4211458,
+          5469125,
+          5543541
+        ],
+        "median_ns": 5125750,
+        "p95_ns": 10473042.0,
+        "p99_ns": 13494875.600000001
+      }
+    },
+    {
+      "path": "data/fixtures/phase-18/realized-violation.json",
+      "sha256": "ddcd4ed63a6fff97d991e5ff616596fb3feb4c61cf028a23c6534d69228d12c7",
+      "scenario_id": "phase18/realized-violation/v1",
+      "configuration": {
+        "kind": "fleet_batch",
+        "work_budget": 100000,
+        "forecast_validity_seconds": 1000,
+        "algorithm": "MultiStartLocal"
+      },
+      "configured_input_sha256": "4cc3c7cb51b91c7ba54b1feb838b7177dbfad723b6e824d92d5853862c372e21",
+      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+      "graph_nodes": 2,
+      "directed_edges": 2,
+      "riders": 1,
+      "orders": 1,
+      "work": {
+        "attempts": 1,
+        "commits": 1,
+        "candidate_submissions": 2,
+        "precedence_exclusions": 2,
+        "incomplete_input_attempts": 0,
+        "terminations": [
+          "LocalOptimum"
+        ],
+        "first_batch_objective": {
+          "admitted_orders": 1,
+          "road_seconds": 20.01511444203593,
+          "road_meters": 222.39016046706587
+        }
+      },
+      "summary": {
+        "scheduled_orders": 1,
+        "created_orders": 1,
+        "uncreated_orders": 0,
+        "assigned_orders": 1,
+        "delivered_orders": 1,
+        "unassigned_orders": 0,
+        "assigned_unfinished_orders": 0,
+        "outstanding_orders": 0,
+        "late_deliveries": 1,
+        "outstanding_past_deadline": 0,
+        "predicted_eta": {
+          "samples": 1,
+          "mean_seconds": 40.00755722101796,
+          "median_seconds": 40.00755722101796,
+          "p95_seconds": 40.00755722101796,
+          "p99_seconds": 40.00755722101796
+        },
+        "delivered_duration": {
+          "samples": 1,
+          "mean_seconds": 95.00755722101796,
+          "median_seconds": 95.00755722101796,
+          "p95_seconds": 95.00755722101796,
+          "p99_seconds": 95.00755722101796
+        },
+        "pickup_waiting": {
+          "samples": 1,
+          "mean_seconds": 71.99244277898204,
+          "median_seconds": 71.99244277898204,
+          "p95_seconds": 71.99244277898204,
+          "p99_seconds": 71.99244277898204
+        },
+        "completed_distance_meters": 222.39016046706587,
+        "rider_utilization": 0.4750377861050898,
+        "mean_rider_idle_seconds": 104.99244277898204
+      },
+      "semantic_artifact": "benchmarks/results/pre20/phase-18-replays/realized-violation-MultiStartLocal.json",
+      "semantic_sha256": "a1454ea6f9a08f3f1a145c394a7f5c5b8002ecf7bf318020479b1659d2459115",
+      "timing": {
+        "raw_ns": [
+          5261750,
+          4453417,
+          5675583,
+          9666875,
+          6465792,
+          7215750,
+          4844625,
+          4194333,
+          4237709,
+          4168875,
+          4926458
+        ],
+        "median_ns": 4926458,
+        "p95_ns": 8441312.5,
+        "p99_ns": 9421762.5
+      }
+    }
+  ]
+}
