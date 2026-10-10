@@ -11,3 +11,12 @@ new graphs. The `.semantic-v2.json` fixture uses verified schema 4 graph identit
 [explicit correspondence](../../../docs/evidence/pre20-graph-correspondence.json)
 records identical topology/geometry/traversal/maneuver content and the changed
 compiler-identity metadata. Use the current fixture for the documented commands.
+
+## Published snapshot portability
+
+`snapshot.semantic-v2/` retains the exact schema 4 graph, compiled provenance and
+build manifest paired with the overlay. Loading verifies semantic identity and
+artifact integrity; the CLI tests also perform deep graph verification. Native
+floating-point Haversine results can vary across platforms, so rebuilding from the
+same PBF/source ID need not reproduce every compiled bit or the pinned digest.
+A new build requires its own explicitly authored overlay; this fixture is not rebound.

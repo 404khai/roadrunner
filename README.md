@@ -156,17 +156,13 @@ and search-budget termination.
 
 ### Static traffic
 
-The fixture's digest requires this exact source identity; do not reuse the generic
-snapshot above or substitute a different source ID:
+Use the published bundle paired with the pinned overlay. Recompiling the PBF on
+another platform can change floating-point distance bits and therefore the digest.
 
 ```bash
-./target/release/roadrunner osm extract \
-  data/fixtures/phase-7/lagos-marina.osm.pbf \
-  target/readme-data/traffic.rr-osm --source-id phase10-lagos-marina
-./target/release/roadrunner osm compile \
-  target/readme-data/traffic.rr-osm target/readme-data/traffic-snapshot
+./target/release/roadrunner graph verify data/fixtures/phase-10/snapshot.semantic-v2 --deep
 ./target/release/roadrunner route traffic \
-  target/readme-data/traffic-snapshot 5602610872 5594385916 \
+  data/fixtures/phase-10/snapshot.semantic-v2 5602610872 5594385916 \
   --scenario data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json
 ```
 
@@ -175,19 +171,15 @@ The overlay affects directed edges independently. See [traffic policies](docs/tr
 
 ### Time-dependent traffic
 
-Use the separate source identity pinned by the profile:
+Use the separately published snapshot pinned by the profile:
 
 ```bash
-./target/release/roadrunner osm extract \
-  data/fixtures/phase-7/lagos-marina.osm.pbf \
-  target/readme-data/schedule.rr-osm --source-id phase11-lagos-marina
-./target/release/roadrunner osm compile \
-  target/readme-data/schedule.rr-osm target/readme-data/schedule-snapshot
+./target/release/roadrunner graph verify data/fixtures/phase-11/snapshot.semantic-v2 --deep
 ./target/release/roadrunner route schedule \
-  target/readme-data/schedule-snapshot 5602610872 5594385916 \
+  data/fixtures/phase-11/snapshot.semantic-v2 5602610872 5594385916 \
   --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 0
 ./target/release/roadrunner route schedule \
-  target/readme-data/schedule-snapshot 5602610872 5594385916 \
+  data/fixtures/phase-11/snapshot.semantic-v2 5602610872 5594385916 \
   --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 600
 ```
 

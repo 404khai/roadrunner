@@ -1,15 +1,19 @@
 {
   "schema_version": 1,
   "workspace_tests": {
-    "passed": 217,
+    "passed": 218,
     "failed": 0,
     "ignored_measurement_test": 1,
-    "measurement_test_executed_separately": true
+    "measurement_test_executed_separately": true,
+    "followup_command": "cargo +1.99.0 test --workspace --all-features --locked"
   },
   "replay_fixtures": 38,
   "baseline_commit": "4271ddd",
   "current_release_binary_sha256": "45f92db34f5e6c8741c6ef971fae568725925d728293f15bb9fb3b438c1700c5",
   "checks": {
+    "ci-fix-clippy.log": "618183f123cef4a6a8bd4096c03cbd474e7e7a5ef7d1988132e4c57d5404790d",
+    "ci-fix-fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ci-fix-tests.log": "9db8e7174c10aa1cc45c0a8624fb3eb7c8ba7b1b7189edb350753ea733fe1ee6",
     "clippy.log": "d9a4918c7af031ab673968cf29d2dec6b22203ee554370b3132a6286b2ce1f14",
     "documentation-build.log": "e2909a6541d1f175c05a1df41d9cd5502ebbf50307f55c848a404335cf9ee00f",
     "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -20,5 +24,17 @@
     "replay.log": "3a7fad013a67339d332c8c33c2a0b8490366043dcb85dc2e1f3b18baa51eece2",
     "workspace-tests.log": "ab458b47ae671ac7b751dd77edc4b1908bbda642171a0a972878f5113ba3138a"
   },
-  "scope": "pre-Phase-20 only; no HTTP/storage/credential/broker implementation"
+  "scope": "pre-Phase-20 only; no HTTP/storage/credential/broker implementation",
+  "ci_portability_correction": {
+    "initial_failed_run": 38048408015,
+    "change": "load verified published bundles for pinned overlays; retain strict cross-snapshot rejection",
+    "published_bundles": {
+      "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph": "7943c50063f8e268359b1e54f066617bfe303edd97e82bf549b388ebf4a5a317",
+      "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-provenance": "b9900d560279be16e23d4d91e6dfaab8373ebcf988959b560d5d393a6cc9b9ad",
+      "data/fixtures/phase-10/snapshot.semantic-v2/manifest.json": "aa4c14bf616943e0c5d6096467a7b12dfd01bdbf0cb499c79de3533a472c7f6d",
+      "data/fixtures/phase-11/snapshot.semantic-v2/graph.rr-graph": "4448745672517c45d97e183f7d64e3214773959b96798f79164e9ae334dc8afa",
+      "data/fixtures/phase-11/snapshot.semantic-v2/graph.rr-provenance": "a7757cdbaa08e5fa5f5d2653393ea1cd867842cf573c530d049f74448f62e83e",
+      "data/fixtures/phase-11/snapshot.semantic-v2/manifest.json": "8d185f83b10bb9dc63e5b6c160ebca1517291927aeb995b50b69bfea482c8a7a"
+    }
+  }
 }

@@ -1,0 +1,383 @@
+   Compiling roadrunner-cli v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s
+     Running unittests src/main.rs (target/debug/deps/roadrunner-916bb8a5d4f0877b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/simulation_cli.rs (target/debug/deps/simulation_cli-27f48580549f2d69)
+
+running 10 tests
+test malformed_scenario_is_an_error_without_success_json ... ok
+test inline_coordinates_and_geometry_are_validated_at_the_json_boundary ... ok
+test graph_artifact_path_resolves_relative_to_scenario_and_digest_is_required ... ok
+test invalid_comparison_arguments_do_not_emit_success_output ... ok
+test simulation_cli_is_reproducible_in_json_and_readable_with_horizon_populations ... ok
+test comparison_cli_replays_four_policies_and_exposes_metrics_and_configuration ... ok
+test phase17_pooled_cli_replays_success_rejections_and_prediction_failure ... ok
+test phase16_fixture_preserves_disconnected_and_future_orders_across_policies ... ok
+test phase18_fleet_cli_replays_joint_publication_isolation_and_incomplete_search ... ok
+test phase19_cli_replays_recovery_refusals_and_incomplete_publication ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+
+     Running tests/traffic_cli.rs (target/debug/deps/traffic_cli-d840678cd0b48602)
+
+running 3 tests
+test pinned_traffic_scenario_selects_longer_faster_route ... ok
+test pinned_time_profile_changes_route_with_departure_time ... ok
+test pinned_scenarios_reject_another_verified_snapshot ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running unittests src/lib.rs (target/debug/deps/roadrunner_core-890b27160852a72d)
+
+running 27 tests
+test cost::route_cost::tests::adds_costs_of_the_same_kind ... ok
+test cost::route_cost::tests::rejects_negative_and_non_finite_costs ... ok
+test cost::route_cost::tests::rejects_mixed_kind_arithmetic_and_comparison ... ok
+test geo::canonical_coordinate::tests::canonicalizes_and_round_trips_coordinates ... ok
+test geo::canonical_coordinate::tests::rejects_out_of_range_components ... ok
+test geo::coordinate::tests::accepts_boundary_coordinates ... ok
+test geo::bounding_box::tests::contains_interior_and_boundary_coordinates ... ok
+test geo::bounding_box::tests::rejects_inverted_longitudes_and_antimeridian_crossing_boxes ... ok
+test geo::bounding_box::tests::rejects_inverted_latitude_bounds ... ok
+test geo::coordinate::tests::rejects_non_finite_components ... ok
+test geo::coordinate::tests::rejects_out_of_range_components ... ok
+test geo::haversine::tests::distance_is_symmetric ... ok
+test geo::haversine::tests::equatorial_quarter_circumference_matches_the_mean_radius ... ok
+test cost::route_cost::tests::deserialization_preserves_validation ... ok
+test geo::bounding_box::tests::deserialization_preserves_box_invariants ... ok
+test geo::coordinate::tests::serde_round_trip_preserves_fields_and_validation ... ok
+test geo::haversine::tests::identical_coordinates_have_zero_distance ... ok
+test geo::haversine::tests::london_to_paris_matches_a_known_distance ... ok
+test geo::units::tests::accepts_zero_and_positive_measurements ... ok
+test geo::units::tests::checked_add_revalidates_the_result ... ok
+test geo::units::tests::rejects_negative_measurements ... ok
+test geo::units::tests::rejects_non_finite_measurements ... ok
+test geo::units::tests::serializes_as_a_number_and_validates_deserialization ... ok
+test tests::reports_the_package_version ... ok
+test graph::artifact::tests::deep_verification_rejects_rehashed_derived_distance_corruption ... ok
+test graph::artifact::tests::semantic_identity_rejects_assertions_and_legacy_schemas ... ok
+test graph::artifact::tests::rejects_invalid_coordinates_duplicate_edges_and_geometry_gaps ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/routing_correctness.rs (target/debug/deps/routing_correctness-302ac5dd8c2cfad6)
+
+running 21 tests
+test built_in_evaluators_deny_reason_specific_access_by_default ... ok
+test alternatives_report_budget_and_degenerate_cases ... ok
+test alternatives_rank_three_loopless_corridors_by_cost ... ok
+test alternatives_respect_incoming_maneuver_and_one_way_edges ... ok
+test disconnected_and_isolated_nodes_return_precise_outcomes ... ok
+test alternatives_skip_tiny_detour_and_keep_distinct_corridor ... ok
+test fifo_evaluation_receives_arrival_time_at_each_node ... ok
+test graph_builder_rejects_malformed_segments ... ok
+test forbidden_edges_are_skipped_but_evaluator_errors_propagate ... ok
+test incompatible_capabilities_and_heuristics_are_rejected ... ok
+test invalid_evaluator_values_are_routing_errors ... ok
+test corrupt_artifacts_are_rejected ... ok
+test objective_overflow_is_an_error ... ok
+test finalization_is_independent_of_insertion_order_and_artifact_round_trips ... ok
+test built_in_distance_heuristic_matches_dijkstra ... ok
+test maneuver_aware_search_keeps_distinct_incoming_edge_states ... ok
+test built_in_travel_time_heuristic_matches_dijkstra ... ok
+test stale_entries_parallel_edges_self_loops_and_zero_cycles_are_safe ... ok
+test atomic_artifact_publication_produces_a_valid_complete_file ... ok
+test seeded_dijkstra_matches_independent_bellman_ford_and_zero_astar ... ok
+test astar_geographic_rounding_regression_matches_dijkstra_exactly ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/semantic_identity.rs (target/debug/deps/semantic_identity-2729da17b07e4f7c)
+
+running 3 tests
+test legacy_claims_are_inspection_only_and_never_relabelled ... ok
+test geometry_speed_access_direction_and_maneuvers_cannot_alias ... ok
+test canonical_input_order_and_roundtrip_have_one_verified_identity ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/traffic_routing.rs (target/debug/deps/traffic_routing-8acd784c103a8da7)
+
+running 8 tests
+test directional_override_does_not_slow_reverse_traversal ... ok
+test departure_time_changes_optimal_route_under_fifo_profiles ... ok
+test traffic_changes_fastest_route_but_not_shortest_distance ... ok
+test overflowing_adjusted_time_is_a_routing_error ... ok
+test time_profiles_reject_non_fifo_and_malformed_inputs ... ok
+test time_dependent_cost_uses_arrival_at_each_edge ... ok
+test time_profiles_interpolate_and_have_canonical_identity ... ok
+test overlay_validates_inputs_and_graph_identity ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/roadrunner_dispatch-9807da3d613cf565)
+
+running 3 tests
+test world::tests::version_overflow_does_not_publish_half_a_transition ... ok
+test world::tests::expected_state_and_transition_invariants_reject_without_partial_mutation ... ok
+test world::tests::order_registration_is_atomic_and_rejects_duplicates_and_version_overflow ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/entry_gate.rs (target/debug/deps/entry_gate-b0c0bcd9fd20d1ac)
+
+running 16 tests
+test fifo_traffic_identity_and_nonzero_epoch_are_used_for_each_leg ... ok
+test anchors_missing_wrong_graph_absent_node_and_wrong_location_are_input_errors ... ok
+test deadlines_are_soft_observed_and_leg_departures_are_propagated ... ok
+test exact_tie_and_permutations_use_lower_rider_id_and_canonical_evidence ... ok
+test eligibility_filters_unavailable_and_coherent_busy_riders_before_screening ... ok
+test all_route_provenance_components_and_departure_are_checked ... ok
+test exhaustive_routed_best_differs_from_spatial_nearest_and_records_coverage ... ok
+test already_expired_deadline_and_early_readiness_are_not_hidden_hard_constraints ... ok
+test general_remaining_plans_validate_custody_and_load_at_every_stop ... ok
+test invalid_assignment_plan_custody_and_fulfillment_worlds_are_rejected ... ok
+test no_route_is_candidate_infeasibility_but_routing_failure_is_evaluation_error ... ok
+test typed_time_epoch_and_stop_timeline_reject_invalid_conversion_and_overflow ... ok
+test scalar_capacity_and_candidate_profile_are_enforced_before_routing ... ok
+test shared_transitions_advance_custody_and_remaining_plan_atomically ... ok
+test structured_unassigned_scope_differs_for_complete_and_bounded_search ... ok
+test stale_commit_preserves_every_assignment_and_plan_and_repeated_commit_is_stale ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fleet.rs (target/debug/deps/fleet-171067f14bd00436)
+
+running 11 tests
+test hard_breached_baseline_is_unchanged_and_acceptance_is_not_reset ... ok
+test greedy_trap_local_ejection_and_multistart_admit_two_and_match_exact_oracle ... ok
+test declared_local_optimum_has_a_measured_gap_to_independent_global_oracle ... ok
+test unknown_inputs_are_isolated_without_discarding_healthy_remainder ... ok
+test unsupported_policy_or_migration_is_not_input_isolation ... ok
+test publication_is_atomic_and_every_relevant_context_mismatch_is_stale ... ok
+test exhausted_search_never_leaks_an_incumbent_assignment_or_terms ... ok
+test frozen_identity_world_revision_and_repeated_cumulative_reference_are_pinned ... ok
+test committed_suffix_resequencing_fixed_custody_and_acceptance_references ... ok
+test seeded_tiny_quality_replay_and_unordered_construction ... ok
+test tiny_generated_exact_oracle_quality_evidence ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s
+
+     Running tests/operational.rs (target/debug/deps/operational-0464eced5c4d431f)
+
+running 18 tests
+test aba_adoption_and_unrelated_authoritative_change_cannot_rebind_old_evaluation ... ok
+test fifo_time_passage_changes_exhaustive_winner_without_any_operational_mutation ... ok
+test expiry_and_backward_clock_never_publish_tentative_state ... ok
+test delayed_publication_preserves_reference_and_stamps_authentic_commit ... ok
+test expiry_during_atomic_staging_rolls_back_the_entire_publication ... ok
+test competing_decisions_have_one_legal_publication_not_just_one_final_owner ... ok
+test fresh_namespaces_checked_allocation_and_no_stale_creation_leaks ... ok
+test operational_boundary_measurement ... ignored, external benchmark collector runs this release-only measurement explicitly
+test observed_readiness_remains_authoritative_when_its_unused_forecast_expires ... ok
+test every_adopted_context_category_invalidates_publication_atomically ... ok
+test fleet_incumbent_and_recovery_publish_after_nonzero_evaluation_time ... ok
+test deadline_cumulative_bound_and_forecast_expiry_reject_endpoint_certification ... ok
+test rescheduling_preserves_action_and_rejects_old_generation_atomically ... ok
+test frozen_action_survives_suffix_publication_and_old_graph_adoption ... ok
+test same_effect_distinct_ids_and_conflicting_reuse_have_no_second_business_effect ... ok
+test pickup_progress_wins_over_an_evaluated_fleet_proposal ... ok
+test time_dependent_ranking_is_not_authorized_by_static_proof ... ok
+test generated_execution_histories_preserve_custody_load_terms_and_once_only_effects ... ok
+
+test result: ok. 17 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/pooling.rs (target/debug/deps/pooling-764d985a52b60ef5)
+
+running 12 tests
+test incomplete_and_complete_infeasible_never_leak_responsibility_stops_or_terms ... ok
+test improvements_consume_zero_and_do_not_bank_future_allowance ... ok
+test custody_exact_fulfillment_capacity_prefix_and_invalid_migration ... ok
+test exact_stale_contexts_reject_without_any_semantic_mutation ... ok
+test hand_worked_all_intermediate_times_loads_and_colocated_independent_stops ... ok
+test explicit_frozen_projection_inserts_only_after_active_pickup_and_validates_effects ... ok
+test required_forecasts_and_versions_fail_the_whole_fleet_not_candidate_rejection ... ok
+test time_dependent_whole_plan_propagation_allows_signed_negative_road_delta ... ok
+test unevaluable_existing_eligible_rider_prevents_publication_and_dropoff_projection_releases_only_its_load ... ok
+test immutable_cumulative_reference_deadline_and_baseline_breach ... ok
+test hand_worked_marginal_cumulative_consumption_and_repeated_insertion_bound ... ok
+test seeded_tiny_oracle_repeated_insertion_and_unordered_construction ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/preparation_aware.rs (target/debug/deps/preparation_aware-f7cb6e30e8ae072c)
+
+running 12 tests
+test no_route_is_rejection_and_delivery_routing_failure_is_error_after_waiting ... ok
+test policy_overflow_and_unrepresentable_departure_fail_without_world_mutation ... ok
+test deadlines_include_waiting_but_remain_soft_observed ... ok
+test configurable_idle_penalty_explicitly_trades_completion_time_for_waiting ... ok
+test actual_ready_observation_overrides_forecast_and_missing_readiness_is_an_error ... ok
+test observed_execution_uses_actual_readiness_even_when_forecast_is_wrong ... ok
+test long_preparation_reduces_observed_idle_time_with_equal_delivery_completion ... ok
+test spatial_scope_capacity_and_profile_rejections_reuse_basic_dispatch_rules ... ok
+test readiness_updates_invalidate_commit_and_forecasts_do_not_authorize_pickup ... ok
+test waiting_advances_fifo_traffic_departure_with_nonzero_epoch ... ok
+test preparation_ranking_is_pure_exact_and_weighted_with_checked_overflow ... ok
+test past_equal_and_intermediate_ready_times_have_nonnegative_waiting ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/recovery.rs (target/debug/deps/recovery-e22099ea46ec2947)
+
+running 9 tests
+test cancellation_keeps_historical_acceptance_and_removes_exact_work ... ok
+test frozen_pickup_and_custody_are_never_transferred_or_cancelled ... ok
+test atomic_reassignment_retains_authentic_terms_and_releases_only_original_owner ... ok
+test complete_context_mismatches_are_stale_with_zero_mutation ... ok
+test hard_baseline_breach_can_repair_but_cumulative_reference_never_resets ... ok
+test budget_prediction_and_churn_failures_publish_nothing ... ok
+test unavailable_owner_repair_bypasses_cooldown_but_never_accepted_protections ... ok
+test independently_ranked_single_order_oracle_and_seeded_replay ... ok
+test generated_multi_order_recoveries_preserve_exact_work_and_unordered_construction ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/rider_lookup.rs (target/debug/deps/rider_lookup-ec5b965877cc900c)
+
+running 5 tests
+test phase_12_migration_preserves_frozen_tie_radius_and_limit_results ... ok
+test configuration_validation_and_eta ... ok
+test empty_zero_limit_boundary_and_ties ... ok
+test global_geometry_matches_scan ... ok
+test seeded_queries_match_scan ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running unittests src/lib.rs (target/debug/deps/roadrunner_osm-37313422cf18af9c)
+
+running 4 tests
+test policy::tests::unknown_directionality_emits_no_edges ... ok
+test policy::tests::motorcycle_oneway_override_restores_both_directions ... ok
+test policy::tests::unpaved_surface_caps_free_flow_speed ... ok
+test policy::tests::compiles_reverse_direction_and_reason_specific_access ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pipeline.rs (target/debug/deps/pipeline-7673617ad4676a7a)
+
+running 12 tests
+test artifact_integrity_failure_is_rejected ... ok
+test noncanonical_artifact_framing_is_rejected ... ok
+test no_turn_compiles_to_a_forbidden_pair_and_changes_the_route ... ok
+test no_u_turn_on_the_same_way_resolves_opposite_traversals ... ok
+test only_turn_forbids_every_other_exit_and_motorcycle_value_wins ... ok
+test unsupported_restriction_shape_is_diagnosed_while_capability_is_enabled ... ok
+test generic_restriction_exception_for_motorcycles_is_diagnosed_not_enforced ... ok
+test source_schema_preserves_node_connectors_and_restriction_variants ... ok
+test real_pbf_offers_distinct_legal_alternative_routes ... ok
+test real_pbf_extracts_and_compiles_with_pinned_results ... ok
+test real_snapshot_round_trip_preserves_validated_routes ... ok
+test semantic_graph_changes_change_authoritative_snapshot_digest ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running unittests src/lib.rs (target/debug/deps/roadrunner_simulation-2a3257a30992253e)
+
+running 4 tests
+test scenario::tests::generator_v1_preserves_the_seed_zero_reference_vector ... ok
+test engine::tests::queue_rejects_reversed_time_and_exhausted_sequences_without_insertion ... ok
+test engine::tests::obsolete_execution_identity_cannot_mutate_world_or_execution ... ok
+test engine::tests::repeated_current_move_cannot_double_distance_or_advance_stage ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/comparison.rs (target/debug/deps/comparison-4e0d17e12c3eead7)
+
+running 5 tests
+test invalid_comparisons_fail_without_partial_results_or_input_mutation ... ok
+test horizon_empty_populations_and_shared_rejections_are_retained ... ok
+test nearest_distance_and_pickup_eta_diverge_under_traffic ... ok
+test completion_ties_and_wait_penalties_select_different_riders_with_explainable_scores ... ok
+test pairing_preserves_readiness_replays_and_canonical_ordering ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/fleet.rs (target/debug/deps/fleet-1ca99d1cf9de1c33)
+
+running 6 tests
+test budget_exhaustion_publishes_nothing_even_after_feasible_work ... ok
+test unknown_active_prefix_is_preserved_while_a_healthy_rider_admits_work ... ok
+test unavailable_order_isolated_then_observation_allows_new_admission ... ok
+test same_instant_orders_form_one_batch_one_commit_and_correct_union_occupancy ... ok
+test frozen_travel_wait_service_and_existing_acceptance_survive_joint_rewrite ... ok
+test generated_seeded_batch_replays_preserve_semantics_under_reversed_input ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/pooling.rs (target/debug/deps/pooling-84c35449f4b87350)
+
+running 7 tests
+test unavailable_new_forecast_blocks_admission_without_stopping_committed_execution ... ok
+test admission_valid_prediction_can_have_realized_readiness_violation ... ok
+test forecast_failures_are_typed_and_legacy_fixtures_remain_versioned ... ok
+test successful_pooling_reads_current_plan_and_releases_one_order_at_a_time ... ok
+test hard_deadline_capacity_and_budget_rejections_are_distinct_and_replay ... ok
+test frozen_travel_wait_and_service_survive_rewrites ... ok
+test seeded_replays_and_canonical_external_collection_order ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/recovery.rs (target/debug/deps/recovery-4b0f6be36d0ebb49)
+
+running 7 tests
+test cancellation_before_assignment_is_neither_unassigned_nor_delivered ... ok
+test forecast_update_is_fresh_and_never_overwrites_actual_observation ... ok
+test unknown_readiness_recovery_fails_but_preserves_execution ... ok
+test observed_road_delay_supersedes_old_arrival_without_double_movement ... ok
+test cancellation_refuses_frozen_and_custody_but_removes_unstarted_work ... ok
+test no_recovery_is_scoped_and_does_not_implicitly_abandon_offline_obligations ... ok
+test offline_recovery_moves_only_unstarted_work_and_both_execute ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/simulation.rs (target/debug/deps/simulation-5ec8421975a81906)
+
+running 15 tests
+test dispatch_errors_are_not_relabelled_as_unassigned_and_inputs_remain_unchanged ... ok
+test disconnected_orders_are_infeasible_not_engine_failures ... ok
+test lifecycle_metrics_and_event_order_are_derived_from_actual_execution ... ok
+test empty_scenario_runs_full_window_and_events_at_horizon_are_inclusive ... ok
+test scenario_validation_rejects_invalid_schema_references_times_and_seed_bounds ... ok
+test horizon_reports_unfinished_uncreated_and_late_work_without_biased_populations ... ok
+test baseline_forecast_never_overrides_actual_readiness_and_rider_is_reused ... ok
+test already_ready_stock_nonzero_epoch_and_zero_time_events_are_supported ... ok
+test preparation_strategy_reuses_far_rider_preference_and_zero_wait_baseline ... ok
+test unavailable_empty_and_capacity_limited_fleets_report_valid_unassigned_results ... ok
+test simultaneous_creations_serialize_commits_and_do_not_double_assign_a_rider ... ok
+test traffic_changes_freeze_inflight_legs_and_apply_at_next_departure ... ok
+test waiting_at_horizon_is_reported_separately_from_completed_pickup_samples ... ok
+test simultaneous_traffic_replacements_preserve_input_order_before_assignments ... ok
+test seed_replays_exactly_and_is_materialized_independently_of_policy_and_input_order ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests roadrunner_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests roadrunner_dispatch
+
+running 1 test
+test crates/roadrunner-dispatch/src/recovery.rs - recovery::RecoveryDecision::evidence (line 162) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+   Doc-tests roadrunner_osm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests roadrunner_simulation
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

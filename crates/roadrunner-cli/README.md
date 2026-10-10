@@ -58,12 +58,10 @@ mkdir -p target/cli-readme
 Choose a new snapshot directory when rerunning compile. A snapshot contains graph,
 provenance and manifest, and compiled graph identity is sensitive to source provenance.
 
-For traffic/profile routing, first build snapshots using the source IDs pinned by their
-scenario digests: `phase10-lagos-marina` for the static fixture and
-`phase11-lagos-marina` for the time-dependent fixture. The exact extraction/compilation
-commands and runnable routes are in the [root walkthrough](../../README.md#static-traffic),
-[traffic guide](../../docs/traffic.md) and [profile guide](../../docs/time-dependent-routing.md).
-Using a generic snapshot here with those bound overlays produces a digest mismatch.
+For traffic/profile routing, use the published `data/fixtures/phase-10/snapshot.semantic-v2`
+and `phase-11/snapshot.semantic-v2` bundles for the pinned traffic fixtures; see the
+root README commands. Recompilation on another platform can change compiled float
+bits and requires a separately authored overlay.
 
 ## Delivery workflows
 

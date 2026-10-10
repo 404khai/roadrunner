@@ -216,7 +216,7 @@ python3 scripts/collect_fleet_benchmark.py --runs 11 --oracle-log /tmp/rr-pre20-
 python3 scripts/collect_recovery_benchmark.py --runs 11 --oracle-log /tmp/rr-pre20-oracles.log --output benchmarks/results/pre20/phase-19.json
 ```
 
-Workspace result: **217 passed, 0 failed**; one intentionally ignored
+Workspace result: **218 passed, 0 failed**; one intentionally ignored
 measurement test was separately executed successfully in release mode. Debug workspace/
 CLI builds, both deep graph CLI checks, focused graph/operational tests, Python syntax
 checks and `git diff --check` also succeeded.
@@ -282,7 +282,7 @@ are excluded. Evidence refers to current code plus successful logs/scenarios abo
 | Versioned command/decision/commitment provenance envelopes | PASS | HistoricalRecord schema1, separate original decision and actual committed facts; actual-time assertions |
 | Explicit authoritative operational clock | PASS | OperationalClock/monotonic named logical implementation; separate samples/domain/epoch and reverse-clock tests |
 | Usable temporal validity for intended commands | PASS | Delayed insertion/fleet/recovery succeed under named static policy; hard/expiry/ranking-change tests reject |
-| Phase 15–19 regression/replay equivalence | PASS | 217 workspace passes; 38 baseline semantic comparisons/exact replays; preserved independent oracles |
+| Phase 15–19 regression/replay equivalence | PASS | 218 workspace passes; 38 baseline semantic comparisons/exact replays; preserved independent oracles |
 | Normative documentation/ADR reconciliation | PASS | Signed Q1–Q33 register, ADR0017–19 and amendments, operational spec/API and implemented-vs-future scope |
 | Builds, format, lint and applicable tests passing | PASS | fmt, strict all-target Clippy, workspace/release/doc builds/tests; executed benchmark measurement |
 
@@ -326,3 +326,25 @@ Phase20 plus selected transactional storage/fencing/retention design. Phase22 re
 completed Phase21 plus explicit message, ordering, retry/quarantine and replay contracts.
 
 Work stops here. Confirm the prerequisite report before any Phase20 work begins.
+
+## CI portability correction
+
+The first Ubuntu CI run failed the two pinned traffic CLI tests. They rebuilt the
+PBF locally but loaded overlays pinned to graphs compiled on macOS. The semantic
+digest correctly binds exact compiled distance/time bits; native Haversine math does
+not promise identical compilation bits across platforms. Local-only validation missed
+this portability assumption.
+
+The fixtures now retain their original verified schema 4 graph/provenance/manifest
+bundles. CLI tests and reproduction commands load those exact published bundles,
+including deep verification. No scenario identity is rewritten, digest comparison is
+not relaxed, and graph semantics are not rounded. A new regression checks that both
+traffic and time-profile overlays still reject a different verified snapshot.
+The OSM compiler tests continue covering extraction, compilation and publication.
+Cross-platform rebuilding with a guaranteed bit-identical math implementation is
+not claimed; a distinct compilation must receive an explicitly authored overlay.
+
+Post-correction workspace tests with all features pass **218 tests**, and strict
+all-target/all-feature Clippy and formatting pass. The retained verification summary
+includes these follow-up logs. Production code and measured release binaries are
+unchanged by this test/fixture correction.
