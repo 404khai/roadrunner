@@ -98,7 +98,8 @@ pub struct ReadinessForecast {
 pub struct AcceptedTerms {
     /// Exact policy at acceptance, never reset on plan rewrite.
     pub policy: OrderPolicy,
-    /// Successful assignment's evaluation instant.
+    /// Authentic acceptance instant. Legacy simulation commits at evaluation time;
+    /// operational publication stamps actual commitment time without rebasing reference.
     pub accepted_at: DispatchInstant,
     /// Authentic completed-dropoff prediction.
     pub completion_reference: DispatchInstant,

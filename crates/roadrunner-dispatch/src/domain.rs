@@ -26,6 +26,22 @@ macro_rules! identity {
 }
 identity!(OrderId, "Stable fulfillment request identity.");
 identity!(DecisionId, "Caller-supplied immutable decision identity.");
+identity!(
+    CommandId,
+    "Namespace-scoped command identity, distinct from HTTP idempotency key."
+);
+identity!(
+    DomainEventId,
+    "Namespace-scoped committed event identity, distinct from action/effect."
+);
+identity!(
+    ExternalObservationId,
+    "Source-scoped observation identity, distinct from command."
+);
+identity!(
+    DecisionAttemptId,
+    "Namespace-scoped evaluation-attempt identity."
+);
 identity!(WorldVersion, "Whole-world optimistic concurrency version.");
 identity!(
     CapacityUnits,

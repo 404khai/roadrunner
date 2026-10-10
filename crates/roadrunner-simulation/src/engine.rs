@@ -7,10 +7,11 @@ use roadrunner_core::graph::{EdgeId, FrozenGraph, NodeId};
 use roadrunner_dispatch::{
     AssignmentDecision, Availability, CandidatePolicy, CandidateResult, CapacityUnits,
     CoreRouteProvider, DecisionId, DispatchDecisionOutcome, DispatchInstant, DispatchSnapshot,
-    DispatchStrategy, Order, OrderId, OrderReadiness, PreparationAwareStrategy, RiderId, RiderPlan,
-    RiderProfile, RiderState, RouteOutcome, RouteProvider, RoutingAnchor, RoutingAnchors,
-    RoutingEpoch, TrafficContext, TrafficIdentity, World, WorldData, basic_dispatch,
-    preparation_aware_dispatch, strategy_dispatch,
+    DispatchStrategy, ExecutionEffect, OperationalState, OperationalWorldNamespace, Order, OrderId,
+    OrderReadiness, PreparationAwareStrategy, RiderId, RiderPlan, RiderProfile, RiderState,
+    RouteOutcome, RouteProvider, RoutingAnchor, RoutingAnchors, RoutingEpoch, TrafficContext,
+    TrafficIdentity, World, WorldData, basic_dispatch, preparation_aware_dispatch,
+    strategy_dispatch,
 };
 
 use crate::metrics::{SimulationInsertionRecord, summarize};
@@ -21,8 +22,7 @@ use crate::{
 };
 use roadrunner_dispatch::{
     FleetContext, FleetInputs, FrozenPrefix, InsertionDecision, PoolingContext, PoolingInputs,
-    PredictionIdentity, ReadinessForecast, Stop, StopTimeline, effective_readiness, insert_order,
-    optimize_fleet, project_execution,
+    PredictionIdentity, ReadinessForecast, Stop, insert_order, optimize_fleet, project_execution,
 };
 
 fn invalid(message: &str) -> SimulationError {
@@ -32,7 +32,7 @@ fn instant(seconds: Seconds) -> Result<DispatchInstant, SimulationError> {
     Ok(DispatchInstant::new(seconds.value())?)
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Action {
     Traffic(TrafficSnapshot),
     Create(OrderId),
@@ -88,24 +88,13 @@ struct PreparedOrder {
     actual_ready_at: DispatchInstant,
 }
 
-#[derive(Clone)]
-struct ActiveStop {
-    id: u64,
-    stop: Stop,
-    arrival: DispatchInstant,
-    service_end: Option<DispatchInstant>,
-    service_wait: Option<Seconds>,
-    anchor: RoutingAnchor,
-    leg: Option<ExecutedLeg>,
-}
-
 struct Engine<'a> {
     graph: &'a FrozenGraph,
     scenario: &'a SimulationScenario,
     now: DispatchInstant,
     end: DispatchInstant,
     epoch: RoutingEpoch,
-    world: World,
+    world: OperationalState,
     traffic: TrafficSnapshot,
     anchors: RoutingAnchors,
     queue: BinaryHeap<QueuedEvent>,
@@ -125,11 +114,8 @@ struct Engine<'a> {
     fleet_queued: bool,
     recovery_queued: bool,
     recovery_triggers: BTreeSet<String>,
-    last_recovery: Option<DispatchInstant>,
     forecast_generated: BTreeMap<OrderId, DispatchInstant>,
     recoveries: Vec<crate::SimulationRecoveryRecord>,
-    active: BTreeMap<RiderId, ActiveStop>,
-    next_execution: u64,
     prediction_failures: Vec<crate::SimulationPredictionFailure>,
 }
 
@@ -225,7 +211,10 @@ impl<'a> Engine<'a> {
                 return Err(invalid("unsupported recovery policy version"));
             }
         }
-        let world = World::new(15, WorldData::default())?;
+        let world = OperationalState::for_simulation(
+            OperationalWorldNamespace::from_bytes(15_u128.to_be_bytes()),
+            World::new(15, WorldData::default())?,
+        )?;
         let mut engine = Self {
             graph,
             scenario,
@@ -252,11 +241,8 @@ impl<'a> Engine<'a> {
             fleet_queued: false,
             recovery_queued: false,
             recovery_triggers: BTreeSet::new(),
-            last_recovery: None,
             forecast_generated: BTreeMap::new(),
             recoveries: Vec::new(),
-            active: BTreeMap::new(),
-            next_execution: 0,
             prediction_failures: Vec::new(),
         };
         engine.initialize_riders()?;
@@ -308,7 +294,10 @@ impl<'a> Engine<'a> {
                 },
             );
         }
-        self.world = World::new(15, data)?;
+        self.world = OperationalState::for_simulation(
+            OperationalWorldNamespace::from_bytes(15_u128.to_be_bytes()),
+            World::new(15, data)?,
+        )?;
         Ok(())
     }
 
@@ -723,43 +712,19 @@ impl<'a> Engine<'a> {
 
     fn frozen_projection(
         &self,
-        active: &ActiveStop,
+        active: &roadrunner_dispatch::ActiveExecution,
         inputs: &PoolingInputs,
     ) -> Result<FrozenPrefix, SimulationError> {
-        let p = &inputs.policies[&active.stop.order()];
-        let (wait, service) = match active.stop {
-            Stop::Pickup(o) => {
-                let (ready, _) = effective_readiness(self.world.data(), inputs, o, self.now)?;
-                (
-                    if ready > active.arrival {
-                        ready.duration_since(active.arrival)?
-                    } else {
-                        Seconds::ZERO
-                    },
-                    p.pickup_service,
-                )
-            }
-            Stop::Dropoff(_) => (Seconds::ZERO, p.dropoff_service),
-        };
-        let mut timeline = StopTimeline::new(active.stop, active.arrival, wait, service)?;
-        // Service already started is pinned to its actual completion, including forecast error.
-        if let Some(end) = active.service_end {
-            timeline.waiting = active
-                .service_wait
-                .ok_or_else(|| invalid("missing frozen service wait"))?;
-            timeline.departure = end;
-        }
-        if timeline.departure < self.now {
-            return Err(roadrunner_dispatch::PoolingError::PredictionUnavailable(
-                active.stop.order(),
-            )
-            .into());
-        }
-        Ok(FrozenPrefix {
-            execution_id: active.id,
-            timeline,
-            anchor: active.anchor.clone(),
-        })
+        let rider = self
+            .world
+            .execution()
+            .iter()
+            .find(|(_, action)| action.action_id == active.action_id)
+            .map(|(rider, _)| *rider)
+            .ok_or_else(|| invalid("absent authoritative active action"))?;
+        self.world
+            .frozen_prefix(rider, inputs, self.now)?
+            .ok_or_else(|| invalid("missing frozen prefix"))
     }
 
     fn pooling_inputs(&self) -> Result<PoolingInputs, SimulationError> {
@@ -853,7 +818,7 @@ impl<'a> Engine<'a> {
             {
                 continue;
             }
-            let frozen = if let Some(active) = self.active.get(&rider) {
+            let frozen = if let Some(active) = self.world.execution().get(&rider) {
                 match self.frozen_projection(active, &inputs) {
                     Ok(frozen) => Some(frozen),
                     Err(SimulationError::Pooling(
@@ -862,7 +827,7 @@ impl<'a> Engine<'a> {
                         unavailable.insert(
                             rider,
                             roadrunner_dispatch::UnavailableExecution {
-                                execution_id: active.id,
+                                execution_id: active.action_id.value(),
                                 order: o,
                                 arrival: active.arrival,
                                 anchor: active.anchor.clone(),
@@ -934,7 +899,7 @@ impl<'a> Engine<'a> {
             inputs,
             recovery,
             trigger,
-            self.last_recovery,
+            self.world.recovery_at(),
         )?)
     }
 
@@ -947,7 +912,8 @@ impl<'a> Engine<'a> {
             .copied()
             .collect::<Vec<_>>()
         {
-            if self.world.data().plans[&rider].stops.is_empty() && !self.active.contains_key(&rider)
+            if self.world.data().plans[&rider].stops.is_empty()
+                && !self.world.execution().contains_key(&rider)
             {
                 if let Some(began) = self.busy_since.remove(&rider) {
                     let metrics = self
@@ -993,7 +959,6 @@ impl<'a> Engine<'a> {
                 if committed {
                     let current = self.recovery_context(trigger.clone())?;
                     self.world.commit_recovery(&decision, &current)?;
-                    self.last_recovery = Some(self.now);
                     self.reconcile_responsibility()?;
                 }
                 let result = format!("{:?}", decision.evidence().termination);
@@ -1023,7 +988,7 @@ impl<'a> Engine<'a> {
             .copied()
             .collect::<Vec<_>>()
         {
-            if !self.active.contains_key(&rider)
+            if !self.world.execution().contains_key(&rider)
                 && !self.world.data().plans[&rider].stops.is_empty()
             {
                 self.schedule_next(rider)?;
@@ -1076,8 +1041,7 @@ impl<'a> Engine<'a> {
             }
             DynamicChange::Cancel { order } => {
                 let o = OrderId::new(order);
-                let active = self.active.values().map(|a| a.stop.order()).collect();
-                match self.world.cancel_order(o, self.now, &active)? {
+                match self.world.cancel_order(o, self.now)? {
                     Ok(()) => {
                         self.pending.remove(&o);
                         let now = self.now;
@@ -1096,20 +1060,18 @@ impl<'a> Engine<'a> {
                 additional_seconds,
             } => {
                 let r = RiderId::new(rider);
-                let moving = self.active.get(&r).and_then(|a| a.leg.as_ref()).is_some();
+                let moving = self
+                    .world
+                    .execution()
+                    .get(&r)
+                    .and_then(|a| a.leg.as_ref())
+                    .is_some();
                 if moving {
-                    let id = self.next_execution;
-                    self.next_execution = id
-                        .checked_add(1)
-                        .ok_or(SimulationError::SequenceExhausted)?;
-                    let active = self
-                        .active
-                        .get_mut(&r)
-                        .ok_or_else(|| invalid("absent execution"))?;
-                    active.id = id; // An explicit observation supersedes the old arrival generation.
-                    active.arrival = active.arrival.checked_add(additional_seconds)?;
-                    let leg = active.leg.as_mut().ok_or_else(|| invalid("absent leg"))?;
-                    leg.travel = leg.travel.checked_add(additional_seconds)?;
+                    let active =
+                        self.world
+                            .delay_action(self.world.revision(), r, additional_seconds)?;
+                    let id = active.id;
+                    let leg = active.leg.as_ref().ok_or_else(|| invalid("absent leg"))?;
                     let action = Action::Move {
                         order: active.stop.order(),
                         rider: r,
@@ -1174,7 +1136,7 @@ impl<'a> Engine<'a> {
                 admitted.push(*assignment);
             }
             for rider in proposal.plans().keys() {
-                if !self.active.contains_key(rider)
+                if !self.world.execution().contains_key(rider)
                     && !self.world.data().plans[rider].stops.is_empty()
                 {
                     self.schedule_next(*rider)?;
@@ -1228,7 +1190,7 @@ impl<'a> Engine<'a> {
             outcome.assigned_at = Some(now);
             outcome.rider = Some(rider);
             outcome.predicted_eta = Some(predicted);
-            if !self.active.contains_key(&rider) {
+            if !self.world.execution().contains_key(&rider) {
                 self.schedule_next(rider)?;
             }
             SimulationEvent::RiderAssigned {
@@ -1251,10 +1213,10 @@ impl<'a> Engine<'a> {
     }
 
     fn schedule_next(&mut self, rider: RiderId) -> Result<(), SimulationError> {
-        if self.active.contains_key(&rider) {
+        if self.world.execution().contains_key(&rider) {
             return Err(invalid("active execution already exists"));
         }
-        let Some(stop) = self.world.data().plans[&rider].stops.first().copied() else {
+        let Some(stop) = self.world.next_stop(rider)? else {
             return Ok(());
         };
         let (to, pickup) = match stop {
@@ -1298,13 +1260,9 @@ impl<'a> Engine<'a> {
             Seconds::ZERO
         };
         let end = self.now.checked_add(service)?;
-        let active = self
-            .active
-            .get_mut(&rider)
-            .ok_or_else(|| invalid("missing active execution"))?;
-        active.service_end = Some(end);
-        active.service_wait = Some(self.now.duration_since(active.arrival)?);
-        let id = active.id;
+        self.world
+            .start_service(self.world.revision(), rider, self.now, service)?;
+        let id = self.world.execution()[&rider].id;
         self.push(
             end,
             if pickup {
@@ -1340,27 +1298,15 @@ impl<'a> Engine<'a> {
             edges: leg.route.edges().to_vec(),
             routing: leg.provenance,
         };
-        let execution_id = self.next_execution;
-        self.next_execution = self
-            .next_execution
-            .checked_add(1)
-            .ok_or(SimulationError::SequenceExhausted)?;
-        self.active.insert(
+        let anchor = self.anchor(to.value())?;
+        let execution_id = self.world.start_action(
+            self.world.revision(),
             rider,
-            ActiveStop {
-                id: execution_id,
-                stop: if pickup {
-                    Stop::Pickup(order)
-                } else {
-                    Stop::Dropoff(order)
-                },
-                arrival,
-                service_end: None,
-                service_wait: None,
-                anchor: self.anchor(to.value())?,
-                leg: Some(executed.clone()),
-            },
-        );
+            self.world.plan_revisions()[&rider],
+            executed.clone(),
+            &self.anchors.riders[&rider],
+            anchor,
+        )?;
         self.push(
             arrival,
             Action::Move {
@@ -1381,17 +1327,8 @@ impl<'a> Engine<'a> {
         pickup: bool,
     ) -> Result<SimulationEvent, SimulationError> {
         let anchor = self.anchor(leg.to.value())?;
-        if let Some(active) = self.active.get_mut(&rider) {
-            active.leg = None;
-        }
-        let state = self.world.data().riders[&rider];
-        self.world.update_rider_state(
-            rider,
-            RiderState {
-                coordinate: anchor.coordinate,
-                ..state
-            },
-        )?;
+        self.world
+            .observe_execution(rider, ExecutionEffect::Arrival, self.now)?;
         self.anchors.riders.insert(rider, anchor);
         let metrics = self
             .rider_metrics
@@ -1401,7 +1338,7 @@ impl<'a> Engine<'a> {
             .completed_distance_meters
             .checked_add(leg.distance)?;
         if pickup {
-            let id = self.active[&rider].id;
+            let id = self.world.execution()[&rider].id;
             self.push(self.now, Action::Arrive(order, rider, id))?;
         } else {
             self.schedule_service(order, rider, false)?;
@@ -1418,6 +1355,8 @@ impl<'a> Engine<'a> {
         if self.world.data().readiness[&order].observed_at.is_some() {
             self.schedule_service(order, rider, true)?;
         } else {
+            self.world
+                .wait_for_readiness(self.world.revision(), rider)?;
             self.waiting.insert(order, rider);
         }
         Ok(SimulationEvent::RiderArrivedPickup { order, rider })
@@ -1428,9 +1367,9 @@ impl<'a> Engine<'a> {
         order: OrderId,
         rider: RiderId,
     ) -> Result<SimulationEvent, SimulationError> {
-        self.world.pickup(rider, order, self.now)?;
+        self.world
+            .observe_execution(rider, ExecutionEffect::Completion, self.now)?;
         self.outcome(order)?.picked_up_at = Some(self.now);
-        self.active.remove(&rider);
         if scenario_dynamic(self.scenario) {
             self.queue_recovery("pickup-boundary")?;
         } else {
@@ -1444,9 +1383,9 @@ impl<'a> Engine<'a> {
         order: OrderId,
         rider: RiderId,
     ) -> Result<SimulationEvent, SimulationError> {
-        self.world.deliver(rider, order, self.now)?;
+        self.world
+            .observe_execution(rider, ExecutionEffect::Completion, self.now)?;
         self.outcome(order)?.delivered_at = Some(self.now);
-        self.active.remove(&rider);
         if self.world.data().plans[&rider].stops.is_empty() {
             let began = self
                 .busy_since
@@ -1480,7 +1419,30 @@ impl<'a> Engine<'a> {
             | Action::Deliver(_, rider, id) => Some((*rider, *id)),
             _ => None,
         };
-        if execution.is_some_and(|(r, id)| self.active.get(&r).is_none_or(|a| a.id != id)) {
+        if execution
+            .is_some_and(|(r, id)| self.world.execution().get(&r).is_none_or(|a| a.id != id))
+        {
+            return Ok(None);
+        }
+        let stage_ok = match &action {
+            Action::Move { rider, .. } => self
+                .world
+                .execution()
+                .get(rider)
+                .is_some_and(|a| a.stage == roadrunner_dispatch::ExecutionStage::Travelling),
+            Action::Arrive(_, rider, _) => self
+                .world
+                .execution()
+                .get(rider)
+                .is_some_and(|a| a.stage == roadrunner_dispatch::ExecutionStage::Arrived),
+            Action::Pickup(_, rider, _) | Action::Deliver(_, rider, _) => self
+                .world
+                .execution()
+                .get(rider)
+                .is_some_and(|a| a.stage == roadrunner_dispatch::ExecutionStage::Servicing),
+            _ => true,
+        };
+        if !stage_ok {
             return Ok(None);
         }
         let event = match action {
@@ -1565,6 +1527,7 @@ impl<'a> Engine<'a> {
         Ok(SimulationResult {
             scenario_id: self.scenario.scenario_id.clone(),
             schema_version: self.scenario.schema_version,
+            runtime_semantics: "shared-execution/v2".into(),
             randomness: "splitmix64-upper53/v1".into(),
             seed: self.scenario.seed,
             graph_snapshot_digest: self.graph.metadata().snapshot_digest().to_owned(),
@@ -1637,9 +1600,85 @@ mod tests {
             assert_eq!(engine.world.version(), version);
             assert!(engine.queue.is_empty());
             assert!(engine.waiting.is_empty());
-            assert!(engine.active.is_empty());
+            assert!(engine.world.execution().is_empty());
             assert_eq!(engine.events, [] as [RecordedEvent; 0]);
         }
+    }
+
+    #[test]
+    fn repeated_current_move_cannot_double_distance_or_advance_stage() {
+        use roadrunner_core::geo::{CanonicalCoordinate, KilometersPerHour};
+        use roadrunner_core::graph::{
+            AccessClass, BuilderNodeId, BuilderSegmentId, EdgeProperties,
+        };
+        let mut builder = GraphBuilder::new(
+            GraphSnapshotId::new(20),
+            GraphMetadata::new(
+                "test",
+                "test",
+                GraphBuildIdentity::new("test", "v1", "v1", "synthetic"),
+            ),
+        );
+        let a = CanonicalCoordinate::new(0, 0).unwrap_or_else(|e| panic!("{e}"));
+        let b = CanonicalCoordinate::new(0, 10000).unwrap_or_else(|e| panic!("{e}"));
+        builder
+            .add_node(BuilderNodeId::new(0), a)
+            .unwrap_or_else(|e| panic!("{e}"));
+        builder
+            .add_node(BuilderNodeId::new(1), b)
+            .unwrap_or_else(|e| panic!("{e}"));
+        let properties = EdgeProperties::new(
+            KilometersPerHour::new(30.0).unwrap_or_else(|e| panic!("{e}")),
+            None,
+            AccessClass::General,
+        );
+        builder
+            .add_segment(
+                BuilderSegmentId::new(0),
+                BuilderNodeId::new(0),
+                BuilderNodeId::new(1),
+                vec![a, b],
+                Some(properties),
+                Some(properties),
+            )
+            .unwrap_or_else(|e| panic!("{e}"));
+        let graph = builder.finalize().unwrap_or_else(|e| panic!("{e}"));
+        let scenario: SimulationScenario = serde_json::from_value(serde_json::json!({
+            "schema_version":1, "seed":1, "start_seconds":0, "end_seconds":1000, "routing_epoch_seconds":0,
+            "dispatch":{"kind":"basic"}, "riders":[{"id":1,"node":0,"capacity":1,"available":true}],
+            "orders":[{"id":1,"pickup_node":1,"dropoff_node":0,"created_at_seconds":0,"expected_ready_at_seconds":500,
+                "actual_readiness":{"kind":"fixed","at_seconds":500},"demand":1}]
+        })).unwrap_or_else(|e| panic!("{e}"));
+        let mut engine = Engine::new(&graph, &scenario).unwrap_or_else(|e| panic!("{e}"));
+        while let Some(event) = engine.queue.pop() {
+            engine.now = event.at;
+            if matches!(event.action, Action::Move { .. }) {
+                let duplicate = event.action.clone();
+                engine
+                    .process(event.action)
+                    .unwrap_or_else(|e| panic!("{e}"));
+                let before = engine.world.snapshot();
+                let distance = engine.rider_metrics[&RiderId::new(1)].completed_distance_meters;
+                let queued = engine.queue.len();
+                assert!(
+                    engine
+                        .process(duplicate)
+                        .unwrap_or_else(|e| panic!("{e}"))
+                        .is_none()
+                );
+                assert_eq!(&engine.world, &*before);
+                assert_eq!(
+                    engine.rider_metrics[&RiderId::new(1)].completed_distance_meters,
+                    distance
+                );
+                assert_eq!(engine.queue.len(), queued);
+                return;
+            }
+            engine
+                .process(event.action)
+                .unwrap_or_else(|e| panic!("{e}"));
+        }
+        panic!("no movement exercised");
     }
 
     #[test]

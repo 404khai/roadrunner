@@ -171,6 +171,12 @@ pub struct CoreRouteProvider<'a> {
 }
 
 impl<'a> CoreRouteProvider<'a> {
+    /// Proves static departure-invariant road costs for temporal publication v1.
+    #[must_use]
+    pub const fn departure_invariant(&self) -> bool {
+        !matches!(self.traffic, TrafficContext::TimeDependent(_))
+    }
+
     /// Pins graph and traffic, rejecting mismatched overlays immediately.
     ///
     /// # Errors

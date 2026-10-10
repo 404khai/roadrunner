@@ -206,7 +206,7 @@ pub enum CommitError {
 }
 
 /// Mutable domain owner; evaluation sees only immutable borrows of its data.
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct World {
     identity: u64,
     version: WorldVersion,
@@ -251,6 +251,22 @@ impl World {
             .ok_or(CommitError::VersionOverflow)?;
         self.data = data;
         self.version = WorldVersion::new(version);
+        Ok(())
+    }
+
+    pub(crate) fn stamp_new_acceptance(
+        &mut self,
+        previous: &WorldData,
+        at: DispatchInstant,
+    ) -> Result<(), CommitError> {
+        let mut data = self.data.clone();
+        for (order, terms) in &mut data.accepted {
+            if !previous.accepted.contains_key(order) {
+                terms.accepted_at = at;
+            }
+        }
+        validate_world(&data).map_err(|_| CommitError::InvalidTransition)?;
+        self.data = data;
         Ok(())
     }
 

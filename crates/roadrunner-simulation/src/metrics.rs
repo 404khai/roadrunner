@@ -160,6 +160,8 @@ pub struct SimulationResult {
     pub scenario_id: Option<String>,
     /// Output schema version.
     pub schema_version: u32,
+    /// Execution evidence contract; independent of the scenario input schema.
+    pub runtime_semantics: String,
     /// Stable seeded generator identifier.
     pub randomness: String,
     /// Explicit input seed.
