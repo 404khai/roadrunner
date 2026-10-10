@@ -156,18 +156,14 @@ and search-budget termination.
 
 ### Static traffic
 
-The fixture's digest requires this exact source identity; do not reuse the generic
-snapshot above or substitute a different source ID:
+Use the published bundle paired with the pinned overlay. Recompiling the PBF on
+another platform can change floating-point distance bits and therefore the digest.
 
 ```bash
-./target/release/roadrunner osm extract \
-  data/fixtures/phase-7/lagos-marina.osm.pbf \
-  target/readme-data/traffic.rr-osm --source-id phase10-lagos-marina
-./target/release/roadrunner osm compile \
-  target/readme-data/traffic.rr-osm target/readme-data/traffic-snapshot
+./target/release/roadrunner graph verify data/fixtures/phase-10/snapshot.semantic-v2 --deep
 ./target/release/roadrunner route traffic \
-  target/readme-data/traffic-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-10/lagos-marina-severe.json
+  data/fixtures/phase-10/snapshot.semantic-v2 5602610872 5594385916 \
+  --scenario data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json
 ```
 
 This compares shortest distance, free-flow fastest, and traffic-adjusted fastest routes.
@@ -175,20 +171,16 @@ The overlay affects directed edges independently. See [traffic policies](docs/tr
 
 ### Time-dependent traffic
 
-Use the separate source identity pinned by the profile:
+Use the separately published snapshot pinned by the profile:
 
 ```bash
-./target/release/roadrunner osm extract \
-  data/fixtures/phase-7/lagos-marina.osm.pbf \
-  target/readme-data/schedule.rr-osm --source-id phase11-lagos-marina
-./target/release/roadrunner osm compile \
-  target/readme-data/schedule.rr-osm target/readme-data/schedule-snapshot
+./target/release/roadrunner graph verify data/fixtures/phase-11/snapshot.semantic-v2 --deep
 ./target/release/roadrunner route schedule \
-  target/readme-data/schedule-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-11/lagos-marina-profile.json --depart 0
+  data/fixtures/phase-11/snapshot.semantic-v2 5602610872 5594385916 \
+  --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 0
 ./target/release/roadrunner route schedule \
-  target/readme-data/schedule-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-11/lagos-marina-profile.json --depart 600
+  data/fixtures/phase-11/snapshot.semantic-v2 5602610872 5594385916 \
+  --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 600
 ```
 
 Departure values are logical seconds since the declared scenario epoch. Profiles must
@@ -335,3 +327,21 @@ explicit churn policy, input failures and atomic publication. [Schema 4 fixtures
 cover successful recovery, pinned execution, cancellation refusals, incomplete
 search and realized violations after valid admission. Custody handoffs, returns and
 physically immobilized vehicles remain outside this runtime.
+
+## Pre-Phase-20 foundation
+
+Graph artifact schema 4/compiler v4 verify canonical compiled semantic identities;
+older identity claims remain historical. Dispatch OperationalState owns coherent
+volatile World/execution, distinct plan/action/schedule/effect identities and atomic
+publication. Simulation drives shared validated transitions and declares its
+`shared-execution/v2` evidence contract. Named static-road temporal certification
+supports delayed publication; time-dependent operational certification is unsupported.
+HTTP, persistence and event transport remain separate future phases.
+
+See [runtime boundary](docs/runtime-boundary.md) and
+[prerequisite verification](docs/pre-phase-20-remediation-completion.md).
+
+```bash
+cargo +1.99.0 test -p roadrunner-core --test semantic_identity --locked
+cargo +1.99.0 test -p roadrunner-dispatch --test operational --locked
+```

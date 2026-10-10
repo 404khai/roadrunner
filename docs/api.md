@@ -47,4 +47,50 @@ accepted terms and frozen execution. Dispatch uses `optimize_fleet`, `FleetInput
 baseline-breach isolation differ from Phase 17 complete-input insertion. See
 [fleet optimization](fleet-optimization.md) for API, objective, neighborhood, coverage,
 execution, oracle and measurement contracts, and [completion](phase-18-completion.md)
-for verified results. Phase 19 recovery remains deferred.
+for verified results. Phase 19 committed recovery is implemented with
+`RecoveryContext`, `RecoveryPolicy`, `recover_fleet`, `World::commit_recovery` and
+validated cancellation; see [dynamic recovery](dynamic-redispatch.md).
+
+## Operational prerequisite library boundary
+
+Standalone `World` APIs above are trusted compatibility/domain APIs; they do not
+establish an external operational authority. `OperationalState` privately contains
+World and active execution. Its read-only `snapshot` is the detached planning
+boundary. `create_order`/`register_rider` allocate checked namespace-scoped identities.
+Shared execution uses `next_stop`, `start_action` with expected PlanRevision,
+`delay_action`, `frozen_prefix`, readiness/wait/service transitions and `apply_effect`
+with distinct action/generation/effect identity. Identical duplicate effects return
+AlreadyApplied without another domain revision; conflicting reuse rejects.
+
+Operational publication uses `adopt_planning_context`, `evaluate_insertion` /
+`evaluate_fleet` / `evaluate_recovery`, `certify`, then `publish_temporal`. Sealed
+records bind exact operational/adoption revisions, pinned routing and named time
+semantics. `static-road-monotone/v1` proves an explicit interval; it supports
+nonzero elapsed evaluation time and rejects unproved time-dependent selection.
+All transition effects publish in one in-memory replacement. Actual accepted_at
+and recovery cooldown use the commit sample; original completion references remain
+unchanged. `PublicationProvenance` includes separate original decision and actual
+commitment records. No mutable World or weaker legacy operational commit is exposed.
+
+Simulation declares `runtime_semantics = shared-execution/v2` separately from its
+scenario schema. Historical graph schema 3 claims are inspection-only; current
+schema 4 loaders recompute the canonical semantic identity. See the complete
+[identity/time/compatibility API contract](runtime-boundary.md).
+
+## Approved Phase 20 interface (not implemented)
+
+Phase 20 adds authorized routing and operational snapshot queries, creation,
+lifecycle/assignment/fleet/recovery/cancellation commands, supported observations,
+command-outcome lookup and isolated simulation. Creation remains separate from
+admission. Clients provide intent, not authoritative snapshots, custody, accepted
+terms or clocks. Routing references are snapshot qualified; no hidden snapping.
+
+The coordinator reserves namespace/principal-scoped idempotency keys against
+canonical intent, assembles server contexts, evaluates outside the writer and
+atomically publishes or returns a typed noncommit/pending result. Same-key different
+meaning conflicts; same-key retries return original status/results. Logical execution
+effects remain once-only across distinct commands. Recognition lasts for the living
+volatile namespace; discarded authority cannot establish durable historical outcomes.
+Authentication, authorization, source/observation ordering and host-clock conversion
+belong to Phase 20. Phase 21/22 durability, outbox/inbox, fencing and recovery are
+separate gates. See [approved Q1–Q33](runtime-boundary-audit.md) and ADRs 0017–0019.

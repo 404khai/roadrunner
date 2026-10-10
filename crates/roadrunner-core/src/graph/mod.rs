@@ -9,8 +9,8 @@ mod node;
 mod segment;
 
 pub use artifact::{
-    GraphArtifactError, decode_graph_artifact, encode_graph_artifact, verify_graph_deep,
-    write_graph_artifact_atomic,
+    GraphArtifactError, HistoricalGraphIdentity, decode_graph_artifact, encode_graph_artifact,
+    inspect_graph_identity, verify_graph_deep, write_graph_artifact_atomic,
 };
 pub use edge::{AccessClass, DirectedEdge, EdgeProperties, Orientation};
 pub use error::GraphError;

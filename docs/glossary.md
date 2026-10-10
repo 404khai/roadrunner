@@ -290,3 +290,25 @@ work is reported explicitly. The full configured window is used even if the queu
 Assignment-to-delivery occupied rider-seconds, clipped at the horizon, divided by
 initially available rider-seconds. Includes pickup waiting; excludes unavailable riders.
 It does not represent productive movement alone. A zero denominator is unavailable.
+
+## Runtime identity and publication
+
+- **Operational namespace:** immutable authority lifetime; a local typed ID has
+  durable meaning only with this namespace.
+- **Operational revision:** monotonic coherent domain/execution/context revision,
+  distinct from narrower WorldVersion and from time.
+- **Plan revision:** logical remaining-work version per rider.
+- **ActionId:** immutable started action, preserved across suffix replacement.
+- **Schedule generation:** attempt revision for a timer/report on that same action.
+- **Applied effect:** once-recognized action transition, distinct from message ID.
+- **Adopted context:** immutable semantic input reference plus operational adoption
+  revision; remote receipt is separate and identity alone does not prove freshness.
+- **Evaluation / publication / commit instant:** input time, protected publication
+  sample and successful replacement-boundary sample in a named clock domain.
+- **Temporal certificate:** proof that the exact evaluated proposal remains applicable
+  through an explicit interval under a named model; no universal TTL.
+- **Historical inspection / recomputation / recovery / event replay:** recorded-fact
+  reading, supported old decision regeneration, restoring authority, and isolated
+  message processing respectively; these guarantees are not interchangeable.
+
+See [runtime boundary](runtime-boundary.md) for implemented and future scope.

@@ -1,30 +1,8 @@
-use roadrunner_core::geo::{Meters, Seconds};
-use roadrunner_core::graph::{EdgeId, NodeId};
-use roadrunner_dispatch::{
-    DecisionId, DispatchInstant, OrderId, RiderId, RoutingProvenance, TrafficIdentity,
-};
+use roadrunner_dispatch::{DecisionId, DispatchInstant, OrderId, RiderId, TrafficIdentity};
 use serde::Serialize;
 
-/// A complete road leg frozen at departure and recorded only after arrival.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-pub struct ExecutedLeg {
-    /// Leg origin node.
-    pub from: NodeId,
-    /// Leg destination node.
-    pub to: NodeId,
-    /// Explicit logical departure.
-    pub departed_at: DispatchInstant,
-    /// Road travel duration; excludes stop waiting.
-    pub travel: Seconds,
-    /// Completed road distance.
-    pub distance: Meters,
-    /// Path computed by Roadrunner's core routing implementation.
-    pub nodes: Vec<NodeId>,
-    /// Directed traversals, including legal maneuvers.
-    pub edges: Vec<EdgeId>,
-    /// Graph/profile/traffic used at departure.
-    pub routing: RoutingProvenance,
-}
+/// Shared pinned execution leg; simulation records it after actual model arrival.
+pub type ExecutedLeg = roadrunner_dispatch::FrozenExecutionLeg;
 
 /// Processed domain event; dispatch failure and valid Unassigned are distinct.
 #[derive(Debug, Clone, PartialEq, Serialize)]

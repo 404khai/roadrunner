@@ -7,6 +7,12 @@ use super::{BuilderNodeId, BuilderSegmentId, EdgeId, NodeId, RoadSegmentId};
 /// Errors produced while building or querying a frozen graph.
 #[derive(Debug, Clone, PartialEq, Error)]
 pub enum GraphError {
+    /// Canonical semantic identity could not be encoded.
+    #[error("semantic identity encoding failed: {reason}")]
+    SemanticIdentity {
+        /// Encoding diagnostic.
+        reason: String,
+    },
     /// A construction node key is duplicated.
     #[error("builder node {id} already exists")]
     DuplicateBuilderNode {

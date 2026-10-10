@@ -23,17 +23,13 @@ An overlay is bound to a graph snapshot ID, semantic digest, and edge count. Unk
 
 ## Reproduce the pinned fixture
 
-The committed [scenario](../data/fixtures/phase-10/lagos-marina-severe.json) uses the Phase 7 Lagos Marina PBF and puts a severe factor on directed edge `91`. Its graph digest is tied to the declared source ID below.
+The committed [scenario](../data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json) uses the Phase 7 Lagos Marina PBF and puts a severe factor on directed edge `91`. Its graph digest pins the exact published bundle below.
 
 ```sh
-cargo run -q -p roadrunner-cli -- osm extract \
-  data/fixtures/phase-7/lagos-marina.osm.pbf \
-  /tmp/phase10-marina.rr-osm --source-id phase10-lagos-marina
-cargo run -q -p roadrunner-cli -- osm compile \
-  /tmp/phase10-marina.rr-osm /tmp/phase10-marina-snapshot
+cargo run -q -p roadrunner-cli -- graph verify data/fixtures/phase-10/snapshot.semantic-v2 --deep
 cargo run -q -p roadrunner-cli -- route traffic \
-  /tmp/phase10-marina-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-10/lagos-marina-severe.json
+  data/fixtures/phase-10/snapshot.semantic-v2 5602610872 5594385916 \
+  --scenario data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json
 ```
 
 The command emits JSON for the shortest-distance route, the free-flow fastest route, and the traffic fastest route. It includes each route's adjusted ETA plus the graph and traffic digests. For this synthetic fixture, the shortest route is 452.043 m with a traffic-adjusted ETA of 112.904 s; the traffic-aware choice is 527.470 m with an ETA of 94.945 s. These are deterministic calculations on a tiny extract, not observed traffic or production ETA measurements.
@@ -45,3 +41,10 @@ The CLI's `shortest_distance.route.elapsed_travel_time` is its original free-flo
 ## Correctness checks
 
 Tests prove shortest distance can differ from fastest traffic-adjusted travel time; Dijkstra and A* agree on optimal adjusted cost; alternatives can use the same evaluator; forward and reverse factors remain independent; invalid and duplicate inputs fail; overflow propagates as an error; and the committed OSM scenario changes the selected route through the CLI. No routing latency claim is made here.
+
+The published `snapshot.semantic-v2` bundle is the exact graph/provenance/manifest
+paired with this overlay. Native Haversine calculations can differ in low floating-point
+bits across platforms; independently recompiling the same PBF is not a promise of the
+same compiled digest. Load the published bundle to reproduce this historical fixture.
+For a new compilation, author a new overlay against its verified digest and edge mapping;
+do not relabel the pinned fixture or bypass snapshot validation.

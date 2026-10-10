@@ -1,0 +1,1109 @@
+{
+  "scenario_id": "phase17/frozen-service/v1",
+  "schema_version": 2,
+  "runtime_semantics": "shared-execution/v2",
+  "randomness": "splitmix64-upper53/v1",
+  "seed": 17,
+  "graph_snapshot_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+  "graph_nodes": 2,
+  "graph_edges": 2,
+  "dispatch": {
+    "kind": "multi_order",
+    "work_budget": 1000,
+    "forecast_validity_seconds": 1000.0
+  },
+  "started_at": 0.0,
+  "ended_at": 200.0,
+  "future_events": 0,
+  "events": [
+    {
+      "at": 0.0,
+      "sequence": 0,
+      "event": {
+        "type": "ORDER_CREATED",
+        "order": 1
+      }
+    },
+    {
+      "at": 0.0,
+      "sequence": 4,
+      "event": {
+        "type": "RIDER_ASSIGNED",
+        "order": 1,
+        "rider": 1,
+        "decision": 0
+      }
+    },
+    {
+      "at": 10.007557221017965,
+      "sequence": 5,
+      "event": {
+        "type": "RIDER_MOVED",
+        "order": 1,
+        "rider": 1,
+        "leg": {
+          "from": 1,
+          "to": 0,
+          "departed_at": 0.0,
+          "travel": 10.007557221017965,
+          "distance": 111.19508023353293,
+          "nodes": [
+            1,
+            0
+          ],
+          "edges": [
+            1
+          ],
+          "routing": {
+            "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "traffic": {
+              "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+            },
+            "profile": "motorcycle-pooling/v1"
+          }
+        }
+      }
+    },
+    {
+      "at": 10.007557221017965,
+      "sequence": 6,
+      "event": {
+        "type": "RIDER_ARRIVED_PICKUP",
+        "order": 1,
+        "rider": 1
+      }
+    },
+    {
+      "at": 25.0,
+      "sequence": 1,
+      "event": {
+        "type": "ORDER_READY",
+        "order": 1,
+        "ready_at": 25.0
+      }
+    },
+    {
+      "at": 26.0,
+      "sequence": 2,
+      "event": {
+        "type": "ORDER_CREATED",
+        "order": 2
+      }
+    },
+    {
+      "at": 26.0,
+      "sequence": 3,
+      "event": {
+        "type": "ORDER_READY",
+        "order": 2,
+        "ready_at": 25.0
+      }
+    },
+    {
+      "at": 26.0,
+      "sequence": 8,
+      "event": {
+        "type": "RIDER_ASSIGNED",
+        "order": 2,
+        "rider": 1,
+        "decision": 1
+      }
+    },
+    {
+      "at": 27.0,
+      "sequence": 7,
+      "event": {
+        "type": "ORDER_PICKED_UP",
+        "order": 1,
+        "rider": 1
+      }
+    },
+    {
+      "at": 27.0,
+      "sequence": 9,
+      "event": {
+        "type": "RIDER_MOVED",
+        "order": 2,
+        "rider": 1,
+        "leg": {
+          "from": 0,
+          "to": 0,
+          "departed_at": 27.0,
+          "travel": 0.0,
+          "distance": 0.0,
+          "nodes": [
+            0
+          ],
+          "edges": [],
+          "routing": {
+            "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "traffic": {
+              "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+            },
+            "profile": "motorcycle-pooling/v1"
+          }
+        }
+      }
+    },
+    {
+      "at": 27.0,
+      "sequence": 10,
+      "event": {
+        "type": "RIDER_ARRIVED_PICKUP",
+        "order": 2,
+        "rider": 1
+      }
+    },
+    {
+      "at": 29.0,
+      "sequence": 11,
+      "event": {
+        "type": "ORDER_PICKED_UP",
+        "order": 2,
+        "rider": 1
+      }
+    },
+    {
+      "at": 39.00755722101796,
+      "sequence": 12,
+      "event": {
+        "type": "RIDER_MOVED",
+        "order": 1,
+        "rider": 1,
+        "leg": {
+          "from": 0,
+          "to": 1,
+          "departed_at": 29.0,
+          "travel": 10.007557221017965,
+          "distance": 111.19508023353293,
+          "nodes": [
+            0,
+            1
+          ],
+          "edges": [
+            0
+          ],
+          "routing": {
+            "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "traffic": {
+              "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+            },
+            "profile": "motorcycle-pooling/v1"
+          }
+        }
+      }
+    },
+    {
+      "at": 42.00755722101796,
+      "sequence": 13,
+      "event": {
+        "type": "ORDER_DELIVERED",
+        "order": 1,
+        "rider": 1
+      }
+    },
+    {
+      "at": 42.00755722101796,
+      "sequence": 14,
+      "event": {
+        "type": "RIDER_MOVED",
+        "order": 2,
+        "rider": 1,
+        "leg": {
+          "from": 1,
+          "to": 1,
+          "departed_at": 42.00755722101796,
+          "travel": 0.0,
+          "distance": 0.0,
+          "nodes": [
+            1
+          ],
+          "edges": [],
+          "routing": {
+            "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "traffic": {
+              "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+            },
+            "profile": "motorcycle-pooling/v1"
+          }
+        }
+      }
+    },
+    {
+      "at": 45.00755722101796,
+      "sequence": 15,
+      "event": {
+        "type": "ORDER_DELIVERED",
+        "order": 2,
+        "rider": 1
+      }
+    }
+  ],
+  "decisions": [],
+  "insertions": [
+    {
+      "decision": {
+        "evidence": {
+          "schema_version": 2,
+          "world_identity": 15,
+          "world_version": 1,
+          "order": 1,
+          "context": {
+            "at": 0.0,
+            "epoch": 0.0,
+            "inputs": {
+              "identity": {
+                "prediction": "phase17/frozen-service/v1:readiness/v1",
+                "service": "per-order-deterministic/v1",
+                "optimizer": "exhaustive-insertion/v1",
+                "routing": {
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "traffic": {
+                    "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+                  },
+                  "profile": "motorcycle-pooling/v1"
+                }
+              },
+              "policies": {
+                "1": {
+                  "id": "phase17-explicit/v1",
+                  "version": 1,
+                  "deadline": "SoftObserved",
+                  "max_completion_delay": null,
+                  "pickup_service": 2.0,
+                  "dropoff_service": 3.0,
+                  "readiness": "ValidForecastV1"
+                }
+              },
+              "forecasts": {
+                "1": {
+                  "id": "scenario-order-1/v1",
+                  "generated_at": 0.0,
+                  "valid_until": 1000.0,
+                  "expected_at": 25.0
+                }
+              },
+              "projections": {
+                "1": {
+                  "frozen": null,
+                  "at": 0.0,
+                  "anchor": {
+                    "coordinate": {
+                      "latitude": 0.0,
+                      "longitude": 0.001
+                    },
+                    "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                    "node": 1
+                  },
+                  "custody": {},
+                  "load": 0,
+                  "suffix": {
+                    "stops": []
+                  }
+                }
+              },
+              "work_budget": 1000
+            },
+            "anchors": {
+              "riders": {
+                "1": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.001
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 1
+                }
+              },
+              "pickups": {
+                "1": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.0
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 0
+                }
+              },
+              "dropoffs": {
+                "1": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.001
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 1
+                }
+              }
+            }
+          },
+          "input_complete": true,
+          "riders_complete": true,
+          "search_complete": true,
+          "exclusions": [],
+          "riders": [
+            {
+              "rider": 1,
+              "suffix_length": 0,
+              "pairs_total": 1,
+              "evaluated": 1,
+              "pruned": 0,
+              "feasible": 1,
+              "baseline": {
+                "plan": {
+                  "stops": []
+                },
+                "travel": 0.0,
+                "distance": 0.0,
+                "stops": [],
+                "completions": {},
+                "breaches": []
+              },
+              "rejections": []
+            }
+          ],
+          "work": 1,
+          "termination": "BestInsertion",
+          "accounting": "projected-post-frozen-prefix; frozen road contribution excluded identically/v1"
+        },
+        "proposal": {
+          "rider": 1,
+          "expected_plan": {
+            "stops": []
+          },
+          "expected_assignment": null,
+          "proposed_assignment": {
+            "order": 1,
+            "rider": 1
+          },
+          "existing_assignments": {},
+          "evaluation": {
+            "plan": {
+              "stops": [
+                {
+                  "Pickup": 1
+                },
+                {
+                  "Dropoff": 1
+                }
+              ]
+            },
+            "travel": 20.01511444203593,
+            "distance": 222.39016046706587,
+            "stops": [
+              {
+                "timeline": {
+                  "stop": {
+                    "Pickup": 1
+                  },
+                  "arrival": 10.007557221017965,
+                  "waiting": 14.992442778982035,
+                  "service": 2.0,
+                  "departure": 27.0
+                },
+                "travel": 10.007557221017965,
+                "distance": 111.19508023353293,
+                "load": 1,
+                "readiness_source": "scenario-order-1/v1"
+              },
+              {
+                "timeline": {
+                  "stop": {
+                    "Dropoff": 1
+                  },
+                  "arrival": 37.00755722101796,
+                  "waiting": 0.0,
+                  "service": 3.0,
+                  "departure": 40.00755722101796
+                },
+                "travel": 10.007557221017965,
+                "distance": 111.19508023353293,
+                "load": 0,
+                "readiness_source": null
+              }
+            ],
+            "completions": {
+              "1": 40.00755722101796
+            },
+            "breaches": []
+          },
+          "accepted": {
+            "policy": {
+              "id": "phase17-explicit/v1",
+              "version": 1,
+              "deadline": "SoftObserved",
+              "max_completion_delay": null,
+              "pickup_service": 2.0,
+              "dropoff_service": 3.0,
+              "readiness": "ValidForecastV1"
+            },
+            "accepted_at": 0.0,
+            "completion_reference": 40.00755722101796,
+            "deadline": null,
+            "readiness": {
+              "expected_at": 25.0,
+              "observed_at": null,
+              "source": "scenario-order-1/v1",
+              "forecast": {
+                "id": "scenario-order-1/v1",
+                "generated_at": 0.0,
+                "valid_until": 1000.0,
+                "expected_at": 25.0
+              }
+            },
+            "provenance": {
+              "prediction": "phase17/frozen-service/v1:readiness/v1",
+              "service": "per-order-deterministic/v1",
+              "optimizer": "exhaustive-insertion/v1",
+              "routing": {
+                "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                "traffic": {
+                  "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+                },
+                "profile": "motorcycle-pooling/v1"
+              }
+            }
+          },
+          "incremental_travel": 20.01511444203593,
+          "incremental_distance": 222.39016046706587,
+          "impacts": [
+            {
+              "order": 1,
+              "accepted": null,
+              "current": null,
+              "candidate": 40.00755722101796,
+              "marginal_seconds": null,
+              "cumulative_seconds": null,
+              "consumed_seconds": null,
+              "deadline_slack_seconds": null,
+              "accepted_deadline_slack_seconds": null,
+              "cumulative_allowance_remaining_seconds": null
+            }
+          ]
+        }
+      },
+      "committed": true,
+      "world_version_after": 2
+    },
+    {
+      "decision": {
+        "evidence": {
+          "schema_version": 2,
+          "world_identity": 15,
+          "world_version": 6,
+          "order": 2,
+          "context": {
+            "at": 26.0,
+            "epoch": 0.0,
+            "inputs": {
+              "identity": {
+                "prediction": "phase17/frozen-service/v1:readiness/v1",
+                "service": "per-order-deterministic/v1",
+                "optimizer": "exhaustive-insertion/v1",
+                "routing": {
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "traffic": {
+                    "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+                  },
+                  "profile": "motorcycle-pooling/v1"
+                }
+              },
+              "policies": {
+                "1": {
+                  "id": "phase17-explicit/v1",
+                  "version": 1,
+                  "deadline": "SoftObserved",
+                  "max_completion_delay": null,
+                  "pickup_service": 2.0,
+                  "dropoff_service": 3.0,
+                  "readiness": "ValidForecastV1"
+                },
+                "2": {
+                  "id": "phase17-explicit/v1",
+                  "version": 1,
+                  "deadline": "SoftObserved",
+                  "max_completion_delay": null,
+                  "pickup_service": 2.0,
+                  "dropoff_service": 3.0,
+                  "readiness": "ValidForecastV1"
+                }
+              },
+              "forecasts": {
+                "1": {
+                  "id": "scenario-order-1/v1",
+                  "generated_at": 0.0,
+                  "valid_until": 1000.0,
+                  "expected_at": 25.0
+                },
+                "2": {
+                  "id": "scenario-order-2/v1",
+                  "generated_at": 26.0,
+                  "valid_until": 1026.0,
+                  "expected_at": 25.0
+                }
+              },
+              "projections": {
+                "1": {
+                  "frozen": {
+                    "execution_id": 0,
+                    "timeline": {
+                      "stop": {
+                        "Pickup": 1
+                      },
+                      "arrival": 10.007557221017965,
+                      "waiting": 14.992442778982035,
+                      "service": 2.0,
+                      "departure": 27.0
+                    },
+                    "anchor": {
+                      "coordinate": {
+                        "latitude": 0.0,
+                        "longitude": 0.0
+                      },
+                      "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                      "node": 0
+                    }
+                  },
+                  "at": 27.0,
+                  "anchor": {
+                    "coordinate": {
+                      "latitude": 0.0,
+                      "longitude": 0.0
+                    },
+                    "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                    "node": 0
+                  },
+                  "custody": {
+                    "1": 27.0
+                  },
+                  "load": 1,
+                  "suffix": {
+                    "stops": [
+                      {
+                        "Dropoff": 1
+                      }
+                    ]
+                  }
+                }
+              },
+              "work_budget": 1000
+            },
+            "anchors": {
+              "riders": {
+                "1": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.0
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 0
+                }
+              },
+              "pickups": {
+                "1": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.0
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 0
+                },
+                "2": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.0
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 0
+                }
+              },
+              "dropoffs": {
+                "1": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.001
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 1
+                },
+                "2": {
+                  "coordinate": {
+                    "latitude": 0.0,
+                    "longitude": 0.001
+                  },
+                  "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                  "node": 1
+                }
+              }
+            }
+          },
+          "input_complete": true,
+          "riders_complete": true,
+          "search_complete": true,
+          "exclusions": [],
+          "riders": [
+            {
+              "rider": 1,
+              "suffix_length": 1,
+              "pairs_total": 3,
+              "evaluated": 3,
+              "pruned": 0,
+              "feasible": 3,
+              "baseline": {
+                "plan": {
+                  "stops": [
+                    {
+                      "Pickup": 1
+                    },
+                    {
+                      "Dropoff": 1
+                    }
+                  ]
+                },
+                "travel": 10.007557221017965,
+                "distance": 111.19508023353293,
+                "stops": [
+                  {
+                    "timeline": {
+                      "stop": {
+                        "Dropoff": 1
+                      },
+                      "arrival": 37.00755722101796,
+                      "waiting": 0.0,
+                      "service": 3.0,
+                      "departure": 40.00755722101796
+                    },
+                    "travel": 10.007557221017965,
+                    "distance": 111.19508023353293,
+                    "load": 0,
+                    "readiness_source": null
+                  }
+                ],
+                "completions": {
+                  "1": 40.00755722101796
+                },
+                "breaches": []
+              },
+              "rejections": []
+            }
+          ],
+          "work": 3,
+          "termination": "BestInsertion",
+          "accounting": "projected-post-frozen-prefix; frozen road contribution excluded identically/v1"
+        },
+        "proposal": {
+          "rider": 1,
+          "expected_plan": {
+            "stops": [
+              {
+                "Pickup": 1
+              },
+              {
+                "Dropoff": 1
+              }
+            ]
+          },
+          "expected_assignment": null,
+          "proposed_assignment": {
+            "order": 2,
+            "rider": 1
+          },
+          "existing_assignments": {
+            "1": {
+              "order": 1,
+              "rider": 1
+            }
+          },
+          "evaluation": {
+            "plan": {
+              "stops": [
+                {
+                  "Pickup": 1
+                },
+                {
+                  "Pickup": 2
+                },
+                {
+                  "Dropoff": 1
+                },
+                {
+                  "Dropoff": 2
+                }
+              ]
+            },
+            "travel": 10.007557221017965,
+            "distance": 111.19508023353293,
+            "stops": [
+              {
+                "timeline": {
+                  "stop": {
+                    "Pickup": 2
+                  },
+                  "arrival": 27.0,
+                  "waiting": 0.0,
+                  "service": 2.0,
+                  "departure": 29.0
+                },
+                "travel": 0.0,
+                "distance": 0.0,
+                "load": 2,
+                "readiness_source": "observed/v1"
+              },
+              {
+                "timeline": {
+                  "stop": {
+                    "Dropoff": 1
+                  },
+                  "arrival": 39.00755722101796,
+                  "waiting": 0.0,
+                  "service": 3.0,
+                  "departure": 42.00755722101796
+                },
+                "travel": 10.007557221017965,
+                "distance": 111.19508023353293,
+                "load": 1,
+                "readiness_source": null
+              },
+              {
+                "timeline": {
+                  "stop": {
+                    "Dropoff": 2
+                  },
+                  "arrival": 42.00755722101796,
+                  "waiting": 0.0,
+                  "service": 3.0,
+                  "departure": 45.00755722101796
+                },
+                "travel": 0.0,
+                "distance": 0.0,
+                "load": 0,
+                "readiness_source": null
+              }
+            ],
+            "completions": {
+              "1": 42.00755722101796,
+              "2": 45.00755722101796
+            },
+            "breaches": []
+          },
+          "accepted": {
+            "policy": {
+              "id": "phase17-explicit/v1",
+              "version": 1,
+              "deadline": "SoftObserved",
+              "max_completion_delay": null,
+              "pickup_service": 2.0,
+              "dropoff_service": 3.0,
+              "readiness": "ValidForecastV1"
+            },
+            "accepted_at": 26.0,
+            "completion_reference": 45.00755722101796,
+            "deadline": null,
+            "readiness": {
+              "expected_at": 25.0,
+              "observed_at": 25.0,
+              "source": "observed/v1",
+              "forecast": {
+                "id": "scenario-order-2/v1",
+                "generated_at": 26.0,
+                "valid_until": 1026.0,
+                "expected_at": 25.0
+              }
+            },
+            "provenance": {
+              "prediction": "phase17/frozen-service/v1:readiness/v1",
+              "service": "per-order-deterministic/v1",
+              "optimizer": "exhaustive-insertion/v1",
+              "routing": {
+                "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+                "traffic": {
+                  "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+                },
+                "profile": "motorcycle-pooling/v1"
+              }
+            }
+          },
+          "incremental_travel": 0.0,
+          "incremental_distance": 0.0,
+          "impacts": [
+            {
+              "order": 1,
+              "accepted": 40.00755722101796,
+              "current": 40.00755722101796,
+              "candidate": 42.00755722101796,
+              "marginal_seconds": 2.0,
+              "cumulative_seconds": 2.0,
+              "consumed_seconds": 2.0,
+              "deadline_slack_seconds": null,
+              "accepted_deadline_slack_seconds": null,
+              "cumulative_allowance_remaining_seconds": null
+            },
+            {
+              "order": 2,
+              "accepted": null,
+              "current": null,
+              "candidate": 45.00755722101796,
+              "marginal_seconds": null,
+              "cumulative_seconds": null,
+              "consumed_seconds": null,
+              "deadline_slack_seconds": null,
+              "accepted_deadline_slack_seconds": null,
+              "cumulative_allowance_remaining_seconds": null
+            }
+          ]
+        }
+      },
+      "committed": true,
+      "world_version_after": 7
+    }
+  ],
+  "realized_protections": [
+    {
+      "order": 1,
+      "accepted_completion": 40.00755722101796,
+      "actual_completion": 42.00755722101796,
+      "signed_delay_seconds": 2.0,
+      "hard_deadline_missed": null,
+      "cumulative_allowance_exceeded": null
+    },
+    {
+      "order": 2,
+      "accepted_completion": 45.00755722101796,
+      "actual_completion": 45.00755722101796,
+      "signed_delay_seconds": 0.0,
+      "hard_deadline_missed": null,
+      "cumulative_allowance_exceeded": null
+    }
+  ],
+  "final_state": {
+    "orders": {
+      "1": {
+        "id": 1,
+        "pickup": {
+          "latitude": 0.0,
+          "longitude": 0.0
+        },
+        "dropoff": {
+          "latitude": 0.0,
+          "longitude": 0.001
+        },
+        "created_at": 0.0,
+        "deadline": null,
+        "demand": 1
+      },
+      "2": {
+        "id": 2,
+        "pickup": {
+          "latitude": 0.0,
+          "longitude": 0.0
+        },
+        "dropoff": {
+          "latitude": 0.0,
+          "longitude": 0.001
+        },
+        "created_at": 26.0,
+        "deadline": null,
+        "demand": 1
+      }
+    },
+    "readiness": {
+      "1": {
+        "expected_at": 25.0,
+        "observed_at": 25.0
+      },
+      "2": {
+        "expected_at": 25.0,
+        "observed_at": 25.0
+      }
+    },
+    "fulfillment": {
+      "1": {
+        "Delivered": {
+          "rider": 1,
+          "picked_up_at": 27.0,
+          "at": 42.00755722101796
+        }
+      },
+      "2": {
+        "Delivered": {
+          "rider": 1,
+          "picked_up_at": 29.0,
+          "at": 45.00755722101796
+        }
+      }
+    },
+    "profiles": {
+      "1": {
+        "id": 1,
+        "routing_profile": "motorcycle-pooling/v1",
+        "max_capacity": 2
+      }
+    },
+    "riders": {
+      "1": {
+        "coordinate": {
+          "latitude": 0.0,
+          "longitude": 0.001
+        },
+        "availability": "Available"
+      }
+    },
+    "assignments": {},
+    "accepted": {
+      "1": {
+        "policy": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 2.0,
+          "dropoff_service": 3.0,
+          "readiness": "ValidForecastV1"
+        },
+        "accepted_at": 0.0,
+        "completion_reference": 40.00755722101796,
+        "deadline": null,
+        "readiness": {
+          "expected_at": 25.0,
+          "observed_at": null,
+          "source": "scenario-order-1/v1",
+          "forecast": {
+            "id": "scenario-order-1/v1",
+            "generated_at": 0.0,
+            "valid_until": 1000.0,
+            "expected_at": 25.0
+          }
+        },
+        "provenance": {
+          "prediction": "phase17/frozen-service/v1:readiness/v1",
+          "service": "per-order-deterministic/v1",
+          "optimizer": "exhaustive-insertion/v1",
+          "routing": {
+            "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "traffic": {
+              "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+            },
+            "profile": "motorcycle-pooling/v1"
+          }
+        }
+      },
+      "2": {
+        "policy": {
+          "id": "phase17-explicit/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 2.0,
+          "dropoff_service": 3.0,
+          "readiness": "ValidForecastV1"
+        },
+        "accepted_at": 26.0,
+        "completion_reference": 45.00755722101796,
+        "deadline": null,
+        "readiness": {
+          "expected_at": 25.0,
+          "observed_at": 25.0,
+          "source": "observed/v1",
+          "forecast": {
+            "id": "scenario-order-2/v1",
+            "generated_at": 26.0,
+            "valid_until": 1026.0,
+            "expected_at": 25.0
+          }
+        },
+        "provenance": {
+          "prediction": "phase17/frozen-service/v1:readiness/v1",
+          "service": "per-order-deterministic/v1",
+          "optimizer": "exhaustive-insertion/v1",
+          "routing": {
+            "graph_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "traffic": {
+              "Static": "39487dafdc4c03b8722ebac88e9ab570cf91521619e7063f32fbbe2a969dad8c"
+            },
+            "profile": "motorcycle-pooling/v1"
+          }
+        }
+      }
+    },
+    "plans": {
+      "1": {
+        "stops": []
+      }
+    }
+  },
+  "orders": [
+    {
+      "order": 1,
+      "realized_ready_at": 25.0,
+      "created_at": 0.0,
+      "observed_ready_at": 25.0,
+      "assigned_at": 0.0,
+      "rider": 1,
+      "predicted_eta": 40.00755722101796,
+      "pickup_arrival": 10.007557221017965,
+      "picked_up_at": 27.0,
+      "delivered_at": 42.00755722101796,
+      "deadline": null,
+      "partial_wait_seconds": null
+    },
+    {
+      "order": 2,
+      "realized_ready_at": 25.0,
+      "created_at": 26.0,
+      "observed_ready_at": 25.0,
+      "assigned_at": 26.0,
+      "rider": 1,
+      "predicted_eta": 19.00755722101796,
+      "pickup_arrival": 27.0,
+      "picked_up_at": 29.0,
+      "delivered_at": 45.00755722101796,
+      "deadline": null,
+      "partial_wait_seconds": null
+    }
+  ],
+  "riders": [
+    {
+      "rider": 1,
+      "available": true,
+      "busy_seconds": 45.00755722101796,
+      "idle_seconds": 154.99244277898202,
+      "completed_distance_meters": 222.39016046706587
+    }
+  ],
+  "summary": {
+    "scheduled_orders": 2,
+    "created_orders": 2,
+    "uncreated_orders": 0,
+    "assigned_orders": 2,
+    "delivered_orders": 2,
+    "unassigned_orders": 0,
+    "assigned_unfinished_orders": 0,
+    "outstanding_orders": 0,
+    "late_deliveries": 0,
+    "outstanding_past_deadline": 0,
+    "predicted_eta": {
+      "samples": 2,
+      "mean_seconds": 29.50755722101796,
+      "median_seconds": 29.50755722101796,
+      "p95_seconds": 40.00755722101796,
+      "p99_seconds": 40.00755722101796
+    },
+    "delivered_duration": {
+      "samples": 2,
+      "mean_seconds": 30.50755722101796,
+      "median_seconds": 30.50755722101796,
+      "p95_seconds": 42.00755722101796,
+      "p99_seconds": 42.00755722101796
+    },
+    "pickup_waiting": {
+      "samples": 2,
+      "mean_seconds": 9.496221389491017,
+      "median_seconds": 9.496221389491017,
+      "p95_seconds": 16.992442778982035,
+      "p99_seconds": 16.992442778982035
+    },
+    "completed_distance_meters": 222.39016046706587,
+    "rider_utilization": 0.22503778610508982,
+    "mean_rider_idle_seconds": 154.99244277898202
+  }
+}

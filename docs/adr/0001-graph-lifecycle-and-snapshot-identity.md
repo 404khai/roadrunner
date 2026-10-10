@@ -58,3 +58,17 @@ digest; compact-ID resolution must also compare that digest.
 
 ADR 0002 defines snapshot-owned segments and edges. ADR 0005 defines
 deterministic finalization. ADR 0007 defines validated snapshot loading.
+
+## Pre-Phase-20 implementation amendment (2026-10-10)
+
+Graph artifact schema 4 and OSM compiler v4 now compute and verify the full
+canonical compiled semantic identity, including required provenance and maneuver
+restrictions. Builder-supplied IDs/digests are assertions, never publication authority.
+Immutable modifiers reseal; the compact ID is derived from the full SHA-256 digest.
+The self identity is excluded from hashing. Provenance has a separate canonical
+binding with its self graph-digest excluded. Bundle loading verifies that binding.
+Schema 3 claims remain inspection-only/unverified and cannot become operational
+routing snapshots by silent relabeling. Historical fixtures/evidence remain intact;
+explicit semantic-v2 fixtures record verified content correspondence separately.
+See [ADR 0018](0018-planning-time-and-historical-provenance.md) and the
+[implemented identity contract](../runtime-boundary.md).

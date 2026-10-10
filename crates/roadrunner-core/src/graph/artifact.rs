@@ -11,7 +11,7 @@ use super::{
 };
 
 const MAGIC: &str = "ROADRUNNER_GRAPH";
-const SCHEMA_VERSION: u32 = 3;
+const SCHEMA_VERSION: u32 = 4;
 static TEMPORARY_ARTIFACT_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Serialize, Deserialize)]
@@ -28,6 +28,7 @@ struct Envelope {
 struct Payload {
     snapshot_id: u64,
     snapshot_digest: String,
+    provenance_digest: Option<String>,
     routing_profile: String,
     jurisdiction_policy: String,
     source_dataset: String,
@@ -129,6 +130,72 @@ pub enum GraphArtifactError {
     },
 }
 
+/// Historical identity inspection does not confer authority to route or reanchor.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HistoricalGraphIdentity {
+    /// Original artifact schema, preserved without relabeling.
+    pub schema_version: u32,
+    /// Original asserted identity, not a newly calculated replacement.
+    pub claimed_digest: String,
+    /// Whether current semantic verification succeeded.
+    pub semantic_identity_verified: bool,
+}
+
+/// Inspects schema 3 historical claims or verifies a current graph. Schema 3's
+/// byte integrity cannot establish its old asserted semantic identity; it remains
+/// inspection-only and `decode_graph_artifact` rejects it for operational use.
+///
+/// # Errors
+/// Rejects corrupt framing/checksum, unknown schemas and malformed identity claims.
+pub fn inspect_graph_identity(bytes: &[u8]) -> Result<HistoricalGraphIdentity, GraphArtifactError> {
+    let envelope: Envelope = serde_json::from_slice(bytes)
+        .map_err(|source| GraphArtifactError::Serialization { source })?;
+    if envelope.schema_version == SCHEMA_VERSION {
+        let graph = decode_graph_artifact(bytes)?;
+        return Ok(HistoricalGraphIdentity {
+            schema_version: SCHEMA_VERSION,
+            claimed_digest: graph.metadata().snapshot_digest().into(),
+            semantic_identity_verified: true,
+        });
+    }
+    if envelope.schema_version != 3 {
+        return Err(GraphArtifactError::UnsupportedSchema {
+            version: envelope.schema_version,
+        });
+    }
+    if envelope.magic != MAGIC {
+        return Err(GraphArtifactError::InvalidMagic);
+    }
+    if serde_json::to_vec(&envelope)
+        .map_err(|source| GraphArtifactError::Serialization { source })?
+        != bytes
+    {
+        return Err(invalid("historical framing is not canonical"));
+    }
+    if format!("{:x}", Sha256::digest(envelope.payload_json.as_bytes())) != envelope.payload_sha256
+    {
+        return Err(GraphArtifactError::IntegrityMismatch);
+    }
+    let payload: serde_json::Value = serde_json::from_str(&envelope.payload_json)
+        .map_err(|source| GraphArtifactError::Serialization { source })?;
+    let claimed_digest = payload
+        .get("snapshot_digest")
+        .and_then(serde_json::Value::as_str)
+        .ok_or_else(|| invalid("historical digest is absent"))?;
+    if claimed_digest.len() != 64
+        || !claimed_digest
+            .bytes()
+            .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+    {
+        return Err(invalid("historical digest syntax is invalid"));
+    }
+    Ok(HistoricalGraphIdentity {
+        schema_version: 3,
+        claimed_digest: claimed_digest.into(),
+        semantic_identity_verified: false,
+    })
+}
+
 /// Encodes and atomically publishes a graph artifact in the target directory.
 ///
 /// # Errors
@@ -189,9 +256,15 @@ pub fn write_graph_artifact_atomic(
 /// Returns an error if deterministic JSON encoding fails.
 #[allow(clippy::too_many_lines)]
 pub fn encode_graph_artifact(graph: &FrozenGraph) -> Result<Vec<u8>, GraphArtifactError> {
-    let payload = Payload {
+    let payload = graph_payload(graph);
+    encode_payload(&payload)
+}
+
+fn graph_payload(graph: &FrozenGraph) -> Payload {
+    Payload {
         snapshot_id: graph.snapshot_id().value(),
         snapshot_digest: graph.metadata().snapshot_digest().to_owned(),
+        provenance_digest: graph.metadata().provenance_digest().map(str::to_owned),
         routing_profile: graph.metadata().routing_profile().to_owned(),
         jurisdiction_policy: graph.metadata().jurisdiction_policy().to_owned(),
         source_dataset: graph
@@ -277,7 +350,23 @@ pub fn encode_graph_artifact(graph: &FrozenGraph) -> Result<Vec<u8>, GraphArtifa
                 outgoing_edge: outgoing.value(),
             })
             .collect(),
-    };
+    }
+}
+
+/// Canonical semantic identity v2 excludes its own digest and compact convenience ID.
+pub(super) fn semantic_digest(graph: &FrozenGraph) -> Result<String, GraphArtifactError> {
+    let mut payload = graph_payload(graph);
+    payload.snapshot_id = 0;
+    payload.snapshot_digest.clear();
+    let bytes = serde_json::to_vec(&payload)
+        .map_err(|source| GraphArtifactError::Serialization { source })?;
+    let mut hash = Sha256::new();
+    hash.update(b"roadrunner.graph-semantics.v2\0");
+    hash.update(bytes);
+    Ok(format!("{:x}", hash.finalize()))
+}
+
+fn encode_payload(payload: &Payload) -> Result<Vec<u8>, GraphArtifactError> {
     let payload_bytes = serde_json::to_vec(&payload)
         .map_err(|source| GraphArtifactError::Serialization { source })?;
     let payload_sha256 = format!("{:x}", Sha256::digest(&payload_bytes));
@@ -568,7 +657,15 @@ fn validate_payload(payload: Payload) -> Result<FrozenGraph, GraphArtifactError>
         payload.snapshot_digest,
     );
     metadata.set_turn_restrictions_enforced(payload.turn_restrictions_enforced);
-    Ok(FrozenGraph::from_validated_parts(
+    if payload
+        .provenance_digest
+        .as_ref()
+        .is_some_and(|d| !is_sha256(d))
+    {
+        return Err(invalid("invalid compiled provenance identity"));
+    }
+    metadata.set_provenance_digest(payload.provenance_digest);
+    let graph = FrozenGraph::from_validated_parts(
         GraphSnapshotId::new(payload.snapshot_id),
         metadata,
         nodes,
@@ -577,7 +674,16 @@ fn validate_payload(payload: Payload) -> Result<FrozenGraph, GraphArtifactError>
         adjacency_offsets,
         geometry,
         forbidden_maneuvers,
-    ))
+    );
+    let actual = semantic_digest(&graph)?;
+    let compact =
+        u64::from_str_radix(&actual[..16], 16).map_err(|error| invalid(error.to_string()))?;
+    if actual != graph.metadata().snapshot_digest() || compact != graph.snapshot_id().value() {
+        return Err(invalid(
+            "semantic graph identity does not match canonical content",
+        ));
+    }
+    Ok(graph)
 }
 
 fn is_sha256(value: &str) -> bool {
@@ -686,14 +792,29 @@ mod tests {
     }
 
     #[test]
+    fn semantic_identity_rejects_assertions_and_legacy_schemas() {
+        let bytes = mutate_payload(|p| p.snapshot_digest = "a".repeat(64));
+        assert!(decode_graph_artifact(&bytes).is_err());
+        let bytes = mutate_payload(|p| p.edges[0].access = AccessClass::Private);
+        assert!(decode_graph_artifact(&bytes).is_err());
+        let bytes = encode_graph_artifact(&fixture()).unwrap_or_else(|e| panic!("{e}"));
+        let mut old: Envelope = serde_json::from_slice(&bytes).unwrap_or_else(|e| panic!("{e}"));
+        old.schema_version = 3;
+        let legacy = serde_json::to_vec(&old).unwrap_or_else(|e| panic!("{e}"));
+        assert!(matches!(
+            decode_graph_artifact(&legacy),
+            Err(GraphArtifactError::UnsupportedSchema { version: 3 })
+        ));
+    }
+
+    #[test]
     fn deep_verification_rejects_rehashed_derived_distance_corruption() {
         let corrupted = mutate_payload(|payload| {
             let distance = f64::from_bits(payload.segments[0].distance_meters_bits);
             payload.segments[0].distance_meters_bits = (distance * 2.0).to_bits();
         });
-        let graph = decode_graph_artifact(&corrupted)
-            .unwrap_or_else(|error| panic!("structurally valid corruption: {error}"));
-        assert!(verify_graph_deep(&graph).is_err());
+        // A rehashed byte checksum cannot authorize relabeling semantic content.
+        assert!(decode_graph_artifact(&corrupted).is_err());
     }
 }
 

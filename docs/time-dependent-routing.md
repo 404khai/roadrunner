@@ -21,20 +21,16 @@ Increasing or flat multipliers always pass. For a falling multiplier, this rule 
 
 ## Reproduce the pinned scenario
 
-The [scenario](../data/fixtures/phase-11/lagos-marina-profile.json) uses the committed Lagos Marina PBF. Directed edge `91` has a severe factor until logical second `300`, then eases linearly to normal by second `600`. The scenario is synthetic.
+The [scenario](../data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json) uses the committed Lagos Marina PBF. Directed edge `91` has a severe factor until logical second `300`, then eases linearly to normal by second `600`. The scenario is synthetic.
 
 ```sh
-cargo run -q -p roadrunner-cli -- osm extract \
-  data/fixtures/phase-7/lagos-marina.osm.pbf \
-  /tmp/phase11-marina.rr-osm --source-id phase11-lagos-marina
-cargo run -q -p roadrunner-cli -- osm compile \
-  /tmp/phase11-marina.rr-osm /tmp/phase11-marina-snapshot
+cargo run -q -p roadrunner-cli -- graph verify data/fixtures/phase-11/snapshot.semantic-v2 --deep
 cargo run -q -p roadrunner-cli -- route schedule \
-  /tmp/phase11-marina-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-11/lagos-marina-profile.json --depart 0
+  data/fixtures/phase-11/snapshot.semantic-v2 5602610872 5594385916 \
+  --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 0
 cargo run -q -p roadrunner-cli -- route schedule \
-  /tmp/phase11-marina-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-11/lagos-marina-profile.json --depart 600
+  data/fixtures/phase-11/snapshot.semantic-v2 5602610872 5594385916 \
+  --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 600
 ```
 
 At second `0`, the free-flow fastest route takes `112.904` s under the profile, while the chosen route takes `94.945` s. At second `600`, both searches choose the free-flow path and take `81.368` s. These are deterministic fixture calculations, not observed travel times or performance benchmarks.
@@ -42,3 +38,10 @@ At second `0`, the free-flow fastest route takes `112.904` s under the profile, 
 The scenario JSON requires `schema_version: 1`, an exact `graph_snapshot_digest`, and a `profiles` array. Each profile has an `edge_id` and ordered `points`; each point has `departure_seconds` and a numeric `multiplier` at least `1.0`. The CLI reports both the free-flow fastest route and the scheduled fastest route. `free_flow_fastest.route.elapsed_travel_time` remains free-flow time; its `time_dependent_eta_seconds` reevaluates that route under the profile and propagates arrival times along it. The scheduled route's elapsed time is already adjusted.
 
 Core tests cover edge-entry propagation, route changes with departure time, A* agreement with Dijkstra, malformed profiles, and FIFO rejection. A CLI test checks both departures against the pinned OSM scenario.
+
+The published `snapshot.semantic-v2` bundle is the exact graph/provenance/manifest
+paired with this overlay. Native Haversine calculations can differ in low floating-point
+bits across platforms; independently recompiling the same PBF is not a promise of the
+same compiled digest. Load the published bundle to reproduce this historical fixture.
+For a new compilation, author a new overlay against its verified digest and edge mapping;
+do not relabel the pinned fixture or bypass snapshot validation.

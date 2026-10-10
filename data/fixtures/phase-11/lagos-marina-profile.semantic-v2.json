@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "graph_snapshot_digest": "d537cd687d6d1a88847962babc85d160b56d85e5ddf8b7c59b99f99e0a5dfe21",
+  "profiles": [
+    {
+      "edge_id": 91,
+      "points": [
+        {
+          "departure_seconds": 0,
+          "multiplier": 2.5
+        },
+        {
+          "departure_seconds": 300,
+          "multiplier": 2.5
+        },
+        {
+          "departure_seconds": 600,
+          "multiplier": 1.0
+        }
+      ]
+    }
+  ]
+}

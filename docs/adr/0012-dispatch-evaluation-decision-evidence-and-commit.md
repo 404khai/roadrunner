@@ -37,3 +37,19 @@ The pre-Phase-13 remediation report records implementation and entry-gate eviden
 
 Live mutable evaluation inputs, score penalties for infeasibility, and permanent
 single-order domain invariants are rejected. Later-phase algorithms remain deferred.
+
+## Pre-Phase-20 operational amendment (2026-10-10)
+
+OperationalState now provides the coherent volatile domain/execution authority.
+OperationalRevision spans World and active execution; PlanRevision, ActionId,
+ScheduleGeneration and applied-effect identity remain distinct. Shared dispatch
+transitions/projected frozen stops serve simulation and future operational drivers.
+Simulation retains clocks/queues/synthetic observations/metrics. Compatibility World
+publication remains trusted internal use, inaccessible as a mutable operational
+bypass. Operational planning binds authoritative adopted contexts and sealed original
+decisions; static-road temporal certification checks continued applicability before
+complete atomic publication. Historical acceptance references are immutable; actual
+new acceptance time is stamped only at successful operational commit.
+Simulation output declares `shared-execution/v2` independently of scenario schema.
+See ADRs [0017](0017-operational-authority-and-publication.md) and
+[0018](0018-planning-time-and-historical-provenance.md).

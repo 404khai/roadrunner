@@ -176,3 +176,11 @@ cargo +1.99.0 test -p roadrunner-dispatch --test recovery --locked -- --nocaptur
 cargo +1.99.0 build -p roadrunner-cli --release --locked
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/collect_recovery_benchmark.py --oracle-log target/phase19-oracle.log --output target/recovery-benchmark.json
 ```
+
+## Pre-Phase-20 prerequisite remediation
+
+[Measured foundation results](../benchmarks/results/pre20/README.md) cover graph
+finalization/verified loading, 101 operational-boundary samples and Phase 15–19
+scenario replays. The [completion report](pre-phase-20-remediation-completion.md)
+records commands, environment, evidence and supported temporal-policy limits.
+HTTP, storage, contention and process memory remain unmeasured.

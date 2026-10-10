@@ -1,0 +1,70 @@
+   Compiling roadrunner-core v0.1.0 (/Users/admin/.t3/worktrees/roadrunner/feat-phase-17-multi-order/crates/roadrunner-core)
+    Finished `bench` profile [optimized] target(s) in 2.02s
+     Running benches/graph_lifecycle.rs (target/release/deps/graph_lifecycle-6d8168c40a309a13)
+Gnuplot not found, using plotters backend
+Benchmarking graph_lifecycle/construct_builder/1000
+Benchmarking graph_lifecycle/construct_builder/1000: Warming up for 1.0000 s
+Benchmarking graph_lifecycle/construct_builder/1000: Collecting 20 samples in estimated 2.0024 s (3360 iterations)
+Benchmarking graph_lifecycle/construct_builder/1000: Analyzing
+graph_lifecycle/construct_builder/1000
+                        time:   [579.84 µs 685.69 µs 834.13 µs]
+Found 2 outliers among 20 measurements (10.00%)
+  2 (10.00%) high severe
+Benchmarking graph_lifecycle/finalize/1000
+Benchmarking graph_lifecycle/finalize/1000: Warming up for 1.0000 s
+Benchmarking graph_lifecycle/finalize/1000: Collecting 20 samples in estimated 2.7291 s (420 iterations)
+Benchmarking graph_lifecycle/finalize/1000: Analyzing
+graph_lifecycle/finalize/1000
+                        time:   [6.3407 ms 6.3454 ms 6.3511 ms]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+Benchmarking graph_lifecycle/serialize/1000
+Benchmarking graph_lifecycle/serialize/1000: Warming up for 1.0000 s
+Benchmarking graph_lifecycle/serialize/1000: Collecting 20 samples in estimated 3.1656 s (420 iterations)
+Benchmarking graph_lifecycle/serialize/1000: Analyzing
+graph_lifecycle/serialize/1000
+                        time:   [7.4974 ms 7.5047 ms 7.5147 ms]
+Benchmarking graph_lifecycle/load_validate/1000_nodes_1349004_bytes
+Benchmarking graph_lifecycle/load_validate/1000_nodes_1349004_bytes: Warming up for 1.0000 s
+
+Warning: Unable to complete 20 samples in 2.0s. You may wish to increase target time to 3.7s, enable flat sampling, or reduce sample count to 10.
+Benchmarking graph_lifecycle/load_validate/1000_nodes_1349004_bytes: Collecting 20 samples in estimated 3.7027 s (210 iterations)
+Benchmarking graph_lifecycle/load_validate/1000_nodes_1349004_bytes: Analyzing
+graph_lifecycle/load_validate/1000_nodes_1349004_bytes
+                        time:   [17.645 ms 17.856 ms 18.301 ms]
+Found 2 outliers among 20 measurements (10.00%)
+  1 (5.00%) high mild
+  1 (5.00%) high severe
+Benchmarking graph_lifecycle/construct_builder/10000
+Benchmarking graph_lifecycle/construct_builder/10000: Warming up for 1.0000 s
+Benchmarking graph_lifecycle/construct_builder/10000: Collecting 20 samples in estimated 3.5089 s (420 iterations)
+Benchmarking graph_lifecycle/construct_builder/10000: Analyzing
+graph_lifecycle/construct_builder/10000
+                        time:   [8.3457 ms 8.3767 ms 8.4331 ms]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high severe
+Benchmarking graph_lifecycle/finalize/10000
+Benchmarking graph_lifecycle/finalize/10000: Warming up for 1.0000 s
+Benchmarking graph_lifecycle/finalize/10000: Collecting 20 samples in estimated 2.7323 s (40 iterations)
+Benchmarking graph_lifecycle/finalize/10000: Analyzing
+graph_lifecycle/finalize/10000
+                        time:   [67.099 ms 67.213 ms 67.332 ms]
+Benchmarking graph_lifecycle/serialize/10000
+Benchmarking graph_lifecycle/serialize/10000: Warming up for 1.0000 s
+Benchmarking graph_lifecycle/serialize/10000: Collecting 20 samples in estimated 3.2267 s (40 iterations)
+Benchmarking graph_lifecycle/serialize/10000: Analyzing
+graph_lifecycle/serialize/10000
+                        time:   [80.348 ms 80.676 ms 81.045 ms]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+Benchmarking graph_lifecycle/load_validate/10000_nodes_13766640_bytes
+Benchmarking graph_lifecycle/load_validate/10000_nodes_13766640_bytes: Warming up for 1.0000 s
+
+Warning: Unable to complete 20 samples in 2.0s. You may wish to increase target time to 3.7s, or reduce sample count to 10.
+Benchmarking graph_lifecycle/load_validate/10000_nodes_13766640_bytes: Collecting 20 samples in estimated 3.7328 s (20 iterations)
+Benchmarking graph_lifecycle/load_validate/10000_nodes_13766640_bytes: Analyzing
+graph_lifecycle/load_validate/10000_nodes_13766640_bytes
+                        time:   [186.60 ms 187.56 ms 188.65 ms]
+Found 1 outliers among 20 measurements (5.00%)
+  1 (5.00%) high mild
+

@@ -50,6 +50,7 @@ def main():
             raise ValueError("simulation output did not replay byte-for-byte")
     ordered = sorted(measurements)
     record = {
+        "schema_version": 1,
         "date": date.today().isoformat(),
         "purpose": "Phase 15 small-fixture wall-clock replay validation, not a scalability claim",
         "hardware": hardware(),
@@ -60,7 +61,7 @@ def main():
                     "created_orders": result["summary"]["created_orders"], "riders": len(result["riders"])},
         "algorithm": {"events": "BinaryHeap ordered by logical time then insertion sequence",
                       "routing": "Roadrunner Dijkstra", "dispatch": result["dispatch"], "coverage": "exhaustive eligible riders"},
-        "configuration": {"profile": "release", "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
+        "configuration": {"binary_sha256": hashlib.sha256(args.binary.read_bytes()).hexdigest(), "profile": "release", "build": "cargo +1.99.0 build -p roadrunner-cli --release --locked",
                           "rustc": subprocess.check_output(["rustc", "+1.99.0", "--version"], text=True).strip(),
                           "command": "target/release/roadrunner simulate " + str(args.scenario) + " --json",
                           "warmup_runs": 1, "measured_runs": args.runs, "concurrent_workspace_validation": False,
