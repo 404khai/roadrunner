@@ -1,6 +1,9 @@
 # Roadrunner API contracts
 
-The current repository exposes library and CLI APIs. HTTP endpoints remain Phase 20.
+Phase 20 exposes Axum HTTP endpoints alongside the existing library and CLI APIs.
+See the [HTTP run guide and contracts](../crates/roadrunner-api/README.md) and
+[completion evidence](phase-20-completion.md). Generated OpenAPI is served at
+`/openapi.json`; vendored Swagger UI is at `/swagger-ui/`.
 
 ## Phase 17 dispatch library
 
@@ -77,7 +80,7 @@ scenario schema. Historical graph schema 3 claims are inspection-only; current
 schema 4 loaders recompute the canonical semantic identity. See the complete
 [identity/time/compatibility API contract](runtime-boundary.md).
 
-## Approved Phase 20 interface (not implemented)
+## Phase 20 HTTP interface
 
 Phase 20 adds authorized routing and operational snapshot queries, creation,
 lifecycle/assignment/fleet/recovery/cancellation commands, supported observations,
@@ -91,6 +94,7 @@ atomically publishes or returns a typed noncommit/pending result. Same-key diffe
 meaning conflicts; same-key retries return original status/results. Logical execution
 effects remain once-only across distinct commands. Recognition lasts for the living
 volatile namespace; discarded authority cannot establish durable historical outcomes.
-Authentication, authorization, source/observation ordering and host-clock conversion
-belong to Phase 20. Phase 21/22 durability, outbox/inbox, fencing and recovery are
+The API implements bearer capability authorization, source-bound observation ordering,
+and a UNIX-origin monotonic host clock. Its explicit local entry point grants observation
+trust only to the trusted local driver. Phase 21/22 durability, outbox/inbox, fencing and recovery are
 separate gates. See [approved Q1–Q33](runtime-boundary-audit.md) and ADRs 0017–0019.

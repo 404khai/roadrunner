@@ -30,7 +30,7 @@ Implemented through **Phase 19 — Dynamic Re-dispatch**:
   correctness oracles, and reproducible benchmark artifacts.
 
 [Phase 17 completion](docs/phase-17-completion.md), [Phase 18 completion](docs/phase-18-completion.md)
-and [Phase 19 completion](docs/phase-19-completion.md) record implementation gates. HTTP serving, databases,
+and [Phase 19 completion](docs/phase-19-completion.md) record implementation gates. Phase 20 adds an [HTTP API with Swagger UI](crates/roadrunner-api/README.md). Databases,
 Redis/Kafka, live traffic, machine learning, and a map UI are future phases. The current
 workspace runs locally without those services; there is no `serve` or `demo` command.
 
@@ -38,6 +38,7 @@ workspace runs locally without those services; there is no `serve` or `demo` com
 
 | Crate | Role | Entry points |
 | --- | --- | --- |
+| [roadrunner-api](crates/roadrunner-api/README.md) | Authorized HTTP commands, routing, isolated simulation, OpenAPI and Swagger UI | `roadrunner-api` binary and embeddable Axum router |
 | [roadrunner-core](crates/roadrunner-core/README.md) | Graphs, geography, costs and routing | Rust library, tests, four Criterion targets |
 | [roadrunner-osm](crates/roadrunner-osm/README.md) | OSM extraction, motorcycle graph compilation, provenance and snapshot validation | Rust library, CLI adapters, pipeline benchmark |
 | [roadrunner-dispatch](crates/roadrunner-dispatch/README.md) | Rider lookup, world/plan state, timing, assignment and insertion | Rust library, two examples, tests, lookup benchmark |
@@ -336,7 +337,7 @@ volatile World/execution, distinct plan/action/schedule/effect identities and at
 publication. Simulation drives shared validated transitions and declares its
 `shared-execution/v2` evidence contract. Named static-road temporal certification
 supports delayed publication; time-dependent operational certification is unsupported.
-HTTP, persistence and event transport remain separate future phases.
+The [Phase 20 HTTP adapter](crates/roadrunner-api/README.md) is implemented over the volatile authority. Persistence and event transport remain future phases.
 
 See [runtime boundary](docs/runtime-boundary.md) and
 [prerequisite verification](docs/pre-phase-20-remediation-completion.md).

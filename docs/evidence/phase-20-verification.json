@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-10",
+  "baseline": "681cd64",
+  "scope": "Phase 20 volatile HTTP adapter",
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "PASS"
+    },
+    {
+      "command": "cargo +1.99.0 clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "result": "PASS",
+      "log_sha256": "37023d8a97f8f9cc2697f418cf1fa7619e0ae6e434da532b68c7201a070445b1"
+    },
+    {
+      "command": "cargo +1.99.0 test --workspace --all-features --locked",
+      "result": "PASS",
+      "passed": 233,
+      "failed": 0,
+      "ignored": 1,
+      "log_sha256": "e98e313e5ce785c77fbfed6cf8d0125076e9c19cc5711684c9bc9cfe27c8579a"
+    },
+    {
+      "command": "cargo +1.99.0 build -p roadrunner-api --release --locked",
+      "result": "PASS",
+      "binary_sha256": "af734832fd895c6a90fe4c1a9ded5050495488c3e690cff89e2f1a08edc5fed0"
+    },
+    {
+      "command": "python3 scripts/collect_http_api_benchmark.py",
+      "result": "PASS",
+      "artifact": "benchmarks/results/phase-20-http.json"
+    }
+  ],
+  "openapi": {
+    "version": "3.1.0",
+    "paths": 24,
+    "schemas": 40,
+    "document_sha256": "d2cd7072f5609a35c9892368b178fedebc2499057408570a621e35ab9c8e3ed2"
+  },
+  "browser": {
+    "result": "PASS",
+    "title": "Swagger UI",
+    "url": "http://localhost:3007/swagger-ui/",
+    "method": "T3 collaborative preview navigation and accessibility snapshot; OAS 3.1 heading and operations present; no console errors"
+  },
+  "limits": [
+    "single-process volatile namespace",
+    "trusted-local loopback binary; embedded host owns physical source trust",
+    "static operational routing and static-road-monotone/v1 certification",
+    "tiny sequential loopback benchmark; no scalability/SLO claim"
+  ]
+}
