@@ -144,6 +144,15 @@ pub struct GraphProvenance {
     pub restrictions: Vec<RestrictionProvenance>,
 }
 
+pub(crate) fn semantic_provenance_digest(provenance: &GraphProvenance) -> Result<String, OsmError> {
+    let mut canonical = provenance.clone();
+    canonical.graph_snapshot_digest.clear();
+    let mut hash = Sha256::new();
+    hash.update(b"roadrunner.compiled-provenance.v1\0");
+    hash.update(serde_json::to_vec(&canonical)?);
+    Ok(format!("{:x}", hash.finalize()))
+}
+
 /// Encodes canonical provenance bytes and validates the mapping first.
 ///
 /// # Errors
@@ -207,6 +216,10 @@ pub fn provenance_artifact_sha256(bytes: &[u8]) -> String {
 
 #[allow(clippy::too_many_lines)]
 fn validate_provenance(provenance: &GraphProvenance, graph: &FrozenGraph) -> Result<(), OsmError> {
+    let binding = semantic_provenance_digest(provenance)?;
+    if graph.metadata().provenance_digest() != Some(binding.as_str()) {
+        return Err(invalid("compiled provenance semantic identity mismatch"));
+    }
     if provenance.provenance_version != "osm_graph_provenance_v2"
         || provenance.graph_snapshot_digest != graph.metadata().snapshot_digest()
         || !is_sha256(&provenance.graph_snapshot_digest)

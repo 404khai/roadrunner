@@ -23,7 +23,7 @@ An overlay is bound to a graph snapshot ID, semantic digest, and edge count. Unk
 
 ## Reproduce the pinned fixture
 
-The committed [scenario](../data/fixtures/phase-10/lagos-marina-severe.json) uses the Phase 7 Lagos Marina PBF and puts a severe factor on directed edge `91`. Its graph digest is tied to the declared source ID below.
+The committed [scenario](../data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json) uses the Phase 7 Lagos Marina PBF and puts a severe factor on directed edge `91`. Its graph digest is tied to the declared source ID below.
 
 ```sh
 cargo run -q -p roadrunner-cli -- osm extract \
@@ -33,7 +33,7 @@ cargo run -q -p roadrunner-cli -- osm compile \
   /tmp/phase10-marina.rr-osm /tmp/phase10-marina-snapshot
 cargo run -q -p roadrunner-cli -- route traffic \
   /tmp/phase10-marina-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-10/lagos-marina-severe.json
+  --scenario data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json
 ```
 
 The command emits JSON for the shortest-distance route, the free-flow fastest route, and the traffic fastest route. It includes each route's adjusted ETA plus the graph and traffic digests. For this synthetic fixture, the shortest route is 452.043 m with a traffic-adjusted ETA of 112.904 s; the traffic-aware choice is 527.470 m with an ETA of 94.945 s. These are deterministic calculations on a tiny extract, not observed traffic or production ETA measurements.

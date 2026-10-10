@@ -19,11 +19,11 @@ use crate::policy::{
 use crate::provenance::{
     CompiledManeuverProvenance, GraphProvenance, RestrictionProvenance, SourceNodeMapping,
     SourceSegmentMapping, SourceWayMapping, TraversalPolicyProvenance, encode_provenance_artifact,
-    provenance_artifact_sha256,
+    provenance_artifact_sha256, semantic_provenance_digest,
 };
 
-const BUILD_CONFIGURATION: &str = "contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1";
-const COMPILER_SEMANTIC_VERSION: &str = "osm_graph_compiler_v3";
+const BUILD_CONFIGURATION: &str = "compiler_semantics=osm_graph_compiler_v4;contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1";
+const COMPILER_SEMANTIC_VERSION: &str = "osm_graph_compiler_v4";
 
 /// Deterministic weak-connectivity diagnostics for a compiled graph.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -294,8 +294,7 @@ pub fn compile_motorcycle_graph(decoded: &DecodedDataset) -> Result<CompiledGrap
             ]
         })
         .collect();
-    let (snapshot_id, snapshot_digest) = derive_snapshot_identity(decoded, &drafts)?;
-    let metadata = GraphMetadata::with_snapshot_digest(
+    let metadata = GraphMetadata::new(
         DELIVERY_MOTORCYCLE_PROFILE,
         NG_JURISDICTION_POLICY,
         GraphBuildIdentity::new(
@@ -304,9 +303,8 @@ pub fn compile_motorcycle_graph(decoded: &DecodedDataset) -> Result<CompiledGrap
             &dataset.normalization_version,
             BUILD_CONFIGURATION,
         ),
-        &snapshot_digest,
     );
-    let mut builder = GraphBuilder::new(GraphSnapshotId::new(snapshot_id), metadata);
+    let mut builder = GraphBuilder::new(GraphSnapshotId::new(0), metadata);
     for osm_id in &routing_node_ids {
         let coordinate = coordinates
             .get(osm_id)
@@ -339,7 +337,7 @@ pub fn compile_motorcycle_graph(decoded: &DecodedDataset) -> Result<CompiledGrap
         )?;
     }
     let graph = builder.finalize()?;
-    let (provenance, forbidden_maneuvers) = build_provenance(
+    let (mut provenance, forbidden_maneuvers) = build_provenance(
         decoded,
         &graph,
         &routing_node_ids,
@@ -347,6 +345,13 @@ pub fn compile_motorcycle_graph(decoded: &DecodedDataset) -> Result<CompiledGrap
         &policy_decisions,
     )?;
     let graph = graph.with_forbidden_maneuvers(forbidden_maneuvers)?;
+    let graph = graph.with_provenance_digest(semantic_provenance_digest(&provenance)?)?;
+    graph
+        .metadata()
+        .snapshot_digest()
+        .clone_into(&mut provenance.graph_snapshot_digest);
+    let snapshot_id = graph.snapshot_id().value();
+    let snapshot_digest = graph.metadata().snapshot_digest().to_owned();
     let components = component_diagnostics(&graph, dataset, &provenance);
     let diagnostics =
         compilation_diagnostics(dataset, &graph, &drafts, &policy_decisions, &provenance);
@@ -930,43 +935,6 @@ fn split_way(
         }
     }
     Ok(())
-}
-
-fn derive_snapshot_identity(
-    decoded: &DecodedDataset,
-    drafts: &[SegmentDraft],
-) -> Result<(u64, String), OsmError> {
-    #[derive(Serialize)]
-    struct SemanticPreimage<'a> {
-        domain: &'static str,
-        normalized_payload_sha256: &'a str,
-        normalization_version: &'a str,
-        routing_profile: &'static str,
-        jurisdiction_policy: &'static str,
-        compiler_semantic_version: &'static str,
-        graph_schema_version: u32,
-        provenance_schema_version: u32,
-        build_configuration: &'static str,
-        turn_restrictions_enforced: bool,
-        drafts: &'a [SegmentDraft],
-    }
-    let preimage = serde_json::to_vec(&SemanticPreimage {
-        domain: "roadrunner.graph-snapshot-digest.v1",
-        normalized_payload_sha256: &decoded.payload_sha256,
-        normalization_version: &decoded.dataset.normalization_version,
-        routing_profile: DELIVERY_MOTORCYCLE_PROFILE,
-        jurisdiction_policy: NG_JURISDICTION_POLICY,
-        compiler_semantic_version: COMPILER_SEMANTIC_VERSION,
-        graph_schema_version: 3,
-        provenance_schema_version: 2,
-        build_configuration: BUILD_CONFIGURATION,
-        turn_restrictions_enforced: true,
-        drafts,
-    })?;
-    let digest = Sha256::digest(preimage);
-    let mut prefix = [0_u8; 8];
-    prefix.copy_from_slice(&digest[..8]);
-    Ok((u64::from_be_bytes(prefix), format!("{digest:x}")))
 }
 
 fn builder_node_id(osm_id: i64) -> Result<BuilderNodeId, OsmError> {

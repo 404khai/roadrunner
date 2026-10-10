@@ -21,7 +21,7 @@ Increasing or flat multipliers always pass. For a falling multiplier, this rule 
 
 ## Reproduce the pinned scenario
 
-The [scenario](../data/fixtures/phase-11/lagos-marina-profile.json) uses the committed Lagos Marina PBF. Directed edge `91` has a severe factor until logical second `300`, then eases linearly to normal by second `600`. The scenario is synthetic.
+The [scenario](../data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json) uses the committed Lagos Marina PBF. Directed edge `91` has a severe factor until logical second `300`, then eases linearly to normal by second `600`. The scenario is synthetic.
 
 ```sh
 cargo run -q -p roadrunner-cli -- osm extract \
@@ -31,10 +31,10 @@ cargo run -q -p roadrunner-cli -- osm compile \
   /tmp/phase11-marina.rr-osm /tmp/phase11-marina-snapshot
 cargo run -q -p roadrunner-cli -- route schedule \
   /tmp/phase11-marina-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-11/lagos-marina-profile.json --depart 0
+  --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 0
 cargo run -q -p roadrunner-cli -- route schedule \
   /tmp/phase11-marina-snapshot 5602610872 5594385916 \
-  --scenario data/fixtures/phase-11/lagos-marina-profile.json --depart 600
+  --scenario data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json --depart 600
 ```
 
 At second `0`, the free-flow fastest route takes `112.904` s under the profile, while the chosen route takes `94.945` s. At second `600`, both searches choose the free-flow path and take `81.368` s. These are deterministic fixture calculations, not observed travel times or performance benchmarks.

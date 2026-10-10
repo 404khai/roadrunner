@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "correspondences": [
+    {
+      "legacy_fixture": "data/fixtures/phase-10/lagos-marina-severe.json",
+      "legacy_fixture_sha256": "aadfda1281ea3be69d067484a4c418644815f8c3f4c10078411d92ec0240ead9",
+      "legacy_digest": "5537ff5503e7691c8e912a2f51a6a490c96fd4ab540abdb499edda23a65c985f",
+      "current_fixture": "data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json",
+      "current_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+      "verified_equal_fields": [
+        "nodes",
+        "segments",
+        "edges",
+        "adjacency_offsets",
+        "geometry",
+        "forbidden_maneuvers",
+        "turn_restrictions_enforced",
+        "routing_profile",
+        "jurisdiction_policy"
+      ],
+      "original_claim_status": "legacy schema 3; not operationally trusted",
+      "verification": "compiled identical normalized PBF data with archived HEAD and semantic compiler v4; exact field equality",
+      "baseline_commit": "4271ddd",
+      "compiler_semantics": "osm_graph_compiler_v4",
+      "current_build_configuration": "compiler_semantics=osm_graph_compiler_v4;contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1",
+      "legacy_build_configuration": "contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1",
+      "metadata_change": "compiler semantics v4 now bound within canonical build configuration"
+    },
+    {
+      "legacy_fixture": "data/fixtures/phase-11/lagos-marina-profile.json",
+      "legacy_fixture_sha256": "2e269d12a6d95b74c74f67af0dc69bee6c72226da44de82f33bb4aa1fffdf92c",
+      "legacy_digest": "8c1be8268f55c62d20c628a75fac24c1cdc452ab966dfec8e29af960ef918528",
+      "current_fixture": "data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json",
+      "current_digest": "d537cd687d6d1a88847962babc85d160b56d85e5ddf8b7c59b99f99e0a5dfe21",
+      "verified_equal_fields": [
+        "nodes",
+        "segments",
+        "edges",
+        "adjacency_offsets",
+        "geometry",
+        "forbidden_maneuvers",
+        "turn_restrictions_enforced",
+        "routing_profile",
+        "jurisdiction_policy"
+      ],
+      "original_claim_status": "legacy schema 3; not operationally trusted",
+      "verification": "compiled identical normalized PBF data with archived HEAD and semantic compiler v4; exact field equality",
+      "baseline_commit": "4271ddd",
+      "compiler_semantics": "osm_graph_compiler_v4",
+      "current_build_configuration": "compiler_semantics=osm_graph_compiler_v4;contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1",
+      "legacy_build_configuration": "contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1",
+      "metadata_change": "compiler semantics v4 now bound within canonical build configuration"
+    }
+  ]
+}

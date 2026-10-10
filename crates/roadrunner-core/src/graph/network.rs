@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 
 use crate::geo::{CanonicalCoordinate, Meters, Seconds, haversine_distance};
 
@@ -21,6 +20,7 @@ pub struct GraphMetadata {
     build_identity: GraphBuildIdentity,
     turn_restrictions_enforced: bool,
     snapshot_digest: String,
+    provenance_digest: Option<String>,
 }
 
 /// Versioned inputs that explain how a graph snapshot was compiled.
@@ -102,22 +102,17 @@ impl GraphMetadata {
     ) -> Self {
         let routing_profile = routing_profile.into();
         let jurisdiction_policy = jurisdiction_policy.into();
-        let mut hasher = Sha256::new();
-        hasher.update(routing_profile.as_bytes());
-        hasher.update(jurisdiction_policy.as_bytes());
-        hasher.update(build_identity.source_integrity().as_bytes());
-        hasher.update(build_identity.compiler_version().as_bytes());
-        hasher.update(build_identity.normalization_version().as_bytes());
-        hasher.update(build_identity.build_configuration().as_bytes());
         Self {
             routing_profile,
             jurisdiction_policy,
             build_identity,
             turn_restrictions_enforced: false,
-            snapshot_digest: format!("{:x}", hasher.finalize()),
+            snapshot_digest: String::new(),
+            provenance_digest: None,
         }
     }
-    /// Creates metadata bound to an authoritative semantic snapshot digest.
+    /// Creates metadata carrying a historical asserted digest. Finalization always
+    /// replaces this assertion with a verified content identity; it cannot publish it.
     #[must_use]
     pub fn with_snapshot_digest(
         routing_profile: impl Into<String>,
@@ -131,7 +126,16 @@ impl GraphMetadata {
             build_identity,
             turn_restrictions_enforced: false,
             snapshot_digest: snapshot_digest.into(),
+            provenance_digest: None,
         }
+    }
+    /// Immutable optional compiled-provenance content digest, excluding its graph reference.
+    #[must_use]
+    pub fn provenance_digest(&self) -> Option<&str> {
+        self.provenance_digest.as_deref()
+    }
+    pub(super) fn set_provenance_digest(&mut self, value: Option<String>) {
+        self.provenance_digest = value;
     }
     /// Returns the routing-profile identifier.
     #[must_use]
@@ -391,7 +395,7 @@ impl GraphBuilder {
             adjacency_offsets[index] += adjacency_offsets[index - 1];
         }
 
-        Ok(FrozenGraph {
+        let mut graph = FrozenGraph {
             snapshot_id: self.snapshot_id,
             metadata: self.metadata,
             nodes,
@@ -400,7 +404,9 @@ impl GraphBuilder {
             adjacency_offsets,
             geometry,
             forbidden_maneuvers: Vec::new(),
-        })
+        };
+        graph.seal_identity()?;
+        Ok(graph)
     }
 }
 
@@ -418,6 +424,41 @@ pub struct FrozenGraph {
 }
 
 impl FrozenGraph {
+    fn seal_identity(&mut self) -> Result<(), GraphError> {
+        let digest = super::artifact::semantic_digest(self).map_err(|error| {
+            GraphError::SemanticIdentity {
+                reason: error.to_string(),
+            }
+        })?;
+        let compact = u64::from_str_radix(&digest[..16], 16).map_err(|error| {
+            GraphError::SemanticIdentity {
+                reason: error.to_string(),
+            }
+        })?;
+        self.metadata.snapshot_digest = digest;
+        self.snapshot_id = GraphSnapshotId::new(compact);
+        Ok(())
+    }
+
+    /// Binds external compiled provenance content before publication. Loaders of the
+    /// associated artifact must verify the referenced digest. Changes reseal identity.
+    ///
+    /// # Errors
+    /// Rejects malformed digests or identity encoding failures.
+    pub fn with_provenance_digest(mut self, digest: String) -> Result<Self, GraphError> {
+        if digest.len() != 64
+            || !digest
+                .bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+        {
+            return Err(GraphError::SemanticIdentity {
+                reason: "invalid provenance digest".into(),
+            });
+        }
+        self.metadata.provenance_digest = Some(digest);
+        self.seal_identity()?;
+        Ok(self)
+    }
     #[allow(clippy::too_many_arguments)]
     pub(super) fn from_validated_parts(
         snapshot_id: GraphSnapshotId,
@@ -470,6 +511,7 @@ impl FrozenGraph {
         }
         self.forbidden_maneuvers = maneuvers;
         self.metadata.set_turn_restrictions_enforced(true);
+        self.seal_identity()?;
         Ok(self)
     }
 

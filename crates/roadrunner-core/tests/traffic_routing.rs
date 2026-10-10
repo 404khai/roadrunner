@@ -25,7 +25,12 @@ fn network(snapshot_id: u64) -> FrozenGraph {
         GraphMetadata::new(
             "traffic_test",
             "test",
-            GraphBuildIdentity::new("traffic-fixture", "fixture-digest", "v1", "static"),
+            GraphBuildIdentity::new(
+                "traffic-fixture",
+                "fixture-digest",
+                "v1",
+                format!("static-fixture-{snapshot_id}"),
+            ),
         ),
     );
     let points = [

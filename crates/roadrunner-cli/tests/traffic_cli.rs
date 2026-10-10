@@ -24,7 +24,7 @@ fn pinned_traffic_scenario_selects_longer_faster_route() {
             "5602610872",
             "5594385916",
             "--scenario",
-            root.join("data/fixtures/phase-10/lagos-marina-severe.json")
+            root.join("data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json")
                 .to_str()
                 .unwrap_or_else(|| panic!("scenario path is not UTF-8")),
         ])
@@ -63,7 +63,7 @@ fn pinned_traffic_scenario_selects_longer_faster_route() {
 fn pinned_time_profile_changes_route_with_departure_time() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let snapshot = fixture_snapshot(&root, "phase11-lagos-marina");
-    let scenario = root.join("data/fixtures/phase-11/lagos-marina-profile.json");
+    let scenario = root.join("data/fixtures/phase-11/lagos-marina-profile.semantic-v2.json");
     let mut routes = Vec::new();
     for departure in ["0", "600"] {
         let output = Command::new(env!("CARGO_BIN_EXE_roadrunner"))
