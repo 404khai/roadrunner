@@ -495,3 +495,13 @@ temporal COMMIT gating and independent acknowledged-head watermarking govern pub
 The default API run remains explicitly volatile. Storage receipts/outbox obligations do
 not introduce event-sourced recovery or broker delivery. See [persistence](persistence.md)
 for supported installation, migrations, retention, backup/clone policy and validation.
+
+### Phase 22 event runtime implementation
+
+The approved audit gate is implemented through a PostgreSQL local durable stream,
+asynchronous outbox polling, transactional projection/notification inbox consumers,
+source ordering, retained quarantine/reconciliation and isolated processing replay.
+Consumer/publisher acknowledgement anchors preserve the same explicit rollback contract
+as operational durability. Broker delivery, remote effects, automatic event-triggered
+planning, parallel consumers and multi-primary operation remain deferred. See
+[event contracts](events.md) and [completion](phase-22-completion.md).

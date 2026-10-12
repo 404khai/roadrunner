@@ -22,3 +22,14 @@ ROADRUNNER_TEST_DATABASE_URL='host=/tmp dbname=roadrunner_test' \
 The opt-in suite requires a dedicated disposable PostgreSQL/PostGIS database and
 runs actual rollback, writer-exclusion, restoration, corruption, rollback-watermark
 and post-COMMIT acknowledgement-failure checks. CI runs it explicitly.
+
+Phase 22 adds the public `events` module and additive delivery migration. Role-specific
+leases, inbox/effects, retained ordering/reconciliation and acknowledgement anchors
+support [local event processing](../../docs/events.md). Real event tests run explicitly:
+
+```bash
+cargo +1.99.0 test -p roadrunner-storage --test events --locked -- --ignored --test-threads=1
+```
+
+The upgrade fixture needs CREATE DATABASE privileges and PostgreSQL keyword connection
+syntax; it creates and removes its own uniquely named disposable database.

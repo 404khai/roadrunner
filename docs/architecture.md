@@ -510,4 +510,14 @@ normalized relational rows and PostGIS geometry, with immutable inspection/outbo
 Private API staging uses the same dispatch validity and temporal proof. The SQL namespace
 row/fence/before-image gate publishes all state/results/obligations at COMMIT; an independent
 acknowledgement anchor must fsync before cache installation and success. See the
-[complete storage/run/restoration contract](persistence.md). Event transport remains Phase 22.
+[complete storage/run/restoration contract](persistence.md). [Phase 22 local event delivery](events.md) implements publishing/inbox processing.
+
+## Phase 22 event runtime
+
+The [local asynchronous event runtime](events.md) publishes Phase 21 outbox obligations
+to an immutable PostgreSQL source-ordered stream. Transactional consumers maintain a
+checked integration projection and local notification obligations; their inbox receipts,
+effect recognition and original outcomes commit together. Separate role leases and
+independent acknowledgement anchors preserve restart/reconciliation boundaries. Replay
+uses isolated in-memory processing of recorded attempts and suppresses effects. Integration
+events never replace authenticated commands, physical observations or operational authority.

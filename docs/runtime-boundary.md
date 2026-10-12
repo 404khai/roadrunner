@@ -1,7 +1,7 @@
 # Runtime boundary foundation
 
 Status: prerequisite library foundation plus the [Phase 20 HTTP adapter](../crates/roadrunner-api/README.md).
-[Phase 21 durable storage](persistence.md) implements the database/acknowledgement boundary; event transport remains Phase 22. The approved [Q1–Q33 audit](runtime-boundary-audit.md)
+[Phase 21 durable storage](persistence.md) implements the database/acknowledgement boundary; [Phase 22 local event delivery](events.md) implements asynchronous publishing and inbox processing. The approved [Q1–Q33 audit](runtime-boundary-audit.md)
 is normative. The [completion report](pre-phase-20-remediation-completion.md)
 records verification and remaining limits.
 
@@ -222,3 +222,8 @@ work requires preserving the unchanged actor and its unknown health explicitly.
 No guarantee of all routing profiles or all input-isolation cases is asserted by
 this initial proof policy. This is a declared applicability limit, not business
 infeasibility or permission to abandon execution.
+
+Phase 22 now implements [local event delivery and processing](events.md): immutable
+source-ordered stream, atomic inbox/local effects, deferred gaps, fingerprint-bound
+quarantine resolution, role acknowledgement watermarks and isolated recorded-attempt
+replay. Remote providers and automatic operational event commands remain deferred.

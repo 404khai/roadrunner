@@ -389,7 +389,7 @@ resource_handler!(
     components(schemas(Envelope, ErrorBody)),
     info(
         title = "Roadrunner Phase 20 API",
-        description = "One volatile authority. Bearer capabilities and Idempotency-Key are required for commands. Clients supply intent and explicit graph projections; server owns identities, clocks, policy, execution and temporal publication. All numeric times are absolute seconds in /v1/state time_domain. Simulation is isolated. No persistence or multi-writer guarantee."
+        description = "One serialized operational authority with optional PostgreSQL/PostGIS durability. Bearer capabilities and Idempotency-Key are required for commands. Clients supply intent and explicit graph projections; server owns identities, clocks, policy, execution and temporal publication. All numeric times are absolute seconds in /v1/state time_domain. Simulation is isolated. Durable mode preserves outcomes across restart under one fenced writer. Event consumers process committed integration facts; they cannot bypass operational commands. No multi-primary guarantee."
     )
 )]
 struct ApiDoc;

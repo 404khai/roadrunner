@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "hardware": {
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "cpu": "Apple M3",
+    "logical_cpus": 8
+  },
+  "dataset": {
+    "path": "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph",
+    "sha256": "7943c50063f8e268359b1e54f066617bfe303edd97e82bf549b388ebf4a5a317",
+    "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+    "nodes": 58,
+    "edges": 114
+  },
+  "build": {
+    "profile": "release",
+    "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+    "event_binary_sha256": "fa08b10f05b71e1cd006feb15729f374439675184c35fbabb631cfac7d261cb0",
+    "api_binary_sha256": "059458bb9a7574d187f8920f2dd760d98e3cc5ff5c916a4361b6566218892454"
+  },
+  "configuration": {
+    "transport": "PostgreSQL local immutable stream/v1",
+    "algorithm": "serial outbox publisher + projection/notification consumers v1",
+    "poll_interval_ms": 100,
+    "measurement_poll_ms": 40,
+    "warmups": 3,
+    "concurrency": 1,
+    "world": "empty to runs+warmups riders; no orders",
+    "events_per_creation": 2,
+    "consumers": 2,
+    "acknowledgements_per_creation": 4,
+    "synchronous_commit": "on",
+    "independent_anchor": "file+parent directory fsync for publisher and each consumer"
+  },
+  "database": {
+    "version": "PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.4.0, compiled by Apple clang version 21.0.0 (clang-2100.0.123.102), 64-bit",
+    "postgis": "3.6.4",
+    "fsync": "on",
+    "shared_buffers": "128MB"
+  },
+  "runs": 30,
+  "results": {
+    "commit_ack_to_both_consumer_acks": {
+      "raw_ms": [
+        258.973709,
+        331.584209,
+        378.156541,
+        323.618333,
+        255.817166,
+        316.489375,
+        441.956041,
+        313.317708,
+        430.17275,
+        372.812041,
+        374.670417,
+        378.33075,
+        355.812542,
+        454.39875,
+        446.723208,
+        493.188875,
+        619.797667,
+        553.965625,
+        558.865417,
+        534.24225,
+        625.1225,
+        585.054,
+        595.86675,
+        614.947458,
+        620.113625,
+        611.070208,
+        592.596459,
+        594.42425,
+        645.662666,
+        642.388083
+      ],
+      "median_ms": 473.7938125,
+      "p95_ms": 642.388083,
+      "p99_ms": 645.662666
+    }
+  },
+  "durable_counts": {
+    "attempts": 396,
+    "consumers": [
+      {
+        "consumer": "notifications-v1",
+        "kind": "notification",
+        "source_sequence": "66"
+      },
+      {
+        "consumer": "projection-v1",
+        "kind": "projection",
+        "source_sequence": "66"
+      }
+    ],
+    "deferred": 0,
+    "effects": 132,
+    "namespace": "4dd8cfd1e0fe5641ce5e94c887d2cbd5:world:0",
+    "outbox_pending": 0,
+    "quarantined": 0,
+    "stream_messages": 66
+  },
+  "verification": {
+    "effects": 132,
+    "notifications": 66,
+    "delivery_acknowledgements": 132,
+    "projection_digest": "7171f5a923c0190401a2022c3ce6e41869049b97c70c58130e7119588b48e40c"
+  },
+  "resources": {
+    "cpu_usage": "unmeasured",
+    "peak_memory": "unmeasured"
+  },
+  "limits": [
+    "Includes psql process launch and polling observation delay; upper-bound latency sample, not precise internal service time",
+    "Small sequential local fixture and full-evidence hashing; no production scalability/SLO claim",
+    "Local notification obligation only; no remote sending"
+  ]
+}

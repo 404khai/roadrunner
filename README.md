@@ -10,7 +10,7 @@ traffic changes the route, and whether another delivery fits an existing rider p
 
 ## Current capabilities
 
-Implemented through **Phase 21 — Persistence**:
+Implemented through **Phase 22 — Event-Driven Runtime**:
 
 - Deterministic graph construction, geographic units, Haversine distance, validated
   graph artifacts, and provenance-addressed OSM ingestion.
@@ -28,11 +28,14 @@ Implemented through **Phase 21 — Persistence**:
   execution, churn penalties/cooldown, pre-pickup cancellation and observed road delays.
 - Authorized HTTP commands, generated OpenAPI and Swagger UI, with opt-in PostgreSQL/PostGIS
   persistence, fenced restart and durable original retry outcomes.
+- Asynchronous durable outbox delivery, transactional inbox recognition, checked projections,
+  local notification obligations, quarantine/reconciliation and isolated processing replay.
 - Seeded discrete-event delivery simulation, deterministic replay, CLI workflows,
   correctness oracles, and reproducible benchmark artifacts.
 
 [Phase 17 completion](docs/phase-17-completion.md), [Phase 18 completion](docs/phase-18-completion.md)
 and [Phase 19 completion](docs/phase-19-completion.md) record implementation gates. Phase 20 adds an [HTTP API with Swagger UI](crates/roadrunner-api/README.md). [Phase 21 PostgreSQL/PostGIS persistence](docs/persistence.md) now preserves operational authority and retry outcomes across restart.
+[Phase 22 event delivery](docs/events.md) is implemented with a local PostgreSQL stream.
 Redis/Kafka, live traffic, machine learning, and a map UI are future phases. The current
 workspace runs locally without those services; there is no `serve` or `demo` command.
 
@@ -41,6 +44,7 @@ workspace runs locally without those services; there is no `serve` or `demo` com
 | Crate | Role | Entry points |
 | --- | --- | --- |
 | [roadrunner-api](crates/roadrunner-api/README.md) | Authorized HTTP commands, routing, isolated simulation, OpenAPI and Swagger UI | `roadrunner-api` binary and embeddable Axum router |
+| [roadrunner-events](crates/roadrunner-events/README.md) | Asynchronous local publisher, inbox consumers, quarantine and isolated replay | `roadrunner-events` binary |
 | [roadrunner-storage](crates/roadrunner-storage/README.md) | PostgreSQL/PostGIS facts, fenced restoration, immutable evidence and outbox obligations | Synchronous library, offline migration and real DB/process tests |
 | [roadrunner-core](crates/roadrunner-core/README.md) | Graphs, geography, costs and routing | Rust library, tests, four Criterion targets |
 | [roadrunner-osm](crates/roadrunner-osm/README.md) | OSM extraction, motorcycle graph compilation, provenance and snapshot validation | Rust library, CLI adapters, pipeline benchmark |
@@ -340,7 +344,7 @@ volatile World/execution, distinct plan/action/schedule/effect identities and at
 publication. Simulation drives shared validated transitions and declares its
 `shared-execution/v2` evidence contract. Named static-road temporal certification
 supports delayed publication; time-dependent operational certification is unsupported.
-The [Phase 20 HTTP adapter](crates/roadrunner-api/README.md) is implemented over the volatile authority. Phase 21 adds opt-in [durable persistence](docs/persistence.md); event transport remains Phase 22.
+The [Phase 20 HTTP adapter](crates/roadrunner-api/README.md) is implemented over the volatile authority. Phase 21 adds opt-in [durable persistence](docs/persistence.md); Phase 22 adds [durable local event transport and inbox consumers](docs/events.md).
 
 See [runtime boundary](docs/runtime-boundary.md) and
 [prerequisite verification](docs/pre-phase-20-remediation-completion.md).

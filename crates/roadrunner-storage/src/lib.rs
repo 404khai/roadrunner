@@ -2,6 +2,8 @@
 //! Relational current facts are authoritative; immutable records explain commits.
 mod anchor;
 mod entities;
+/// Durable local event transport, inbox consumers and isolated processing replay.
+pub mod events;
 use postgres::{Client, NoTls, Transaction};
 use roadrunner_core::graph::{FrozenGraph, decode_graph_artifact, encode_graph_artifact};
 use roadrunner_dispatch::OperationalState;
@@ -11,6 +13,7 @@ use sha2::{Digest, Sha256};
 use std::path::Path;
 
 const MIGRATION: &str = include_str!("../migrations/0001_operational.sql");
+const EVENT_MIGRATION: &str = include_str!("../migrations/0002_events.sql");
 const MIGRATION_LOCK: i64 = 0x5252_4d49_4752;
 /// Durable record version. Domain checkpoint and graph formats have independent versions.
 pub const STORAGE_SCHEMA_VERSION: u32 = 1;
@@ -120,6 +123,8 @@ impl PgStore {
             .query_one("SELECT to_regclass('rr_installation') IS NOT NULL", &[])?
             .get(0);
         if exists {
+            verify_base_installation(&mut c)?;
+            migrate_events(&mut c)?;
             return verify_installation(&mut c);
         }
         let (cluster, oid) = installation(&mut c)?;
@@ -128,6 +133,7 @@ impl PgStore {
         tx.batch_execute(MIGRATION)?;
         tx.execute("INSERT INTO rr_installation(singleton,cluster_id,database_oid,authority_table_oid,schema_version,migration_sha256) VALUES(true,$1,$2,'rr_worlds'::regclass::oid::bigint,1,$3)",&[&cluster,&oid,&checksum])?;
         tx.commit()?;
+        migrate_events(&mut c)?;
         Ok(())
     }
     /// Acquires the namespace writer, restores a coherent image, or atomically creates
@@ -568,7 +574,7 @@ fn installation(c: &mut Client) -> Result<(String, i64), StorageError> {
     let row=c.query_one("SELECT (pg_control_system()).system_identifier::text,(SELECT oid::bigint FROM pg_database WHERE datname=current_database())",&[])?;
     Ok((row.get(0), row.get(1)))
 }
-fn verify_installation(c: &mut Client) -> Result<(), StorageError> {
+fn verify_base_installation(c: &mut Client) -> Result<(), StorageError> {
     let (cluster, oid) = installation(c)?;
     let row=c.query_one("SELECT cluster_id,database_oid,schema_version,migration_sha256,authority_table_oid FROM rr_installation WHERE singleton",&[])?;
     if row.get::<_, String>(0) != cluster
@@ -578,6 +584,34 @@ fn verify_installation(c: &mut Client) -> Result<(), StorageError> {
         || row.get::<_, i64>(4)
             != c.query_one("SELECT 'rr_worlds'::regclass::oid::bigint", &[])?
                 .get::<_, i64>(0)
+    {
+        return Err(StorageError::Binding);
+    }
+    Ok(())
+}
+fn migrate_events(c: &mut Client) -> Result<(), StorageError> {
+    let exists: bool = c
+        .query_one("SELECT to_regclass('rr_event_schema') IS NOT NULL", &[])?
+        .get(0);
+    if !exists {
+        let mut tx = c.transaction()?;
+        tx.batch_execute(EVENT_MIGRATION)?;
+        tx.execute(
+            "INSERT INTO rr_event_schema VALUES(true,1,$1)",
+            &[&digest_bytes(EVENT_MIGRATION.as_bytes())],
+        )?;
+        tx.commit()?;
+    }
+    Ok(())
+}
+fn verify_installation(c: &mut Client) -> Result<(), StorageError> {
+    verify_base_installation(c)?;
+    let row = c.query_one(
+        "SELECT version,checksum FROM rr_event_schema WHERE singleton",
+        &[],
+    )?;
+    if row.get::<_, i32>(0) != 1
+        || row.get::<_, String>(1) != digest_bytes(EVENT_MIGRATION.as_bytes())
     {
         return Err(StorageError::Binding);
     }
