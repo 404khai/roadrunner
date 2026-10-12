@@ -2,7 +2,7 @@
 
 Status: Accepted future contract (audit Q14–Q17, Q19–Q29, Q31–Q33).
 Implementation: Phase 20 API and Phase 21 durable state/recognition/outbox obligation are implemented.
-Phase 22 delivery/inbox remains future work; see [persistence contracts](../persistence.md).
+Phase 22 local event delivery/inbox is implemented; see [event contracts](../events.md) and [persistence contracts](../persistence.md).
 
 ## Decision
 

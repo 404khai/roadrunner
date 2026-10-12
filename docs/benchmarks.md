@@ -217,3 +217,20 @@ algorithm, compiler/binary, configuration, database/PostGIS version, fsync setti
 median/p95/p99 and durable row counts. It measures sequential loopback requests on
 a 58-node/114-edge graph. Search scaling, CPU and memory remain unmeasured. See
 [Phase 21 completion](phase-21-completion.md) for separate crash/transaction evidence.
+
+## Phase 22 asynchronous local delivery baseline
+
+[Raw measurements](../benchmarks/results/phase-22-event-delivery.json) record 30 release
+samples from original HTTP commit acknowledgement to observation of both consumers'
+durable delivery ACKs, using the actual PostgreSQL stream and independent role anchors.
+
+```bash
+cargo +1.99.0 build -p roadrunner-api -p roadrunner-events --release --locked
+ROADRUNNER_TEST_DATABASE_URL='host=/tmp dbname=roadrunner_test' python3 scripts/collect_event_benchmark.py
+```
+
+Hardware, verified dataset/hash/size, publisher/reducer algorithms, build hashes,
+configuration, warmups, raw samples and median/p95/p99 are recorded. Psql launch and
+40 ms polling delay are included; this is an observed upper-bound baseline on a tiny
+sequential fixture, not internal latency or production throughput. CPU/memory are
+unmeasured. See [completion](phase-22-completion.md) for separate actual fault evidence.

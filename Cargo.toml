@@ -2,6 +2,7 @@
 members = [
     "crates/roadrunner-api",
     "crates/roadrunner-storage",
+    "crates/roadrunner-events",
     "crates/roadrunner-cli",
     "crates/roadrunner-core",
     "crates/roadrunner-dispatch",

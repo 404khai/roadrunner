@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "baseline": "33cddf88e4e3b81281578954f85241717cff6d1a",
+  "scope": "Phase 22 asynchronous PostgreSQL local event delivery, transactional integration inbox/effects and isolated processing replay",
+  "operational_storage_schema_version": 1,
+  "event_schema_version": 1,
+  "consumer_semantics": "roadrunner.integration-consumer/v1",
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "PASS"
+    },
+    {
+      "command": "cargo +1.99.0 clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "result": "PASS",
+      "log_sha256": "8fdc233257a9d0f310e7d2886003d4a5e20d9db26ff322614a334b20d9c94b9a"
+    },
+    {
+      "command": "cargo +1.99.0 test --workspace --all-features --locked",
+      "result": "PASS",
+      "log_sha256": "8671b015b318efe3eaac13d80aad5c173c55efd21c59169c8a901e9cf750305d",
+      "passed_cases": 234,
+      "passed": 234,
+      "failed": 0,
+      "ignored": 13
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-storage --test postgres --locked -- --ignored --test-threads=1",
+      "result": "PASS",
+      "log_sha256": "fd79d364a492a974c9cd3cfdb0aef07cce658d52ce64cc8a380046af3bf7086c",
+      "passed_cases": 5
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-storage --test events --locked -- --ignored --test-threads=1",
+      "result": "PASS",
+      "log_sha256": "5b2acbcd257f64483d7eeec125922fb99ed6919afc9ebd7e1f02e2eb60b3e21f",
+      "passed_cases": 7
+    },
+    {
+      "command": "python3 scripts/verify_postgres_runtime.py --output /tmp/phase-21-regression.json",
+      "result": "PASS",
+      "log_sha256": "021a7a9fac0b644850bdf5774e9a55df6d10171e611d440127d2f018add95803",
+      "passed_cases": 7
+    },
+    {
+      "command": "python3 scripts/verify_event_runtime.py",
+      "result": "PASS",
+      "log_sha256": "684e323dfe8b921e49079a6c2b82de069fbf6a6adb1a63c9abfee8e01f6e5c61",
+      "passed_cases": 5
+    },
+    {
+      "command": "cargo +1.99.0 build -p roadrunner-api -p roadrunner-events --release --locked",
+      "result": "PASS",
+      "event_binary_sha256": "fa08b10f05b71e1cd006feb15729f374439675184c35fbabb631cfac7d261cb0",
+      "api_binary_sha256": "059458bb9a7574d187f8920f2dd760d98e3cc5ff5c916a4361b6566218892454"
+    },
+    {
+      "command": "python3 scripts/collect_event_benchmark.py",
+      "result": "PASS",
+      "artifact": "benchmarks/results/phase-22-event-delivery.json",
+      "artifact_sha256": "f1fc62ae715947d329b23773ec6f3e68e24e045e4c16d6969de4963caf62bf87"
+    }
+  ],
+  "runtime_artifact": "docs/evidence/phase-22-runtime.json",
+  "phase21_regression": {
+    "cases": 7,
+    "artifact_sha256": "86a961290598e8b8e27a30e1b9c50f036021cd515bc91ed8c3a39ac4ae69881d",
+    "preserves": [
+      "frozen execution",
+      "authentic terms",
+      "original command outcomes",
+      "distinct command domain-effect recognition",
+      "temporal SQL COMMIT gate"
+    ]
+  },
+  "openapi": {
+    "document_sha256": "7a5114d1bc9b69e79fcf2860fe81119026142ad4382fa01b09adf287ea67b081",
+    "change": "Description now documents optional durability and integration boundary; existing typed schemas remain supported"
+  },
+  "limits": [
+    "single-primary trusted-local NoTls, serial role writers and independent fsynced role acknowledgement anchors",
+    "local projection/notification effects; no external provider or automatic event-triggered planning",
+    "physical writable clones, automatic failover, parallel consumers and public remote source authentication unsupported",
+    "full retained-evidence hashing grows with history; no scalability claim",
+    "30 sequential local release samples include psql/poll observation delay; CPU/memory unmeasured",
+    "local PostgreSQL 18.4/PostGIS 3.6.4; CI PostgreSQL 16/PostGIS 3.5 configured"
+  ]
+}

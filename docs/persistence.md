@@ -147,12 +147,11 @@ the exact finalized original intent/result. Event delivery can reuse the same id
 and body in Phase 22. Storage revisions may advance for recordings without an event;
 they are not a contiguous consumer message sequence.
 
-There is no publisher, broker acknowledgement, consumer inbox, integration side effect
-or end-to-end exactly-once claim in this phase.
+Phase 21 creates obligations; Phase 22 now adds a [local publisher, stream and transactional inbox consumers](events.md). Remote effects and end-to-end exactly-once claims remain unsupported.
 
 ## Migrations, retention and restoration policy
 
-Migration `0001_operational.sql` is checksum-pinned and transactional. Migrations
+Migration `0001_operational.sql` is checksum-pinned and transactional. Phase 22 adds the separately pinned `0002_events.sql` without changing operational records or anchors. Migrations
 require exclusive global exclusion; running writers prevent them. Unknown versions,
 modified migration text, database/cluster identity changes or authority-table OID changes
 reject. Future upgrades must be explicit offline meaning-preserving migrations with

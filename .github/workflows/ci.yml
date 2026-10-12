@@ -77,7 +77,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
       - name: Real storage transactions and restoration
         run: cargo test -p roadrunner-storage --test postgres --locked -- --ignored --test-threads=1
-      - name: Build process test binary
-        run: cargo build -p roadrunner-api --locked
+      - name: Real event transport, inbox, ordering and reconciliation
+        run: cargo test -p roadrunner-storage --test events --locked -- --ignored --test-threads=1
+      - name: Build process test binaries
+        run: cargo build -p roadrunner-api -p roadrunner-events --locked
       - name: Crash, frozen restoration, lost response and COMMIT expiry
         run: python3 scripts/verify_postgres_runtime.py --output /tmp/phase-21-runtime.json
+      - name: Publisher and consumer crash boundaries and isolated replay
+        run: python3 scripts/verify_event_runtime.py --output /tmp/phase-22-runtime.json
