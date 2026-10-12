@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "world_key": "process-verify-40e0342c90ef44f1889ec36015bec38b",
+  "database": "PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.4.0, compiled by Apple clang version 21.0.0 (clang-2100.0.123.102), 64-bit",
+  "postgis": "POSTGIS=\"3.6.4 0\" [EXTENSION] PGSQL=\"180\" GEOS=\"3.15.0-CAPI-1.21.0\" PROJ=\"9.9.0 NETWORK_ENABLED=OFF URL_ENDPOINT=https://cdn.proj.org USER_WRITABLE_DIRECTORY=/Users/admin/Library/Application Support/proj DATABASE_PATH=/opt/homebrew/Cellar/proj/9.9.0/share/proj/proj.db\" (compiled against PROJ 9.8.1) LIBXML=\"2.15.4\" LIBJSON=\"0.19\" LIBPROTOBUF=\"1.5.2\" WAGYU=\"0.5.0 (Internal)\"",
+  "dataset_sha256": "7943c50063f8e268359b1e54f066617bfe303edd97e82bf549b388ebf4a5a317",
+  "binary_sha256": "5034dc7886b4262cc168e1a92fbb856f4ede1de0a3bc777e10ba06abc0cb08db",
+  "cases": [
+    {
+      "case": "SIGKILL and frozen restoration",
+      "result": "PASS",
+      "namespace": "258a98fdcb54ff5bc8c3c3d27e98fe7f:world:0",
+      "revision": "8",
+      "action": "258a98fdcb54ff5bc8c3c3d27e98fe7f:action:0",
+      "generation": "0",
+      "preserved": [
+        "world",
+        "execution",
+        "terms",
+        "contexts",
+        "history",
+        "publications",
+        "command outcomes"
+      ]
+    },
+    {
+      "case": "cross-command effect recognition after restart",
+      "result": "PASS",
+      "revision": "15",
+      "effect": "already_applied"
+    },
+    {
+      "case": "spatial routes and isolated simulation persistence",
+      "result": "PASS",
+      "route_records": [
+        "258a98fdcb54ff5bc8c3c3d27e98fe7f:world:0:route:32:0"
+      ]
+    },
+    {
+      "case": "SIGKILL after reservation and partial SQL writes",
+      "result": "PASS",
+      "outcome": "interrupted_before_publication",
+      "riders": 1
+    },
+    {
+      "case": "lost HTTP response after SQL commit and SIGKILL",
+      "result": "PASS",
+      "command": "258a98fdcb54ff5bc8c3c3d27e98fe7f:command:18",
+      "one_effect": true
+    },
+    {
+      "case": "certificate expiry during deferred SQL COMMIT",
+      "result": "PASS",
+      "http_status": 503,
+      "original_outcome": "rejected"
+    },
+    {
+      "case": "writer exclusion and immutable outbox",
+      "result": "PASS",
+      "head": {
+        "revision": 43,
+        "digest": "059e828657093073e1a14faa24dc795148a23d12c7287dcb38447ebf1b0111bf"
+      }
+    }
+  ],
+  "observations": "Explicit synthetic trusted-local test observations; no physical-source integration claimed."
+}

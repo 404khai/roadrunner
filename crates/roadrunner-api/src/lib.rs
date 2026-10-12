@@ -5,6 +5,7 @@ mod http;
 mod model;
 mod routing;
 mod runtime;
+use runtime::persistence;
 
 use roadrunner_core::{geo::Seconds, graph::FrozenGraph};
 use roadrunner_dispatch::{
@@ -97,6 +98,7 @@ pub(crate) struct Inner {
     pub coordinator: Mutex<Coordinator>,
     pub workers: Arc<tokio::sync::Semaphore>,
     pub namespace: OperationalWorldNamespace,
+    pub storage: Option<Mutex<roadrunner_storage::PgStore>>,
 }
 impl Api {
     /// Establishes a fresh volatile authority. Discarding it discards command recognition.
@@ -157,6 +159,7 @@ impl Api {
                 clock,
                 namespace,
                 coordinator: Mutex::new(Coordinator::new(state)),
+                storage: None,
             }),
         })
     }

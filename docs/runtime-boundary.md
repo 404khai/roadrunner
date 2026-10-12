@@ -1,7 +1,7 @@
 # Runtime boundary foundation
 
 Status: prerequisite library foundation plus the [Phase 20 HTTP adapter](../crates/roadrunner-api/README.md).
-Durable storage and event transport are future phases. The approved [Q1–Q33 audit](runtime-boundary-audit.md)
+[Phase 21 durable storage](persistence.md) implements the database/acknowledgement boundary; event transport remains Phase 22. The approved [Q1–Q33 audit](runtime-boundary-audit.md)
 is normative. The [completion report](pre-phase-20-remediation-completion.md)
 records verification and remaining limits.
 

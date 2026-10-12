@@ -82,6 +82,7 @@ async fn command(
 
 #[utoipa::path(get,path="/v1/state",responses((status=200,body=Object),(status=401,body=ErrorBody)),security(("bearer"=[])))]
 async fn state(State(api): State<Api>, headers: HeaderMap) -> Result<Json<Value>, ApiError> {
+    crate::persistence::check_async(&api).await?;
     let principal = read(&api, &headers)?;
     if principal.resources.is_some() {
         return Err(ApiError::new(
@@ -106,6 +107,7 @@ async fn order(
     headers: HeaderMap,
     Path(id): Path<String>,
 ) -> Result<Json<Value>, ApiError> {
+    crate::persistence::check_async(&api).await?;
     let principal = read(&api, &headers)?;
     runtime::authorize_resource(&principal, &id)?;
     let oid = roadrunner_dispatch::OrderId::new(runtime::reference(&api, "order", &id)?);
@@ -130,6 +132,7 @@ async fn rider(
     headers: HeaderMap,
     Path(id): Path<String>,
 ) -> Result<Json<Value>, ApiError> {
+    crate::persistence::check_async(&api).await?;
     let principal = read(&api, &headers)?;
     runtime::authorize_resource(&principal, &id)?;
     let rid = roadrunner_dispatch::RiderId::new(runtime::reference(&api, "rider", &id)?);
@@ -154,6 +157,7 @@ async fn delivery(
     headers: HeaderMap,
     Path(id): Path<String>,
 ) -> Result<Json<Value>, ApiError> {
+    crate::persistence::check_async(&api).await?;
     let principal = read(&api, &headers)?;
     runtime::authorize_resource(&principal, &id)?;
     let oid = roadrunner_dispatch::OrderId::new(runtime::reference(&api, "order", &id)?);
@@ -175,6 +179,7 @@ async fn outcome(
     headers: HeaderMap,
     Path(key): Path<String>,
 ) -> Result<impl IntoResponse, ApiError> {
+    crate::persistence::check_async(&api).await?;
     let principal = credential(&api, &headers)?;
     let namespace = headers
         .get("x-roadrunner-namespace")
@@ -220,6 +225,7 @@ async fn route_query(
     request: RouteRequest,
     multiple: bool,
 ) -> Result<Json<Value>, ApiError> {
+    crate::persistence::check_async(&api).await?;
     read(&api, &headers)?;
     let traffic = api
         .inner
@@ -237,7 +243,16 @@ async fn route_query(
         .map_err(|_| ApiError::internal())?;
     tokio::task::spawn_blocking(move || {
         let _permit = permit;
-        crate::routing::query(&api, &request, traffic.as_ref(), multiple).map(Json)
+        let mut response = crate::routing::query(&api, &request, traffic.as_ref(), multiple)?;
+        if let Some(store) = &api.inner.storage {
+            let records = store
+                .lock()
+                .map_err(|_| ApiError::internal())?
+                .record_routes(&runtime::value(&request)?, &response)
+                .map_err(crate::persistence::storage_error)?;
+            response["route_records"] = runtime::value(records)?;
+        }
+        Ok(Json(response))
     })
     .await
     .map_err(|_| ApiError::internal())?

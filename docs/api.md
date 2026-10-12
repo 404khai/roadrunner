@@ -98,3 +98,14 @@ The API implements bearer capability authorization, source-bound observation ord
 and a UNIX-origin monotonic host clock. Its explicit local entry point grants observation
 trust only to the trusted local driver. Phase 21/22 durability, outbox/inbox, fencing and recovery are
 separate gates. See [approved Q1–Q33](runtime-boundary-audit.md) and ADRs 0017–0019.
+
+## Phase 21 durable adapter
+
+[Persistent mode](persistence.md) preserves the namespace, original command responses,
+observations/effect recognition, frozen execution, counters, authentic terms and history.
+Database COMMIT is authoritative; acknowledgement additionally requires the independent
+fsynced head watermark. A fenced/failed writer cannot serve cached operational state.
+Successful route queries return `route_records` and retain full original provenance;
+simulation scenarios/results are recorded in isolation. Migrations, restoration and
+unknown-outcome semantics are detailed in the durable guide. HTTP DTOs and domain
+algorithms remain independently owned; no client state restoration endpoint is added.

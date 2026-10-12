@@ -1,9 +1,9 @@
 use roadrunner_core::geo::Seconds;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// Logical instant in the caller's declared dispatch time domain.
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Serialize, Deserialize)]
 pub struct DispatchInstant(Seconds);
 
 /// Checked time construction, arithmetic, or epoch conversion failure.
@@ -53,7 +53,7 @@ impl DispatchInstant {
 }
 
 /// Dispatch instant corresponding to routing/scenario departure second zero.
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct RoutingEpoch(pub DispatchInstant);
 
 impl RoutingEpoch {

@@ -485,3 +485,13 @@ foundation:
 - persistence schemas;
 - non-FIFO and multi-label time-dependent routing; and
 - frontend route geometry contracts.
+
+### Phase 21 persistence implementation
+
+PostgreSQL/PostGIS current facts are authority in configured persistent mode. Restoration
+preserves operational identity, counters, terms, execution, recognition and immutable
+provenance. Session/file exclusion, monotonic writer fences, exact before-images,
+temporal COMMIT gating and independent acknowledged-head watermarking govern publication.
+The default API run remains explicitly volatile. Storage receipts/outbox obligations do
+not introduce event-sourced recovery or broker delivery. See [persistence](persistence.md)
+for supported installation, migrations, retention, backup/clone policy and validation.
