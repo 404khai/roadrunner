@@ -1,7 +1,8 @@
 # ADR 0019: Durable authority and event delivery contracts
 
 Status: Accepted future contract (audit Q14–Q17, Q19–Q29, Q31–Q33).
-Implementation: NOT implemented by prerequisite remediation.
+Implementation: Phase 20 API and Phase 21 durable state/recognition/outbox obligation are implemented.
+Phase 22 delivery/inbox remains future work; see [persistence contracts](../persistence.md).
 
 ## Decision
 

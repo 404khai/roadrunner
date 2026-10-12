@@ -1,1 +1,4 @@
 /target/
+
+# Independently retained local persistence acknowledgement anchors.
+.roadrunner-state/

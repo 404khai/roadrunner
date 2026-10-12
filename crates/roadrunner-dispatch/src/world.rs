@@ -242,6 +242,19 @@ impl World {
         &self.data
     }
 
+    pub(crate) fn restore(
+        identity: u64,
+        version: WorldVersion,
+        data: WorldData,
+    ) -> Result<Self, CommitError> {
+        validate_world(&data).map_err(|_| CommitError::InvalidTransition)?;
+        Ok(Self {
+            identity,
+            version,
+            data,
+        })
+    }
+
     pub(crate) fn publish(&mut self, data: WorldData) -> Result<(), CommitError> {
         validate_world(&data).map_err(|_| CommitError::InvalidTransition)?;
         let version = self

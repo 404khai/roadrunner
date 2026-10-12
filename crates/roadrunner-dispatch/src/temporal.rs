@@ -9,7 +9,7 @@
 //! Frozen prefix projections must remain in the future throughout the interval.
 use std::collections::BTreeMap;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::{
@@ -43,7 +43,7 @@ pub enum TemporalError {
 }
 
 /// Independently versioned provenance envelope, not internal struct persistence.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PublicationProvenance {
     /// Record schema (independent of policy/algorithm semantics).
     pub schema_version: u32,

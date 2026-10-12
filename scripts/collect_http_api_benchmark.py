@@ -13,6 +13,7 @@ import subprocess
 import tempfile
 import time
 import urllib.request
+import uuid
 from pathlib import Path
 
 
@@ -22,6 +23,7 @@ def main():
     parser.add_argument("--graph", default="data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph")
     parser.add_argument("--runs", type=int, default=30)
     parser.add_argument("--output", default="benchmarks/results/phase-20-http.json")
+    parser.add_argument("--database-url", help="Dedicated PostgreSQL/PostGIS database; enables durable mode and independent temporary anchor")
     args = parser.parse_args()
     if args.runs < 2:
         parser.error("runs must be at least 2")
@@ -52,8 +54,13 @@ def main():
         with urllib.request.urlopen(urllib.request.Request(base + path, raw, headers, method=method), timeout=10) as response:
             result = json.load(response)
         return (time.perf_counter_ns() - started) / 1e6, result
-    with tempfile.TemporaryFile() as log:
-        process = subprocess.Popen([args.binary, "--trusted-local", str(graph_path)], env=env, stdout=log, stderr=log)
+    with tempfile.TemporaryFile() as log, tempfile.TemporaryDirectory(prefix="roadrunner-benchmark-anchor-") as anchor:
+        arguments=[args.binary,"--trusted-local",str(graph_path)]
+        if args.database_url:
+            env.update(ROADRUNNER_DATABASE_URL=args.database_url,ROADRUNNER_DURABILITY_ANCHOR=str(Path(anchor)/"world.head"))
+            subprocess.run([args.binary,"--migrate"],env=env,check=True,capture_output=True)
+            arguments.extend(["--postgres","http-benchmark-"+uuid.uuid4().hex])
+        process = subprocess.Popen(arguments, env=env, stdout=log, stderr=log)
         try:
             state = None
             for _ in range(100):
@@ -119,6 +126,15 @@ def main():
                 "resources": {"cpu_usage": "unmeasured", "peak_memory": "unmeasured"},
                 "limits": "Tiny fixed pair/graph and local client+HTTP+serialization overhead; not routing scalability or an SLO. No durable/process-restart guarantees."
             }
+            if args.database_url:
+                def pg(statement):
+                    return subprocess.check_output(["psql","-X","-At","-v","ON_ERROR_STOP=1","-d",args.database_url,"-c",statement],text=True).strip()
+                artifact["configuration"].update(persistence="PostgreSQL/PostGIS + independent fsynced acknowledgement anchor",database_transport="local test connection",synchronous_commit="on",acknowledgement_anchor="file+directory fsync before HTTP success")
+                artifact["database"]={"version":pg("SELECT version()"),"postgis":pg("SELECT PostGIS_Full_Version()"),"fsync":pg("SHOW fsync"),"wal_level":pg("SHOW wal_level"),"shared_buffers":pg("SHOW shared_buffers")}
+                artifact["storage_counts"]={name:int(pg(f"SELECT count(*) FROM {name} WHERE namespace='{namespace}'")) for name in ["rr_riders","rr_routes","rr_commands","rr_history","rr_outbox","rr_commits"]}
+                assert artifact["storage_counts"]["rr_commands"]==args.runs
+                assert artifact["storage_counts"]["rr_riders"]==args.runs
+                artifact["limits"]="Tiny sequential durable adapter baseline, including client/HTTP/JSON/SQL/WAL/anchor overhead; no scalability or production SLO claim."
             output = Path(args.output)
             output.parent.mkdir(parents=True, exist_ok=True)
             output.write_text(json.dumps(artifact, indent=2) + "\n")

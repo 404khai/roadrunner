@@ -1,7 +1,8 @@
 # roadrunner-api
 
 Phase 20 Axum/Tokio adapter over Roadrunner's graph, dispatch and simulation libraries.
-It owns one volatile operational namespace and a serialized publication lane. Algorithms,
+It owns one operational namespace and a serialized publication lane. Phase 21 adds
+[opt-in PostgreSQL/PostGIS persistence](../../docs/persistence.md); the default run mode remains volatile. Algorithms,
 execution validity and temporal certification remain in `roadrunner-dispatch`/core.
 
 ## Run locally
@@ -181,3 +182,14 @@ source ordering, simulation isolation, OpenAPI/Swagger, and lost-response inject
 Controlled coordinator tests hold certified proposals across competing adoption,
 observation and time-expiry interleavings and inspect complete domain state/history.
 Measurements are tiny loopback adapter baselines, not scalability or production SLO claims.
+
+## Phase 21 durable mode
+
+The [durable run and restoration guide](../../docs/persistence.md) defines migrations,
+writer fences, independent acknowledgement anchors, restart-safe recognition,
+spatial records and supported backup/clone policy. Start with `--trusted-local <graph>
+--postgres <world-key>` after `--migrate`, supplying `ROADRUNNER_DATABASE_URL` and an
+absolute persistent `ROADRUNNER_DURABILITY_ANCHOR`. The namespace and original outcomes
+survive restart. Durable queries also return opaque `route_records`; optional expected
+head and independent watermark checks reject rollback. The volatile limitations above
+apply to the default mode; durable guarantees require this configured persistence mode.

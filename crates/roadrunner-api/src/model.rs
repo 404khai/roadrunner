@@ -179,7 +179,7 @@ pub(crate) struct SimulationRequest {
     #[schema(value_type = SimulationScenarioSchema)]
     pub scenario: serde_json::Value,
 }
-#[derive(Clone, Debug, Serialize, ToSchema)]
+#[derive(Clone, Debug, Serialize, Deserialize, ToSchema)]
 pub(crate) struct Envelope {
     pub schema_version: u32,
     pub namespace: String,
@@ -226,6 +226,8 @@ pub(crate) struct RouteView {
 #[derive(Serialize, ToSchema)]
 pub(crate) struct RoutesResponse {
     routes: Vec<RouteView>,
+    /// Phase 21 durable recording identities; absent in volatile mode.
+    route_records: Option<Vec<String>>,
     objective: Objective,
     departure_seconds: f64,
     traffic_digest: Option<String>,

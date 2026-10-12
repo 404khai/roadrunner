@@ -122,7 +122,7 @@ pub struct AdoptedContext {
 }
 
 /// Pinned departed route, retained across suffix replacement and graph adoption.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrozenExecutionLeg {
     /// Snapshot-local origin under routing provenance.
     pub from: NodeId,
@@ -143,7 +143,7 @@ pub struct FrozenExecutionLeg {
 }
 
 /// Authoritative active stage. Timers cannot directly imply physical effects.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ExecutionStage {
     /// Departed route must complete unchanged.
     Travelling,
@@ -156,7 +156,7 @@ pub enum ExecutionStage {
 }
 
 /// Started work independent of effective editable plan revision.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActiveExecution {
     /// Immutable logical action identity.
     pub action_id: ActionId,
@@ -185,7 +185,7 @@ pub struct ActiveExecution {
 }
 
 /// Distinct effects of one started action.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum ExecutionEffect {
     /// Accepted endpoint arrival.
     Arrival,
@@ -193,7 +193,7 @@ pub enum ExecutionEffect {
     Completion,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 struct AppliedEffect {
     id: AppliedExecutionEffectId,
     action: ActionId,
@@ -214,7 +214,7 @@ pub enum EffectOutcome {
 
 /// One successfully linearized transition. Attempts and duplicate ledger aliases
 /// do not masquerade as new committed business history.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OperationalTransitionRecord {
     /// Expected authoritative predecessor.
     pub before: OperationalRevision,
@@ -1243,3 +1243,7 @@ pub trait OperationalClock {
     /// Returns invalid/unavailable time rather than substituting a host clock.
     fn now(&self) -> Result<DispatchInstant, DispatchTimeError>;
 }
+
+#[path = "checkpoint.rs"]
+mod checkpoint;
+pub use checkpoint::CheckpointError;

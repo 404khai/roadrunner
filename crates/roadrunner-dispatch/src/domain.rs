@@ -1,14 +1,16 @@
 use std::collections::BTreeMap;
 
 use roadrunner_core::geo::Coordinate;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{DispatchInstant, RiderId};
 
 macro_rules! identity {
     ($name:ident, $description:literal) => {
         #[doc = $description]
-        #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
+        #[derive(
+            Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize,
+        )]
         pub struct $name(u64);
         impl $name {
             /// Creates an identity from its canonical integer value.
@@ -49,7 +51,7 @@ identity!(
 );
 
 /// Stable fulfillment request facts, separate from readiness and execution.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Order {
     /// Request identity.
     pub id: OrderId,
@@ -66,7 +68,7 @@ pub struct Order {
 }
 
 /// Readiness prediction and observation are distinct facts.
-#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
 pub struct OrderReadiness {
     /// Mutable estimate; Phase 14 uses this only while no actual ready event exists.
     pub expected_at: Option<DispatchInstant>,
@@ -75,7 +77,7 @@ pub struct OrderReadiness {
 }
 
 /// Fulfillment state is authoritative for custody and remaining-stop semantics.
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum FulfillmentState {
     /// No pickup completed; responsibility may still be unassigned.
     AwaitingPickup,
@@ -103,7 +105,7 @@ pub enum FulfillmentState {
 }
 
 /// Stable rider identity and supported capabilities.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RiderProfile {
     /// Identity shared with the spatial projection.
     pub id: RiderId,
@@ -114,7 +116,7 @@ pub struct RiderProfile {
 }
 
 /// Operational availability independent from plan or custody.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Availability {
     /// Operationally available; existing work still prevents Basic Dispatch eligibility.
     Available,
@@ -123,7 +125,7 @@ pub enum Availability {
 }
 
 /// Mutable authoritative position and operational availability.
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct RiderState {
     /// Validated geographic location.
     pub coordinate: Coordinate,
@@ -132,7 +134,7 @@ pub struct RiderState {
 }
 
 /// Current active responsibility, distinct from decision evidence.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CommittedAssignment {
     /// Request being fulfilled.
     pub order: OrderId,
@@ -141,7 +143,7 @@ pub struct CommittedAssignment {
 }
 
 /// Logical remaining work; location is resolved through the referenced request.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Stop {
     /// Complete pickup and establish onboard custody.
     Pickup(OrderId),
@@ -160,14 +162,14 @@ impl Stop {
 }
 
 /// Ordered remaining logical work, with no two-stop or single-order type limit.
-#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct RiderPlan {
     /// Pending work in execution order; completed stops are removed.
     pub stops: Vec<Stop>,
 }
 
 /// Value input to a world; published state is validated and exposed read-only.
-#[derive(Debug, Clone, PartialEq, Default, Serialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorldData {
     /// Stable requests.
     pub orders: BTreeMap<OrderId, Order>,

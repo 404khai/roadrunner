@@ -25,15 +25,16 @@ use roadrunner_dispatch::{
     RoutingEpoch, ScheduleGeneration, Stop, TemporalError, TemporalProposal, TrafficContext,
     TrafficIdentity, project_execution,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub(crate) struct StoredCommand {
     pub intent: Value,
     pub command: Command,
+    #[serde(with = "crate::persistence::status_code")]
     pub status: StatusCode,
     pub envelope: Envelope,
 }
@@ -47,6 +48,7 @@ pub(crate) struct Coordinator {
     next_command: u64,
     observations: BTreeMap<(String, String), (Value, Value)>,
     sequences: BTreeMap<(String, String), (u64, DispatchInstant)>,
+    clock_floor: f64,
 }
 impl Coordinator {
     pub fn new(state: OperationalState) -> Self {
@@ -60,10 +62,11 @@ impl Coordinator {
             next_command: 1,
             observations: BTreeMap::new(),
             sequences: BTreeMap::new(),
+            clock_floor: 0.0,
         }
     }
 }
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(tag = "operation", content = "intent")]
 pub(crate) enum Command {
     CreateOrder(CreateOrder),
@@ -169,8 +172,22 @@ pub(crate) fn reference(api: &Api, kind: &str, resource: &str) -> Result<u64, Ap
     Ok(id)
 }
 pub(crate) fn value<T: Serialize>(v: T) -> Result<Value, ApiError> {
-    serde_json::to_value(v).map_err(|_| ApiError::internal())
+    serde_json::to_value(v)
+        .map(|mut v| {
+            canonical_zero(&mut v);
+            v
+        })
+        .map_err(|_| ApiError::internal())
 }
+fn canonical_zero(v: &mut Value) {
+    match v {
+        Value::Number(n) if n.is_f64() && n.as_f64() == Some(0.0) => *v = json!(0.0),
+        Value::Object(o) => o.values_mut().for_each(canonical_zero),
+        Value::Array(a) => a.iter_mut().for_each(canonical_zero),
+        _ => {}
+    }
+}
+
 fn instant(v: f64) -> Result<DispatchInstant, ApiError> {
     DispatchInstant::new(v).map_err(ApiError::invalid)
 }
@@ -242,69 +259,82 @@ pub(crate) async fn submit(
         _ => {}
     }
     let intent = value(&command)?;
-    let ledger_key = (credential.principal.clone(), key);
-    let permit = {
-        let mut c = api
+    tokio::task::spawn_blocking(move || {
+        persistence::check(&api)?;
+        let ledger_key = (credential.principal, key);
+        let permit = {
+            let mut c = api
+                .inner
+                .coordinator
+                .lock()
+                .map_err(|_| ApiError::internal())?;
+            if let Some(prior) = c.commands.get(&ledger_key) {
+                if prior.intent != intent {
+                    return Err(ApiError::new(
+                        StatusCode::CONFLICT,
+                        "idempotency_conflict",
+                        "same principal/key has different canonical intent",
+                    ));
+                }
+                return Ok((prior.status, axum::Json(prior.envelope.clone())));
+            }
+            let permit = api.inner.workers.clone().try_acquire_owned().map_err(|_| {
+                ApiError::new(
+                    StatusCode::SERVICE_UNAVAILABLE,
+                    "workers_busy",
+                    "no command reserved; retry same key after capacity is available",
+                )
+            })?;
+            persistence::write(&api, &mut c, |c| {
+                let id = c.next_command;
+                c.next_command = id.checked_add(1).ok_or_else(ApiError::internal)?;
+                let envelope = Envelope {
+                    schema_version: 1,
+                    namespace: api.namespace(),
+                    command: api.inner.namespace.reference("command", id),
+                    outcome: "pending".into(),
+                    published: false,
+                    revision: c.state.revision().number.to_string(),
+                    result: json!({}),
+                };
+                c.commands.insert(
+                    ledger_key.clone(),
+                    StoredCommand {
+                        command: command.clone(),
+                        intent,
+                        status: StatusCode::ACCEPTED,
+                        envelope,
+                    },
+                );
+                Ok(())
+            })?;
+            permit
+        };
+        // This worker owns durable reservation and publication even when its HTTP waiter disconnects.
+        let _permit = permit;
+        if let Err(error) = execute(&api, &ledger_key, &command) {
+            if error.body.code == "commit_outcome_unknown" {
+                return Err(error);
+            }
+            let mut c = api
+                .inner
+                .coordinator
+                .lock()
+                .map_err(|_| ApiError::internal())?;
+            persistence::write(&api, &mut c, |c| finish(c, &ledger_key, Err(error)))?;
+        }
+        let c = api
             .inner
             .coordinator
             .lock()
             .map_err(|_| ApiError::internal())?;
-        if let Some(prior) = c.commands.get(&ledger_key) {
-            if prior.intent != intent {
-                return Err(ApiError::new(
-                    StatusCode::CONFLICT,
-                    "idempotency_conflict",
-                    "same principal/key has different canonical intent",
-                ));
-            }
-            return Ok((prior.status, axum::Json(prior.envelope.clone())));
-        }
-        let permit = api.inner.workers.clone().try_acquire_owned().map_err(|_| {
-            ApiError::new(
-                StatusCode::SERVICE_UNAVAILABLE,
-                "workers_busy",
-                "no command reserved; retry the same key after capacity becomes available",
-            )
-        })?;
-        let id = c.next_command;
-        c.next_command = id.checked_add(1).ok_or_else(ApiError::internal)?;
-        let envelope = Envelope {
-            schema_version: 1,
-            namespace: api.namespace(),
-            command: api.inner.namespace.reference("command", id),
-            outcome: "pending".into(),
-            published: false,
-            revision: c.state.revision().number.to_string(),
-            result: json!({}),
-        };
-        c.commands.insert(
-            ledger_key.clone(),
-            StoredCommand {
-                command: command.clone(),
-                intent,
-                status: StatusCode::ACCEPTED,
-                envelope,
-            },
-        );
-        permit
-    };
-    // The spawned worker owns the reservation: disconnecting/lost response cannot cancel publication.
-    let worker_api = api.clone();
-    let worker_key = ledger_key.clone();
-    tokio::task::spawn_blocking(move || {
-        let _permit = permit;
-        execute(&worker_api, &worker_key, &command)
+        let stored = c.commands.get(&ledger_key).ok_or_else(ApiError::internal)?;
+        Ok((stored.status, axum::Json(stored.envelope.clone())))
     })
     .await
-    .map_err(|_| ApiError::internal())??;
-    let c = api
-        .inner
-        .coordinator
-        .lock()
-        .map_err(|_| ApiError::internal())?;
-    let stored = c.commands.get(&ledger_key).ok_or_else(ApiError::internal)?;
-    Ok((stored.status, axum::Json(stored.envelope.clone())))
+    .map_err(|_| ApiError::internal())?
 }
+
 fn finish(
     c: &mut Coordinator,
     key: &(String, String),
@@ -345,16 +375,16 @@ fn execute(api: &Api, key: &(String, String), command: &Command) -> Result<(), A
             .coordinator
             .lock()
             .map_err(|_| ApiError::internal())?;
-        return match result {
+        return persistence::write(api, &mut c, |c| match result {
             Ok(planned) => {
-                let result = publish_plan(api, &mut c, planned);
-                finish(&mut c, key, result)
+                let result = publish_plan(api, c, planned);
+                finish(c, key, result)
             }
             Err(PlanningFailure::Noncommit(evidence)) => {
-                finish(&mut c, key, Ok((json!({"noncommit":evidence}), false)))
+                finish(c, key, Ok((json!({"noncommit":evidence}), false)))
             }
-            Err(PlanningFailure::Error(error)) => finish(&mut c, key, Err(error)),
-        };
+            Err(PlanningFailure::Error(error)) => finish(c, key, Err(error)),
+        });
     }
     if let Command::Start(resource, request) = command {
         let prepared = prepare_start(api, resource, request);
@@ -363,13 +393,15 @@ fn execute(api: &Api, key: &(String, String), command: &Command) -> Result<(), A
             .coordinator
             .lock()
             .map_err(|_| ApiError::internal())?;
-        let result=prepared.and_then(|(revision,rider,plan,mut leg,origin,destination)| {
+        return persistence::write(api, &mut c, |c| {
+            let result=prepared.and_then(|(revision,rider,plan,mut leg,origin,destination)| {
             leg.departed_at=api.inner.clock.now().map_err(ApiError::invalid)?;
             let attempt=c.state.start_action(revision,rider,plan,leg,&origin,destination).map_err(ApiError::conflict)?;
             let active=&c.state.execution()[&rider];
             Ok((json!({"attempt":attempt.to_string(),"action":api.inner.namespace.reference("action",active.action_id.value()),"generation":active.generation.value().to_string(),"arrival_seconds":active.arrival}),true))
         });
-        return finish(&mut c, key, result);
+            finish(c, key, result)
+        });
     }
     if let Command::Simulation(request) = command {
         let result = (|| {
@@ -398,15 +430,17 @@ fn execute(api: &Api, key: &(String, String), command: &Command) -> Result<(), A
             .coordinator
             .lock()
             .map_err(|_| ApiError::internal())?;
-        return finish(&mut c, key, result);
+        return persistence::write(api, &mut c, |c| finish(c, key, result));
     }
     let mut c = api
         .inner
         .coordinator
         .lock()
         .map_err(|_| ApiError::internal())?;
-    let result = mutation(api, &mut c, command);
-    finish(&mut c, key, result)
+    persistence::write(api, &mut c, |c| {
+        let result = mutation(api, c, command);
+        finish(c, key, result)
+    })
 }
 fn temporal_error(error: TemporalError) -> ApiError {
     let code = match &error {
@@ -552,7 +586,11 @@ fn planning(api: &Api, command: &Command) -> Result<Planned, PlanningFailure> {
             _ => PoolingContext::new(&dispatch, inputs.clone()).map_err(ApiError::invalid)?,
         };
         let revision = c.state.revision();
-        c.state.adopt_planning_context(revision, &context)?;
+        persistence::write(api, &mut c, |c| {
+            c.state
+                .adopt_planning_context(revision, &context)
+                .map_err(temporal_error)
+        })?;
         (
             c.state.snapshot(),
             c.anchors.clone(),
@@ -1277,3 +1315,6 @@ mod tests {
         assert_eq!(c.state.publications(), before.publications());
     }
 }
+
+#[path = "persistence.rs"]
+pub(crate) mod persistence;

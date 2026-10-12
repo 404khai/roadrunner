@@ -81,7 +81,7 @@ impl OrderPolicy {
 }
 
 /// Freshness metadata for the expectation stored in the coherent world.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReadinessForecast {
     /// Prediction identity/version supplied by the caller.
     pub id: String,
@@ -94,7 +94,7 @@ pub struct ReadinessForecast {
 }
 
 /// Immutable acceptance-time service protections, established only by commit.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AcceptedTerms {
     /// Exact policy at acceptance, never reset on plan rewrite.
     pub policy: OrderPolicy,
@@ -112,7 +112,7 @@ pub struct AcceptedTerms {
 }
 
 /// Readiness prediction provenance pinned with authoritative acceptance terms.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AcceptedReadiness {
     /// Prediction value, separate from observation.
     pub expected_at: Option<DispatchInstant>,
@@ -125,7 +125,7 @@ pub struct AcceptedReadiness {
 }
 
 /// Relevant non-world prediction policy identities.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PredictionIdentity {
     /// Versioned prediction model/scenario identity.
     pub prediction: String,

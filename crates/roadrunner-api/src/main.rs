@@ -14,8 +14,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
         println!("{}", serde_json::to_string_pretty(&Api::openapi())?);
         return Ok(());
     }
-    if arguments.len() != 2 || arguments[0] != "--trusted-local" {
-        return Err("usage: roadrunner-api --trusted-local <graph.rr-graph>; ROADRUNNER_API_TOKEN (>=16 bytes) required; ROADRUNNER_API_BIND defaults to 127.0.0.1:3000".into());
+    if arguments == ["--migrate"] {
+        let url = std::env::var("ROADRUNNER_DATABASE_URL")
+            .map_err(|_| "ROADRUNNER_DATABASE_URL required")?;
+        tokio::task::spawn_blocking(move || roadrunner_storage::PgStore::migrate(&url)).await??;
+        return Ok(());
+    }
+    if !matches!(arguments.len(), 2 | 4)
+        || arguments[0] != "--trusted-local"
+        || (arguments.len() == 4 && arguments[2] != "--postgres")
+    {
+        return Err("usage: roadrunner-api --trusted-local <graph.rr-graph> [--postgres <world-key>]; roadrunner-api --migrate; ROADRUNNER_API_TOKEN (>=16 bytes) required; ROADRUNNER_API_BIND defaults to 127.0.0.1:3000".into());
     }
     let bind: SocketAddr = std::env::var("ROADRUNNER_API_BIND")
         .unwrap_or_else(|_| "127.0.0.1:3000".into())
@@ -60,7 +69,25 @@ async fn main() -> Result<(), Box<dyn Error>> {
         certification_window: Seconds::new(2.0)?,
         workers: 4,
     };
-    let api = Api::new(graph, config)?;
+    let api = if arguments.len() == 4 {
+        let url = std::env::var("ROADRUNNER_DATABASE_URL")
+            .map_err(|_| "ROADRUNNER_DATABASE_URL required")?;
+        let key = arguments[3].clone();
+        let anchor = std::path::PathBuf::from(
+            std::env::var("ROADRUNNER_DURABILITY_ANCHOR")
+                .map_err(|_| "absolute ROADRUNNER_DURABILITY_ANCHOR required")?,
+        );
+        let expected = std::env::var("ROADRUNNER_EXPECTED_HEAD")
+            .ok()
+            .map(|json| serde_json::from_str::<roadrunner_storage::DurableHead>(&json))
+            .transpose()?;
+        tokio::task::spawn_blocking(move || {
+            Api::open_postgres(graph, config, &url, &key, &anchor, expected.as_ref())
+        })
+        .await??
+    } else {
+        Api::new(graph, config)?
+    };
     let listener = tokio::net::TcpListener::bind(bind).await?;
     tracing::info!(address=%listener.local_addr()?,namespace=%api.namespace(),"Roadrunner trusted-local API listening; Swagger UI at /swagger-ui/");
     axum::serve(listener, api.router())

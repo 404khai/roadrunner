@@ -500,3 +500,14 @@ contracts and separate phase gates are recorded in [the audit](runtime-boundary-
 and ADRs [0017](adr/0017-operational-authority-and-publication.md),
 [0018](adr/0018-planning-time-and-historical-provenance.md),
 [0019](adr/0019-durable-authority-and-event-contracts.md).
+
+## Phase 21 storage boundary
+
+`roadrunner-storage` depends on core/dispatch; the API depends on storage. Domain code
+knows no PostgreSQL or filesystem APIs. Its independently versioned checkpoint restores
+validated values and sealed publication evidence. The adapter maps current facts into
+normalized relational rows and PostGIS geometry, with immutable inspection/outbox records.
+Private API staging uses the same dispatch validity and temporal proof. The SQL namespace
+row/fence/before-image gate publishes all state/results/obligations at COMMIT; an independent
+acknowledgement anchor must fsync before cache installation and success. See the
+[complete storage/run/restoration contract](persistence.md). Event transport remains Phase 22.

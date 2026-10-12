@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "baseline": "3e0f907",
+  "scope": "Phase 21 PostgreSQL/PostGIS durable authority",
+  "storage_schema_version": 1,
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "PASS"
+    },
+    {
+      "command": "cargo +1.99.0 clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "result": "PASS",
+      "log_sha256": "2e9f6deee419ea1db75ae25d4cd032da2bd183228fef5b32957af208ec978428"
+    },
+    {
+      "command": "cargo +1.99.0 test --workspace --all-features --locked",
+      "result": "PASS",
+      "log_sha256": "10a9bf967ac93ffc343413008c334d8ebdc4187d8c14fec4d64481d2298bbbcc",
+      "passed": 234,
+      "failed": 0,
+      "ignored": 6
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-storage --test postgres --locked -- --ignored --test-threads=1",
+      "result": "PASS",
+      "log_sha256": "1196be3ea8197cda3a0200ebd5eea29a2d7cda0bfe1de2d495bff839c92e4727",
+      "passed": 5,
+      "failed": 0,
+      "database": "PostgreSQL 18.4 / PostGIS 3.6.4; dedicated disposable DB"
+    },
+    {
+      "command": "python3 scripts/verify_postgres_runtime.py",
+      "result": "PASS",
+      "log_sha256": "0a2a510fb256d26df86123662b6d20ca88d4eb42d44f261d4e179f4ac9cda5cd",
+      "artifact": "docs/evidence/phase-21-runtime.json",
+      "cases": 7
+    },
+    {
+      "command": "cargo +1.99.0 build -p roadrunner-api --release --locked",
+      "result": "PASS",
+      "binary_sha256": "aa5eb283076df958feaffeb64281e6aca3bd1e240f312d7bb221ba1fa3b286e6"
+    },
+    {
+      "command": "python3 scripts/collect_http_api_benchmark.py --database-url \"$ROADRUNNER_TEST_DATABASE_URL\" --output benchmarks/results/phase-21-durable-http.json",
+      "result": "PASS",
+      "artifact": "benchmarks/results/phase-21-durable-http.json"
+    }
+  ],
+  "limits": [
+    "single PostgreSQL primary; session writer lease and independent fsynced acknowledgement anchor",
+    "NoTls trusted-local driver; production TLS/roles/physical source attestation not provisioned",
+    "physical writable clones/global multi-primary fencing unsupported",
+    "static operational certification; tiny sequential loopback benchmark; CPU/memory unmeasured",
+    "CI PostgreSQL 16/PostGIS 3.5 job configured; local verification PostgreSQL 18.4/PostGIS 3.6.4"
+  ]
+}

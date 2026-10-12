@@ -1,9 +1,9 @@
 //! Versioned inspection contracts. No persistence or event sourcing is implemented.
 use crate::{DispatchInstant, OperationalRevision, PredictionIdentity};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 /// Historical record category; these are records, not inbound operational commands.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum HistoricalRecordKind {
     /// Command request/result envelope; registry is deferred to Phase 20.
     Command,
@@ -15,7 +15,7 @@ pub enum HistoricalRecordKind {
     Execution,
 }
 /// Independent version dimensions prevent silent historical reinterpretation.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HistoricalRecord<T> {
     /// Envelope storage/inspection schema, not a policy version.
     pub schema_version: u32,
@@ -39,7 +39,7 @@ pub struct HistoricalRecord<T> {
     pub payload: T,
 }
 /// Explicit inability to recompute history; callers must not substitute current inputs.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum HistoricalReplayUnavailable {
     /// Required original graph/prediction/source artifact not retained.
     MissingArtifact,

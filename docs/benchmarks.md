@@ -200,3 +200,20 @@ verified dataset/hash/graph size, compiler/binary, configuration, warmups and me
 p95/p99 are recorded. The fixed one-edge pair measures client/network/serialization
 and adapter overhead; it is not a search-space or production scalability comparison.
 CPU usage and memory are explicitly unmeasured. See [Phase 20 completion](phase-20-completion.md).
+
+## Phase 21 durable HTTP baseline
+
+[Recorded results](../benchmarks/results/phase-21-durable-http.json) add real
+PostgreSQL/PostGIS transactions and independent acknowledgement-file fsync to the
+Phase 20 collector. Reproduce against a dedicated disposable database:
+
+```bash
+cargo +1.99.0 build -p roadrunner-api --release --locked
+python3 scripts/collect_http_api_benchmark.py --database-url 'host=/tmp dbname=roadrunner_test' --output benchmarks/results/phase-21-durable-http.json
+```
+
+The artifact records 30 raw samples per workload, hardware, graph/hash/size,
+algorithm, compiler/binary, configuration, database/PostGIS version, fsync settings,
+median/p95/p99 and durable row counts. It measures sequential loopback requests on
+a 58-node/114-edge graph. Search scaling, CPU and memory remain unmeasured. See
+[Phase 21 completion](phase-21-completion.md) for separate crash/transaction evidence.

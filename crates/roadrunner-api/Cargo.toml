@@ -6,6 +6,7 @@ rust-version.workspace = true
 publish.workspace = true
 
 [dependencies]
+roadrunner-storage = { path = "../roadrunner-storage" }
 roadrunner-core = { path = "../roadrunner-core" }
 roadrunner-dispatch = { path = "../roadrunner-dispatch" }
 roadrunner-simulation = { path = "../roadrunner-simulation" }

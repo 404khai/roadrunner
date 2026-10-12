@@ -7,12 +7,12 @@ use roadrunner_core::cost::{
 use roadrunner_core::geo::{Coordinate, Seconds};
 use roadrunner_core::graph::{FrozenGraph, NodeId};
 use roadrunner_core::routing::{RouteResult, RoutingError, dijkstra};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{DispatchEvaluationError, OrderId, RiderId};
 
 /// Semantic traffic context identity, including explicit free-flow routing.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TrafficIdentity {
     /// No traffic overlay.
     FreeFlow,
@@ -23,7 +23,7 @@ pub enum TrafficIdentity {
 }
 
 /// Inputs fixed across every route leg within a dispatch decision.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RoutingProvenance {
     /// Full authoritative graph digest (core represents this as a string).
     pub graph_digest: String,
@@ -34,7 +34,7 @@ pub struct RoutingProvenance {
 }
 
 /// Caller-supplied node-backed projection of an authoritative location fact.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RoutingAnchor {
     /// Stable coordinate to which this projection belongs.
     pub coordinate: Coordinate,
@@ -65,7 +65,7 @@ impl RoutingAnchor {
 }
 
 /// Decision-scoped projections supplied by callers until coordinate snapping exists.
-#[derive(Debug, Clone, PartialEq, Default, Serialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RoutingAnchors {
     /// Rider current locations.
     pub riders: BTreeMap<RiderId, RoutingAnchor>,
