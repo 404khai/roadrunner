@@ -234,3 +234,13 @@ configuration, warmups, raw samples and median/p95/p99 are recorded. Psql launch
 40 ms polling delay are included; this is an observed upper-bound baseline on a tiny
 sequential fixture, not internal latency or production throughput. CPU/memory are
 unmeasured. See [completion](phase-22-completion.md) for separate actual fault evidence.
+
+## Phase 24 estimator-error evidence
+
+The [B0 result artifact](../ml/results/phase24-b0-v1/manifest.json) measures original
+whole-leg estimate error, not routing latency or system throughput. Definitions, exact
+action populations, source/dependency counts and numerical rules are retained in the
+[baseline contract](eta-baseline.md). Reproduce with `roadrunner baseline evaluate` and
+verify with `scripts/verify_eta_baseline.py`. The one-group synthetic example supports
+descriptive metrics only; no performance/scalability or physical-generalization claim
+is added to the routing benchmarks.

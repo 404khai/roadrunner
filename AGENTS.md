@@ -2970,3 +2970,14 @@ Whole-leg labels do not supervise edges: the roadmap's future `predict(edge, con
 sketch is superseded for initial research by pinned whole-route duration prediction.
 Phase 24 must begin with original B0 evaluation only after completion review and
 separate authorization; Phase 23 does not compute baseline error metrics or admit ML.
+
+# Approved Original-B0 Evaluation Contract
+
+Phase 24 implements the signed audit baseline/evaluation requirements through
+[ADR 0021](docs/adr/0021-original-b0-evaluation.md) and the
+[baseline contract](docs/eta-baseline.md). Original frozen-route B0 precedes optional
+fitted corrections; roadmap regression/boosted-tree examples are not mandatory models.
+Preserve action-paired labels, exact coverage, frozen splits and honest uncertainty/claim
+limits. Phase 23's prohibition on baseline metrics describes its historical scope;
+Phase 24 is separately authorized. No Phase 25 research, training or learned inference
+is authorized by Phase 24 completion.

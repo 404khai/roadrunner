@@ -356,3 +356,6 @@ cargo +1.99.0 test -p roadrunner-dispatch --test operational --locked
 
 Phase 23 adds a [verified synthetic ETA dataset](docs/eta-dataset.md) with complete
 started-action census, original B0, evidence-qualified labels and reproducible bundles.
+
+Phase 24 provides [original-B0 baseline evaluation](docs/eta-baseline.md), with
+reproducible synthetic error metrics, action-paired coverage and independent verification.

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "oracle": "independent-source-endpoint-pairing-and-Decimal80-metrics/v1",
+  "packaging_sha256": "9da4cf8e55f3aa5dff7ce1fd49bfec8f22ec266c31342ea588642c7df2420a25",
+  "actions": 5,
+  "exact_pairs": 4,
+  "segment_slices": 24,
+  "hand_calculated_metric_fixtures": 3,
+  "metric_comparison_tolerance": "relative 2e-14, absolute 1e-12; identities, outcomes, counts and unavailability exact",
+  "physical_generalization": {
+    "EvaluationUnavailable": "NoPhysicalDepartureOrArrivalMeasurements"
+  },
+  "independent_holdout": {
+    "EvaluationUnavailable": "InsufficientProtectedIndependentComponents; descriptive only"
+  }
+}

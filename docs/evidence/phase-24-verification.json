@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "authorization": "User: implement phase 24, open pr when done; after merged Phase 23 PR #30",
+  "base_revision": "e58b796fc1db79ac7cd023ec9cfc20d3bcb07539",
+  "branch": "feat/phase-24-eta-baseline",
+  "checkout": "root checkout; no worktree created",
+  "preserved_unrelated": [
+    ".DS_Store",
+    ".t3/",
+    "logo.png"
+  ],
+  "contract": "signed audit Q28\u2013Q32; ADR 0021 frozen before evaluating results; original B0 only, no fitting",
+  "toolchain": "rustc 1.96.0 (ac68faa20 2026-05-25)\nbinary: rustc\ncommit-hash: ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96\ncommit-date: 2026-05-25\nhost: aarch64-apple-darwin\nrelease: 1.96.0\nLLVM version: 22.1.2",
+  "hardware": {
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "architecture": "arm64",
+    "cpu": "Apple M3"
+  },
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "PASS",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets -- -D warnings",
+      "result": "PASS",
+      "log_sha256": "dbc24fda790f8111a3a50203baa84318a659de6aa8d640e0f828dd0ed74c2f22"
+    },
+    {
+      "command": "cargo build --workspace",
+      "result": "PASS",
+      "log_sha256": "d7dae192715495fa89ccbe279af3efb9792c1dae1768228e369035e68a1df673"
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "PASS",
+      "log_sha256": "471853f9d17a28eee943b3949de954d2de35103b068ac37aff49bd1bd8151fe3"
+    }
+  ],
+  "workspace": {
+    "passed": 285,
+    "failed": 0,
+    "ignored": 13,
+    "new_tests": 22,
+    "ignored_status": "13 preexisting opt-in database/measurement tests remain; no new ignored/disabled cases. SQL/process suites not rerun in Phase 24: routing/runtime/storage/event crates are unchanged; their historical evidence is not claimed as new execution."
+  },
+  "new_tests": {
+    "metrics_and_pairing_unit": 16,
+    "artifact_integration": 5,
+    "cli_end_to_end": 1
+  },
+  "independent_oracle": {
+    "result": "PASS",
+    "evidence": "phase-24-baseline-oracle.json",
+    "slices": 24,
+    "hand_calculated_metric_fixtures": 3,
+    "arithmetic": "Python Decimal80; relative tolerance 2e-14 and absolute 1e-12; identities/counts/eligibility/availability exact"
+  },
+  "input_dataset": {
+    "result": "PASS; byte-for-byte unchanged from merged Phase 23",
+    "packaging_sha256": "41b718271d332e4052881990ab53142b76705e2047eb1cdc3babd95237ed88c0",
+    "independent_evidence": "phase-24-input-dataset-oracle.json"
+  },
+  "legacy_behavior": {
+    "result": "PASS",
+    "fixtures": 38,
+    "all_preexisting_fields_equal": true,
+    "exact_trace_replay": true,
+    "independent_started_trace_oracle": true,
+    "evidence": "phase-24-legacy-behavior.json"
+  },
+  "retained_evaluator_reconstruction": {
+    "result": "PASS",
+    "files": 149,
+    "build": "cargo build --offline --locked -p roadrunner-cli --bin roadrunner",
+    "evidence": "phase-24-reproduction.json"
+  },
+  "actual_result": {
+    "coverage": {
+      "committed_starts": 5,
+      "excluded_starts": 0,
+      "outcomes": {
+        "Observed": 4,
+        "Pending": 0,
+        "RightCensored": 1,
+        "MissingArrival": 0,
+        "DisputedOrInvalid": 0
+      },
+      "reasons": {
+        "NoExactArrival": 1
+      },
+      "exact_label_coverage": {
+        "numerator": 4,
+        "denominator": 5,
+        "ratio": 0.8
+      },
+      "prediction_coverage": {
+        "numerator": 5,
+        "denominator": 5,
+        "ratio": 1.0
+      },
+      "eligible_label_coverage": {
+        "numerator": 4,
+        "denominator": 5,
+        "ratio": 0.8
+      },
+      "prediction_on_eligible_coverage": {
+        "numerator": 4,
+        "denominator": 4,
+        "ratio": 1.0
+      },
+      "census_groups": 1,
+      "paired_groups": 1
+    },
+    "metrics": {
+      "samples": 4,
+      "mae_seconds": 10.000000000000002,
+      "rmse_seconds": 14.142135623730951,
+      "mean_signed_residual_seconds": 9.999999999999998,
+      "median_signed_residual_seconds": 9.999999999999998,
+      "absolute_error_quantiles_seconds": {
+        "p50": 3.552713678800501e-15,
+        "p95": 20.0,
+        "p99": 20.0
+      },
+      "positive_residual_quantiles_seconds": {
+        "p50": 20.0,
+        "p95": 20.0,
+        "p99": 20.0
+      },
+      "underprediction_count": 2,
+      "underprediction_frequency": 0.5,
+      "underprediction_severity_seconds": 20.0
+    },
+    "metrics_unavailable_reason": null,
+    "full_eligible_population": "Available"
+  },
+  "limitations": {
+    "source_scope": "verified synthetic whole-leg labels only",
+    "dependency_groups": 1,
+    "independent_holdout": {
+      "EvaluationUnavailable": "InsufficientProtectedIndependentComponents; descriptive only"
+    },
+    "physical_generalization": {
+      "EvaluationUnavailable": "NoPhysicalDepartureOrArrivalMeasurements"
+    },
+    "metric_uncertainty": {
+      "EvaluationUnavailable": "NoJustifiedSamplingDesignOrInferentialMethod; dependency/replay rows are not independent"
+    },
+    "prediction_uncertainty": {
+      "EvaluationUnavailable": "B0PointEstimateOnly; no prediction interval or physical guarantee"
+    },
+    "causal_policy_effect": {
+      "EvaluationUnavailable": "NoCounterfactualOrCausalIdentificationEvidence"
+    },
+    "fitting": "none; optional fitted corrections and candidate comparison interface are not part of mandatory original-B0 v1",
+    "performance": "latency/memory/scalability unmeasured; this is estimator-error evidence, not a throughput benchmark"
+  },
+  "phase24_gates": {
+    "original_b0_and_exact_pairing": "PASS",
+    "metric_and_residual_semantics": "PASS",
+    "coverage_missingness_and_fallback_policy": "PASS; no fallback authorized, incomplete full-population performance unavailable",
+    "cohort_segment_group_reporting": "PASS",
+    "adversarial_and_independent_checks": "PASS",
+    "reproducible_results_and_claim_limits": "PASS"
+  },
+  "verdict": "PHASE 24 COMPLETE \u2014 VERIFIED FOR DECLARED SYNTHETIC DESCRIPTIVE SCOPE",
+  "phase25": "NOT STARTED; requires target-specific research proposal and separate authorization"
+}

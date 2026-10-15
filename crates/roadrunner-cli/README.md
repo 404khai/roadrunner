@@ -142,3 +142,10 @@ See [full recovery contracts](../../docs/dynamic-redispatch.md),
 sources, code/lockfile/toolchain and all started legs. `roadrunner dataset verify
 <directory>` checks digests, replays retained sources and rebuilds all derived fields.
 See [usage and evidence contracts](../../docs/eta-dataset.md).
+
+## Original-B0 baseline
+
+`roadrunner baseline evaluate <dataset-directory> <new-result-directory>` verifies a
+frozen Phase 23 dataset and publishes action-paired B0 errors, coverage and segments.
+`roadrunner baseline verify <result-directory>` checks/recomputes the self-contained
+result. See the [Phase 24 guide](../../docs/eta-baseline.md).

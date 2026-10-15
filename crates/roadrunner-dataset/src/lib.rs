@@ -1,4 +1,5 @@
-//! Phase 23 offline synthetic dataset construction. No fitting, metrics or inference.
+//! Offline evidence-qualified datasets and Phase 24 original-B0 evaluation. No fitting or inference.
+pub mod baseline;
 mod bundle;
 mod features;
 mod labels;
