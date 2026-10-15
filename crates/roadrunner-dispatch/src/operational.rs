@@ -193,14 +193,21 @@ pub enum ExecutionEffect {
     Completion,
 }
 
+/// Read-only recognized execution evidence; acceptance is not physical measurement.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-struct AppliedEffect {
-    id: AppliedExecutionEffectId,
-    action: ActionId,
-    rider: RiderId,
-    generation: ScheduleGeneration,
-    effect: ExecutionEffect,
-    at: DispatchInstant,
+pub struct AppliedEffect {
+    /// Recognized effect identity.
+    pub id: AppliedExecutionEffectId,
+    /// Logical action identity.
+    pub action: ActionId,
+    /// Committed owner.
+    pub rider: RiderId,
+    /// Accepted schedule generation.
+    pub generation: ScheduleGeneration,
+    /// Accepted effect kind.
+    pub effect: ExecutionEffect,
+    /// Accepted source occurrence reference.
+    pub at: DispatchInstant,
 }
 
 /// Explicit effect result; duplicates do not change authority or revision.
@@ -375,6 +382,18 @@ impl OperationalState {
     pub fn publications(&self) -> &[crate::PublicationProvenance] {
         &self.publications
     }
+    /// Next logical action allocator; fresh simulation starts at zero, commits advance once.
+    #[must_use]
+    pub const fn next_action_id(&self) -> ActionId {
+        self.next_action
+    }
+
+    /// Read-only accepted effects, including aliases; never a mutable authority bypass.
+    #[must_use]
+    pub fn execution_effects(&self) -> &BTreeMap<AppliedExecutionEffectId, AppliedEffect> {
+        &self.effects
+    }
+
     /// Committed transition history, not attempted operations.
     #[must_use]
     pub fn history(&self) -> &[OperationalTransitionRecord] {

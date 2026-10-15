@@ -9,6 +9,7 @@ use roadrunner_osm::{
 };
 
 mod alternatives_command;
+mod dataset_command;
 mod reference_comparison;
 mod simulation_command;
 mod time_dependent_command;
@@ -29,6 +30,9 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
         .into_iter()
         .map(|argument| argument.to_string_lossy().into_owned())
         .collect();
+    if args.first().is_some_and(|s| s == "dataset") {
+        return dataset_command::run(&args[1..]);
+    }
     match args.as_slice() {
         [command] if command == "--help" || command == "help" => {
             print_help();
@@ -150,6 +154,8 @@ fn print_help() {
          roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>\n  \
          roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>\n  \
          roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>\n  \
+         roadrunner dataset build <request.json> <new-output-directory>\n  \
+         roadrunner dataset verify <dataset-directory>\n  \
          roadrunner simulate <scenario.json> [--json]\n\
          roadrunner benchmark dispatch <scenario.json> [--idle-penalty-weight <weight>] [--json]"
     );

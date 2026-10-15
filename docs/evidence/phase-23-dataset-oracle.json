@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "oracle": "independent-python-source-authority/v1",
+  "dataset": "ml/data/phase23-representative-v1",
+  "packaging_sha256": "41b718271d332e4052881990ab53142b76705e2047eb1cdc3babd95237ed88c0",
+  "census": 5,
+  "outcomes": {
+    "Observed": 4,
+    "RightCensored": 1
+  },
+  "sources": [
+    {
+      "run": "phase23-delay-complete",
+      "authority_starts": 2,
+      "rows": 2,
+      "horizon": 200.0,
+      "pending_events": 0,
+      "schedules": 1
+    },
+    {
+      "run": "phase23-delay-horizon",
+      "authority_starts": 1,
+      "rows": 1,
+      "horizon": 5.0,
+      "pending_events": 2,
+      "schedules": 1
+    },
+    {
+      "run": "phase23-delay-replay",
+      "authority_starts": 2,
+      "rows": 2,
+      "horizon": 200.0,
+      "pending_events": 0,
+      "schedules": 1
+    }
+  ],
+  "result": "PASS",
+  "claim": "synthetic dataset engineering only; no predictive error metrics"
+}

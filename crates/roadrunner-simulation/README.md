@@ -161,3 +161,9 @@ See [runtime boundary](../../docs/runtime-boundary.md) and
 cargo +1.99.0 test -p roadrunner-core --test semantic_identity --locked
 cargo +1.99.0 test -p roadrunner-dispatch --test operational --locked
 ```
+
+Phase 23 adds `synthetic-started-actions/v1` in `SimulationResult.trace`: original
+committed starts/B0, ownership/revision, delay generations, recognized effects, final
+active execution and the full pending queue. Existing event/metric fields preserve their
+semantics. `simulate_with_run_identity` adds archive-owned run scope; default `simulate`
+uses an input-qualified deterministic replay identity. See the [dataset guide](../../docs/eta-dataset.md).

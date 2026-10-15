@@ -14,6 +14,5 @@ roadrunner-core = { path = "../roadrunner-core" }
 roadrunner-dispatch = { path = "../roadrunner-dispatch" }
 serde.workspace = true
 thiserror.workspace = true
-
-[dev-dependencies]
 serde_json.workspace = true
+sha2.workspace = true

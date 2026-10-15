@@ -135,3 +135,10 @@ Dispatch APIs: `RecoveryPolicy`, `RecoveryContext`, `recover_fleet`,
 See [full recovery contracts](../../docs/dynamic-redispatch.md),
 [scenario fixtures](../../data/fixtures/phase-19/README.md) and
 [completion evidence](../../docs/phase-19-completion.md).
+
+## Offline ETA dataset
+
+`roadrunner dataset build <request.json> <new-directory>` captures verified synthetic
+sources, code/lockfile/toolchain and all started legs. `roadrunner dataset verify
+<directory>` checks digests, replays retained sources and rebuilds all derived fields.
+See [usage and evidence contracts](../../docs/eta-dataset.md).

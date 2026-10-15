@@ -32,7 +32,8 @@ fn instant(seconds: Seconds) -> Result<DispatchInstant, SimulationError> {
     Ok(DispatchInstant::new(seconds.value())?)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize)]
+#[serde(tag = "kind", content = "data")]
 enum Action {
     Traffic(TrafficSnapshot),
     Create(OrderId),
@@ -117,6 +118,10 @@ struct Engine<'a> {
     forecast_generated: BTreeMap<OrderId, DispatchInstant>,
     recoveries: Vec<crate::SimulationRecoveryRecord>,
     prediction_failures: Vec<crate::SimulationPredictionFailure>,
+    starts: Vec<crate::StartedAction>,
+    arrivals: Vec<crate::ArrivalEvidence>,
+    schedules: Vec<crate::ScheduleChange>,
+    run_identity: String,
 }
 
 /// Executes a validated fixed scenario through its inclusive horizon without sleeping.
@@ -131,7 +136,37 @@ pub fn simulate(
     graph: &FrozenGraph,
     scenario: &SimulationScenario,
 ) -> Result<SimulationResult, SimulationError> {
-    Engine::new(graph, scenario)?.run()
+    use sha2::{Digest, Sha256};
+    let mut normalized = scenario.clone();
+    normalized.orders.sort_by_key(|o| o.id);
+    normalized.riders.sort_by_key(|r| r.id);
+    normalized.initial_traffic.sort_by_key(|o| o.edge_id);
+    for change in &mut normalized.traffic_changes {
+        change.overrides.sort_by_key(|o| o.edge_id);
+    }
+    let bytes = serde_json::to_vec(&normalized).map_err(|e| invalid(&e.to_string()))?;
+    let identity = format!(
+        "replay:{}:{:x}",
+        graph.metadata().snapshot_digest(),
+        Sha256::digest(bytes)
+    );
+    simulate_with_run_identity(graph, scenario, &identity)
+}
+
+/// Executes with an explicit archive-owned run identity. Replays must preserve ancestry.
+/// # Errors
+/// Rejects empty run identity and the same invalid inputs as [`simulate`].
+pub fn simulate_with_run_identity(
+    graph: &FrozenGraph,
+    scenario: &SimulationScenario,
+    run_identity: &str,
+) -> Result<SimulationResult, SimulationError> {
+    if run_identity.is_empty() {
+        return Err(invalid("empty simulation run identity"));
+    }
+    let mut engine = Engine::new(graph, scenario)?;
+    run_identity.clone_into(&mut engine.run_identity);
+    engine.run()
 }
 
 fn traffic(
@@ -244,6 +279,10 @@ impl<'a> Engine<'a> {
             forecast_generated: BTreeMap::new(),
             recoveries: Vec::new(),
             prediction_failures: Vec::new(),
+            starts: Vec::new(),
+            arrivals: Vec::new(),
+            schedules: Vec::new(),
+            run_identity: String::new(),
         };
         engine.initialize_riders()?;
         engine.initialize_orders()?;
@@ -1070,6 +1109,12 @@ impl<'a> Engine<'a> {
                     let active =
                         self.world
                             .delay_action(self.world.revision(), r, additional_seconds)?;
+                    self.schedules.push(crate::ScheduleChange {
+                        rider: r,
+                        execution: active.clone(),
+                        revision: self.world.revision(),
+                        at: self.now,
+                    });
                     let id = active.id;
                     let leg = active.leg.as_ref().ok_or_else(|| invalid("absent leg"))?;
                     let action = Action::Move {
@@ -1307,6 +1352,24 @@ impl<'a> Engine<'a> {
             &self.anchors.riders[&rider],
             anchor,
         )?;
+        self.starts.push(crate::StartedAction {
+            rider,
+            original: self.world.execution()[&rider].clone(),
+            committed_revision: self.world.revision(),
+            traffic: self
+                .graph
+                .edges()
+                .iter()
+                .filter_map(|e| {
+                    self.traffic
+                        .multiplier(e.id())
+                        .map(|multiplier| TrafficOverride {
+                            edge_id: e.id().value(),
+                            multiplier,
+                        })
+                })
+                .collect(),
+        });
         self.push(
             arrival,
             Action::Move {
@@ -1483,8 +1546,27 @@ impl<'a> Engine<'a> {
         while self.queue.peek().is_some_and(|event| event.at <= self.end) {
             let event = self.queue.pop().ok_or_else(|| invalid("queue invariant"))?;
             self.now = event.at;
+            let arrival = if let Action::Move { rider, .. } = &event.action {
+                self.world
+                    .execution()
+                    .get(rider)
+                    .map(|a| crate::ArrivalEvidence {
+                        action: a.action_id,
+                        rider: *rider,
+                        generation: a.generation,
+                        event_sequence: event.sequence,
+                        reported_at: self.now,
+                        processing_sample_at: self.now,
+                    })
+            } else {
+                None
+            };
             let processed = self.process(event.action)?;
             if let Some(processed) = processed {
+                if matches!(processed, SimulationEvent::RiderMoved { .. }) {
+                    self.arrivals
+                        .push(arrival.ok_or_else(|| invalid("arrival action join missing"))?);
+                }
                 self.events.push(RecordedEvent {
                     at: self.now,
                     sequence: event.sequence,
@@ -1524,7 +1606,39 @@ impl<'a> Engine<'a> {
         let orders: Vec<_> = self.outcomes.into_values().collect();
         let riders: Vec<_> = self.rider_metrics.into_values().collect();
         let summary = summarize(&orders, &riders, start, self.end)?;
+        let mut pending = self
+            .queue
+            .iter()
+            .map(|event| {
+                Ok(crate::PendingEvent {
+                    at: event.at,
+                    sequence: event.sequence,
+                    action: serde_json::to_value(&event.action)
+                        .map_err(|e| invalid(&e.to_string()))?,
+                })
+            })
+            .collect::<Result<Vec<_>, SimulationError>>()?;
+        pending.sort_by(|a, b| {
+            a.at.value()
+                .total_cmp(&b.at.value())
+                .then(a.sequence.cmp(&b.sequence))
+        });
+        let trace = crate::SyntheticTrace {
+            semantics: "synthetic-started-actions/v1".into(),
+            run_identity: self.run_identity,
+            starts: self.starts,
+            arrivals: self.arrivals,
+            schedules: self.schedules,
+            effects: self.world.execution_effects().values().cloned().collect(),
+            committed_start_count: self.world.next_action_id().value(),
+            history: self.world.history().to_vec(),
+            final_active: self.world.execution().clone(),
+            pending,
+            horizon: self.end,
+            final_revision: self.world.revision(),
+        };
         Ok(SimulationResult {
+            trace,
             scenario_id: self.scenario.scenario_id.clone(),
             schema_version: self.scenario.schema_version,
             runtime_semantics: "shared-execution/v2".into(),
@@ -1653,6 +1767,21 @@ mod tests {
         while let Some(event) = engine.queue.pop() {
             engine.now = event.at;
             if matches!(event.action, Action::Move { .. }) {
+                let allocated = engine.world.next_action_id();
+                let starts = engine.starts.clone();
+                assert!(
+                    engine
+                        .schedule_leg(
+                            OrderId::new(1),
+                            RiderId::new(1),
+                            NodeId::new(0),
+                            NodeId::new(1),
+                            true
+                        )
+                        .is_err()
+                );
+                assert_eq!(engine.world.next_action_id(), allocated);
+                assert_eq!(engine.starts, starts);
                 let duplicate = event.action.clone();
                 engine
                     .process(event.action)

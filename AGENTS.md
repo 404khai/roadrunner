@@ -2955,3 +2955,18 @@ explicit user confirmation before Phase 20. Preserve namespace/revision/action/
 generation/effect distinctions, coherent operational authority, immutable graph and
 accepted-reference provenance, exact stale rejection and usable temporal validity.
 Future durable/event guarantees must not be described as implemented prerequisites.
+
+# Approved ETA Dataset Contract
+
+The signed Q1–Q43 [data/ML readiness audit](docs/data-ml-readiness-audit.md),
+[Phase 23 authorization](docs/phase-23-authorization.md) and
+[ADR 0020](docs/adr/0020-eta-dataset-evidence-and-synthetic-traces.md) govern the
+started-leg dataset and later baseline/ML promotion. See the implemented
+[dataset contract](docs/eta-dataset.md). The initial published cohort is verified
+synthetic evidence. All committed starts define the denominator; retain original
+frozen-route B0, run/namespace/action identity, evidence-qualified labels and
+restricted point-in-time inputs. Missing physical measurements remain unsupported.
+Whole-leg labels do not supervise edges: the roadmap's future `predict(edge, context)`
+sketch is superseded for initial research by pinned whole-route duration prediction.
+Phase 24 must begin with original B0 evaluation only after completion review and
+separate authorization; Phase 23 does not compute baseline error metrics or admit ML.
