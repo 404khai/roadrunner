@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "restored_from": "artifact.evaluator.files only; no Git checkout, original dataset directory or original source paths",
+  "retained_files": 149,
+  "build_command": "cargo build --offline --locked -p roadrunner-cli --bin roadrunner",
+  "toolchain": "rustc 1.96.0 (ac68faa20 2026-05-25) | binary: rustc | commit-hash: ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96 | commit-date: 2026-05-25 | host: aarch64-apple-darwin | release: 1.96.0 | LLVM version: 22.1.2 |; cargo 1.96.0 (30a34c682 2026-05-25) |; Numeric: Rust IEEE-754 binary64; serde_json float_roundtrip; no fast-math; Cargo.lock retained",
+  "build_result": "PASS",
+  "verification_result": "PASS",
+  "verification_output": "verified eta-b0-report/v1: 5 committed starts; 4 exact pairs; descriptive synthetic B0 only",
+  "rebuilt_binary_sha256": "1739462c4f971b9e842eabca2c5806708feec39e16f8c2edd7c2757243cba2c3",
+  "artifact_packaging_sha256": "9da4cf8e55f3aa5dff7ce1fd49bfec8f22ec266c31342ea588642c7df2420a25",
+  "scope": "retained evaluator rebuild and source/report verification; third-party dependencies supplied from Cargo cache, not vendored; binary byte identity not claimed"
+}

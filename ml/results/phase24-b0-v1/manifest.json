@@ -1,0 +1,6 @@
+{
+  "schema": "eta-b0-publication/v1",
+  "artifact_file": "evaluation.json",
+  "semantic_sha256": "70f9afb729b4ba7691707a1a77f5d1264c8461915c1f24fc03606cb5409686b6",
+  "packaging_sha256": "9da4cf8e55f3aa5dff7ce1fd49bfec8f22ec266c31342ea588642c7df2420a25"
+}

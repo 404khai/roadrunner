@@ -30,7 +30,7 @@ fn command(program: &str, args: &[&str]) -> Result<String, String> {
     }
     String::from_utf8(result.stdout).map_err(|e| e.to_string())
 }
-fn reproduction() -> Result<Reproduction, String> {
+pub(super) fn reproduction() -> Result<Reproduction, String> {
     let root = command("git", &["rev-parse", "--show-toplevel"])?;
     let names = command(
         "git",

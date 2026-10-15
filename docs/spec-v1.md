@@ -515,3 +515,11 @@ restricted start-available features. Initial publication is verified synthetic e
 “observed travel time.” Phase 24 starts with original B0 evaluation only after separate
 authorization. Future initial learned research predicts pinned whole-route duration;
 whole-leg labels cannot supervise edge costs or justify learned A* heuristics.
+
+## Phase 24 baseline amendment
+
+Phase 24 implements original frozen-route B0 evaluation under the signed audit, before
+any optional fitted correction. [Definitions](eta-baseline.md) freeze equal-action
+MAE/RMSE, signed residual/tail semantics, coverage, partitions and segments. The initial
+result is descriptive synthetic evidence; unavailable physical/independent holdout
+claims remain unavailable. No fitted model, live inference or Phase 25 work is implied.

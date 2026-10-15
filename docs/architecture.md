@@ -528,3 +528,10 @@ events never replace authenticated commands, physical observations or operationa
 authoritative runtime publication. See [dataset contracts](eta-dataset.md) and
 [ADR 0020](adr/0020-eta-dataset-evidence-and-synthetic-traces.md). It does not introduce
 learned routing, physical measurement or operational data-source assumptions.
+
+## Offline B0 evaluation (Phase 24)
+
+`roadrunner-dataset::baseline` evaluates only complete verified datasets and their
+original frozen B0. CLI composition captures evaluator provenance and publishes an
+immutable result package. Routing, dispatch, storage and the synchronous/event runtime
+remain unchanged. See [ADR 0021](adr/0021-original-b0-evaluation.md).

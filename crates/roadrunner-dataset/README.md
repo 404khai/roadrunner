@@ -12,5 +12,9 @@ cargo +1.99.0 run -p roadrunner-cli --locked -- dataset build data/fixtures/phas
 cargo +1.99.0 run -p roadrunner-cli --locked -- dataset verify /tmp/eta-v1
 ```
 
-Publication is synthetic only. Original B0 is stored and checked; no Phase 24 metrics,
-training, physical measurement claims or operational extraction are implemented.
+Publication is synthetic only. Original B0 and source contracts remain immutable;
+training, physical measurement claims and operational extraction are not implemented.
+
+Phase 24 adds `baseline::evaluate_b0` and immutable self-contained baseline artifacts.
+It evaluates original B0 only; no fitting or ML inference occurs. See the
+[baseline guide](../../docs/eta-baseline.md) and [ADR 0021](../../docs/adr/0021-original-b0-evaluation.md).

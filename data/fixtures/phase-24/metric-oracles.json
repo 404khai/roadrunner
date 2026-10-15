@@ -1,0 +1,53 @@
+{
+  "kind": "controlled-arithmetic-oracles/v1; not source observations",
+  "cases": [
+    {
+      "name": "signed-residuals-and-even-median",
+      "predictions_seconds": [10, 10, 10, 0],
+      "observed_seconds": [6, 10, 12, 8],
+      "expected": {
+        "mae_seconds": 3.5,
+        "mean_squared_error_seconds_squared": 21,
+        "mean_signed_residual_seconds": 1.5,
+        "median_signed_residual_seconds": 1,
+        "absolute_error_quantiles_seconds": {"p50": 2, "p95": 8, "p99": 8},
+        "positive_residual_quantiles_seconds": {"p50": 2, "p95": 8, "p99": 8},
+        "underprediction_count": 2,
+        "underprediction_frequency": 0.5,
+        "underprediction_severity_seconds": 5
+      }
+    },
+    {
+      "name": "legitimate-zero-duration",
+      "predictions_seconds": [0],
+      "observed_seconds": [0],
+      "expected": {
+        "mae_seconds": 0,
+        "mean_squared_error_seconds_squared": 0,
+        "mean_signed_residual_seconds": 0,
+        "median_signed_residual_seconds": 0,
+        "absolute_error_quantiles_seconds": {"p50": 0, "p95": 0, "p99": 0},
+        "positive_residual_quantiles_seconds": null,
+        "underprediction_count": 0,
+        "underprediction_frequency": 0,
+        "underprediction_severity_seconds": null
+      }
+    },
+    {
+      "name": "overprediction-only-no-positive-tail",
+      "predictions_seconds": [10, 12],
+      "observed_seconds": [6, 10],
+      "expected": {
+        "mae_seconds": 3,
+        "mean_squared_error_seconds_squared": 10,
+        "mean_signed_residual_seconds": -3,
+        "median_signed_residual_seconds": -3,
+        "absolute_error_quantiles_seconds": {"p50": 2, "p95": 4, "p99": 4},
+        "positive_residual_quantiles_seconds": null,
+        "underprediction_count": 0,
+        "underprediction_frequency": 0,
+        "underprediction_severity_seconds": null
+      }
+    }
+  ]
+}

@@ -9,6 +9,7 @@ use roadrunner_osm::{
 };
 
 mod alternatives_command;
+mod baseline_command;
 mod dataset_command;
 mod reference_comparison;
 mod simulation_command;
@@ -33,7 +34,14 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
     if args.first().is_some_and(|s| s == "dataset") {
         return dataset_command::run(&args[1..]);
     }
-    match args.as_slice() {
+    if args.first().is_some_and(|s| s == "baseline") {
+        return baseline_command::run(&args[1..]);
+    }
+    run_commands(&args)
+}
+
+fn run_commands(args: &[String]) -> Result<(), String> {
+    match args {
         [command] if command == "--help" || command == "help" => {
             print_help();
             Ok(())
@@ -154,6 +162,8 @@ fn print_help() {
          roadrunner route alternatives <snapshot-directory> <from-osm-node> <to-osm-node> --count <n>\n  \
          roadrunner route traffic <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <traffic.json>\n  \
          roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>\n  \
+         roadrunner baseline evaluate <dataset-directory> <new-result-directory>\n  \
+         roadrunner baseline verify <result-directory>\n  \
          roadrunner dataset build <request.json> <new-output-directory>\n  \
          roadrunner dataset verify <dataset-directory>\n  \
          roadrunner simulate <scenario.json> [--json]\n\

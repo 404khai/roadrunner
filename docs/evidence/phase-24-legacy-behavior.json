@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "acfd80900dcf02c4358b2f18d731f2e72020968e",
+  "baseline_binary_sha256": "4f982418d6dccfada2d4d0e870e60af87b23113ec24d64e808cc20b04b6691b7",
+  "current_binary_sha256": "22501e9e59ef534653d75e93103e29d3b7415e76c9ac7c7f4a4b905c66721230",
+  "normalization": "remove only new top-level trace; no route, metric, timing, terms, identity or decision normalization",
+  "fixtures": [
+    {
+      "fixture": "data/fixtures/phase-15/seeded-deliveries.json",
+      "fixture_sha256": "678be268e5c0e6544f4a80f3305d1693a23f2c44036bf37066c65e2bac26b76e",
+      "baseline_sha256": "3a73b2b4048a008d43e831dd3e083de6967b2d9f3dcc040611ae85a47a1b25a5",
+      "current_sha256": "79ad0aca5226324cc858d82c556165c6b9f9365c229a30f45f6b172b8ad700ec",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 8
+    },
+    {
+      "fixture": "data/fixtures/phase-16/paired-strategies.json",
+      "fixture_sha256": "6dabddeb01290fe8aeb5dfc2da121cc0b861602bad42bc72c1e093b706f007f8",
+      "baseline_sha256": "39f35a1923c4b14789acf27c954a4d4888ae96527611ec81941817756dddaa24",
+      "current_sha256": "30729307e5b1012883084bd5b5dc24f4c22f3071ec11902daa2e3e500ad84dea",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 24
+    },
+    {
+      "fixture": "data/fixtures/phase-17/baseline-predicted-breach.json",
+      "fixture_sha256": "d2e8b3dc0a8451b219d6a1b23063615ad27122c9cfa1f75a973024515f54b444",
+      "baseline_sha256": "6128b09a9322a8f904c88bfbba1cd5fa7c6853201f5b7babcc8711b1569789ad",
+      "current_sha256": "90a11f272a33bcfe819d3f607200b73ff0f960ca926e1ac99600f322a01b00fa",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-17/budget-exhaustion.json",
+      "fixture_sha256": "c9a3576575f85ea821e6b21d16511dab9153be518e4cd028618f1fe7714afea4",
+      "baseline_sha256": "24e5a97629f98950385fefcd42300856da65b663f85ad4c5a40438dc4d639ad8",
+      "current_sha256": "30fb60fa7345dae4e85ceaaed2e4810387cb8101b0036c2fd06509a0c708163f",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-17/capacity-prefix.json",
+      "fixture_sha256": "be58acf9fd95bf901935e81cdef624c8e8b49a66dd2ea95db25b1600788f229e",
+      "baseline_sha256": "94d9d104e0225387b92e6d6a4f8568b54757ba1bb4273c83f11a4edfbfb9da2b",
+      "current_sha256": "6142b98ec52dc09fdf37c645458eb04d64ff8d2a2d76252ab457d710ae1e1184",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-17/complete-infeasibility.json",
+      "fixture_sha256": "d6aff83f963765688e85f1518694a14ea59b7aa5d8b94ab4998b3f6091f4c038",
+      "baseline_sha256": "cd4360b7aef023166b3db15d98c762c29c15fb7d544ad4b9d5512ab1161a46d5",
+      "current_sha256": "fa106d9a66395ae0610effd266ddeb0d41dcf318a25ddee233f4bf1a6713e63e",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-17/cumulative-repeat.json",
+      "fixture_sha256": "246a3fc84ad38740feebc629f83d7b5b1177802efeeaeefdbb7ee701d803a1e9",
+      "baseline_sha256": "104fc9c9ac85bf8ea4bef52e23fd9d7b6b538a9a132ec5bb97d1ef2a939a2413",
+      "current_sha256": "0ea9b7f31c2574433bdbe13e022ff4ac646b1fca28af744bbb7d39609c596158",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 6
+    },
+    {
+      "fixture": "data/fixtures/phase-17/frozen-service.json",
+      "fixture_sha256": "f4a9747a114f20fed548a9bea802e323cedabf001ab5895849ac37e37bed8af1",
+      "baseline_sha256": "dc67b9c236dd9fbbe04cf053c6db3cc6a0184c20f115710a497c1b16f54c1d39",
+      "current_sha256": "9dc5731f6dc5520422065031674c0f2018998e8c19f3145cd3e4ba1cb45409a9",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-17/frozen-wait.json",
+      "fixture_sha256": "a951409a9e352f41470aa78c7a4e2d373e914c331341b63b7275c47cc7aa838e",
+      "baseline_sha256": "b4dcf503ea5f4a1a8aed284904513bddd164052d6cfe7474183083f14c1aaf9c",
+      "current_sha256": "05549e7669f7adde9e92b98e18531877d5a40d4f30b3d338d8e043724076a461",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-17/hard-deadline.json",
+      "fixture_sha256": "3b56fcc69fd678a129f42e685ecd33d5650131f23735c19d3eda3708ecf7830b",
+      "baseline_sha256": "10d8e74847cd2c979c4a4d22839d5f828196020961e706488cb90e703c4ccbad",
+      "current_sha256": "53e66b74de4792e5cd05ccbd7d37ea6a763a2e512f029f568dbfd037f52f284c",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-17/realized-readiness-violation.json",
+      "fixture_sha256": "c1408cb7588180f73f75456c357aa8e39b48d0e40e3ea3cd260aed842b894248",
+      "baseline_sha256": "dba23d9db138ce40302fe23cd8ee7def441c9edd526499c1fff83aa9040604e5",
+      "current_sha256": "1903bf060b4c64d9c8f5590cb32d0e5554510d49dc9095f0c31efec339f2c3be",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-17/successful-pooling.json",
+      "fixture_sha256": "67403d9ecfe580b959ad9474389b675ebd9b9a2e81df7a243a93a6123ca06094",
+      "baseline_sha256": "918a11998c85e001fdc072afb53a4ddf1d0d9db962a32438a88403303cb1b256",
+      "current_sha256": "beb0eb4a7a0fec9344a8db0a88cd9bb673294b88cf0ca1865a0b573da249123f",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-17/unavailable-forecast.json",
+      "fixture_sha256": "ad8617b6f8a5262846ab9c5816a2466810fc2c01a9e11c2bfa2b6beae3871ffd",
+      "baseline_sha256": "9ba55580e028215c8526fe5f50a154949f86d5ba690edf409a9488061689cc1f",
+      "current_sha256": "1d399dba1df11b8cb6cec596a798320213476e690d8477194c96d4b8be353f8e",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/baseline-breach.json",
+      "fixture_sha256": "36e7850d0810001b9137462151609d393cfcc9946cd490270e208e29d701c281",
+      "baseline_sha256": "61e92fd97d12226e8bef570afa09e78cc4c58fdc80ac310e8b427110f278b52e",
+      "current_sha256": "7ccb8cd8d43f66ec4a02a08afb44a9b8e456adde8110552c67357c51b58f0be1",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/budget-exhaustion.json",
+      "fixture_sha256": "af24c90196c2169f80118cad02e1e3e7b67fac71c314346ff33d60747f9b3714",
+      "baseline_sha256": "a36a50c71d5747fe377e59840b2c11b9610eb6326a14081b465de4acc79929b1",
+      "current_sha256": "505aa510481c8a7f5fdcd7eacc5ed3db9b93e54853c00816081b8b4d51fd9249",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 0
+    },
+    {
+      "fixture": "data/fixtures/phase-18/capacity-prefix.json",
+      "fixture_sha256": "c49aaabf45cbcf596c57307f4c90c8cc8ac5c37a4cc46e5e2860a401160c740e",
+      "baseline_sha256": "cdcb8ba548ab12e418a732fdc5d0c743a0074e0bf580d25556d0ce40cc0794c6",
+      "current_sha256": "aafa0d2885a76e303ee64481f3ee458cef8e7dae5502c65f902b69d0aa81d5ee",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/complete-infeasibility.json",
+      "fixture_sha256": "e5df46d5546adb6bdae861b000c1fe8b8877b34859bb447b7ba911c50d34fa39",
+      "baseline_sha256": "255ad5dbf0baa04d27177b8c89dddc59c04edaa5cf5b277fbbcaacbf4fac258c",
+      "current_sha256": "ca72e10d83e437b4ffe3882aab2567c2a94dfacbaa676701ae827a8c014f72e9",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-18/cumulative-repeat.json",
+      "fixture_sha256": "a577873aee99259382e1bf83bd4ab54b400044a71778fde51193d9b6151ce657",
+      "baseline_sha256": "b86ec9e09d2612e98f81f7c6f31265fe256c49bf38364dbe542841958d1832b3",
+      "current_sha256": "9c0d5f03c49fa7fc46882ed54b921c0ed719c7df6bd670ec8df4dfde96b9f0d2",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 6
+    },
+    {
+      "fixture": "data/fixtures/phase-18/frozen-service.json",
+      "fixture_sha256": "eae252c6a777d64e017049c545a505b573e4b1445420a6b63830c055c5ee4a78",
+      "baseline_sha256": "aab6c9f05549523146d1716043a9948ad81ffa03473257627f68c8255c3476b2",
+      "current_sha256": "c1194473d279d677f19d9dc32adc26fd69369b22ce8ac67be26399c21e5cc2b5",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/frozen-wait.json",
+      "fixture_sha256": "65c1f4b1bb2e5f2770ceb40d148b592670769065ae8e723bab299a1a1df42aa1",
+      "baseline_sha256": "37b017e39623bb4ab2035d820e4a4b8f9ee851b18a32220cc0afb6748116352e",
+      "current_sha256": "d3f60cabd9cb214312fea96dbc3c4696bb67d927f38ec0aa1a0f85df53dce879",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/greedy-trap.json",
+      "fixture_sha256": "c499ef54f88339365f31166a5748bf98e14438bfe3df43ca8db626d7bd606903",
+      "baseline_sha256": "49d78d4f66b76f51df93d2731ed7587a6c79ce89ea617fda56f333e02657faf8",
+      "current_sha256": "709ae4002014d6e660dd90d84953b3d8fb047310bcb8f246fcb0dc935a6273c4",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/hard-deadline.json",
+      "fixture_sha256": "b517789668c40053b99f33e649a9042788f9e1276223557b6ae84cfc49697f1b",
+      "baseline_sha256": "b418c1ebb5f06e098de7111fe4c2bc3fcbb9323c556b9dcafa09e662fb7dd146",
+      "current_sha256": "4591b711d65b58dbbce2a87c0892190baf2b6b3227e8a702b612e3d11e3e4afc",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-18/input-isolation.json",
+      "fixture_sha256": "26548db54dd1ee6781759aa85bf76513cb585e46334f50165829c85e0776c8c1",
+      "baseline_sha256": "7948fda79769fbd9aab2bb9ce9a7b434a1afaa9bda880833cf2384049778213d",
+      "current_sha256": "8459a3fe21f1bf1eace70d7625c8083c7204d1047f78e972b7b8d2a84c6906e9",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/joint-pooling.json",
+      "fixture_sha256": "070b1915684a535357acfd8ff74845eec099e70e8089154eee4bd608341e9f3b",
+      "baseline_sha256": "c8392d585311b1a22cd088911527db9eec6db52fbc226beb34adcaac1b076544",
+      "current_sha256": "777af9d90ff370dd031b13ed19b530f9d44d9bd550ff0a08c3e4ff6ef7f3ac92",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-18/realized-violation.json",
+      "fixture_sha256": "ddcd4ed63a6fff97d991e5ff616596fb3feb4c61cf028a23c6534d69228d12c7",
+      "baseline_sha256": "a1454ea6f9a08f3f1a145c394a7f5c5b8002ecf7bf318020479b1659d2459115",
+      "current_sha256": "803948dc82af68a3b228909899c2bff6a8e40141da8726bd813d57b1a37ee647",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-19/budget-exhaustion.json",
+      "fixture_sha256": "c6b66b79b3496755714aba3589b9fe4a2da6c2f2921c4c609839995a58ad7da1",
+      "baseline_sha256": "a4f390fa7b9a5b6fb31812e0ec879103f591654ae5f77d4ba5871e85b710233e",
+      "current_sha256": "c285e0d58ba7fa208a098b335bd75bf4e8714c1bffc9d37762ecd01d08b0519c",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/cancellation.json",
+      "fixture_sha256": "8f741ff77fb515c8f77607ccf4840005348de59bf7795b1ee6b789286ec9e7f6",
+      "baseline_sha256": "e9875b49dd1ec33c2e8a9f52c9d864c7ceb4f947355375f948c030f566714362",
+      "current_sha256": "6eeaa1e1245857ce6fbefd211ed5d6c73df95ef5db07309574f3e900c91f5822",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-19/churn-suppression.json",
+      "fixture_sha256": "73644ef07aa6ff072817cb88aac1a1c77c4ded2cee323da5b8048e9c50ec3a2f",
+      "baseline_sha256": "e76f2b41e33dc284925dfa6fc4ad921c955b8cfa15e9a013107a937db706c089",
+      "current_sha256": "c54173d34db2034f745dc9d3ad84d3b7549426ef45c7d626b0a29eb36f0f2e82",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/forecast-update.json",
+      "fixture_sha256": "e6db0b5949ae0ef425b064c37bfcf10ebd2199f122070954b2479cdc1fb13d2d",
+      "baseline_sha256": "52c3bc48e3f259a115a382fc9b6fae480f9c68c7fa7dbd60166c9796c70b7dce",
+      "current_sha256": "f5664a4583b7ee75d7d91e8c94eb900dc23ba8decaf432408953390a158ef7ba",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/frozen-service.json",
+      "fixture_sha256": "4f86e7bb6e8d91402dbeaec4cb113a373090a68e6cb34d9fc069fc17cd9599f2",
+      "baseline_sha256": "9c38bf64e0d148983608e4e21a0871735e4706ec2848a8f80684255ec93bcadc",
+      "current_sha256": "368441e41a6da0c117802d52e099d3c0521d84fd294e209adf1c18343b37a900",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/frozen-wait.json",
+      "fixture_sha256": "cea7c19272ca9998730f5e088533b10a481e8ab95094dc0e1f9b8a4efc1b58fe",
+      "baseline_sha256": "a36aa532284f7d240fc59136208c450b1f69ebcd8c61a2abf038f957cb8c9df7",
+      "current_sha256": "f66931d622330215e6916b900384af486dd808412f15e5aeacfa2777e4f2a330",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/hard-deadline-breach.json",
+      "fixture_sha256": "cf368f81f7f6cda421eabbce707020b3e441cfc516cf0bfffafb896bc6634dc2",
+      "baseline_sha256": "31c6c35e3c734bea23001b1d9c80a7f57ef9c9848fe100f4b95d35c47c3d73e6",
+      "current_sha256": "248c85d88c232d6e82985bed7f26dd5d96912d25b9bffc5681df69c71d1f6d78",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-19/no-recovery.json",
+      "fixture_sha256": "9e9a305f8f41f23a23b2d012ec345720c12f3cf75d225e3f43a37bfb402d79f0",
+      "baseline_sha256": "3e5211d1034e93467773909b1b5227e3623770b56ffb9a03baf657e771eea2f0",
+      "current_sha256": "7772b4670fc4fc2b7cbb85bce9337fd32aeb750cee5f442e099746879369267c",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/observed-road-delay.json",
+      "fixture_sha256": "b9148058553d2b5336a75aed6ff70d8e71945705d62f7617a3093da4c92b9dfb",
+      "baseline_sha256": "a035b514cd88c89136485748f53aa43e3619bd5d0a8d53d340cb4153c6285df9",
+      "current_sha256": "a20bba939028bd193cacb593aa6eb91569ef3860ffa00926837f38aabeb742df",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    },
+    {
+      "fixture": "data/fixtures/phase-19/offline-recovery.json",
+      "fixture_sha256": "c42b8d60e88228fecd18fcf3de0da13b94c5ad3f9e0bb14e791fd5da7ead1f78",
+      "baseline_sha256": "e58975b18ed11d34e83048042456847e84111c798a8c1744716bce679cc3b78e",
+      "current_sha256": "ea8b75c26c88a020fc7c6df4408e1b1a1e7d090f4770a328642206b8451702f5",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/optional-recovery.json",
+      "fixture_sha256": "e26b4dd66bf345656d47410e16f811562099410f524cc31929ddab0c8d6f129a",
+      "baseline_sha256": "38bf4cefd28b9df4ff783669751028a5cb752c9a5d274d7f5e75b22bec480d26",
+      "current_sha256": "263c0b2c5c4139a7ae649608b0a9b7b8b8d15f3d099755268ede3bb3b1d03498",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/traffic-change.json",
+      "fixture_sha256": "13053d9c6eaf96ee3b0c7db421be04b7d1fa8c74e107af8c6ce602f4441f9709",
+      "baseline_sha256": "a515b656f79e9f48196d14f221dc4aae2ef9c922c3a685e99fa5b43a439f24aa",
+      "current_sha256": "cf5531946c900c5667882c4c9b510ccb0ab9c53ed4fb9dab64e7f2dcb2982724",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 4
+    },
+    {
+      "fixture": "data/fixtures/phase-19/unavailable-readiness.json",
+      "fixture_sha256": "6351e5cab3641cf8731e7307316c5e471bd7e4bd085bb944aa2f735e9ee9d89d",
+      "baseline_sha256": "f300a47fc1a0d8ac443f98cbda0a9e025cd9ff60fe406e12fbd079dcce205396",
+      "current_sha256": "94d0b29d1b4cd33afdd87ef40bd08443afd78790973019b322caeb6e5b2bcfa7",
+      "all_preexisting_fields_equal": true,
+      "exact_new_replay": true,
+      "independent_started_trace_oracle": true,
+      "committed_starts": 2
+    }
+  ]
+}
