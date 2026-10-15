@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "restored_from": "bundle.reproduction.files only; no Git checkout or original source paths",
+  "retained_files": 141,
+  "build_command": "cargo +1.99.0 build -p roadrunner-cli --bin roadrunner --locked",
+  "build_result": "PASS",
+  "verification_result": "PASS",
+  "verification_output": "verified phase23-representative/v1: 5 committed starts, 4 exact synthetic labels, 1 dependency groups; physical evaluation unavailable",
+  "rebuilt_binary_sha256": "02c89a71fc8f234e4ffbbbeccc95b09d5c98b3a319fec8b9b49f3ebdd8fcb503",
+  "dataset_packaging_sha256": "41b718271d332e4052881990ab53142b76705e2047eb1cdc3babd95237ed88c0",
+  "scope": "extractor rebuild and complete source/derived-content replay; third-party dependencies supplied by local Cargo cache/registry, not vendored; binary byte identity not claimed"
+}

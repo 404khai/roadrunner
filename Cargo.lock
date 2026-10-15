@@ -1322,6 +1322,7 @@ name = "roadrunner-cli"
 version = "0.1.0"
 dependencies = [
  "roadrunner-core",
+ "roadrunner-dataset",
  "roadrunner-osm",
  "roadrunner-simulation",
  "serde",
@@ -1339,6 +1340,19 @@ dependencies = [
  "sha2 0.10.9",
  "thiserror 2.0.20",
  "tracing",
+]
+
+[[package]]
+name = "roadrunner-dataset"
+version = "0.1.0"
+dependencies = [
+ "roadrunner-core",
+ "roadrunner-dispatch",
+ "roadrunner-simulation",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -1387,6 +1401,7 @@ dependencies = [
  "roadrunner-dispatch",
  "serde",
  "serde_json",
+ "sha2 0.10.9",
  "thiserror 2.0.20",
 ]
 

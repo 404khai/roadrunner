@@ -8,9 +8,11 @@ mod engine;
 mod event;
 mod metrics;
 mod scenario;
+mod trace;
+pub use trace::{ArrivalEvidence, PendingEvent, ScheduleChange, StartedAction, SyntheticTrace};
 
 pub use comparison::{StrategyComparison, compare_strategies};
-pub use engine::simulate;
+pub use engine::{simulate, simulate_with_run_identity};
 pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};
 pub use metrics::{

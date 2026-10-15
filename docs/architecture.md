@@ -521,3 +521,10 @@ effect recognition and original outcomes commit together. Separate role leases a
 independent acknowledgement anchors preserve restart/reconciliation boundaries. Replay
 uses isolated in-memory processing of recorded attempts and suppresses effects. Integration
 events never replace authenticated commands, physical observations or operational authority.
+
+## Offline dataset boundary (Phase 23)
+
+`roadrunner-dataset` consumes retained synthetic graph/scenario/result evidence outside
+authoritative runtime publication. See [dataset contracts](eta-dataset.md) and
+[ADR 0020](adr/0020-eta-dataset-evidence-and-synthetic-traces.md). It does not introduce
+learned routing, physical measurement or operational data-source assumptions.

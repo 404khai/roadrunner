@@ -505,3 +505,13 @@ Consumer/publisher acknowledgement anchors preserve the same explicit rollback c
 as operational durability. Broker delivery, remote effects, automatic event-triggered
 planning, parallel consumers and multi-primary operation remain deferred. See
 [event contracts](events.md) and [completion](phase-22-completion.md).
+
+## Phase 23 dataset amendment
+
+The signed [data/ML audit](data-ml-readiness-audit.md) defines all committed started
+road legs as the population, original frozen-route B0, evidence-qualified labels and
+restricted start-available features. Initial publication is verified synthetic evidence.
+[Phase 23 contracts](eta-dataset.md) supersede an unqualified interpretation of
+“observed travel time.” Phase 24 starts with original B0 evaluation only after separate
+authorization. Future initial learned research predicts pinned whole-route duration;
+whole-leg labels cannot supervise edge costs or justify learned A* heuristics.

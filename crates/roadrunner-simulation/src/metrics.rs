@@ -155,6 +155,8 @@ pub struct SimulationSummary {
 /// Full deterministic artifact; contains no wall-clock timing or machine-specific values.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct SimulationResult {
+    /// Complete Phase 23 source trace, independent of completed-only metrics.
+    pub trace: crate::SyntheticTrace,
     /// Named schema 2 scenario identity; absent for historical schema 1 fixtures.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scenario_id: Option<String>,

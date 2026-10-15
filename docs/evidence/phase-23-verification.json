@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "scope": "verified synthetic Phase 23 dataset engineering; no predictive error evaluation",
+  "audit_base": "acfd80900dcf02c4358b2f18d731f2e72020968e",
+  "branch_base": "bc4cad6 (origin/main; merge-only tree-equal to audit base)",
+  "implementation_branch": "feat/phase-23-eta-dataset",
+  "checkout": "root checkout; no worktree created",
+  "preserved_unrelated": [
+    ".DS_Store",
+    ".t3/",
+    "logo.png"
+  ],
+  "signed_source": {
+    "thread_id": "67a08df0-4aab-4932-9af2-443c26d06e69",
+    "audit_position": 485,
+    "authorization_position": 487,
+    "pagination": "read itemId/textOffset until nextTextOffset=null for both complete items",
+    "preservation": "exact full source text plus one final newline; explicitly compared in-session",
+    "audit_sha256": "90ae4b1655893bc53999f60f9b628e4c0f200d2f15082dd0f4f78889cb84387e",
+    "authorization_sha256": "50f9656ecd67d63596d156acc607f41b8180dd6fa51c0c3230af7cdb75e4e10d"
+  },
+  "hardware": {
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "architecture": "arm64",
+    "cpu": "Apple M3"
+  },
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)\nbinary: rustc\ncommit-hash: ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96\ncommit-date: 2026-05-25\nhost: aarch64-apple-darwin\nrelease: 1.96.0\nLLVM version: 22.1.2",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "PASS",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cargo build --workspace",
+      "result": "PASS",
+      "log_sha256": "8455b187ab97b46040bd4030ae4f3c22a2183a831fcef496a6681e984970c304"
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets -- -D warnings",
+      "result": "PASS",
+      "log_sha256": "d5345912b30ae3f11f9496a7ed46bfaaf5c04a99747be28f187b1748e0c0186f"
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "PASS",
+      "log_sha256": "7d15acd23d4a2545540749c8c7e5fcea838a8963f9c3a18e24767a52bb4d37a3"
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-storage --test postgres --locked -- --ignored --test-threads=1",
+      "environment": "ROADRUNNER_TEST_DATABASE_URL=host=/tmp dbname=roadrunner_phase23_test (dedicated disposable database)",
+      "result": "PASS",
+      "cases": 5,
+      "log_sha256": "5be83821715a2b95cf3599c533cfe70d51eacf7d75103ec510e7ae3de93fb96d"
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-storage --test events --locked -- --ignored --test-threads=1",
+      "environment": "ROADRUNNER_TEST_DATABASE_URL=host=/tmp dbname=roadrunner_phase23_test (dedicated disposable database)",
+      "result": "PASS",
+      "cases": 7,
+      "log_sha256": "8ba3ed69d0c5f882e62cb3fc0c9197204feafc4af23aef8eedaab0a5d7d3dfb9"
+    }
+  ],
+  "workspace": {
+    "passed": 263,
+    "failed": 0,
+    "ignored": 13,
+    "ignored_accounting": "12 database cases explicitly run separately; one existing opt-in operational measurement case not run; no new ignored tests"
+  },
+  "dataset_contract_tests": 28,
+  "cli_end_to_end_tests": 1,
+  "postgres_process_cases": 7,
+  "event_process_cases": 5,
+  "behavior_comparison": {
+    "fixtures": 38,
+    "baseline_commit": "acfd80900dcf02c4358b2f18d731f2e72020968e",
+    "all_preexisting_fields_equal": true,
+    "exact_replay": true,
+    "independent_started_trace_oracle": true,
+    "evidence": "phase-23-behavior.json"
+  },
+  "dataset_oracle": "phase-23-dataset-oracle.json",
+  "retained_source_rebuild": "phase-23-reproduction.json",
+  "representative_quality": {
+    "sources": 3,
+    "starts": 5,
+    "observed": 4,
+    "right_censored": 1,
+    "exact_labels": 4,
+    "original_b0": 5,
+    "dependency_groups": 1
+  },
+  "initial_failures_resolved": [
+    {
+      "check": "default Clippy",
+      "finding": "three preexisting PostgreSQL doc-markdown comments; corrected backticks only"
+    },
+    {
+      "check": "independent-component positive split test",
+      "finding": "replay dependency key initially omitted graph; key now binds graph+scenario, retaining family/world/episode protection; 28 focused tests and final workspace pass"
+    },
+    {
+      "check": "first PostgreSQL process attempt under concurrent compilation",
+      "finding": "dispatch returned storage_unavailable: invalid staged transition: unsupported or corrupt operational checkpoint; no domain publication reported",
+      "root_cause": "not independently isolated; concurrent compiler load observed, temporal staging rejection is a possible explanation, not an established diagnosis",
+      "resolution": "controlled fresh process suite rerun passed all seven cases with no runtime code, expiry budget or protection changes",
+      "failure_log_sha256": "118ea5e5e37863467bba62b61dae4b207c791c945355684d780e11f6c2ad7c43",
+      "failure_log_utf8": "Traceback (most recent call last):\n  File \"/Users/admin/Developer/roadrunner/scripts/verify_postgres_runtime.py\", line 268, in <module>\n    main()\n  File \"/Users/admin/Developer/roadrunner/scripts/verify_postgres_runtime.py\", line 120, in main\n    dispatch = command(\"/v1/dispatch\", \"dispatch\", {\"order\": order})\n  File \"/Users/admin/Developer/roadrunner/scripts/verify_postgres_runtime.py\", line 101, in command\n    assert status == 200, (path, status, result)\nAssertionError: ('/v1/dispatch', 503, {'schema_version': 1, 'namespace': '647cac74687a300d948760fbdfba5218:world:0', 'command': '647cac74687a300d948760fbdfba5218:command:4', 'outcome': 'rejected', 'published': False, 'revision': '4', 'result': {'code': 'storage_unavailable', 'message': 'invalid staged transition: unsupported or corrupt operational checkpoint'}})\n"
+    }
+  ],
+  "gates": {
+    "A": "PASS",
+    "B": "PASS",
+    "C": "PASS",
+    "D": "PASS",
+    "E": "PASS",
+    "F": "PASS"
+  },
+  "scientific_limits": {
+    "physical_labels": "NOT ESTABLISHED",
+    "physical_generalization": "EvaluationUnavailable",
+    "representative_independent_holdout": "EvaluationUnavailable: one dependency group",
+    "causal_dispatch_effects": "UNSUPPORTED",
+    "performance_scalability": "NOT MEASURED",
+    "phase24_metrics": "NOT IMPLEMENTED OR COMPUTED"
+  },
+  "verdict": "PHASE 23 COMPLETE \u2014 VERIFIED FOR DECLARED SCOPE"
+}

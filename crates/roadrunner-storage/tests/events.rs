@@ -1,4 +1,4 @@
-//! Controlled real PostgreSQL delivery/inbox/effect histories; CI opts in explicitly.
+//! Controlled real `PostgreSQL` delivery/inbox/effect histories; CI opts in explicitly.
 #![allow(clippy::unwrap_used, clippy::expect_used)]
 use postgres::{Client, NoTls};
 use roadrunner_core::graph::{FrozenGraph, decode_graph_artifact};

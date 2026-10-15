@@ -1,0 +1,6 @@
+{
+  "schema": "eta-publication/v1",
+  "semantic_sha256": "179a11c4a7645f3ac1c1c1cae6835dc35f0bf06dbe8142dae617137808f5a406",
+  "packaging_sha256": "41b718271d332e4052881990ab53142b76705e2047eb1cdc3babd95237ed88c0",
+  "bundle_file": "bundle.json"
+}

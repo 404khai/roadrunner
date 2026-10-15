@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "crates/roadrunner-dataset",
     "crates/roadrunner-api",
     "crates/roadrunner-storage",
     "crates/roadrunner-events",

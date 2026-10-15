@@ -1,0 +1,19 @@
+[package]
+name = "roadrunner-dataset"
+description = "Offline evidence-qualified started-leg datasets"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+roadrunner-core = { path = "../roadrunner-core" }
+roadrunner-dispatch = { path = "../roadrunner-dispatch" }
+roadrunner-simulation = { path = "../roadrunner-simulation" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true

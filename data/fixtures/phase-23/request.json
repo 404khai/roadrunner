@@ -1,0 +1,56 @@
+{
+  "dataset_version": "phase23-representative/v1",
+  "sources": [
+    {
+      "scenario": "../phase-19/observed-road-delay.json",
+      "run": "phase23-delay-complete",
+      "lineage": {
+        "generator": "shared-execution-v2/scripted/v1",
+        "family": "phase19-dynamic-fixtures/v1",
+        "base_world": "phase19-observed-road-delay-world/v1",
+        "realization": "phase19-fixed-road-delay-20s/v1",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "phase19-observed-road-delay-ancestry/v1"
+        ]
+      }
+    },
+    {
+      "scenario": "delay-horizon.json",
+      "run": "phase23-delay-horizon",
+      "lineage": {
+        "generator": "shared-execution-v2/scripted/v1",
+        "family": "phase19-dynamic-fixtures/v1",
+        "base_world": "phase19-observed-road-delay-world/v1",
+        "realization": "phase19-fixed-road-delay-20s/v1",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "phase19-observed-road-delay-ancestry/v1"
+        ]
+      }
+    },
+    {
+      "scenario": "../phase-19/observed-road-delay.json",
+      "run": "phase23-delay-replay",
+      "lineage": {
+        "generator": "shared-execution-v2/scripted/v1",
+        "family": "phase19-dynamic-fixtures/v1",
+        "base_world": "phase19-observed-road-delay-world/v1",
+        "realization": "phase19-fixed-road-delay-20s/v1",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "phase19-observed-road-delay-ancestry/v1"
+        ]
+      }
+    }
+  ],
+  "splits": {
+    "claim": "descriptive-synthetic/v1",
+    "assignments": {
+      "phase23-delay-complete": "Descriptive",
+      "phase23-delay-horizon": "Descriptive",
+      "phase23-delay-replay": "Descriptive"
+    },
+    "excluded_reasons": {}
+  }
+}

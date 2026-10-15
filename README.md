@@ -353,3 +353,6 @@ See [runtime boundary](docs/runtime-boundary.md) and
 cargo +1.99.0 test -p roadrunner-core --test semantic_identity --locked
 cargo +1.99.0 test -p roadrunner-dispatch --test operational --locked
 ```
+
+Phase 23 adds a [verified synthetic ETA dataset](docs/eta-dataset.md) with complete
+started-action census, original B0, evidence-qualified labels and reproducible bundles.

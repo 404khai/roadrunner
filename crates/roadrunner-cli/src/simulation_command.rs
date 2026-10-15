@@ -121,7 +121,7 @@ fn inline_graph(
     builder.finalize().map_err(|e| e.to_string())
 }
 
-fn load(path: &str) -> Result<(FrozenGraph, SimulationScenario), String> {
+pub(super) fn load(path: &str) -> Result<(FrozenGraph, SimulationScenario), String> {
     let bytes = std::fs::read(path).map_err(|e| format!("could not read scenario {path}: {e}"))?;
     let document: Document = serde_json::from_slice(&bytes).map_err(|e| e.to_string())?;
     let graph = match document.graph {

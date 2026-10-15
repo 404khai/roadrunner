@@ -57,7 +57,7 @@ impl DurableImage {
 /// Storage failure distinguishes exclusion, proven rejection, and uncertain COMMIT.
 #[derive(Debug, thiserror::Error)]
 pub enum StorageError {
-    /// PostgreSQL operation failed before COMMIT was attempted.
+    /// `PostgreSQL` operation failed before COMMIT was attempted.
     #[error("PostgreSQL operation failed: {0}")]
     Database(#[from] postgres::Error),
     /// Unsupported schema or mismatched content/artifacts/installation.
@@ -92,7 +92,7 @@ pub struct DurableHead {
     /// Full state/recognition content fingerprint.
     pub digest: String,
 }
-/// Synchronous PostgreSQL writer; use only on blocking threads. Dropping closes its
+/// Synchronous `PostgreSQL` writer; use only on blocking threads. Dropping closes its
 /// session lease. No reconnect or implicit leader takeover can reuse an obsolete fence.
 pub struct PgStore {
     client: Client,
