@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "method": "reconstructed current Rust and Python source from retained immutable publications; fresh standalone offline Cargo build; no Git metadata; verify both copied publications from outside original repository",
+  "rust_source_files": 152,
+  "python_source_files": 1,
+  "build_log_sha256": "b1e7af6f1216d623f871acfe46fe077a8b38d1e31e60c497fca77fcc1d78a4e2",
+  "results": [
+    "verified source capture, protected fitting, inference, metrics and immutable publication",
+    "verified source capture, protected fitting, inference, metrics and immutable publication"
+  ],
+  "training_reproduction": true,
+  "inference_reproduction": true,
+  "source_and_metric_reproduction": true
+}

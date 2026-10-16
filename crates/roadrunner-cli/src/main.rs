@@ -11,6 +11,7 @@ use roadrunner_osm::{
 mod alternatives_command;
 mod baseline_command;
 mod dataset_command;
+mod learned_command;
 mod reference_comparison;
 mod simulation_command;
 mod time_dependent_command;
@@ -36,6 +37,9 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
     }
     if args.first().is_some_and(|s| s == "baseline") {
         return baseline_command::run(&args[1..]);
+    }
+    if args.first().is_some_and(|s| s == "learned") {
+        return learned_command::run(&args[1..]);
     }
     run_commands(&args)
 }
@@ -164,6 +168,7 @@ fn print_help() {
          roadrunner route schedule <snapshot-directory> <from-osm-node> <to-osm-node> --scenario <profile.json> --depart <seconds>\n  \
          roadrunner baseline evaluate <dataset-directory> <new-result-directory>\n  \
          roadrunner baseline verify <result-directory>\n  \
+         roadrunner learned export <dataset-directory>\n  \
          roadrunner dataset build <request.json> <new-output-directory>\n  \
          roadrunner dataset verify <dataset-directory>\n  \
          roadrunner simulate <scenario.json> [--json]\n\

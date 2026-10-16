@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "oracle": "raw-start-arrival-census; dependency-closure; Decimal80-pivoted-ridge-and-metrics/v1",
+  "publication_sha256": "81defdf1a8e042e7046758e12d103e8f36203c60a1874a4de5f70471efeae1f4",
+  "starts": 13,
+  "train_exact_actions": 6,
+  "dependency_groups": 6,
+  "comparison_slices": 50,
+  "supported_offline_improvement": false,
+  "physical_generalization": "EvaluationUnavailable",
+  "tolerance": "identities/counts/coverage exact; numeric relative 2e-14, absolute 1e-12; no metric clamping"
+}

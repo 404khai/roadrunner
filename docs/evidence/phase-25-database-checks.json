@@ -1,0 +1,25 @@
+{
+  "environment": "dedicated newly-created disposable PostgreSQL database on /tmp; dropped after tests",
+  "checks": [
+    {
+      "command": "cargo test -p roadrunner-storage --test postgres --locked -- --ignored --test-threads=1",
+      "exit_code": 0,
+      "log_sha256": "73c4621ee7f6e6db51d467d2fa9f81cca7035b1e6e0c623858bcb3ca8a698eac"
+    },
+    {
+      "command": "cargo test -p roadrunner-storage --test events --locked -- --ignored --test-threads=1",
+      "exit_code": 0,
+      "log_sha256": "7e127284f83e507e716cf67804508ae77cfd5af25d570b6793e61826e9255852"
+    },
+    {
+      "command": "python3 scripts/verify_postgres_runtime.py --output docs/evidence/phase-25-postgres-runtime.json",
+      "exit_code": 0,
+      "log_sha256": "6ec79c31de38b241ad6b85a833c4e2839d3a653b3c1fe93c4764f600f5b283a8"
+    },
+    {
+      "command": "python3 scripts/verify_event_runtime.py --output docs/evidence/phase-25-event-runtime.json",
+      "exit_code": 0,
+      "log_sha256": "7276c496c5478660ea16ddf4abda186d0719a480775bbef6afffd8e15aaf1093"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "authorization": "User explicit implement phase25 request; preserve descriptive naming preference in AGENTS.md",
+  "base_revision": "4edfda71b6281f5a63c039b50548a6a17d77a835",
+  "branch": "feat/learned-route-eta",
+  "checkout": "root checkout, no worktree",
+  "preserved_unrelated": [
+    ".DS_Store",
+    ".t3/",
+    "logo.png",
+    "google-maps-2d.jpg",
+    "google-mps-3d-and-2d.webp"
+  ],
+  "scope": "offline whole-started-route synthetic residual ridge research; no shadow, live inference, path/edge costs or operational changes",
+  "checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "PASS",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cargo build --workspace --all-features --locked",
+      "result": "PASS",
+      "log_sha256": "1687dc96861d426ba86e0c77f874fce953161fc1a3e899a717493f91df9ed8e6"
+    },
+    {
+      "command": "cargo test --workspace --all-features --locked",
+      "result": "PASS",
+      "log_sha256": "d2d2db55a5dc486ee3efe69692f7916d5e852ab335a174648870d0f5ddf8e278"
+    },
+    {
+      "command": "python3 -m unittest discover -s ml/tests -v",
+      "result": "PASS",
+      "log_sha256": "b959139ba18541b4b3cc820eafba7419d49f9e7bb57fcc2913bb2f0b541559ab"
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "result": "PASS",
+      "evidence": "tool invocation exited 0; output recorded in thread"
+    }
+  ],
+  "workspace": {
+    "passed": 286,
+    "failed": 0,
+    "ignored": 13,
+    "ignored_status": "12 existing DB/event opt-in tests run separately and passed; one existing operational measurement benchmark not run; no new ignored tests"
+  },
+  "python_tests": {
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0
+  },
+  "new_tests": {
+    "rust_cli": 1,
+    "python_adversarial_and_source_integration": 22
+  },
+  "toolchain": "rustc 1.96.0 (ac68faa20 2026-05-25)\nbinary: rustc\ncommit-hash: ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96\ncommit-date: 2026-05-25\nhost: aarch64-apple-darwin\nrelease: 1.96.0\nLLVM version: 22.1.2",
+  "python": "3.9.6",
+  "host": "macOS-27.0-arm64-arm-64bit",
+  "controlled": {
+    "starts": 13,
+    "exact": 12,
+    "censored": 1,
+    "source_runs": 8,
+    "dependency_components": 6,
+    "train_exact": 6,
+    "validation_exact": 2,
+    "test_exact": 4,
+    "test_comparison": {
+      "b0_full_eligible": {
+        "absolute_error_quantiles_seconds": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "mae_seconds": 0.0,
+        "mean_signed_residual_seconds": 0.0,
+        "median_signed_residual_seconds": 0.0,
+        "positive_residual_quantiles_seconds": null,
+        "rmse_seconds": 0.0,
+        "samples": 4,
+        "underprediction_count": 0,
+        "underprediction_frequency": 0.0,
+        "underprediction_severity_seconds": null
+      },
+      "b0_matched_candidate": {
+        "absolute_error_quantiles_seconds": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "mae_seconds": 0.0,
+        "mean_signed_residual_seconds": 0.0,
+        "median_signed_residual_seconds": 0.0,
+        "positive_residual_quantiles_seconds": null,
+        "rmse_seconds": 0.0,
+        "samples": 4,
+        "underprediction_count": 0,
+        "underprediction_frequency": 0.0,
+        "underprediction_severity_seconds": null
+      },
+      "candidate_matched": {
+        "absolute_error_quantiles_seconds": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "mae_seconds": 0.0,
+        "mean_signed_residual_seconds": 0.0,
+        "median_signed_residual_seconds": 0.0,
+        "positive_residual_quantiles_seconds": null,
+        "rmse_seconds": 0.0,
+        "samples": 4,
+        "underprediction_count": 0,
+        "underprediction_frequency": 0.0,
+        "underprediction_severity_seconds": null
+      },
+      "coherent_batch_fallback": false,
+      "coverage": {
+        "census_groups": 2,
+        "committed_starts": 4,
+        "eligible_label_coverage": {
+          "denominator": 4,
+          "numerator": 4,
+          "ratio": 1.0
+        },
+        "exact_label_coverage": {
+          "denominator": 4,
+          "numerator": 4,
+          "ratio": 1.0
+        },
+        "excluded_starts": 0,
+        "failures": {},
+        "label_exclusion_reasons": {},
+        "outcomes": {
+          "DisputedOrInvalid": 0,
+          "MissingArrival": 0,
+          "Observed": 4,
+          "Pending": 0,
+          "RightCensored": 0
+        },
+        "paired_groups": 2,
+        "prediction_coverage": {
+          "denominator": 4,
+          "numerator": 4,
+          "ratio": 1.0
+        },
+        "prediction_on_eligible_coverage": {
+          "denominator": 4,
+          "numerator": 4,
+          "ratio": 1.0
+        }
+      },
+      "full_eligible_with_coherent_b0_fallback": {
+        "absolute_error_quantiles_seconds": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "mae_seconds": 0.0,
+        "mean_signed_residual_seconds": 0.0,
+        "median_signed_residual_seconds": 0.0,
+        "positive_residual_quantiles_seconds": null,
+        "rmse_seconds": 0.0,
+        "samples": 4,
+        "underprediction_count": 0,
+        "underprediction_frequency": 0.0,
+        "underprediction_severity_seconds": null
+      },
+      "metrics_unavailable_reason": null
+    },
+    "model_id": "d467b0f05577b04d9c99adca473075f1b3826643e2c6474507e2a1bb5da61971",
+    "coefficients": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "supported_offline_improvement": false
+  },
+  "original_dataset": {
+    "starts": 5,
+    "exact": 4,
+    "censored": 1,
+    "dependency_components": 1,
+    "status": "EvaluationUnavailable:InsufficientProtectedIndependentComponents",
+    "model": null
+  },
+  "reproduction": "phase-25-reproduction.json; fresh standalone offline Cargo build from 152 retained Rust source/configuration files plus retained Python source; both copied publications verified outside checkout",
+  "independent_oracles": [
+    "phase-25-null-oracle.json",
+    "phase-25-unavailable-oracle.json"
+  ],
+  "legacy_equivalence": "phase-25-legacy-behavior.json; all 38 prior fixture histories unchanged; all instrumented replays exact",
+  "scientific_limits": [
+    "controlled engineering design, no sampled-world independence",
+    "physical generalization unavailable",
+    "no demonstrated learned improvement",
+    "no uncertainty intervals or physical bounds",
+    "no causal or unchosen-route claims",
+    "no operational admission or runtime resource benchmark"
+  ],
+  "audit_sha256": "90ae4b1655893bc53999f60f9b628e4c0f200d2f15082dd0f4f78889cb84387e",
+  "original_authorization_sha256": "50f9656ecd67d63596d156acc607f41b8180dd6fa51c0c3230af7cdb75e4e10d",
+  "database_verification": {
+    "storage_tests_passed": 5,
+    "event_tests_passed": 7,
+    "storage_process_cases_passed": 7,
+    "event_process_cases_passed": 5,
+    "failed": 0,
+    "environment": "new isolated disposable database created and dropped; existing user databases untouched",
+    "evidence": "phase-25-database-checks.json"
+  },
+  "cross_python_verification": {
+    "version": "Python 3.12.13",
+    "result": "PASS",
+    "scope": "both retained publications reproduced under a second Python runtime, in addition to original Python 3.9.6"
+  }
+}

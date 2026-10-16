@@ -51,6 +51,25 @@ jobs:
       - name: Run tests
         run: cargo test --workspace --all-features --locked
 
+  learned-eta:
+    name: Offline learned ETA contracts and source oracles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build source verifier
+        run: cargo build -p roadrunner-cli --locked
+      - name: Adversarial training, inference and artifact contracts
+        run: python3 -m unittest discover -s ml/tests -v
+      - name: Reproduce controlled negative experiment
+        run: python3 ml/eta_engine.py verify ml/results/route-ridge-null-v1
+      - name: Reproduce explicit unavailable fitting population
+        run: python3 ml/eta_engine.py verify ml/results/route-ridge-unavailable-v1
+      - name: Independent retained-source and Decimal oracles
+        run: |
+          python3 scripts/verify_learned_eta.py ml/results/route-ridge-null-v1
+          python3 scripts/verify_learned_eta.py ml/results/route-ridge-unavailable-v1
+
   persistence:
     name: PostgreSQL/PostGIS persistence and process recovery
     runs-on: ubuntu-latest
