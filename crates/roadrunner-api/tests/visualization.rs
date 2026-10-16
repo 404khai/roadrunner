@@ -283,3 +283,98 @@ async fn decision_recommendation_and_actual_publication_are_separate() {
         StatusCode::NOT_FOUND
     );
 }
+
+#[tokio::test]
+async fn anchor_catalog_is_bounded_exact_read_only_and_authenticated() {
+    let (api, _, digest) = fixture();
+    let before = request(&api, "GET", "/v1/state", None, json!(null), Some(TOKEN))
+        .await
+        .1;
+    assert_eq!(
+        request(
+            &api,
+            "GET",
+            "/v1/visualization/anchors",
+            None,
+            json!(null),
+            None
+        )
+        .await
+        .0,
+        StatusCode::UNAUTHORIZED
+    );
+    let (status, page) = request(
+        &api,
+        "GET",
+        "/v1/visualization/anchors",
+        None,
+        json!(null),
+        Some("test-reader-token-1234"),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(page["graph"]["snapshot_digest"], digest);
+    assert_eq!(page["node_count"], 4);
+    assert_eq!(page["anchors"].as_array().unwrap().len(), 4);
+    assert_eq!(
+        page["anchors"][1],
+        json!({"node":1,"coordinate":{"latitude":0.0,"longitude":0.001}})
+    );
+    assert_eq!(page["next_offset"], json!(null));
+    let tail = request(
+        &api,
+        "GET",
+        "/v1/visualization/anchors?offset=3",
+        None,
+        json!(null),
+        Some(TOKEN),
+    )
+    .await
+    .1;
+    assert_eq!(tail["anchors"].as_array().unwrap().len(), 1);
+    assert_eq!(tail["anchors"][0]["node"], 3);
+    assert_eq!(
+        request(
+            &api,
+            "GET",
+            "/v1/visualization/anchors?offset=5",
+            None,
+            json!(null),
+            Some(TOKEN)
+        )
+        .await
+        .0,
+        StatusCode::UNPROCESSABLE_ENTITY
+    );
+    let empty = request(
+        &api,
+        "GET",
+        "/v1/visualization/anchors?offset=4",
+        None,
+        json!(null),
+        Some(TOKEN),
+    )
+    .await
+    .1;
+    assert_eq!(empty["anchors"], json!([]));
+    let after = request(&api, "GET", "/v1/state", None, json!(null), Some(TOKEN))
+        .await
+        .1;
+    assert_eq!(before, after);
+    // Every emitted anchor is accepted by the existing strict routing boundary.
+    for a in page["anchors"].as_array().unwrap() {
+        let mut location = a.clone();
+        location["graph_digest"] = json!(digest);
+        let (status, route) = request(
+            &api,
+            "POST",
+            "/v1/visualization/routes",
+            None,
+            json!({"origin":location,"destination":location}),
+            Some(TOKEN),
+        )
+        .await;
+        assert_eq!(status, StatusCode::OK, "{route}");
+        assert_eq!(route["routes"][0]["geometry"]["no_travel"], true);
+    }
+}

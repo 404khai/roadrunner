@@ -1,0 +1,430 @@
+{
+  "anchors": [
+    {
+      "coordinate": {
+        "latitude": 6.5232933,
+        "longitude": 3.3801305
+      },
+      "node": 0
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5216648,
+        "longitude": 3.3807667
+      },
+      "node": 1
+    },
+    {
+      "coordinate": {
+        "latitude": 6.522834,
+        "longitude": 3.3791073
+      },
+      "node": 2
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5220645,
+        "longitude": 3.3799931
+      },
+      "node": 3
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5235754,
+        "longitude": 3.3807554
+      },
+      "node": 4
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5225235,
+        "longitude": 3.3811484
+      },
+      "node": 5
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5239572,
+        "longitude": 3.3784957
+      },
+      "node": 6
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5243699,
+        "longitude": 3.3796759
+      },
+      "node": 7
+    },
+    {
+      "coordinate": {
+        "latitude": 6.52471,
+        "longitude": 3.3804625
+      },
+      "node": 8
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5238646,
+        "longitude": 3.3799023
+      },
+      "node": 9
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5241318,
+        "longitude": 3.3804948
+      },
+      "node": 10
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5252683,
+        "longitude": 3.3763044
+      },
+      "node": 11
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5243316,
+        "longitude": 3.3782919
+      },
+      "node": 12
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5240278,
+        "longitude": 3.3784018
+      },
+      "node": 13
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5248066,
+        "longitude": 3.3780974
+      },
+      "node": 14
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5247392,
+        "longitude": 3.3780105
+      },
+      "node": 15
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5256001,
+        "longitude": 3.3765927
+      },
+      "node": 16
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5250178,
+        "longitude": 3.37832
+      },
+      "node": 17
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5255708,
+        "longitude": 3.3788028
+      },
+      "node": 18
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5260051,
+        "longitude": 3.3781578
+      },
+      "node": 19
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5257573,
+        "longitude": 3.3780183
+      },
+      "node": 20
+    },
+    {
+      "coordinate": {
+        "latitude": 6.524241,
+        "longitude": 3.3793835
+      },
+      "node": 21
+    },
+    {
+      "coordinate": {
+        "latitude": 6.526241,
+        "longitude": 3.3765914
+      },
+      "node": 22
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5259669,
+        "longitude": 3.3820275
+      },
+      "node": 23
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5225802,
+        "longitude": 3.3772418
+      },
+      "node": 24
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5228993,
+        "longitude": 3.3785789
+      },
+      "node": 25
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5258924,
+        "longitude": 3.3798354
+      },
+      "node": 26
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5262165,
+        "longitude": 3.3783816
+      },
+      "node": 27
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5257885,
+        "longitude": 3.3789848
+      },
+      "node": 28
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5260118,
+        "longitude": 3.3776374
+      },
+      "node": 29
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5248672,
+        "longitude": 3.3775851
+      },
+      "node": 30
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5253482,
+        "longitude": 3.3778265
+      },
+      "node": 31
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5253802,
+        "longitude": 3.3786634
+      },
+      "node": 32
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5263449,
+        "longitude": 3.379519
+      },
+      "node": 33
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5239812,
+        "longitude": 3.3811082
+      },
+      "node": 34
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5246268,
+        "longitude": 3.3792066
+      },
+      "node": 35
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5242595,
+        "longitude": 3.3807761
+      },
+      "node": 36
+    },
+    {
+      "coordinate": {
+        "latitude": 6.524774,
+        "longitude": 3.379468
+      },
+      "node": 37
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5250911,
+        "longitude": 3.3792655
+      },
+      "node": 38
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5240092,
+        "longitude": 3.3802137
+      },
+      "node": 39
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5235968,
+        "longitude": 3.3792093
+      },
+      "node": 40
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5235549,
+        "longitude": 3.3788404
+      },
+      "node": 41
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5235268,
+        "longitude": 3.3785319
+      },
+      "node": 42
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5247673,
+        "longitude": 3.3791208
+      },
+      "node": 43
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5244901,
+        "longitude": 3.3786915
+      },
+      "node": 44
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5254522,
+        "longitude": 3.3792682
+      },
+      "node": 45
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5232934,
+        "longitude": 3.3789147
+      },
+      "node": 46
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5229539,
+        "longitude": 3.3823645
+      },
+      "node": 47
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5238243,
+        "longitude": 3.3809961
+      },
+      "node": 48
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5258456,
+        "longitude": 3.3811217
+      },
+      "node": 49
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5254773,
+        "longitude": 3.3812233
+      },
+      "node": 50
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5257633,
+        "longitude": 3.3809502
+      },
+      "node": 51
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5254395,
+        "longitude": 3.3810146
+      },
+      "node": 52
+    },
+    {
+      "coordinate": {
+        "latitude": 6.525541,
+        "longitude": 3.3797579
+      },
+      "node": 53
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5254668,
+        "longitude": 3.3811779
+      },
+      "node": 54
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5258146,
+        "longitude": 3.3810666
+      },
+      "node": 55
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5230005,
+        "longitude": 3.3796142
+      },
+      "node": 56
+    },
+    {
+      "coordinate": {
+        "latitude": 6.5235215,
+        "longitude": 3.3807743
+      },
+      "node": 57
+    }
+  ],
+  "edge_count": 114,
+  "graph": {
+    "build_identity": {
+      "build_configuration": "compiler_semantics=osm_graph_compiler_v4;contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1",
+      "compiler_version": "0.1.0",
+      "normalization_version": "osm_normalization_v2",
+      "source_dataset": "phase10-lagos-marina",
+      "source_integrity": "661df8d84fcb77877f8d6a2d809b3a639d5eaa6cf7a43b1bdb14ec68286b1977"
+    },
+    "jurisdiction_policy": "ng_v2",
+    "provenance_digest": "afe1cfd4a6ef55fde35bf9eea8c94e4046aec5551cc7d6c5b33529a3bb44b482",
+    "routing_profile": "delivery_motorcycle_v2",
+    "snapshot_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+    "turn_restrictions_enforced": true
+  },
+  "next_offset": null,
+  "node_count": 58,
+  "offset": 0,
+  "schema_version": 1,
+  "selection_semantics": "explicit_graph_node_no_snapping/v1"
+}

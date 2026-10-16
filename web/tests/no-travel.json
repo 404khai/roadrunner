@@ -1,0 +1,64 @@
+{
+  "provenance": {
+    "departure_seconds": 1792152000.0,
+    "evaluator": "free-flow-travel-time/v1",
+    "heuristic": "travel-time-haversine/v1;max_kph=30",
+    "routing_context": {
+      "departure_time": 1792152000.0,
+      "permit_access": false,
+      "private_access": false
+    },
+    "time_domain": "unix_seconds",
+    "traffic_digest": null
+  },
+  "routes": [
+    {
+      "cost_breakdown": "unavailable_not_retained",
+      "distance_meters": 0.0,
+      "evaluation_id": "evaluation-v1:72d07437a2b5e9bba7f89337fc4979d3b367d79624bf37ea4391862583abaaec",
+      "geometry": {
+        "encoding": "wgs84_e7",
+        "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+        "no_travel": true,
+        "nodes": [0],
+        "occurrences": [],
+        "path_id": "path-v1:0b0d3046b5b3fdcd5478d26ae2d0df34418924ff7854284b73313af0b1113610",
+        "points_e7": [{ "latitude_e7": 65232933, "longitude_e7": 33801305 }],
+        "schema_version": 1
+      },
+      "jurisdiction_policy": "ng_v2",
+      "objective": { "kind": "travel_time", "value": 0.0 },
+      "objective_unit": "seconds",
+      "optional_capabilities": [],
+      "predicted_elapsed_seconds": 0.0,
+      "provenance": {
+        "departure_seconds": 1792152000.0,
+        "evaluator": "free-flow-travel-time/v1",
+        "heuristic": "travel-time-haversine/v1;max_kph=30",
+        "routing_context": {
+          "departure_time": 1792152000.0,
+          "permit_access": false,
+          "private_access": false
+        },
+        "time_domain": "unix_seconds",
+        "traffic_digest": null
+      },
+      "routing_profile": "delivery_motorcycle_v2",
+      "search": {
+        "algorithm": "a_star",
+        "counter_semantics": "accepted_non_stale_pops_including_goal;source_equals_destination_convention_1_without_queue_operations",
+        "detailed_trace": "deferred",
+        "expanded_states": 1,
+        "relaxation": "strict_objective_improvement_only",
+        "state_mode": "node_incoming_edge_with_source_sentinel",
+        "termination": "route_found"
+      },
+      "semantics": {
+        "authority": "deterministic_prediction",
+        "geometry": "wgs84_e7",
+        "schema_version": 1
+      }
+    }
+  ],
+  "schema_version": 1
+}

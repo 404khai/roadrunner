@@ -1,0 +1,147 @@
+[
+  {
+    "case": "built-client-desktop-route",
+    "height": 800,
+    "mapReady": "true",
+    "scrollWidth": 1280,
+    "text": "SELECTED ROUTECOMPUTED1.8 minPredicted road time607 mRoad distance9 directed traversalsA*Deterministic prediction · free-flow context. Road time excludes pickup, waiting and service.Evaluation evidenceObjective105.9955 seconds · travel_timeProfile / jurisdictiondelivery_motorcycle_v2 / ng_v2Graph digesta3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95Spatial pathpath-v1:e9f8145b0a587d4e283251b1e3e158d7c4125e7d41068a675ed8bd93aab0a2f2Evaluationevaluation-v1:03b33f16dd74346583935245d9b1e507fd364427891666b25fa051569b75e485Evaluatorfree-flow-travel-time/v1Departure1792185648.5552711 · unix-origin-monotonic/v1/cd80f2113db3be315f7972ad6621abe1:world:0Traffic digestNot applicableHeuristictravel-time-haversine/v1;max_kph=30Access contextPrivate: false · Permit: falseCost breakdownUnavailable — components not retainedGuidance / physical telemetryUnavailableEvidence semanticsv1 · WGS84 E7 · deterministic_predictionDownload source evidence",
+    "width": 1280
+  },
+  {
+    "case": "built-client-paused-reveal",
+    "progress": "0.348"
+  },
+  {
+    "case": "built-client-reverse-route",
+    "text": "9 directed traversals\nA*"
+  },
+  {
+    "case": "built-client-no-travel",
+    "text": "SELECTED ROUTE\nNO TRAVEL\n0 sec\nPredicted road time\n0 m\nRoad distance\nOrigin equals destination\nA*\nDeterministic prediction · free-flow context. Road time excludes pickup, waiting and service.\nEvaluation evidence",
+    "replayCount": 0
+  },
+  {
+    "case": "built-client-disconnected",
+    "text": "No route found\n\nno route from node 0 to node 49\n\nno_route",
+    "revealCount": 0
+  },
+  {
+    "case": "built-client-traffic-unavailable",
+    "text": "Route unavailable\n\nno adopted traffic snapshot\n\nconflict"
+  },
+  {
+    "case": "built-client-mobile-reduced-motion",
+    "height": 844,
+    "progress": "1.000",
+    "reveal": "Route in viewReduced motion · static result",
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "case": "built-client-tablet",
+    "height": 1024,
+    "scrollWidth": 768,
+    "sidebar": 330,
+    "width": 768
+  },
+  {
+    "case": "final-floating-open",
+    "expanded": "true",
+    "map": {
+      "bottom": 800,
+      "height": 800,
+      "left": 0,
+      "right": 1280,
+      "top": 0,
+      "width": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "viewport": [
+      1280,
+      800
+    ]
+  },
+  {
+    "case": "final-floating-collapse",
+    "expanded": "false",
+    "map": {
+      "bottom": 800,
+      "height": 800,
+      "left": 0,
+      "right": 1280,
+      "top": 0,
+      "width": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "metrics": "1.8 minPredicted road time607 mRoad distanceA*",
+    "source": "Evaluation evidenceObjective105.9955 seconds · travel_timeProfile / jurisdictiondelivery_motorcycle_v2 / ng_v2Graph digesta3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95Spatial pathpath-v1:e9f8145b0a587d4e283251b1e3e158d7c4125e7d41068a675ed8bd93aab0a2f2Evaluationevaluation-v1:78e057eb46793c3ba96025fee3a8cc2c8995ec0dac7832db46a724c4b413a8faEvaluatorfree-flow-travel-time/v1Departure1792186022.294185 · unix-origin-monotonic/v1/cd80f2113db3be315f7972ad6621abe1:world:0Traffic digestNot applicableHeuristictravel-time-haversine/v1;max_kph=30Access contextPrivate: false · Permit: falseCost breakdownUnavailable — components not retainedGuidance / physical telemetryUnavailableEvidence semanticsv1 · WGS84 E7 · deterministic_predictionDownload source evidence"
+  },
+  {
+    "case": "final-mobile-overlays",
+    "expanded": "false",
+    "map": {
+      "bottom": 844,
+      "height": 844,
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "width": 390,
+      "x": 0,
+      "y": 0
+    },
+    "metrics": "1.8 minPredicted road time607 mRoad distanceA*",
+    "reveal": "Route in viewReduced motion · static result",
+    "scrollWidth": 390,
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "case": "final-tablet-floating-collapsed",
+    "map": {
+      "bottom": 1024,
+      "height": 1024,
+      "left": 0,
+      "right": 768,
+      "top": 0,
+      "width": 768,
+      "x": 0,
+      "y": 0
+    },
+    "panel": {
+      "bottom": 150,
+      "height": 48,
+      "left": 24,
+      "right": 354,
+      "top": 102,
+      "width": 330,
+      "x": 24,
+      "y": 102
+    },
+    "scrollWidth": 768,
+    "viewport": [
+      768,
+      1024
+    ]
+  },
+  {
+    "case": "final-tablet-floating-expanded",
+    "expanded": "true"
+  },
+  {
+    "case": "final-navbar-free-connection-control",
+    "connection_icon_opened_modal": true,
+    "modal_title": "Connect your engine",
+    "viewport": [
+      390,
+      844
+    ],
+    "map_fills_viewport": true,
+    "navbar_count": 0,
+    "horizontal_overflow": false,
+    "collapsed_workspace": true
+  }
+]

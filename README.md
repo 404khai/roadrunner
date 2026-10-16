@@ -367,4 +367,11 @@ routing and dispatch continue to use their deterministic models.
 
 
 Phase 26 provides [checked portable route and decision evidence](docs/visualization-contract.md).
-See [producer-conformance evidence](docs/phase-26-completion.md). The map/animation client remains Phase 27+.
+See [producer-conformance evidence](docs/phase-26-completion.md).
+
+Phase 27 adds the [routing visualization workspace](web/README.md): React, TypeScript
+and MapLibre GL, with exact graph-node selection, real Dijkstra/A* requests, directed
+geometry, evidence-qualified road metrics and replayable presentation-only route reveal.
+See [setup and run commands](web/README.md#run) and [verification/screenshots](docs/phase-27-completion.md).
+Full alternatives, fleet/dispatch, scooter journeys, search traces and historical playback
+remain later phases.

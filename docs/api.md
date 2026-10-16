@@ -122,3 +122,16 @@ limits return 413 without changing authoritative routing or returning silently p
 These endpoints do not record durable routes. Legacy alternative responses now include objective
 and applicable traffic digest, matching single-route provenance. Planning command evidence additionally
 contains versioned `inspection` metadata; separate original publication evidence establishes commitment.
+
+## Phase 27 graph-anchor selection
+
+`GET /v1/visualization/anchors?offset=0` requires the existing routing read capability
+and returns version 1 immutable graph metadata, total node/edge counts and up to 500
+exact `{node, coordinate}` anchors in dense node order. `offset` is a nonnegative
+index, `next_offset` is null on the last page, and out-of-range offsets reject. Its
+selection semantics are `explicit_graph_node_no_snapping/v1`. Pages refer to the
+process's fixed full graph identity, never a mutable operational snapshot. The
+bounded slice is serialized without taking the operational coordinator lock. No
+edges, operational entities, search traces, snapping or routing changes are added.
+The [web client](../web/README.md) uses this catalog and the unchanged Phase 26
+portable single-route endpoint; it does not fetch `/v1/state`.

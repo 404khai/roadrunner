@@ -1,0 +1,41 @@
+{
+  "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+  "node_count": 58,
+  "edge_count": 114,
+  "cases": {
+    "selected": {
+      "status": 200,
+      "distance_meters": 607.312320579204,
+      "predicted_elapsed_seconds": 105.99551481536915,
+      "point_count": 38,
+      "traversals": 9,
+      "evaluation_id": "evaluation-v1:d5b2feada35b71a560dc5e5cb5e7adcbefd0832c0ead762799e0ec5e630dc10b"
+    },
+    "reverse": {
+      "status": 200,
+      "distance_meters": 607.312320579204,
+      "predicted_elapsed_seconds": 105.99551481536915,
+      "point_count": 38,
+      "traversals": 9,
+      "evaluation_id": "evaluation-v1:ddcc4af09137d9042ace5f2599ad8ba35795cb0483f4d7666bc989c2231f0af3"
+    },
+    "no-travel": {
+      "status": 200,
+      "distance_meters": 0.0,
+      "predicted_elapsed_seconds": 0.0,
+      "point_count": 1,
+      "traversals": 0,
+      "evaluation_id": "evaluation-v1:72d07437a2b5e9bba7f89337fc4979d3b367d79624bf37ea4391862583abaaec"
+    },
+    "disconnected": {
+      "status": 404,
+      "code": "no_route",
+      "message": "no route from node 0 to node 49"
+    },
+    "traffic-unavailable": {
+      "status": 409,
+      "code": "conflict",
+      "message": "no adopted traffic snapshot"
+    }
+  }
+}
