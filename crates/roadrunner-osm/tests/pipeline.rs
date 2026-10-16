@@ -720,3 +720,24 @@ fn must<T, E: std::fmt::Debug>(result: Result<T, E>) -> T {
         Err(error) => panic!("unexpected error: {error:?}"),
     }
 }
+
+#[test]
+fn phase26_zero_distance_candidates_are_quarantined_by_production_compiler() {
+    let mut dataset = synthetic_dataset();
+    let coordinate = dataset.nodes[0].coordinate;
+    for node in &mut dataset.nodes {
+        node.coordinate = coordinate;
+    }
+    let compiled = compile_dataset(&dataset);
+    assert_eq!(compiled.manifest.zero_distance_candidate_count, 2);
+    assert_eq!(compiled.graph.segment_count(), 0);
+    assert_eq!(compiled.graph.edge_count(), 0);
+    let bytes = must(roadrunner_core::graph::encode_graph_artifact(
+        &compiled.graph,
+    ));
+    let decoded = must(roadrunner_core::graph::decode_graph_artifact(&bytes));
+    assert_eq!(
+        decoded.metadata().snapshot_digest(),
+        compiled.graph.metadata().snapshot_digest()
+    );
+}

@@ -99,7 +99,10 @@ impl RouteResult {
     pub const fn elapsed_travel_time(&self) -> Seconds {
         self.elapsed_travel_time
     }
-    /// Returns the number of search-state expansion events.
+    /// Returns the producer's exact expansion counter, never unique graph nodes.
+    /// Dijkstra/A*: accepted non-stale pops including the goal; source==destination
+    /// convention is one without queue processing. Incoming-edge states and repeated
+    /// A* processing remain distinct. Yen: originating root/spur search path pops.
     #[must_use]
     pub const fn expanded_states(&self) -> usize {
         self.expanded_states

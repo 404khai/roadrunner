@@ -380,6 +380,7 @@ impl Api {
         *inner = Inner {
             graph: Arc::new(graph),
             workers: Arc::new(tokio::sync::Semaphore::new(config.workers)),
+            export_admission: Arc::new(tokio::sync::Semaphore::new(config.workers)),
             config,
             clock,
             namespace,

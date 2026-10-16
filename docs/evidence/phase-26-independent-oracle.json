@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "VERIFIED",
+  "validator": "jsonschema 4.25.1",
+  "fixture": "phase26-chain/v1;100 segments;4 vertices;36kph",
+  "exact_vertices": 400,
+  "exact_occurrences": 100,
+  "path_id_independent_oracle": "domain+digest+LE64 lengths+LE32 IDs SHA256",
+  "evaluation_id_oracle": "independent Python compact JSON tuple on verified fixture values;v1 field order",
+  "metric_oracle": "independent Python spherical Haversine;1e-10 relative tolerance;speed conversion 36kph=10m/s",
+  "required_mutations_rejected": [
+    "semantics.geometry",
+    "semantics.authority",
+    "semantics.schema_version",
+    "objective.kind",
+    "objective_unit"
+  ],
+  "optional_omission_and_unknown_extension": "accepted",
+  "scope": "portable export; no scene, physical source, operational replay or universal evaluation identity claim"
+}

@@ -10,6 +10,8 @@ mod domain;
 mod evaluation;
 mod fleet;
 mod history;
+mod inspection;
+pub use inspection::DecisionInspection;
 mod identity;
 mod operational;
 mod pooling;

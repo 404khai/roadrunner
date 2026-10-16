@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:roadrunner:route-evidence:v1",
+  "title": "Roadrunner portable route evidence v1",
+  "type": "object",
+  "properties": {
+    "semantics": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "geometry": {
+          "const": "wgs84_e7"
+        },
+        "authority": {
+          "const": "deterministic_prediction"
+        }
+      },
+      "required": [
+        "schema_version",
+        "geometry",
+        "authority"
+      ]
+    },
+    "geometry": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "encoding": {
+          "const": "wgs84_e7"
+        },
+        "graph_digest": {
+          "type": "string"
+        },
+        "path_id": {
+          "type": "string",
+          "pattern": "^path-v1:[a-f0-9]{64}$"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 1
+        },
+        "points_e7": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "latitude_e7": {
+                "type": "integer",
+                "minimum": -900000000,
+                "maximum": 900000000
+              },
+              "longitude_e7": {
+                "type": "integer",
+                "minimum": -1800000000,
+                "maximum": 1800000000
+              }
+            },
+            "required": [
+              "latitude_e7",
+              "longitude_e7"
+            ]
+          },
+          "minItems": 1
+        },
+        "occurrences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ordinal": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "edge": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "segment": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "from": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "to": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "point_start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "point_end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "orientation": {
+                "enum": [
+                  "forward",
+                  "reverse"
+                ]
+              },
+              "distance_meters": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "ordinal",
+              "edge",
+              "segment",
+              "from",
+              "to",
+              "point_start",
+              "point_end",
+              "orientation",
+              "distance_meters"
+            ]
+          }
+        },
+        "no_travel": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "schema_version",
+        "encoding",
+        "graph_digest",
+        "path_id",
+        "nodes",
+        "points_e7",
+        "occurrences",
+        "no_travel"
+      ]
+    },
+    "evaluation_id": {
+      "type": "string",
+      "pattern": "^evaluation-v1:[a-f0-9]{64}$"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "evaluator": {
+          "type": "string"
+        },
+        "traffic_digest": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "departure_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "time_domain": {
+          "type": "string"
+        },
+        "heuristic": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "routing_context": {
+          "type": "object",
+          "required": [
+            "departure_time",
+            "private_access",
+            "permit_access"
+          ],
+          "properties": {
+            "departure_time": {
+              "type": "number",
+              "minimum": 0
+            },
+            "private_access": {
+              "type": "boolean"
+            },
+            "permit_access": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "required": [
+        "evaluator",
+        "traffic_digest",
+        "departure_seconds",
+        "time_domain",
+        "heuristic",
+        "routing_context"
+      ]
+    },
+    "routing_profile": {
+      "type": "string"
+    },
+    "jurisdiction_policy": {
+      "type": "string"
+    },
+    "distance_meters": {
+      "type": "number",
+      "minimum": 0
+    },
+    "predicted_elapsed_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "objective": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "distance",
+            "travel_time"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ]
+    },
+    "objective_unit": {
+      "enum": [
+        "meters",
+        "seconds"
+      ]
+    },
+    "cost_breakdown": {
+      "const": "unavailable_not_retained"
+    },
+    "search": {
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "dijkstra",
+            "a_star",
+            "yen"
+          ]
+        },
+        "state_mode": {
+          "enum": [
+            "node",
+            "node_incoming_edge_with_source_sentinel",
+            "loopless_path"
+          ]
+        },
+        "expanded_states": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "counter_semantics": {
+          "type": "string"
+        },
+        "relaxation": {
+          "type": "string"
+        },
+        "termination": {
+          "const": "route_found"
+        },
+        "detailed_trace": {
+          "const": "deferred"
+        }
+      },
+      "required": [
+        "algorithm",
+        "state_mode",
+        "expanded_states",
+        "counter_semantics",
+        "relaxation",
+        "termination",
+        "detailed_trace"
+      ]
+    },
+    "optional_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "semantics",
+    "geometry",
+    "evaluation_id",
+    "provenance",
+    "routing_profile",
+    "jurisdiction_policy",
+    "distance_meters",
+    "predicted_elapsed_seconds",
+    "objective",
+    "objective_unit",
+    "cost_breakdown",
+    "search"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "objective": {
+            "properties": {
+              "kind": {
+                "const": "distance"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "objective_unit": {
+            "const": "meters"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "objective_unit": {
+            "const": "seconds"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -585,6 +585,8 @@ fn maneuver_aware_search_keeps_distinct_incoming_edge_states() {
             NodeId::new(3)
         ]
     );
+    assert_eq!(dijkstra_route.expanded_states(), 5);
+    assert_eq!(astar_route.expanded_states(), 5);
     assert_eq!(dijkstra_route.path(), astar_route.path());
     assert_eq!(dijkstra_route.total_cost(), astar_route.total_cost());
     let encoded = match encode_graph_artifact(&graph) {
@@ -1255,4 +1257,116 @@ fn atomic_artifact_publication_produces_a_valid_complete_file() {
     assert!(decode_graph_artifact(&bytes).is_ok());
     assert!(std::fs::remove_file(&path).is_ok());
     assert!(std::fs::remove_dir(&directory).is_ok());
+}
+
+#[test]
+fn phase26_exact_stale_goal_and_trivial_counter_conventions() {
+    // Queue pops: source, B(1), A(2), stale A(10), goal(102).
+    // Only four accepted pops; goal included, stale excluded.
+    let g = graph(4, &[(0, 0, 1), (1, 0, 2), (2, 2, 1), (3, 1, 3)]);
+    let evaluator = WeightedEvaluator {
+        weights: BTreeMap::from([
+            (edge_between(&g, 0, 1), 10.0),
+            (edge_between(&g, 0, 2), 1.0),
+            (edge_between(&g, 2, 1), 1.0),
+            (edge_between(&g, 1, 3), 100.0),
+        ]),
+        forbidden: None,
+        fail: None,
+    };
+    let d = dijkstra(
+        &g,
+        NodeId::new(0),
+        NodeId::new(3),
+        &evaluator,
+        &RoutingContext::new(),
+    )
+    .unwrap_or_else(|e| panic!("{e}"));
+    let a = astar(
+        &g,
+        NodeId::new(0),
+        NodeId::new(3),
+        &evaluator,
+        &ZeroHeuristic::new(CostKind::TravelTime),
+        &RoutingContext::new(),
+    )
+    .unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(d.expanded_states(), 4);
+    assert_eq!(a.expanded_states(), 4);
+    assert_eq!(d.total_cost().value(), 102.0);
+    for source in 0..4 {
+        let d = dijkstra(
+            &g,
+            NodeId::new(source),
+            NodeId::new(source),
+            &evaluator,
+            &RoutingContext::new(),
+        )
+        .unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(d.expanded_states(), 1);
+        assert_eq!(d.edges(), []);
+    }
+}
+
+#[test]
+fn phase26_strict_objective_and_actual_heuristic_invocations() {
+    use roadrunner_core::{cost::HeuristicPolicy, routing::Heuristic};
+    use std::sync::Mutex;
+    struct CountZero(Mutex<Vec<NodeId>>);
+    impl Heuristic for CountZero {
+        fn kind(&self) -> CostKind {
+            CostKind::TravelTime
+        }
+        fn policy(&self) -> HeuristicPolicy {
+            HeuristicPolicy::Zero
+        }
+        fn supports(&self, c: SearchCapability) -> bool {
+            c == SearchCapability::StaticNonNegative
+        }
+        fn estimate(
+            &self,
+            _: &FrozenGraph,
+            node: NodeId,
+            _: NodeId,
+        ) -> Result<RouteCost, CostError> {
+            self.0.lock().unwrap_or_else(|e| panic!("{e}")).push(node);
+            Ok(RouteCost::zero(CostKind::TravelTime))
+        }
+    }
+    // Equal objective arrival at node 3 from node 2 must not replace node 1's label,
+    // or invoke the heuristic for a discarded candidate.
+    let g = graph(4, &[(0, 0, 1), (1, 0, 2), (2, 1, 3), (3, 2, 3)]);
+    let evaluator = WeightedEvaluator {
+        weights: BTreeMap::new(),
+        forbidden: None,
+        fail: None,
+    };
+    let h = CountZero(Mutex::new(Vec::new()));
+    let a = astar(
+        &g,
+        NodeId::new(0),
+        NodeId::new(3),
+        &evaluator,
+        &h,
+        &RoutingContext::new(),
+    )
+    .unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(a.path(), [0, 1, 3].map(NodeId::new));
+    assert_eq!(a.expanded_states(), 4);
+    assert_eq!(
+        *h.0.lock().unwrap_or_else(|e| panic!("{e}")),
+        [0, 1, 2, 3].map(NodeId::new)
+    );
+    let h = CountZero(Mutex::new(Vec::new()));
+    let a = astar(
+        &g,
+        NodeId::new(0),
+        NodeId::new(0),
+        &evaluator,
+        &h,
+        &RoutingContext::new(),
+    )
+    .unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(a.expanded_states(), 1);
+    assert!(h.0.lock().unwrap_or_else(|e| panic!("{e}")).is_empty());
 }
