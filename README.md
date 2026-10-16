@@ -373,5 +373,8 @@ Phase 27 adds the [routing visualization workspace](web/README.md): React, TypeS
 and MapLibre GL, with exact graph-node selection, real Dijkstra/A* requests, directed
 geometry, evidence-qualified road metrics and replayable presentation-only route reveal.
 See [setup and run commands](web/README.md#run) and [verification/screenshots](docs/phase-27-completion.md).
-Full alternatives, fleet/dispatch, scooter journeys, search traces and historical playback
+Phase 28 adds ranked alternative comparison, map visibility/selection, objective differences,
+and bounded selected-route segment inspection under the pinned evaluation context.
+See [Phase 28 verification and limitations](docs/phase-28-completion.md).
+Fleet/dispatch, scooter journeys, global graph/search debugging and historical playback
 remain later phases.

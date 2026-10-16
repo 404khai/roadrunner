@@ -200,6 +200,22 @@ async fn captured_traffic_context_is_identical_in_both_producers() {
     )
     .await
     .1;
+    let inspection = &multiple["routes"][0]["segment_inspection"];
+    assert_eq!(
+        inspection["traffic_digest"],
+        multiple["provenance"]["traffic_digest"]
+    );
+    assert_eq!(inspection["segments"][0]["traffic_factor"], 2.0);
+    let base = inspection["base_seconds"].as_f64().unwrap();
+    assert!((inspection["traffic_delay_seconds"].as_f64().unwrap() - base).abs() < 1e-8);
+    assert!(
+        (inspection["segments"][0]["objective_cost"]
+            .as_f64()
+            .unwrap()
+            - base * 2.0)
+            .abs()
+            < 1e-8
+    );
     assert!(single["provenance"]["traffic_digest"].is_string());
     assert_eq!(single["provenance"], multiple["provenance"]);
     let s = &single["routes"][0];
@@ -377,4 +393,74 @@ async fn anchor_catalog_is_bounded_exact_read_only_and_authenticated() {
         assert_eq!(status, StatusCode::OK, "{route}");
         assert_eq!(route["routes"][0]["geometry"]["no_travel"], true);
     }
+}
+
+#[tokio::test]
+async fn alternative_segment_weights_are_pinned_directed_and_non_mutating() {
+    let (api, _, digest) = fixture();
+    let before = request(&api, "GET", "/v1/state", None, json!(null), Some(TOKEN))
+        .await
+        .1;
+    for objective in ["distance", "travel_time"] {
+        let mut q = query(&digest);
+        q["objective"] = json!(objective);
+        let r = request(
+            &api,
+            "POST",
+            "/v1/visualization/routes/alternatives",
+            None,
+            q,
+            Some(TOKEN),
+        )
+        .await
+        .1;
+        let member = &r["routes"][0];
+        let route = &member["route"];
+        let inspection = &member["segment_inspection"];
+        assert_eq!(inspection["evaluation_id"], route["evaluation_id"]);
+        assert_eq!(
+            inspection["graph_digest"],
+            route["geometry"]["graph_digest"]
+        );
+        assert_eq!(inspection["traffic_digest"], json!(null));
+        assert_eq!(inspection["traffic_delay_seconds"], json!(null));
+        let segments = inspection["segments"].as_array().unwrap();
+        let occurrences = route["geometry"]["occurrences"].as_array().unwrap();
+        assert_eq!(segments.len(), occurrences.len());
+        for (s, o) in segments.iter().zip(occurrences) {
+            assert_eq!(s["edge"], o["edge"]);
+            assert_eq!(s["ordinal"], o["ordinal"]);
+            assert_eq!(s["traffic_factor"], json!(null));
+        }
+        for (field, total) in [
+            ("objective_cost", &route["objective"]["value"]),
+            (
+                "predicted_elapsed_seconds",
+                &route["predicted_elapsed_seconds"],
+            ),
+            ("base_seconds", &inspection["base_seconds"]),
+        ] {
+            let sum: f64 = segments.iter().map(|s| s[field].as_f64().unwrap()).sum();
+            assert!((sum - total.as_f64().unwrap()).abs() < 1e-8);
+        }
+        assert_eq!(occurrences[1]["orientation"], "reverse");
+    }
+    let after = request(&api, "GET", "/v1/state", None, json!(null), Some(TOKEN))
+        .await
+        .1;
+    assert_eq!(before, after);
+    let mut q = query(&digest);
+    q["destination"] = q["origin"].clone();
+    let r = request(
+        &api,
+        "POST",
+        "/v1/visualization/routes/alternatives",
+        None,
+        q,
+        Some(TOKEN),
+    )
+    .await
+    .1;
+    assert_eq!(r["routes"][0]["segment_inspection"]["segments"], json!([]));
+    assert_eq!(r["routes"][0]["segment_inspection"]["base_seconds"], 0.0);
 }

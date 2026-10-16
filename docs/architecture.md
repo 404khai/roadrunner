@@ -562,3 +562,19 @@ Unsupported semantics/geometry reject, unavailable breakdowns remain unavailable
 and large routes/reduced motion use static presentation. External OpenFreeMap tiles
 are contextual scene data and never replace canonical graph geometry. Phase 28+
 alternative, graph, journey, dispatch and history interfaces remain deferred.
+
+## Phase 28: alternative route comparison
+
+The React client keeps an immutable alternative result set, original member IDs,
+rank, directed E7 evidence and evaluation context. UI selection/visibility and
+occurrence inspection are separate presentation state. MapLibre renders unselected
+paths with monochrome dash patterns; the selected path keeps the Phase 27 reveal.
+One map-click handler resolves a single topmost feature before changing selection.
+Replay/selection/inspection do not invoke the API or mutate engine state.
+
+A small API extension evaluates bounded returned occurrences through the original
+captured static evaluator and exposes objective weights, free-flow road time and
+applicable pinned traffic factors. Its separate semantic version does not redefine
+portable route IDs or claim retained search history. Unknown extensions degrade to
+unavailable diagnostics. Global graph exploration/search traces remain Phase 29.
+See [Phase 28 completion and evidence](phase-28-completion.md).

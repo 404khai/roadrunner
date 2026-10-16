@@ -1564,3 +1564,278 @@ h1 > span {
     bottom: 124px;
   }
 }
+
+/* Phase 28: monochrome comparison, within the floating spatial workspace. */
+.comparison-mode {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #74746d;
+  font-size: 11px;
+}
+.comparison-mode select {
+  width: 100%;
+  padding: 11px;
+  background: #fff;
+  color: #242424;
+  border: 1px solid #deded9;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+}
+.comparison {
+  border-bottom: 1px solid #deded9;
+  padding-bottom: 20px;
+  margin-bottom: 22px;
+}
+.route-cards {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.comparison-card {
+  position: relative;
+  border: 1px solid #deded9;
+  background: #fff;
+  border-radius: 11px;
+  padding: 12px;
+  transition: border-color 0.15s;
+}
+.comparison-card.selected {
+  border-color: #222;
+  background: #f1f1ed;
+}
+.comparison-card.route-hidden {
+  opacity: 0.6;
+}
+.route-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  background: none;
+  color: #242424;
+  border: 0;
+  padding: 0 30px 0 0;
+  width: 100%;
+  cursor: pointer;
+}
+.route-choice strong {
+  display: block;
+  font-size: 13px;
+}
+.route-choice small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #777;
+  margin-top: 4px;
+}
+.route-swatch {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #888;
+  border-radius: 7px;
+  font:
+    500 13px "Space Grotesk Variable",
+    sans-serif;
+}
+.swatch-2,
+.swatch-4 {
+  border-style: dashed;
+}
+.swatch-3,
+.swatch-5 {
+  border-style: dotted;
+}
+.selected-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #222;
+  margin-left: auto;
+}
+.visibility-button {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  background: none;
+  color: #74746d;
+  border: 0;
+  padding: 5px;
+  cursor: pointer;
+}
+.visibility-button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.comparison-metrics {
+  display: flex;
+  gap: 30px;
+  color: #222;
+  margin: 11px 0 8px;
+  font:
+    500 19px "Space Grotesk Variable",
+    sans-serif;
+}
+.comparison-metrics small {
+  display: block;
+  color: #77776e;
+  font:
+    10px "DM Sans Variable",
+    sans-serif;
+  margin-top: 3px;
+}
+.comparison-facts {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px;
+  margin: 0;
+  font-size: 10px;
+}
+.comparison-facts dt {
+  color: #77776e;
+}
+.comparison-facts dd {
+  margin: 0;
+  text-align: right;
+  color: #252525;
+}
+.comparison-explanation,
+.comparison-scope p,
+.segment-panel p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #74746d;
+  margin: 12px 0 0;
+}
+.comparison-scope summary {
+  font-size: 11px;
+  color: #252525;
+  cursor: pointer;
+  margin-top: 12px;
+}
+.comparison-scope code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #888;
+  font-size: 9px;
+  margin-top: 10px;
+}
+.partial-result {
+  border: 1px dashed #777;
+  padding: 10px;
+  font-size: 11px;
+  color: #242424;
+  border-radius: 6px;
+}
+.segment-panel {
+  margin: 14px 0;
+  border: 1px solid #deded9;
+  border-radius: 9px;
+  padding: 12px;
+}
+.segment-panel summary {
+  font-size: 11px;
+  cursor: pointer;
+  color: #252525;
+}
+.segment-panel summary span {
+  float: right;
+  color: #77776e;
+}
+.segment-panel dl {
+  display: grid;
+  gap: 5px;
+  font-size: 10px;
+  margin: 15px 0 0;
+}
+.segment-panel dt {
+  color: #888;
+}
+.segment-panel dd {
+  margin: 0 0 7px;
+  color: #252525;
+  overflow-wrap: anywhere;
+}
+.segment-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 11px;
+  color: #74746d;
+  gap: 5px;
+}
+.segment-navigation button {
+  background: #303030;
+  border: 1px solid #444;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+}
+.segment-navigation button:disabled {
+  opacity: 0.3;
+}
+.segment-navigation input {
+  width: 60px;
+  background: #111;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 6px;
+  color: white;
+}
+.route-choice:focus-visible,
+.visibility-button:focus-visible,
+.segment-panel summary:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .comparison-card {
+    transition: none;
+  }
+}
+.floating-metrics:has(.floating-route-switch) {
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.floating-route-switch {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  order: 2;
+}
+.floating-route-switch button {
+  flex: 1;
+  padding: 7px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #555;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 11px;
+}
+.floating-route-switch button[aria-pressed="true"] {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
+.floating-metrics:has(.floating-route-switch) > .floating-algorithm {
+  font-size: 9px;
+  max-width: 42px;
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .panel-collapsed:has(.floating-route-switch) .map-tools {
+    top: 220px;
+  }
+}
+@media (max-width: 1050px) and (min-width: 761px) {
+  .panel-collapsed:has(.floating-route-switch) .map-heading {
+    top: 235px;
+  }
+}

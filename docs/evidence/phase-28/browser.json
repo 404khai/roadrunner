@@ -1,0 +1,77 @@
+{
+  "actual_engine": true,
+  "production_build": true,
+  "preview_url": "http://127.0.0.1:5174",
+  "graph_fixture": "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph",
+  "cases": {
+    "forward_time": "0->22: 3 routes, objective 106.00/113.89/117.60 seconds (rounded)",
+    "reverse_distance": "22->0: 3 routes, exact reversed directed curves and meters objective",
+    "unreachable": "0->49: no_route with no successful route line",
+    "no_travel": "0->0: 1/3 routes, exhausted, zero traversals, static point, no reveal replay",
+    "traffic": "real disposable snapshot: 2x on edges 53/72/80/94; third returned path 27.19 sec same-path delay; edge 53 8.4855 base / 16.9710 evaluated sec",
+    "traffic_restoration": "normal overlay restored after QA; retained result identity and weights stayed unchanged"
+  },
+  "interactions_verified": [
+    "card selection",
+    "visibility hide/show",
+    "selected route automatically remains visible",
+    "topmost map alternative pick",
+    "map occurrence pick (ordinal 3)",
+    "reverse curved occurrence inspection",
+    "traversal input editing and next/previous",
+    "replay and pause at progress 0.077",
+    "reduced motion remains progress 1 after alternate selection",
+    "mobile auto-collapse and A/B/C switches",
+    "plug control opens connection modal",
+    "original full-envelope browser download"
+  ],
+  "source_download": {
+    "artifact": "browser-source.json",
+    "members": 3,
+    "geometry_and_objectives_equal_actual_fixed_time_fixture": true,
+    "sha256": "7bbfa8ec3a8de00d187c307a5ad8e81e052099c027a3c0a876278eafdf158172",
+    "automation_note": "download event wait timed out, but the completed named browser download was verified on disk; bytes retained unchanged"
+  },
+  "presentation_no_extra_routing_requests": "verified by client and presentation-clock tests, not browser network instrumentation",
+  "final_app_asset_warnings": [],
+  "browser_extension_warnings": "unrelated extension warnings excluded; prior application resize warning fixed and final asset checked",
+  "browser_tool_fallback": "native preview snapshot timed out twice; Chrome CUA fallback used",
+  "screenshots": {
+    "traffic-segment.png": [
+      65536,
+      4293001752
+    ],
+    "reveal-paused.png": [
+      65536,
+      4293001752
+    ],
+    "mobile-comparison.png": [
+      65536,
+      4293001752
+    ],
+    "desktop-comparison.png": [
+      65536,
+      4293001752
+    ],
+    "unreachable.png": [
+      65536,
+      4293001752
+    ],
+    "segment-reverse.png": [
+      65536,
+      4293001752
+    ],
+    "no-travel.png": [
+      65536,
+      4293001752
+    ],
+    "traffic-comparison.png": [
+      65536,
+      4293001752
+    ],
+    "tablet-comparison.png": [
+      65536,
+      4293001752
+    ]
+  }
+}

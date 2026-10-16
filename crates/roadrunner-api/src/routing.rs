@@ -1,3 +1,4 @@
+mod inspection;
 use crate::{
     Api,
     error::ApiError,
@@ -214,7 +215,7 @@ pub(crate) fn query(
             );
             let members=result.routes.iter().zip(routes).map(|(r,route)|{
                 let id=route["evaluation_id"].as_str().ok_or_else(ApiError::internal)?;
-                Ok(json!({"member_id":format!("{set_id}/{id}"),"rank":r.rank,"max_shared_distance_ratio":r.max_shared_distance_ratio,"route":route}))
+                Ok(json!({"member_id":format!("{set_id}/{id}"),"rank":r.rank,"max_shared_distance_ratio":r.max_shared_distance_ratio,"route":route,"segment_inspection":inspection::export(graph, &r.route, cost, &context, traffic.filter(|_| matches!(request.objective, Objective::TrafficAware)), id)?}))
             }).collect::<Result<Vec<_>,ApiError>>()?;
             Ok(
                 json!({"schema_version":1,"result_set_id":set_id,"routes":members,"provenance":provenance,"summary":{"termination":result.termination,"truncated":result.truncated,"options":result.options,"ranked_paths":result.ranked_paths,"search_states":result.search_states,"work_unit":"loopless_path_pops_across_root_and_spur_searches","scope":"selected_diverse_legal_loopless_paths_static_nonnegative;not_all_candidates_or_legal_walks","overlap":"shared_physical_segment_distance_over_shorter_route","candidate_history":"not_retained"}}),

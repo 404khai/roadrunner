@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import {
   ArrowDownUp,
   ArrowRight,
@@ -25,6 +25,8 @@ import {
   ApiError,
   catalogSchema,
   decodeRoute,
+  decodeAlternatives,
+  type ComparisonResult,
   parseExact,
   type Anchor,
   type Catalog,
@@ -32,6 +34,7 @@ import {
   type RouteResult,
 } from "./contracts";
 import { distanceLabel, durationLabel } from "./geometry";
+import { ComparisonPanel, SegmentPanel, routeName } from "./ComparisonPanel";
 import { MapView } from "./MapView";
 import { useReducedMotion, useReveal } from "./useReveal";
 function message(error: unknown) {
@@ -60,9 +63,56 @@ export function App() {
     [busy, setBusy] = useState(false),
     [connecting, setConnecting] = useState(false),
     [error, setError] = useState<{ code: string; text: string }>(),
-    [result, setResult] = useState<RouteResult>();
+    [singleResult, setSingleResult] = useState<RouteResult>();
+  const [comparison, setComparison] = useState<ComparisonResult>();
+  const [count, setCount] = useState(1);
+  const [selected, setSelected] = useState("");
+  const [visible, setVisible] = useState<Set<string>>(new Set());
+  const [segment, setSegment] = useState<number>();
+  const member = comparison?.members.find((m) => m.member_id === selected);
+  const result = useMemo(
+    () =>
+      member && comparison
+        ? {
+            evidence: member.route,
+            raw: comparison.raw,
+            request: comparison.request,
+          }
+        : singleResult,
+    [member, comparison, singleResult],
+  );
+  function setResult(next: RouteResult | undefined) {
+    setSingleResult(next);
+    setComparison(undefined);
+    setSegment(undefined);
+  }
+  function selectMember(id: string) {
+    setSelected(id);
+    setVisible((v) => new Set([...v, id]));
+    setSegment(undefined);
+  }
+  function toggleMember(id: string) {
+    const next = new Set(visible);
+    if (next.has(id)) {
+      if (next.size === 1) return;
+      next.delete(id);
+      if (selected === id) {
+        setSelected([...next][0]);
+        setSegment(undefined);
+      }
+    } else next.add(id);
+    setVisible(next);
+  }
   const [revealId, setRevealId] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
+  const resultPanel = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (comparison)
+      resultPanel.current?.scrollIntoView?.({
+        block: "start",
+        behavior: "instant",
+      });
+  }, [comparison]);
   const request = useRef<AbortController | null>(null),
     connection = useRef<AbortController | null>(null);
   const catalogDigest = useRef<string | undefined>(undefined);
@@ -95,7 +145,9 @@ export function App() {
     connection.current = controller;
     setConnecting(true);
     setError(undefined);
-    setResult(undefined);
+    setSingleResult(undefined);
+    setComparison(undefined);
+    setSegment(undefined);
     try {
       const next = catalogSchema.parse(
         parseExact(
@@ -170,19 +222,28 @@ export function App() {
         ...destination,
         graph_digest: catalog.graph.snapshot_digest,
       },
-      algorithm,
+      algorithm: count > 1 ? "dijkstra" : algorithm,
       objective,
+      ...(count > 1 ? { alternatives: count } : {}),
     };
     try {
       const raw = await apiText(
-        "/v1/visualization/routes",
+        count > 1
+          ? "/v1/visualization/routes/alternatives"
+          : "/v1/visualization/routes",
         token,
         controller.signal,
         query,
       );
-      const next = decodeRoute(raw, query);
+      const next =
+        count > 1 ? decodeAlternatives(raw, query) : decodeRoute(raw, query);
       if (controller.signal.aborted) return;
-      setResult(next);
+      if ("members" in next) {
+        setComparison(next);
+        setSelected(next.members[0].member_id);
+        setVisible(new Set(next.members.map((m) => m.member_id)));
+        setSegment(undefined);
+      } else setResult(next);
       if (window.matchMedia("(max-width: 760px)").matches) setCollapsed(true);
       setRevealId((x) => x + 1);
     } catch (e) {
@@ -341,19 +402,38 @@ export function App() {
                   </button>
                 </div>
               )}
+              <label className="comparison-mode">
+                Route results
+                <select
+                  aria-label="Route results"
+                  value={count}
+                  onChange={(e) => {
+                    invalidate();
+                    setCount(Number(e.target.value));
+                  }}
+                >
+                  <option value={1}>Single route</option>
+                  <option value={2}>Compare up to 2 routes</option>
+                  <option value={3}>Compare up to 3 routes</option>
+                  <option value={5}>Compare up to 5 routes</option>
+                </select>
+              </label>
               <div className="options-row">
                 <label>
                   Algorithm
                   <select
                     aria-label="Algorithm"
-                    value={algorithm}
+                    disabled={count > 1}
+                    value={count > 1 ? "dijkstra" : algorithm}
                     onChange={(e) => {
                       invalidate();
                       setAlgorithm(e.target.value as RouteRequest["algorithm"]);
                     }}
                   >
                     <option value="astar">A* search</option>
-                    <option value="dijkstra">Dijkstra</option>
+                    <option value="dijkstra">
+                      {count > 1 ? "Yen · Dijkstra" : "Dijkstra"}
+                    </option>
                   </select>
                 </label>
                 <label>
@@ -389,7 +469,12 @@ export function App() {
                 Explicit graph anchors. No automatic snapping.
               </p>
             </form>
-            <div className="result-panel" aria-live="polite" aria-atomic="true">
+            <div
+              ref={resultPanel}
+              className="result-panel"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               {connecting ? (
                 <div className="empty-result">
                   <LoaderCircle size={23} className="spinner" />
@@ -428,8 +513,22 @@ export function App() {
                 </div>
               ) : route ? (
                 <>
+                  {comparison && (
+                    <ComparisonPanel
+                      comparison={comparison}
+                      selected={selected}
+                      visible={visible}
+                      onSelect={selectMember}
+                      onToggle={toggleMember}
+                    />
+                  )}
                   <div className="result-heading">
-                    <span className="section-label">SELECTED ROUTE</span>
+                    <span className="section-label">
+                      SELECTED ROUTE
+                      {member
+                        ? ` · ${routeName(member.rank).toUpperCase()}`
+                        : ""}
+                    </span>
                     <span className="result-badge">
                       <Check size={12} />
                       {route.geometry.no_travel ? "NO TRAVEL" : "COMPUTED"}
@@ -457,7 +556,11 @@ export function App() {
                         : `${route.geometry.occurrences.length} directed traversals`}
                     </span>
                     <span>
-                      {route.search.algorithm === "a_star" ? "A*" : "Dijkstra"}
+                      {route.search.algorithm === "yen"
+                        ? "Yen · Dijkstra"
+                        : route.search.algorithm === "a_star"
+                          ? "A*"
+                          : "Dijkstra"}
                     </span>
                   </div>
                   <div className="prediction-note">
@@ -467,6 +570,14 @@ export function App() {
                       : " · free-flow context"}
                     . Road time excludes pickup, waiting and service.
                   </div>
+                  {member && (
+                    <SegmentPanel
+                      key={member.member_id}
+                      member={member}
+                      ordinal={segment}
+                      onChange={setSegment}
+                    />
+                  )}
                   <details className="evidence-details">
                     <summary>
                       <Fingerprint size={16} />
@@ -559,6 +670,12 @@ export function App() {
             origin={result?.request.origin ?? origin}
             destination={result?.request.destination ?? destination}
             result={result}
+            alternatives={comparison?.members}
+            visible={visible}
+            selectedMember={selected}
+            onSelectMember={selectMember}
+            segment={segment}
+            onSelectSegment={setSegment}
             progress={reveal.progress}
             reduced={reduced}
             selection={selection}
@@ -574,8 +691,29 @@ export function App() {
                 {distanceLabel(route.distance_meters)}
                 <small>Road distance</small>
               </span>
+              {comparison && (
+                <div
+                  className="floating-route-switch"
+                  aria-label="Select comparison route"
+                >
+                  {comparison.members.map((m) => (
+                    <button
+                      key={m.member_id}
+                      aria-label={`View ${routeName(m.rank)}`}
+                      aria-pressed={selected === m.member_id}
+                      onClick={() => selectMember(m.member_id)}
+                    >
+                      {String.fromCharCode(64 + m.rank)}
+                    </button>
+                  ))}
+                </div>
+              )}
               <span className="floating-algorithm">
-                {route.search.algorithm === "a_star" ? "A*" : "Dijkstra"}
+                {route.search.algorithm === "yen"
+                  ? "Yen · Dijkstra"
+                  : route.search.algorithm === "a_star"
+                    ? "A*"
+                    : "Dijkstra"}
               </span>
             </div>
           )}

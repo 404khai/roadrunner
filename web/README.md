@@ -1,7 +1,7 @@
 # Roadrunner routing workspace
 
-Phase 27's TypeScript / React / MapLibre GL client consumes the real version-1
-portable route endpoint. This is a local engineering interface. No hosted deployment
+The TypeScript / React / MapLibre GL client consumes the real version-1
+portable route and alternative endpoints. This is a local engineering interface. No hosted deployment
 or fleet visualization is included.
 
 ## Run
@@ -81,6 +81,11 @@ and graph/request mismatches reject. Polar and seam-crossing presentation is uns
   and evidence semantics. Read capability is required. No durable route record or
   operational mutation is created.
 
+- `POST /v1/visualization/routes/alternatives` — ranked Yen members under shared
+  provenance, with exact directed paths and bounded termination/work evidence. The
+  optional selected-path inspection extension supplies pinned static segment weights
+  and traffic factors. See [comparison controls](#compare-alternatives-phase-28).
+
 The catalog is selection infrastructure, not a graph debugger: no edges, weights,
 restriction inspection or search traces are exposed by it. It shares the existing
 routing endpoint's graph-read access boundary. Serialization is bounded to one
@@ -126,3 +131,48 @@ Full alternative comparison, graph/search animation, dispatch/fleet views, scoot
 journeys, guidance, physical telemetry, historical playback, streaming and immersive
 3D remain deferred. See [Phase 27 completion](../docs/phase-27-completion.md) for
 actual verification scope and screenshots.
+
+## Compare alternatives (Phase 28)
+
+Choose **Compare up to 2 / 3 / 5 routes** in Route results, then Find route. Comparison
+uses the engine's Yen enumeration with Dijkstra internally; its algorithm control
+is fixed accordingly. Single-route mode preserves A*/Dijkstra selection. On the
+bundled graph, **0 → 22** and **22 → 0** return three routes for travel-time routing.
+No additional server, environment variable or dependency is required.
+
+Route A/B/C are positions in this returned result set. **ENGINE PRIMARY** always
+marks rank 1, while the selected card/white map line describe your current view.
+Cards show source distance, predicted elapsed road time, objective cost/unit,
+algorithm and traffic delay when supported. The difference against the primary
+uses objective units. A distance optimum is not labeled fastest. Expand Selection
+rules & search limits for overlap/cost policies, actual termination and bounded
+work units. Fewer routes and partial budget results never imply complete coverage.
+
+Click a card or an unselected map line to select it. Eye controls hide/show paths;
+at least one remains visible. Hiding the selected path selects the first remaining
+visible member, and selecting a hidden member shows it. The selected route is solid
+white; other routes use gray dash patterns and map labels. Shared sections can
+coincide, so cards remain the unambiguous way to select overlapping alternatives.
+Collapsed metrics provide A/B/C route switches, including on mobile. The floating
+workspace remains scrollable and collapsible; successful comparison scrolls to its
+cards. Scroll back up to edit endpoints/objective.
+
+Select a traversal by clicking the white route or expanding **Inspect selected
+route segments**. Previous/Next and the traversal-number input step through exact
+occurrences, including reversed curves. The map highlights that occurrence's
+original point interval. Inspection shows directed edge/segment IDs, direction,
+canonical distance, objective weight/unit, base/evaluated road seconds and applicable
+traffic factor. These values come from a bounded API export evaluated under the
+original static context; they are not search events. Unsupported/older optional
+exports show unavailable values. No global graph debugger is included.
+
+Traffic delay is evaluated time minus the **same returned path's** free-flow time,
+not a difference between independently optimal paths. Nontraffic objectives show
+**Not applied** rather than invented delay. Traffic routing requires an already
+adopted backend snapshot. This UI does not adopt or edit traffic.
+
+Changing selection replays that member's reveal; manual replay/pause/skip/speed,
+visibility, segment inspection and collapse never rerun routing. Reduced motion
+and large-route static fallbacks still apply. Source download contains the **entire
+original alternative envelope**, retaining every member and result-set identity.
+See [completion/visual QA](../docs/phase-28-completion.md) for evidence and limits.

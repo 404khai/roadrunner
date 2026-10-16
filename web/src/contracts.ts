@@ -75,8 +75,12 @@ export const evidenceSchema = z
     cost_breakdown: z.string(),
     search: z
       .object({
-        algorithm: z.enum(["dijkstra", "a_star"]),
-        state_mode: z.enum(["node", "node_incoming_edge_with_source_sentinel"]),
+        algorithm: z.enum(["dijkstra", "a_star", "yen"]),
+        state_mode: z.enum([
+          "node",
+          "node_incoming_edge_with_source_sentinel",
+          "loopless_path",
+        ]),
         expanded_states: z.union([
           z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
           z.bigint().nonnegative(),
@@ -124,6 +128,7 @@ export type RouteRequest = {
   algorithm: "astar" | "dijkstra";
   objective: "distance" | "travel_time" | "traffic_aware";
   departure_time?: string;
+  alternatives?: number;
 };
 export type RouteResult = {
   evidence: RouteEvidence;
@@ -147,8 +152,16 @@ export function decodeRoute(raw: string, request: RouteRequest): RouteResult {
       provenance,
     })
     .parse(parseExact(raw));
-  const r = envelope.routes[0],
-    g = r.geometry,
+  validateRoute(envelope.routes[0], envelope.provenance, request);
+  return { evidence: envelope.routes[0], raw, request };
+}
+function validateRoute(
+  r: RouteEvidence,
+  shared: z.infer<typeof provenance>,
+  request: RouteRequest,
+  alternative = false,
+) {
+  const g = r.geometry,
     p = g.points_e7,
     o = g.occurrences;
   const fail = () => {
@@ -172,13 +185,29 @@ export function decodeRoute(raw: string, request: RouteRequest): RouteResult {
     fail();
   if (
     r.search.algorithm !==
-    (request.algorithm === "astar" ? "a_star" : "dijkstra")
+    (alternative
+      ? "yen"
+      : request.algorithm === "astar"
+        ? "a_star"
+        : "dijkstra")
+  )
+    fail();
+  const expectedEvaluator =
+    request.objective === "distance"
+      ? "distance/v1"
+      : request.objective === "travel_time"
+        ? "free-flow-travel-time/v1"
+        : "traffic-aware-travel-time/v1";
+  if (r.provenance.evaluator !== expectedEvaluator) fail();
+  if (
+    JSON.stringify(r.provenance) !== JSON.stringify(shared) ||
+    r.provenance.departure_seconds !==
+      r.provenance.routing_context.departure_time
   )
     fail();
   if (
-    JSON.stringify(r.provenance) !== JSON.stringify(envelope.provenance) ||
-    r.provenance.departure_seconds !==
-      r.provenance.routing_context.departure_time
+    request.departure_time &&
+    r.provenance.departure_seconds !== Date.parse(request.departure_time) / 1000
   )
     fail();
   const equals = (a: (typeof p)[number], b: (typeof p)[number]) =>
@@ -243,7 +272,207 @@ export function decodeRoute(raw: string, request: RouteRequest): RouteResult {
     throw new Error(
       "This map does not support polar or antimeridian-crossing route presentation. The supplied geometry cannot be rendered here.",
     );
-  return { evidence: r, raw, request };
+  if (
+    alternative &&
+    (r.search.state_mode !== "loopless_path" || r.provenance.heuristic !== null)
+  )
+    fail();
+  if (
+    request.objective === "traffic_aware"
+      ? !r.provenance.traffic_digest
+      : r.provenance.traffic_digest !== null
+  )
+    fail();
+}
+const exactCount = z.union([
+  z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
+  z.bigint().nonnegative(),
+]);
+const inspectionSchema = z.object({
+  schema_version: z.literal(1),
+  semantics: z.literal("pinned_static_path_evaluation/v1"),
+  evaluation_id: z.string(),
+  graph_digest: z.string(),
+  traffic_digest: z.string().nullable(),
+  base_seconds: nonnegative,
+  traffic_delay_seconds: nonnegative.nullable(),
+  segments: z
+    .array(
+      z.object({
+        ordinal: index,
+        edge: index,
+        objective_cost: nonnegative,
+        predicted_elapsed_seconds: nonnegative,
+        base_seconds: nonnegative,
+        traffic_factor: z.number().finite().min(1).nullable(),
+      }),
+    )
+    .max(20000),
+});
+export type SegmentInspection = z.infer<typeof inspectionSchema>;
+const alternativesSchema = z.object({
+  schema_version: z.literal(1),
+  result_set_id: z.string().regex(/^alternatives-v1:[a-f0-9]{64}$/),
+  provenance,
+  routes: z
+    .array(
+      z.object({
+        member_id: z.string(),
+        rank: z.number().int().min(1).max(5),
+        max_shared_distance_ratio: z.number().min(0).max(1),
+        route: evidenceSchema,
+        segment_inspection: z.unknown().optional(),
+      }),
+    )
+    .min(1)
+    .max(5),
+  summary: z.object({
+    termination: z.enum([
+      "requested_count",
+      "exhausted",
+      "cost_limit",
+      "budget",
+    ]),
+    truncated: z.boolean(),
+    options: z.object({
+      max_routes: z.number().int().min(1).max(5),
+      max_shared_distance_ratio: z.number().min(0).max(1),
+      max_cost_factor: z.number().finite().min(1),
+      max_search_states: exactCount,
+      max_candidate_paths: exactCount,
+    }),
+    ranked_paths: exactCount,
+    search_states: exactCount,
+    work_unit: z.literal("loopless_path_pops_across_root_and_spur_searches"),
+    scope: z.literal(
+      "selected_diverse_legal_loopless_paths_static_nonnegative;not_all_candidates_or_legal_walks",
+    ),
+    overlap: z.literal("shared_physical_segment_distance_over_shorter_route"),
+    candidate_history: z.literal("not_retained"),
+  }),
+});
+export type AlternativeMember = {
+  member_id: string;
+  rank: number;
+  max_shared_distance_ratio: number;
+  route: RouteEvidence;
+  inspection?: SegmentInspection;
+};
+export type ComparisonResult = {
+  raw: string;
+  request: RouteRequest;
+  result_set_id: string;
+  members: AlternativeMember[];
+  summary: z.infer<typeof alternativesSchema>["summary"];
+};
+export function decodeAlternatives(
+  raw: string,
+  request: RouteRequest,
+): ComparisonResult {
+  const e = alternativesSchema.parse(parseExact(raw));
+  const fail = () => {
+    throw new Error(
+      "Alternative evidence is inconsistent with its result set or evaluation context.",
+    );
+  };
+  if (
+    request.algorithm !== "dijkstra" ||
+    e.routes.length > (request.alternatives ?? 3) ||
+    e.summary.options.max_routes !== (request.alternatives ?? 3) ||
+    e.summary.truncated !== (e.summary.termination === "budget") ||
+    (e.summary.termination === "requested_count" &&
+      e.routes.length !== e.summary.options.max_routes)
+  )
+    fail();
+  const identities = new Set<string>();
+  const close = (a: number, b: number) =>
+    Math.abs(a - b) <= 1e-8 * Math.max(1, Math.abs(a), Math.abs(b));
+  const members = e.routes.map((m, i): AlternativeMember => {
+    validateRoute(m.route, e.provenance, request, true);
+    if (
+      m.rank !== i + 1 ||
+      m.member_id !== `${e.result_set_id}/${m.route.evaluation_id}` ||
+      identities.has(m.route.geometry.path_id) ||
+      (i > 0 &&
+        (m.route.objective.value < e.routes[i - 1].route.objective.value ||
+          m.route.objective.value >
+            e.routes[0].route.objective.value *
+              e.summary.options.max_cost_factor ||
+          m.max_shared_distance_ratio >
+            e.summary.options.max_shared_distance_ratio))
+    )
+      fail();
+    if (
+      m.route.routing_profile !== e.routes[0].route.routing_profile ||
+      m.route.jurisdiction_policy !== e.routes[0].route.jurisdiction_policy
+    )
+      fail();
+    identities.add(m.route.geometry.path_id);
+    // Optional, versioned diagnostics degrade to unavailable on older/unknown extensions.
+    const parsed = inspectionSchema.safeParse(m.segment_inspection);
+    const inspection = parsed.success ? parsed.data : undefined;
+    if (inspection) {
+      const d = inspection,
+        r = m.route;
+      if (
+        d.evaluation_id !== r.evaluation_id ||
+        d.graph_digest !== r.geometry.graph_digest ||
+        d.traffic_digest !== r.provenance.traffic_digest ||
+        d.segments.length !== r.geometry.occurrences.length
+      )
+        fail();
+      d.segments.forEach((s, j) => {
+        if (
+          s.ordinal !== j ||
+          s.edge !== r.geometry.occurrences[j].edge ||
+          (d.traffic_digest
+            ? s.traffic_factor === null
+            : s.traffic_factor !== null) ||
+          !close(
+            s.objective_cost,
+            r.objective.kind === "distance"
+              ? r.geometry.occurrences[j].distance_meters
+              : s.predicted_elapsed_seconds,
+          ) ||
+          !close(
+            s.predicted_elapsed_seconds,
+            s.base_seconds * (s.traffic_factor ?? 1),
+          )
+        )
+          fail();
+      });
+      const sum = (
+        key: "objective_cost" | "predicted_elapsed_seconds" | "base_seconds",
+      ) => d.segments.reduce((n, s) => n + s[key], 0);
+      if (
+        !close(sum("objective_cost"), r.objective.value) ||
+        !close(sum("predicted_elapsed_seconds"), r.predicted_elapsed_seconds) ||
+        !close(sum("base_seconds"), d.base_seconds) ||
+        (d.traffic_digest
+          ? d.traffic_delay_seconds === null ||
+            !close(
+              d.traffic_delay_seconds,
+              r.predicted_elapsed_seconds - d.base_seconds,
+            )
+          : d.traffic_delay_seconds !== null)
+      )
+        fail();
+    }
+    return {
+      member_id: m.member_id,
+      rank: m.rank,
+      max_shared_distance_ratio: m.max_shared_distance_ratio,
+      route: m.route,
+      inspection,
+    };
+  });
+  return {
+    raw,
+    request,
+    result_set_id: e.result_set_id,
+    members,
+    summary: e.summary,
+  };
 }
 export class ApiError extends Error {
   constructor(
