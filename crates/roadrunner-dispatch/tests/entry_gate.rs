@@ -196,6 +196,20 @@ fn exhaustive_routed_best_differs_from_spatial_nearest_and_records_coverage() {
     ));
     assert_eq!(selected(&shortlist), near());
     assert_eq!(
+        shortlist.inspection().coverage,
+        "potentially_incomplete_spatial_shortlist"
+    );
+    assert_eq!(shortlist.inspection().discovery_order, "not_retained");
+    assert!(shortlist.inspection().proposal_available);
+    assert_eq!(
+        shortlist.inspection().authority,
+        "recommended_proposal_not_committed"
+    );
+    assert_eq!(
+        exhaustive.inspection().coverage,
+        "complete_basic_dispatch_eligible_fleet"
+    );
+    assert_eq!(
         shortlist.evidence().coverage,
         CandidateCoverage::PotentiallyIncomplete
     );

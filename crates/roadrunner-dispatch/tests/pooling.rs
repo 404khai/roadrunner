@@ -450,6 +450,11 @@ fn incomplete_and_complete_infeasible_never_leak_responsibility_stops_or_terms()
         InsertionTermination::SearchIncomplete
     );
     assert!(d.proposal().is_none());
+    assert!(!d.inspection().proposal_available);
+    assert_eq!(d.inspection().input_complete, d.evidence().input_complete);
+    assert_eq!(d.inspection().search_complete, d.evidence().search_complete);
+    assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+    assert_eq!(d.inspection().discovery_order, "not_retained");
     assert_eq!(
         world.commit_insertion(&d, &d.evidence().context),
         Err(CommitError::InvalidTransition)

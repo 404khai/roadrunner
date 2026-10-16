@@ -131,3 +131,13 @@ and effect counts. Build `roadrunner-api --release --locked` first. See
 [Phase 20 evidence](../docs/phase-20-completion.md) and
 [raw results](results/phase-20-http.json). This tiny sequential baseline includes client,
 HTTP and serialization overhead and has no production SLO claim.
+
+## Phase 26 portable visualization evidence
+
+`cargo build --release --locked -p roadrunner-api -p roadrunner-core --bins --examples`, then
+`python3 scripts/collect_visualization_benchmark.py --output /tmp/phase26.json` reproduces bounded
+canonical export / JSON encoding and loopback inspection measurements. The synthetic chain generator
+records graph identities, topology/point counts, configuration and exact runs. Read the
+[retained result](results/2026-10-16-phase26-visualization.json) and
+[limitations/completion evidence](../docs/phase-26-completion.md). Whole-example process RSS includes
+artifact creation; it does not measure exporter-only allocation. No renderer or fleet scalability claim.

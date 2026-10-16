@@ -646,11 +646,32 @@ fn planning(api: &Api, command: &Command) -> Result<Planned, PlanningFailure> {
         _ => return Err(ApiError::internal().into()),
     };
     let (evidence, has_proposal) = if let Some(d) = evaluated.insertion() {
-        (value(d)?, d.proposal().is_some())
+        (
+            {
+                let mut v = value(d)?;
+                v["inspection"] = value(d.inspection())?;
+                v
+            },
+            d.proposal().is_some(),
+        )
     } else if let Some(d) = evaluated.fleet() {
-        (value(d)?, d.proposal().is_some())
+        (
+            {
+                let mut v = value(d)?;
+                v["inspection"] = value(d.inspection())?;
+                v
+            },
+            d.proposal().is_some(),
+        )
     } else if let Some(d) = evaluated.recovery() {
-        (value(d)?, d.proposal().is_some())
+        (
+            {
+                let mut v = value(d)?;
+                v["inspection"] = value(d.inspection())?;
+                v
+            },
+            d.proposal().is_some(),
+        )
     } else {
         return Err(ApiError::internal().into());
     };

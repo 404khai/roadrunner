@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_thread": "592ad522-b513-4f12-a1e8-23407f5e3935",
+  "retrieval": "t3_thread_read itemId/textOffset;every item read through nextTextOffset=null;full text retained;terminal newline added and trailing whitespace normalized for repository checks",
+  "items": [
+    {
+      "file": "audit.md",
+      "position": 113,
+      "item_id": "turn-item:provider:codex:native-item:msg_0b2ca105c8bfd95b016ad24df253308191bed2bf33ded0d486",
+      "sha256": "bde73aeb6070ef7fda4daddd1db85972aeb310e770c85e523c8f0523d01ffd3c"
+    },
+    {
+      "file": "cinematic-addendum.md",
+      "position": 120,
+      "item_id": "turn-item:provider:codex:native-item:msg_0b2ca105c8bfd95b016ad251897b248191ba3d625325fe8828",
+      "sha256": "b71776777a34d76cc99e58b40f7570c77d94347c7331a4db91588f6253b59a51"
+    },
+    {
+      "file": "final-refinements.md",
+      "position": 103,
+      "item_id": "turn-item:message:a118703b-e043-4f0e-8f73-40f678f8d76b",
+      "sha256": "a7dd9557205005cfdef76ed978d6fda5e1e4065e2e77e17af4d39a151bc9d8e5"
+    },
+    {
+      "file": "authorization.md",
+      "position": 122,
+      "item_id": "turn-item:message:0754fd8c-490b-46e5-8aab-9cb91df92c38",
+      "sha256": "67c27079dcc9ea1b02d2f4054c73ac2df47bc11d08a65614402a41e74553cbf2"
+    },
+    {
+      "file": "visual-request.md",
+      "position": 115,
+      "item_id": "turn-item:message:ac2eefa8-e8ee-4353-bf63-ddc66da5acc0",
+      "sha256": "b70cf9f82e3b82f95ae3a750f17e6215f780841f80093395eaa784c8413109a6"
+    }
+  ]
+}

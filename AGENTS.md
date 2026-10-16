@@ -2997,3 +2997,15 @@ protected source dependency components, aligned candidate populations and comple
 failure/coverage evidence are required. Negative experiments and explicit
 EvaluationUnavailable are valid outcomes. Neither a fitted artifact nor lower
 error admits shadow, live inference, learned edge costs or operational influence.
+
+
+## Approved visualization evidence contract
+
+Gates A/B for Phase 26 were explicitly approved in the retained
+[authorization](docs/phase-26-source/authorization.md). The approved
+[audit](docs/phase-26-source/audit.md), [cinematic addendum](docs/phase-26-source/cinematic-addendum.md),
+[ADR 0023](docs/adr/0023-checked-visualization-evidence.md), and
+[implemented contract](docs/visualization-contract.md) govern checked portable geometry, scoped identities,
+original provenance, metrics, retained decisions and exact summaries. Conditional historical/execution/
+snapshot services were not needed for this finite package. Phase 26 completion does not authorize
+Phase 27 rendering, cinematic animation, telemetry, detailed tracing, streaming or assets.

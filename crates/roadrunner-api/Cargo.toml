@@ -11,6 +11,7 @@ roadrunner-core = { path = "../roadrunner-core" }
 roadrunner-dispatch = { path = "../roadrunner-dispatch" }
 roadrunner-simulation = { path = "../roadrunner-simulation" }
 axum = "0.8"
+http-body = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "signal", "sync"] }
 sha2.workspace = true
 serde.workspace = true

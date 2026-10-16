@@ -364,3 +364,7 @@ reproducible synthetic error metrics, action-paired coverage and independent ver
 restricted whole-route residual model with protected splits and B0 comparisons.
 The controlled synthetic experiment shows no improvement over exact B0; live
 routing and dispatch continue to use their deterministic models.
+
+
+Phase 26 provides [checked portable route and decision evidence](docs/visualization-contract.md).
+See [producer-conformance evidence](docs/phase-26-completion.md). The map/animation client remains Phase 27+.

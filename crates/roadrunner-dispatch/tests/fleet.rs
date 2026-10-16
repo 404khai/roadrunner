@@ -366,6 +366,11 @@ fn exhausted_search_never_leaks_an_incumbent_assignment_or_terms() {
         assert_eq!(d.evidence().termination, FleetTermination::SearchIncomplete);
         assert_eq!(d.evidence().work.total(), budget);
         assert!(d.proposal().is_none());
+        assert!(!d.inspection().proposal_available);
+        assert_eq!(d.inspection().input_complete, d.evidence().input_complete);
+        assert_eq!(d.inspection().search_complete, d.evidence().search_complete);
+        assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+        assert_eq!(d.inspection().discovery_order, "not_retained");
         assert_eq!(
             world.commit_fleet(&d, &d.evidence().context),
             Err(CommitError::InvalidTransition)
@@ -898,6 +903,11 @@ fn declared_local_optimum_has_a_measured_gap_to_independent_global_oracle() {
     let exact = oracle(&f, &world, &[], &inputs);
     assert_eq!(d.evidence().termination, FleetTermination::LocalOptimum);
     assert!(d.proposal().is_none());
+    assert!(!d.inspection().proposal_available);
+    assert_eq!(d.inspection().input_complete, d.evidence().input_complete);
+    assert_eq!(d.inspection().search_complete, d.evidence().search_complete);
+    assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+    assert_eq!(d.inspection().discovery_order, "not_retained");
     assert!((objective_of(&d).road_seconds - 32.0).abs() < 1e-8);
     assert!((exact.0.road_seconds - 30.0).abs() < 1e-8);
     println!(

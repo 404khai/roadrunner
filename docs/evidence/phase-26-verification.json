@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "branch": "feat/visualization-evidence-contracts",
+  "baseline_commit": "0ef8c93156c03bb46ca7162c103eec4062b96c5f",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "results": [
+    {
+      "name": "baseline",
+      "command": "cargo test --workspace --all-features --locked",
+      "status": "PASS",
+      "passed": 286,
+      "failed": 0,
+      "ignored": 13,
+      "log_sha256": "5bfc568c867a91d1431316fa79cd0638915154b1b7b8f95dfd810858fcb07075"
+    },
+    {
+      "name": "workspace",
+      "command": "cargo test --workspace --all-features --locked",
+      "status": "PASS",
+      "passed": 303,
+      "failed": 0,
+      "ignored": 13,
+      "log_sha256": "dd20f90fed80d028d2e01d9e66f38d75d5dd5ee2dd8f8c26064bc4c5ee2167ee"
+    },
+    {
+      "name": "storage",
+      "command": "ROADRUNNER_TEST_DATABASE_URL=<disposable local database> cargo test -p roadrunner-storage --test postgres --locked -- --ignored --test-threads=1",
+      "status": "PASS",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "log_sha256": "c407c519f6817015c4a2da317d9fd043c432cb3e3820611b1f6b3995b4fa276a"
+    },
+    {
+      "name": "events",
+      "command": "ROADRUNNER_TEST_DATABASE_URL=<disposable local database> cargo test -p roadrunner-storage --test events --locked -- --ignored --test-threads=1",
+      "status": "PASS",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "log_sha256": "216c22ca191576529a1abe26d17aa84244b824e28d746e799686bff422e466f3"
+    },
+    {
+      "name": "clippy",
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "status": "PASS",
+      "log_sha256": "4794e3520138fbd31cb96cbc6160e4a9c6877bfb0d40f804dab8e66eb5ed51a2"
+    },
+    {
+      "name": "independent_oracle",
+      "command": "python scripts/verify_visualization_contract.py (jsonschema 4.25.1)",
+      "status": "PASS",
+      "log_sha256": "ad609a008affb9acc867add06c26692f25d135759a97c53aca79194c676cdfb4"
+    },
+    {
+      "name": "cargo fmt --all -- --check",
+      "command": "cargo fmt --all -- --check",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "git diff --check",
+      "command": "git diff --check",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "staged whitespace check",
+      "command": "git diff --cached --check",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "process_runtime": "phase-26-postgres-runtime.json (seven explicit PASS cases)",
+  "source_sha256": {
+    "Cargo.lock": "3cfbe3871da967a92475a50a2fd3539f2cb9ed5e86e3221883b3ef742a8881e8",
+    "crates/roadrunner-api/Cargo.toml": "8ee3855fd26c0677c2553d6c854f4eaf694707c5859464d08babf69bf4fb52ce",
+    "crates/roadrunner-api/src/http.rs": "5a750311e6287538a80a6e0a2859aa196e2f5f22e0023aadb01a39c46d5ff0fd",
+    "crates/roadrunner-api/src/lib.rs": "af43c81de1ed89aaeab38855815f06bd988f05ef4241ab46a733ea78c422ad25",
+    "crates/roadrunner-api/src/persistence.rs": "df991402973fb21fd5f30cd8bd05a8e17e131c50233ad57489d268249198bf8e",
+    "crates/roadrunner-api/src/routing.rs": "2b159ca830c4e927aa1fec5005c35c5f255551697743d72f559538fc7fccd688",
+    "crates/roadrunner-api/src/runtime.rs": "91b0809e0c36b8c44be80bfae6c32e8b931787f85fd0804ed16a48b83b50d39e",
+    "crates/roadrunner-api/tests/http.rs": "79245a9ffe10eff17ff139b38f8dfb28d0deab29f38695779b6d4c3df6fc4c34",
+    "crates/roadrunner-api/tests/visualization.rs": "ff925c84b7141a976e3ca96e2410432424128ed45d841648a3b8095a40c22ad1",
+    "crates/roadrunner-core/examples/visualization_evidence.rs": "798475af702d2e1c7f3815c386c15155f767b73c6019e6fed5cc08b8a7ffd4b4",
+    "crates/roadrunner-core/src/routing/evidence.rs": "d17ad6ca174c748dce8e4f877ec25ed9535df860849456d501bce52b7cc92fe2",
+    "crates/roadrunner-core/src/routing/geometry.rs": "0f20dfb533529ea50bbf5d6bdc0151978f08da13ce1b56ab50611f2b0f8e5fcc",
+    "crates/roadrunner-core/src/routing/mod.rs": "6d438ebc681a2f7673574d189e0e112012cc1c6f17052b614042486bd33c6072",
+    "crates/roadrunner-core/src/routing/result.rs": "f18f75ad43ce30f359eb925b905472b90d38c1aeeeeb13a098bd5ee0e553e932",
+    "crates/roadrunner-core/tests/routing_correctness.rs": "0e2a773ef72b9860a9fdc1920b6b463b7d4da9625e8e364708faa58d2630f3c7",
+    "crates/roadrunner-core/tests/visualization_geometry.rs": "55e91562c6880ba24f02f451611c21484c8692edd0a85ee5153300194d945144",
+    "crates/roadrunner-dispatch/src/inspection.rs": "1586be2c155d11de91be2a7ba18e3ca2400c5c5021118b22bfe8c6567ce7afc2",
+    "crates/roadrunner-dispatch/src/lib.rs": "ed52bf36203893aae4cca8b6b3914702ae62e93be29bcebf1dcdbce8def9b3ce",
+    "crates/roadrunner-dispatch/tests/entry_gate.rs": "d0dc1aa837b5c7e90a2aa82caf0febd2fee7fa0548c038c8940facc47302e0da",
+    "crates/roadrunner-dispatch/tests/fleet.rs": "b16de9821bfbaf08bb230069d540e64e5122b3d5429407d62ab27982f11f00f6",
+    "crates/roadrunner-dispatch/tests/pooling.rs": "2cb353267ddc2721efbb3bd7bd9e4c4a6529c92cf804c7753dba96cd09caf4da",
+    "crates/roadrunner-dispatch/tests/recovery.rs": "cf64e5818259c0efe0249e853d11921f94fc4d16ee1c783ad5cc6eff9469411b",
+    "crates/roadrunner-osm/tests/pipeline.rs": "2e052ac6ab591439693b1e90b6e309c93206a24cd8fd0333aee3cdd89c090b42",
+    "scripts/collect_visualization_benchmark.py": "5645c194bc80c5b2b84cf7de70af21251e5c8f84cd8ceced7ea43e3f3cead2b3",
+    "scripts/verify_visualization_contract.py": "959e27c1a8a801cf5dfc82431b12f14ebe9055f73fe95c53e82c3714be913291"
+  },
+  "qualifications": [
+    "13 opt-in tests ignored by default workspace;12 explicitly run here via storage/events suites.",
+    "The remaining pre-existing ignored dispatch benchmark evidence writer is not required for these unchanged optimizer algorithms.",
+    "Early local DB invocation without host failed configuration;rerun with disposable Unix-socket connection passed.",
+    "Schema oracle uses temporary venv;no Python production dependency introduced.",
+    "Current built-in heuristics are consistent;no new inconsistent heuristic policy was authorized solely to produce reopen history.",
+    "Imported source Markdown hard-break trailing spaces were normalized before the final staged whitespace check;full source content is retained."
+  ]
+}

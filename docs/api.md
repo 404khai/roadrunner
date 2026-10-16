@@ -109,3 +109,16 @@ Successful route queries return `route_records` and retain full original provena
 simulation scenarios/results are recorded in isolation. Migrations, restoration and
 unknown-outcome semantics are detailed in the durable guide. HTTP DTOs and domain
 algorithms remain independently owned; no client state restoration endpoint is added.
+
+
+## Phase 26 portable inspection
+
+`POST /v1/visualization/routes` and `/v1/visualization/routes/alternatives` use the existing
+strict route request and bearer read capability. Their version-1 responses embed checked E7 route
+evidence rather than the legacy display GeoJSON. See the [producer contract](visualization-contract.md)
+and [route schema](schemas/route-evidence-v1.schema.json) for identities, units, exact boundaries,
+summary/termination scopes and directional compatibility. Saturation returns 503 and geometry/byte
+limits return 413 without changing authoritative routing or returning silently partial geometry.
+These endpoints do not record durable routes. Legacy alternative responses now include objective
+and applicable traffic digest, matching single-route provenance. Planning command evidence additionally
+contains versioned `inspection` metadata; separate original publication evidence establishes commitment.

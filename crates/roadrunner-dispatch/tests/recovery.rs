@@ -350,6 +350,9 @@ fn budget_prediction_and_churn_failures_publish_nothing() {
         RecoveryTermination::SearchIncomplete
     );
     assert!(d.proposal().is_none());
+    assert!(!d.inspection().proposal_available);
+    assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+    assert_eq!(d.inspection().discovery_order, "not_retained");
     let mut ctx = context(&f, &world, churn());
     ctx.pooling.inputs.forecasts.remove(&OrderId::new(1));
     assert_eq!(
@@ -376,6 +379,9 @@ fn budget_prediction_and_churn_failures_publish_nothing() {
             .is_some_and(|s| s > 0.0)
     );
     assert!(d.proposal().is_none());
+    assert!(!d.inspection().proposal_available);
+    assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+    assert_eq!(d.inspection().discovery_order, "not_retained");
     let mut ctx = context(&f, &world, churn());
     ctx.policy.cooldown = secs(100.0);
     ctx.last_applied = Some(at(0.0));
@@ -423,6 +429,9 @@ fn frozen_pickup_and_custody_are_never_transferred_or_cancelled() {
         .insert(rider, f.anchors.pickups[&order].clone());
     let d = ok(recovery(&f, &world, context(&f, &world, churn())));
     assert!(d.proposal().is_none());
+    assert!(!d.inspection().proposal_available);
+    assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+    assert_eq!(d.inspection().discovery_order, "not_retained");
     assert_eq!(
         ok(world.cancel_order(order, at(0.0), &std::collections::BTreeSet::default())),
         Err(CancellationRefusal::NotAwaitingPickup)
@@ -600,6 +609,9 @@ fn hard_baseline_breach_can_repair_but_cumulative_reference_never_resets() {
     assert!(d.evidence().baseline_requires_repair);
     assert_eq!(d.evidence().termination, RecoveryTermination::NoRecovery);
     assert!(d.proposal().is_none());
+    assert!(!d.inspection().proposal_available);
+    assert_eq!(d.inspection().authority, "evaluation_without_proposal");
+    assert_eq!(d.inspection().discovery_order, "not_retained");
     assert_eq!(world.data().accepted, terms);
 }
 #[test]

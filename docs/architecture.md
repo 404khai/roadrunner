@@ -329,8 +329,11 @@ requests. Configuration includes graph fixture, listening address, log filter,
 and safety limits such as maximum alternatives. Defaults live in adapters and are
 documented; domain libraries do not read environment variables.
 
-There is no durable state. Restarting the process discards in-memory simulation,
-order, rider, and delivery data. The route endpoint itself is stateless.
+Volatile mode discards in-memory simulation, order, rider, and delivery data on restart.
+Phase 21 additionally implements optional PostgreSQL/PostGIS durability and acknowledged restoration;
+see [persistence](persistence.md) and the runtime extensions below. Routing computation is stateless,
+while the durable legacy route endpoint records results. Phase 26 portable inspection endpoints are
+read-only and do not create durable route records.
 
 ## 10. Testing boundaries
 
@@ -535,3 +538,13 @@ learned routing, physical measurement or operational data-source assumptions.
 original frozen B0. CLI composition captures evaluator provenance and publishes an
 immutable result package. Routing, dispatch, storage and the synchronous/event runtime
 remain unchanged. See [ADR 0021](adr/0021-original-b0-evaluation.md).
+
+
+## Phase 26: checked visualization evidence
+
+[ADR 0023](adr/0023-checked-visualization-evidence.md) and the
+[producer contract](visualization-contract.md) define checked graph-qualified E7 occurrences,
+scoped path/evaluation/alternative identities, original context, typed existing metrics and exact
+search summaries. New inspection routes and retained decision metadata prepare later clients.
+Conditional execution/timeline/snapshot/resolver adapters were not required. No Phase 27 UI,
+rendering, detailed search capture, navigation guidance or movement producer is implemented here.

@@ -97,6 +97,7 @@ pub(crate) struct Inner {
     pub clock: Arc<dyn OperationalClock + Send + Sync>,
     pub coordinator: Mutex<Coordinator>,
     pub workers: Arc<tokio::sync::Semaphore>,
+    pub export_admission: Arc<tokio::sync::Semaphore>,
     pub namespace: OperationalWorldNamespace,
     pub storage: Option<Mutex<roadrunner_storage::PgStore>>,
 }
@@ -155,6 +156,7 @@ impl Api {
             inner: Arc::new(Inner {
                 graph: Arc::new(graph),
                 workers: Arc::new(tokio::sync::Semaphore::new(config.workers)),
+                export_admission: Arc::new(tokio::sync::Semaphore::new(config.workers)),
                 config,
                 clock,
                 namespace,
