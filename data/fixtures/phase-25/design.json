@@ -1,0 +1,16 @@
+{
+  "schema": "controlled-route-null-design/v1",
+  "claim": "engineering component holdout within shared deterministic simulator; no sampling independence, physical or causal claim",
+  "construction": "six explicit different geometries and topologies; Train ranges enclose Validation/Test; horizon and no-start descendants remain with Train ancestor",
+  "expected": "12 complete starts plus one censored start; no-delay source labels route-derived; no evidence for learnable physical residual",
+  "assignments": {
+    "wide-line": "Train",
+    "wide-line-censored": "Train",
+    "wide-line-no-starts": "Train",
+    "short-chain": "Train",
+    "long-branch": "Train",
+    "middle-cycle": "Validation",
+    "middle-diamond": "Test",
+    "middle-star": "Test"
+  }
+}

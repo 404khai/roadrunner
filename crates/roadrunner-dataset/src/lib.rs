@@ -3,6 +3,7 @@ pub mod baseline;
 mod bundle;
 mod features;
 mod labels;
+pub mod learned;
 mod source;
 mod split;
 

@@ -1,0 +1,131 @@
+{
+  "dataset_version": "controlled-route-null/v1",
+  "sources": [
+    {
+      "scenario": "wide-line.json",
+      "run": "wide-line",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/wide-line",
+        "base_world": "constructed-geometry/wide-line",
+        "realization": "deterministic-no-delay/wide-line",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/wide-line"
+        ]
+      }
+    },
+    {
+      "scenario": "wide-line-censored.json",
+      "run": "wide-line-censored",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/wide-line",
+        "base_world": "constructed-geometry/wide-line",
+        "realization": "deterministic-no-delay/wide-line",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/wide-line"
+        ]
+      }
+    },
+    {
+      "scenario": "wide-line-no-starts.json",
+      "run": "wide-line-no-starts",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/wide-line",
+        "base_world": "constructed-geometry/wide-line",
+        "realization": "deterministic-no-delay/wide-line",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/wide-line"
+        ]
+      }
+    },
+    {
+      "scenario": "short-chain.json",
+      "run": "short-chain",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/short-chain",
+        "base_world": "constructed-geometry/short-chain",
+        "realization": "deterministic-no-delay/short-chain",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/short-chain"
+        ]
+      }
+    },
+    {
+      "scenario": "long-branch.json",
+      "run": "long-branch",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/long-branch",
+        "base_world": "constructed-geometry/long-branch",
+        "realization": "deterministic-no-delay/long-branch",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/long-branch"
+        ]
+      }
+    },
+    {
+      "scenario": "middle-cycle.json",
+      "run": "middle-cycle",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/middle-cycle",
+        "base_world": "constructed-geometry/middle-cycle",
+        "realization": "deterministic-no-delay/middle-cycle",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/middle-cycle"
+        ]
+      }
+    },
+    {
+      "scenario": "middle-diamond.json",
+      "run": "middle-diamond",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/middle-diamond",
+        "base_world": "constructed-geometry/middle-diamond",
+        "realization": "deterministic-no-delay/middle-diamond",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/middle-diamond"
+        ]
+      }
+    },
+    {
+      "scenario": "middle-star.json",
+      "run": "middle-star",
+      "lineage": {
+        "generator": "controlled-distinct-topologies/no-delay/v1",
+        "family": "constructed-topology/middle-star",
+        "base_world": "constructed-geometry/middle-star",
+        "realization": "deterministic-no-delay/middle-star",
+        "policy": "dynamic-multistart-local/v1",
+        "dependencies": [
+          "controlled-world/middle-star"
+        ]
+      }
+    }
+  ],
+  "splits": {
+    "claim": "unseen-synthetic-components/v1",
+    "assignments": {
+      "wide-line": "Train",
+      "wide-line-censored": "Train",
+      "wide-line-no-starts": "Train",
+      "short-chain": "Train",
+      "long-branch": "Train",
+      "middle-cycle": "Validation",
+      "middle-diamond": "Test",
+      "middle-star": "Test"
+    },
+    "excluded_reasons": {}
+  }
+}

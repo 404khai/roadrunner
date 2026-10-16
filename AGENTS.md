@@ -1,5 +1,10 @@
 # AGENTS.md
 
+## Branch and pull request naming
+
+Use descriptive branch names and PR titles. Phase numbers are not required in
+either; put phase scope and completion evidence in the PR description when useful.
+
 # Roadrunner
 
 > A real-time last-mile routing and delivery optimization engine.
@@ -2981,3 +2986,14 @@ Preserve action-paired labels, exact coverage, frozen splits and honest uncertai
 limits. Phase 23's prohibition on baseline metrics describes its historical scope;
 Phase 24 is separately authorized. No Phase 25 research, training or learned inference
 is authorized by Phase 24 completion.
+
+## Approved offline learned ETA research contract
+
+Phase 25 is separately authorized. [ADR 0022](docs/adr/0022-offline-learned-route-eta.md)
+and the signed data/ML audit control its offline whole-started-route research scope.
+A simple fitted correction is sufficient; no neural architecture is mandatory.
+Train-only preprocessing, mature exact Train labels, immutable original B0,
+protected source dependency components, aligned candidate populations and complete
+failure/coverage evidence are required. Negative experiments and explicit
+EvaluationUnavailable are valid outcomes. Neither a fitted artifact nor lower
+error admits shadow, live inference, learned edge costs or operational influence.

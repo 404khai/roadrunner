@@ -1,4 +1,5 @@
 /target/
+__pycache__/
 
 # Independently retained local persistence acknowledgement anchors.
 .roadrunner-state/

@@ -18,3 +18,9 @@ produces a different content identity even when label values coincide.
 Only public synthetic data is authorized here. Do not add credentials, private source
 records or operational trajectories. Retain source bytes for as long as this dataset's
 reconstruction claims are required; removal must explicitly narrow those claims.
+
+The [offline learned ETA study](../../docs/learned-eta.md) retains its controlled
+source-backed dataset inside `ml/results/route-ridge-null-v1/dataset/`. Distinct
+constructed graph components support an engineering holdout within the same
+simulator mechanism, not physical generalization or sampled-world uncertainty.
+The original representative dataset remains immutable and unavailable for fitting.

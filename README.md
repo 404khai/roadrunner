@@ -359,3 +359,8 @@ started-action census, original B0, evidence-qualified labels and reproducible b
 
 Phase 24 provides [original-B0 baseline evaluation](docs/eta-baseline.md), with
 reproducible synthetic error metrics, action-paired coverage and independent verification.
+
+[Offline learned route ETA research](docs/learned-eta.md) fits a reproducible,
+restricted whole-route residual model with protected splits and B0 comparisons.
+The controlled synthetic experiment shows no improvement over exact B0; live
+routing and dispatch continue to use their deterministic models.
