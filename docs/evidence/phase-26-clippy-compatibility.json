@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "original_implementation_commit": "6c9d3c3",
+  "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+  "finding": "Rust 1.99 Clippy assert_is_empty lint rejects two new emptiness assertions;original local verification used Rust 1.96.",
+  "change": "Replace boolean emptiness assertions with equality assertions that display actual values;no lint suppression or production behavior change.",
+  "results": [
+    {
+      "command": "cargo +1.99.0 clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "status": "PASS",
+      "passed": null,
+      "log_sha256": "2922d50df97a08bdbadac8d1fdbf0c72177fb36fcf4b087322d895bf0a54603a"
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-core --test routing_correctness --locked",
+      "status": "PASS",
+      "passed": 23,
+      "log_sha256": "0d554e662934f51e8a6e72afe31f504808773e10fb240ecc8e171c3c659dbc49"
+    },
+    {
+      "command": "cargo +1.99.0 test -p roadrunner-api --test visualization --locked",
+      "status": "PASS",
+      "passed": 4,
+      "log_sha256": "a16740fbe9a9aeee5498aa56028088df551fbc9c1443691051913f006f4609ee"
+    }
+  ],
+  "source_sha256": {
+    "crates/roadrunner-core/tests/routing_correctness.rs": "770c51e593cde76e6cbc20efe54e4d375abfcf8cbaf42b4e2f26584ba4459635",
+    "crates/roadrunner-api/tests/visualization.rs": "a09a6ff19874cc23216b3959e81c4d0649709ca36f00da059ef34191148b6f5c"
+  }
+}

@@ -183,3 +183,12 @@ workers. Explicit saturation/oversize tests pass. Slow-body tests verify a held 
 export admission, with operational workers available, and drop releases admission. Allocation failure
 is not claimed recoverable. Existing full-state snapshot growth/lock cost, real fleet concurrency,
 rendering, physical telemetry, provider scenes and detailed tracing remain unmeasured/out of scope.
+
+## CI toolchain compatibility correction
+
+CI's Rust 1.99 introduced `clippy::assert_is_empty`, which rejected two test assertions that passed
+original local Rust 1.96 verification. Both now use equality assertions showing the actual collection;
+no lint is suppressed and production behavior is unchanged. The full workspace/all-target/all-feature
+Clippy command passes on 1.99, as do the affected 23 routing and 4 visualization API tests.
+[Supplemental evidence](evidence/phase-26-clippy-compatibility.json) records the corrected source hashes
+and actual commands; the original verification artifact retains its original implementation evidence.

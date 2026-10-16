@@ -1304,7 +1304,7 @@ fn phase26_exact_stale_goal_and_trivial_counter_conventions() {
         )
         .unwrap_or_else(|e| panic!("{e}"));
         assert_eq!(d.expanded_states(), 1);
-        assert!(d.edges().is_empty());
+        assert_eq!(d.edges(), []);
     }
 }
 

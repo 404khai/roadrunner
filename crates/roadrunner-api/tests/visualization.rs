@@ -141,12 +141,7 @@ async fn no_travel_auth_unsupported_snapping_and_graph_conflict() {
             .len(),
         1
     );
-    assert!(
-        r["routes"][0]["geometry"]["occurrences"]
-            .as_array()
-            .unwrap()
-            .is_empty()
-    );
+    assert_eq!(r["routes"][0]["geometry"]["occurrences"], json!([]));
     assert_eq!(r["routes"][0]["search"]["expanded_states"], 1);
     q["origin"]["graph_digest"] = json!("wrong");
     assert_eq!(
