@@ -548,3 +548,17 @@ scoped path/evaluation/alternative identities, original context, typed existing 
 search summaries. New inspection routes and retained decision metadata prepare later clients.
 Conditional execution/timeline/snapshot/resolver adapters were not required. No Phase 27 UI,
 rendering, detailed search capture, navigation guidance or movement producer is implemented here.
+
+## Phase 27: routing visualization client
+
+The [React/TypeScript/MapLibre workspace](../web/README.md) is a consumer of portable
+version-1 route evidence. A small authenticated 500-anchor catalog enables explicit
+node selection independently of operational snapshots. The API still owns routing,
+original evaluation context, graph identity and cost semantics. The client owns
+camera framing, monochrome map style, responsive layout and a bounded result-reveal
+animation. It retains exact source bytes and directed E7 occurrences; rendering
+prefixes never become domain state. Replay uses retained evidence without routing.
+Unsupported semantics/geometry reject, unavailable breakdowns remain unavailable,
+and large routes/reduced motion use static presentation. External OpenFreeMap tiles
+are contextual scene data and never replace canonical graph geometry. Phase 28+
+alternative, graph, journey, dispatch and history interfaces remain deferred.

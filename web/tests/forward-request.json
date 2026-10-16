@@ -1,0 +1,21 @@
+{
+  "origin": {
+    "coordinate": {
+      "latitude": 6.5232933,
+      "longitude": 3.3801305
+    },
+    "node": 0,
+    "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95"
+  },
+  "destination": {
+    "coordinate": {
+      "latitude": 6.5246268,
+      "longitude": 3.3792066
+    },
+    "node": 35,
+    "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95"
+  },
+  "algorithm": "astar",
+  "objective": "travel_time",
+  "departure_time": "2026-10-16T12:00:00Z"
+}

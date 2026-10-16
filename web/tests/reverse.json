@@ -1,0 +1,122 @@
+{
+  "provenance": {
+    "departure_seconds": 1792152000.0,
+    "evaluator": "free-flow-travel-time/v1",
+    "heuristic": "travel-time-haversine/v1;max_kph=30",
+    "routing_context": {
+      "departure_time": 1792152000.0,
+      "permit_access": false,
+      "private_access": false
+    },
+    "time_domain": "unix_seconds",
+    "traffic_digest": null
+  },
+  "routes": [
+    {
+      "cost_breakdown": "unavailable_not_retained",
+      "distance_meters": 212.33597101394872,
+      "evaluation_id": "evaluation-v1:bea59564e5dad8b4df59278d10fe7f4e0d16d6277297b3624963e4155788b457",
+      "geometry": {
+        "encoding": "wgs84_e7",
+        "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+        "no_travel": false,
+        "nodes": [35, 21, 7, 9, 0],
+        "occurrences": [
+          {
+            "distance_meters": 47.141529041824924,
+            "edge": 78,
+            "from": 35,
+            "ordinal": 0,
+            "orientation": "forward",
+            "point_end": 3,
+            "point_start": 0,
+            "segment": 18,
+            "to": 21
+          },
+          {
+            "distance_meters": 35.339949172106934,
+            "edge": 52,
+            "from": 21,
+            "ordinal": 1,
+            "orientation": "forward",
+            "point_end": 5,
+            "point_start": 3,
+            "segment": 41,
+            "to": 7
+          },
+          {
+            "distance_meters": 61.50713350096701,
+            "edge": 17,
+            "from": 7,
+            "ordinal": 2,
+            "orientation": "forward",
+            "point_end": 9,
+            "point_start": 5,
+            "segment": 26,
+            "to": 9
+          },
+          {
+            "distance_meters": 68.34735929904986,
+            "edge": 20,
+            "from": 9,
+            "ordinal": 3,
+            "orientation": "forward",
+            "point_end": 12,
+            "point_start": 9,
+            "segment": 27,
+            "to": 0
+          }
+        ],
+        "path_id": "path-v1:2aa91211ed3bacfa3c6637f2c61f34ca70b86229b1a8552db68bd66f052aebe3",
+        "points_e7": [
+          { "latitude_e7": 65246268, "longitude_e7": 33792066 },
+          { "latitude_e7": 65244988, "longitude_e7": 33792641 },
+          { "latitude_e7": 65242410, "longitude_e7": 33793835 },
+          { "latitude_e7": 65242410, "longitude_e7": 33793835 },
+          { "latitude_e7": 65243699, "longitude_e7": 33796759 },
+          { "latitude_e7": 65243699, "longitude_e7": 33796759 },
+          { "latitude_e7": 65242201, "longitude_e7": 33797456 },
+          { "latitude_e7": 65240102, "longitude_e7": 33798402 },
+          { "latitude_e7": 65238646, "longitude_e7": 33799023 },
+          { "latitude_e7": 65238646, "longitude_e7": 33799023 },
+          { "latitude_e7": 65236833, "longitude_e7": 33799771 },
+          { "latitude_e7": 65232933, "longitude_e7": 33801305 }
+        ],
+        "schema_version": 1
+      },
+      "jurisdiction_policy": "ng_v2",
+      "objective": { "kind": "travel_time", "value": 38.22047478251077 },
+      "objective_unit": "seconds",
+      "optional_capabilities": [],
+      "predicted_elapsed_seconds": 38.22047478251077,
+      "provenance": {
+        "departure_seconds": 1792152000.0,
+        "evaluator": "free-flow-travel-time/v1",
+        "heuristic": "travel-time-haversine/v1;max_kph=30",
+        "routing_context": {
+          "departure_time": 1792152000.0,
+          "permit_access": false,
+          "private_access": false
+        },
+        "time_domain": "unix_seconds",
+        "traffic_digest": null
+      },
+      "routing_profile": "delivery_motorcycle_v2",
+      "search": {
+        "algorithm": "a_star",
+        "counter_semantics": "accepted_non_stale_pops_including_goal;source_equals_destination_convention_1_without_queue_operations",
+        "detailed_trace": "deferred",
+        "expanded_states": 10,
+        "relaxation": "strict_objective_improvement_only",
+        "state_mode": "node_incoming_edge_with_source_sentinel",
+        "termination": "route_found"
+      },
+      "semantics": {
+        "authority": "deterministic_prediction",
+        "geometry": "wgs84_e7",
+        "schema_version": 1
+      }
+    }
+  ],
+  "schema_version": 1
+}

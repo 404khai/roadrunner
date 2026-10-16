@@ -3,3 +3,9 @@ __pycache__/
 
 # Independently retained local persistence acknowledgement anchors.
 .roadrunner-state/
+
+# Frontend build and local configuration.
+web/node_modules/
+web/dist/
+web/.env.local
+web/*.tsbuildinfo

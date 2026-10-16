@@ -11,7 +11,7 @@ use crate::{
 };
 use axum::{
     Json, Router,
-    extract::{DefaultBodyLimit, Path, State, rejection::JsonRejection},
+    extract::{DefaultBodyLimit, Path, Query, State, rejection::JsonRejection},
     http::{HeaderMap, StatusCode},
     response::IntoResponse,
     routing::{get, patch, post},
@@ -101,6 +101,43 @@ async fn state(State(api): State<Api>, headers: HeaderMap) -> Result<Json<Value>
         json!({"schema_version":1,"namespace":api.namespace(),"revision":c.state.revision().number.to_string(),"time_domain":api.inner.clock.time_domain(),"now_seconds":api.inner.clock.now().map_err(ApiError::invalid)?,"graph":api.inner.graph.metadata(),"references":references,"world":c.state.data(),"plan_revisions":c.state.plan_revisions(),"execution":c.state.execution(),"contexts":c.state.contexts(),"history":c.state.history(),"publications":c.state.publications()}),
     ))
 }
+/// Bounded immutable node catalog for explicit route-anchor selection.
+#[derive(serde::Deserialize, utoipa::IntoParams)]
+#[serde(deny_unknown_fields)]
+struct AnchorPage {
+    #[serde(default)]
+    offset: usize,
+}
+#[utoipa::path(get,path="/v1/visualization/anchors",params(AnchorPage),responses((status=200,body=Object),(status=401,body=ErrorBody)),security(("bearer"=[])))]
+async fn anchors(
+    State(api): State<Api>,
+    headers: HeaderMap,
+    Query(page): Query<AnchorPage>,
+) -> Result<Json<Value>, ApiError> {
+    crate::persistence::check_async(&api).await?;
+    read(&api, &headers)?;
+    let graph = &api.inner.graph;
+    if page.offset > graph.node_count() {
+        return Err(ApiError::invalid("anchor offset exceeds node count"));
+    }
+    let end = page.offset.saturating_add(500).min(graph.node_count());
+    let nodes: Vec<_> = graph.nodes()[page.offset..end]
+        .iter()
+        .map(|node| {
+            json!({"node":node.id(),"coordinate":{
+                "latitude":node.coordinate().latitude(),
+                "longitude":node.coordinate().longitude()
+            }})
+        })
+        .collect();
+    Ok(Json(json!({
+        "schema_version":1,"graph":graph.metadata(),
+        "node_count":graph.node_count(),"edge_count":graph.edge_count(),
+        "offset":page.offset,"next_offset":(end < graph.node_count()).then_some(end),
+        "anchors":nodes,"selection_semantics":"explicit_graph_node_no_snapping/v1"
+    })))
+}
+
 #[utoipa::path(get,path="/v1/orders/{id}",params(("id"=String,Path,description="Opaque namespace:order:id reference")),responses((status=200,body=Object),(status=404,body=ErrorBody)),security(("bearer"=[])))]
 async fn order(
     State(api): State<Api>,
@@ -429,6 +466,7 @@ resource_handler!(
 #[derive(OpenApi)]
 #[openapi(
     paths(
+        anchors,
         visualization_route,
         visualization_alternatives,
         state,
@@ -476,6 +514,7 @@ pub(crate) fn openapi() -> utoipa::openapi::OpenApi {
 pub(crate) fn router(api: Api) -> Router {
     Router::new()
         .route("/v1/state", get(state))
+        .route("/v1/visualization/anchors", get(anchors))
         .route("/v1/routes", post(route))
         .route("/v1/visualization/routes", post(visualization_route))
         .route(
@@ -668,5 +707,64 @@ mod export_budget_tests {
         assert!(workers.clone().try_acquire_owned().is_err());
         drop(body);
         assert!(workers.try_acquire_owned().is_ok());
+    }
+}
+
+#[cfg(test)]
+mod anchor_catalog_tests {
+    use super::*;
+    use roadrunner_core::{geo::CanonicalCoordinate, graph::*};
+
+    #[tokio::test]
+    #[allow(clippy::unwrap_used)]
+    async fn pages_are_capped_and_dense_order_is_preserved() {
+        let (original, clock, _) = crate::test_support::fixture();
+        let mut builder = GraphBuilder::new(
+            GraphSnapshotId::new(99),
+            GraphMetadata::new(
+                "synthetic/v1",
+                "test",
+                GraphBuildIdentity::new("anchor-pages", "v1", "v1", "synthetic"),
+            ),
+        );
+        for i in 0..501_u32 {
+            builder
+                .add_node(
+                    BuilderNodeId::new(u64::from(i)),
+                    CanonicalCoordinate::new(0, i32::try_from(i).unwrap()).unwrap(),
+                )
+                .unwrap();
+        }
+        let api = Api::with_clock(
+            builder.finalize().unwrap(),
+            original.inner.config.clone(),
+            original.inner.namespace,
+            clock,
+        )
+        .unwrap();
+        let headers = HeaderMap::from_iter([(
+            axum::http::header::AUTHORIZATION,
+            format!("Bearer {}", crate::test_support::TOKEN)
+                .parse()
+                .unwrap(),
+        )]);
+        let first = anchors(
+            State(api.clone()),
+            headers.clone(),
+            Query(AnchorPage { offset: 0 }),
+        )
+        .await
+        .unwrap()
+        .0;
+        assert_eq!(first["anchors"].as_array().unwrap().len(), 500);
+        assert_eq!(first["next_offset"], 500);
+        let last = anchors(State(api), headers, Query(AnchorPage { offset: 500 }))
+            .await
+            .unwrap()
+            .0;
+        assert_eq!(last["anchors"].as_array().unwrap().len(), 1);
+        assert_eq!(last["anchors"][0]["node"], 500);
+        assert_eq!(last["next_offset"], json!(null));
+        assert_eq!(last["graph"], first["graph"]);
     }
 }
