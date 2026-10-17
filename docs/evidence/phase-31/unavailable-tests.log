@@ -1,0 +1,12 @@
+
+> roadrunner-web@0.1.0 test
+> vitest run tests/DispatchAuditCard.test.tsx
+
+
+ RUN  v5.0.5 /Users/admin/Developer/roadrunner/web
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  15:18:17
+   Duration  14.73s (environment 44%, tests 28%, import 24%, transform 3%)

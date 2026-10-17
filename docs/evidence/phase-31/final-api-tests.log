@@ -1,0 +1,46 @@
+   Compiling roadrunner-api v0.1.0 (/Users/admin/Developer/roadrunner/crates/roadrunner-api)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 45.48s
+     Running unittests src/lib.rs (target/debug/deps/roadrunner_api-87a74304da82e541)
+
+running 3 tests
+test dispatch_scene::tests::validates_bounds_and_graph_before_resolving_ids ... ok
+test dispatch_scene::tests::captures_original_candidate_geometry_and_keeps_publication_separate ... ok
+test dispatch_scene::http_tests::requires_authorization_and_does_not_publish_live_state ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.40s
+
+     Running unittests src/main.rs (target/debug/deps/roadrunner_api-1aae1507690619f9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/delivery_scene.rs (target/debug/deps/delivery_scene-a4dc19d565bc3a46)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/entrypoint.rs (target/debug/deps/entrypoint-a67849b01ac0c347)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/graph_debug.rs (target/debug/deps/graph_debug-abdd8ccdcb2e3bbd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/http.rs (target/debug/deps/http-14be537d2c856c82)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/visualization.rs (target/debug/deps/visualization-a87e46d33e9f6d61)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s

@@ -231,3 +231,5 @@ ROADRUNNER_API_TOKEN="$ROADRUNNER_API_TOKEN" python3 scripts/verify_delivery_sce
 
 Run this command from the repository root. It compares all five actual source artifacts
 and checks that namespace, revision, world, execution, plans and publications are unchanged.
+
+Dispatch candidates, original hypothetical routes and cinematic policy presentation are described in [Phase 31](../docs/dispatch-visualization.md).

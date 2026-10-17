@@ -486,7 +486,7 @@ export async function apiText(
   path: string,
   token: string,
   signal: AbortSignal,
-  request?: RouteRequest,
+  request?: object,
 ) {
   let response: Response;
   try {

@@ -1,0 +1,26 @@
+
+> roadrunner-web@0.1.0 build
+> tsc -b && vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 1867 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                      0.58 kB │ gzip:   0.34 kB
+dist/assets/space-grotesk-vietnamese-wght-normal-D0rl6rjA.woff2      6.71 kB
+dist/assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2            18.22 kB
+dist/assets/space-grotesk-latin-ext-wght-normal-D9tNdqV9.woff2      18.94 kB
+dist/assets/space-grotesk-latin-wght-normal-BhU9QXUp.woff2          22.28 kB
+dist/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2                36.93 kB
+dist/assets/maplibre-gl-worker-DxGNRm0a.mjs                        508.31 kB
+dist/assets/index-DVFm6tgv.css                                     133.41 kB │ gzip:  21.32 kB
+dist/assets/immersiveLayer-CvpSIxKd.js                             538.98 kB │ gzip: 135.25 kB
+dist/assets/index-CiovtoHr.js                                    1,519.09 kB │ gzip: 427.17 kB
+
+✓ built in 903ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

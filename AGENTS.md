@@ -2296,6 +2296,11 @@ A physically interacting traffic simulator needs separate engine design and appr
 
 # PHASE 31 — Dispatch Visualization
 
+Implementation and evidence: [dispatch visualization](docs/dispatch-visualization.md).
+The bounded isolated evaluation captures original hypothetical routes; simulation
+audit records retain publication and incomplete/unavailable outcomes. Final mobile
+visual acceptance remains pending browser-host availability. Phase 32 is not started.
+
 ## Goal
 
 Make dispatch decisions inspectable.

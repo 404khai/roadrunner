@@ -13,6 +13,7 @@ import { riderVisual } from "./riderVisual";
 import type { ReactNode } from "react";
 import type { Catalog } from "./contracts";
 import { decodeScene, frameAt, sampleRider, type Scene } from "./deliveryScene";
+import { DispatchAuditCard, type AuditFocus } from "./DispatchAuditCard";
 import { DeliveryMap } from "./DeliveryMap";
 import { useReducedMotion } from "./useReveal";
 import { durationLabel } from "./geometry";
@@ -174,6 +175,7 @@ export function DeliveryWorkspace({
   token: string;
   onExit: () => void;
 }) {
+  const [dispatchFocus, setDispatchFocus] = useState<AuditFocus>();
   const [scene, setScene] = useState<Scene>(),
     [at, setAt] = useState(0),
     [playing, setPlaying] = useState(false),
@@ -261,6 +263,7 @@ export function DeliveryWorkspace({
       }
       const next = decodeScene(raw, catalog.graph.snapshot_digest);
       if (controller.signal.aborted) return;
+      setDispatchFocus(undefined);
       setScene(next);
       setAt(next.start);
       setSelected(next.frames[0].riders[0]?.id ?? "");
@@ -302,7 +305,9 @@ export function DeliveryWorkspace({
   };
   return (
     <main className="delivery-workspace">
+      <DispatchAuditCard scene={scene} onFocus={setDispatchFocus} />
       <DeliveryMap
+        dispatchFocus={dispatchFocus}
         reduced={reduced}
         scene={scene}
         at={at}

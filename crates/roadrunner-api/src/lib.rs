@@ -1,6 +1,7 @@
 //! Phase 20 HTTP adapter over one volatile, serialized operational authority.
 //! Domain publication remains in dispatch; simulations never mutate live state.
 mod delivery_scene;
+mod dispatch_scene;
 mod error;
 mod graph_debug;
 mod http;

@@ -1,0 +1,15 @@
+
+> roadrunner-web@0.1.0 test
+> vitest run --testTimeout=60000
+
+
+ RUN  v5.0.5 /Users/admin/Developer/roadrunner/web
+
+
+ Test Files  17 passed (17)
+      Tests  73 passed (73)
+   Start at  15:15:37
+   Duration  79.00s (tests 49%, environment 27%, import 21%, transform 3%)
+
+    Isolate  17 workers spawned · ~9.16s startup each (spawn + environment, per file)
+             at least ~13.08s faster with isolate: false — reuses workers across files instead of one per file
