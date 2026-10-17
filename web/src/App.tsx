@@ -37,6 +37,7 @@ import { distanceLabel, durationLabel } from "./geometry";
 import { ComparisonPanel, SegmentPanel, routeName } from "./ComparisonPanel";
 import { GraphPanel } from "./GraphPanel";
 import { useGraphDebugger } from "./useGraphDebugger";
+import { DispatchWorkspace } from "./DispatchWorkspace";
 import { DeliveryWorkspace } from "./DeliveryWorkspace";
 import { MapView } from "./MapView";
 import { useReducedMotion, useReveal } from "./useReveal";
@@ -51,6 +52,7 @@ function message(error: unknown) {
 }
 export function App() {
   const [deliveryMode, setDeliveryMode] = useState(false);
+  const [dispatchMode, setDispatchMode] = useState(false);
   const [catalog, setCatalog] = useState<Catalog>(),
     [origin, setOrigin] = useState<Anchor>(),
     [destination, setDestination] = useState<Anchor>();
@@ -271,6 +273,14 @@ export function App() {
   const route = result?.evidence;
   const debug = useGraphDebugger(catalog?.graph.snapshot_digest, token);
   const noRoute = error?.code === "no_route";
+  if (dispatchMode)
+    return (
+      <DispatchWorkspace
+        catalog={catalog}
+        token={token}
+        onExit={() => setDispatchMode(false)}
+      />
+    );
   if (deliveryMode)
     return (
       <DeliveryWorkspace
@@ -339,6 +349,12 @@ export function App() {
               onClick={() => setDeliveryMode(true)}
             >
               Delivery simulation <ArrowRight size={15} />
+            </button>
+            <button
+              className="delivery-entry"
+              onClick={() => setDispatchMode(true)}
+            >
+              Dispatch visualization <ArrowRight size={15} />
             </button>
             {debug.enabled && <GraphPanel debug={debug} route={route} />}
             <div hidden={debug.enabled} className="panel-intro">

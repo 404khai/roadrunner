@@ -67,6 +67,7 @@ pub(crate) fn export(api: &Api, scenario: &SimulationScenario) -> Result<Value, 
         "start":result.started_at,"end":result.ended_at,"frames":frames,"routes":routes,
         "schedules":result.trace.schedules,"effects":result.trace.effects,"roads":roads,
         "summary":result.summary,"scenario":scenario,
+        "dispatch_audit":{"basic":result.decisions,"insertion":result.insertions,"fleet":result.fleets,"recovery":result.recoveries,"failures":result.prediction_failures},
         "limitations":["interpolated_not_measured_gps","no_physical_heading","road_page_not_city_coverage","no_ambient_vehicles","no_retained_turn_cost_breakdown"]}),
     )
 }

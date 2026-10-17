@@ -362,9 +362,10 @@ async fn simulations_are_isolated_and_openapi_and_swagger_are_served() {
     assert_eq!(before, after);
     let doc = request(&api, "GET", "/openapi.json", None, json!(null), None).await;
     assert_eq!(doc.0, StatusCode::OK);
-    assert_eq!(doc.1["paths"].as_object().unwrap().len(), 29);
+    assert_eq!(doc.1["paths"].as_object().unwrap().len(), 30);
     assert!(doc.1["paths"]["/v1/visualization/graph"]["get"].is_object());
     assert!(doc.1["paths"]["/v1/visualization/deliveries"]["post"].is_object());
+    assert!(doc.1["paths"]["/v1/visualization/dispatch"]["post"].is_object());
     let mut schemas = vec![&doc.1];
     while let Some(node) = schemas.pop() {
         match node {

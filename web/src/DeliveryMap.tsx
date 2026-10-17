@@ -5,6 +5,7 @@ import { style } from "./MapView";
 import { frameAt, sampleRider, actionKey, type Scene } from "./deliveryScene";
 import { perspectiveScooter, relativeDirection } from "./perspectiveScooter";
 import { riderTagAsset } from "./riderPortraitAsset";
+import type { AuditFocus } from "./DispatchAuditCard";
 import { CameraGizmo } from "./CameraGizmo";
 import { useReveal } from "./useReveal";
 import { revealPrefix } from "./geometry";
@@ -61,6 +62,7 @@ export function DeliveryMap({
   onEdge,
   reduced = false,
   selectionRevision = 0,
+  dispatchFocus,
 }: {
   scene?: Scene;
   at: number;
@@ -70,6 +72,7 @@ export function DeliveryMap({
   onEdge: (id: number) => void;
   reduced?: boolean;
   selectionRevision?: number;
+  dispatchFocus?: AuditFocus;
 }) {
   const container = useRef<HTMLDivElement>(null),
     map = useRef<ml.Map | null>(null),
@@ -672,6 +675,25 @@ export function DeliveryMap({
     cameraPitch,
     reduced,
   ]);
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m || !dispatchFocus) return;
+    const element = document.createElement("div");
+    element.className = reduced ? "audit-pulse reduced" : "audit-pulse";
+    element.setAttribute("role", "status");
+    element.textContent = dispatchFocus.label;
+    const marker = new ml.Marker({ element, anchor: "center" })
+      .setLngLat(dispatchFocus.center)
+      .addTo(m);
+    const timer = window.setTimeout(
+      () => marker.remove(),
+      reduced ? 5000 : 3000,
+    );
+    return () => {
+      window.clearTimeout(timer);
+      marker.remove();
+    };
+  }, [ready, dispatchFocus, reduced]);
   // Geometry is uploaded only at captured transitions or selection/context changes.
   // Animation frames move the existing DOM markers without retransmitting paths.
   useEffect(() => {

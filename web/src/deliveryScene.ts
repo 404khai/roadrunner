@@ -121,6 +121,15 @@ const schema = z.object({
       at: time,
     }),
   ),
+  dispatch_audit: z
+    .object({
+      basic: z.array(z.unknown()),
+      insertion: z.array(z.unknown()),
+      fleet: z.array(z.unknown()),
+      recovery: z.array(z.unknown()),
+      failures: z.array(z.unknown()).optional(),
+    })
+    .optional(),
   roads: z.unknown(),
 });
 export type Scene = z.infer<typeof schema> & {
