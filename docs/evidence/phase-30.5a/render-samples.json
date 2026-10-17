@@ -1,0 +1,460 @@
+{
+  "hardware": "Apple M3, 16 GiB RAM",
+  "scenario": "Distributed Fleet Demo, 58 nodes / 114 directed edges",
+  "renderer": "Three.js r186 custom MapLibre layer; 48 ambient actors + 6 distant rider tags; fit-scene, 1x",
+  "sampling": "30 sequential DOM instrumentation samples in one running Chrome session; CPU render submission only, not GPU frame time or FPS benchmark",
+  "medianCpuMs": 3.800000011920929,
+  "p95CpuMs": 4.9000000059604645,
+  "samples": [
+    {
+      "clock": "10.6",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "4.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "10.8",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.7999999821186066",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "11",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "11.2",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.7000000178813934",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "11.4",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.7999999821186066",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "11.6",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.899999976158142",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "11.8",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.5999999940395355",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "11.9",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "12.1",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "4",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "12.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.7000000178813934",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "12.5",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.7999999821186066",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "12.7",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "12.9",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "13.1",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "13.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "13.5",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "4.0999999940395355",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "13.6",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "5.4000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "13.9",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "14.1",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "14.2",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.600000023841858",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "14.4",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.7999999821186066",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "14.6",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.5999999940395355",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "14.8",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.800000011920929",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    },
+    {
+      "clock": "15.3",
+      "stats": {
+        "buildingFeatures": "19",
+        "engine": "three.js r186",
+        "modelCalls": "1176",
+        "modelCount": "48",
+        "modelFrameMs": "3.9000000059604645",
+        "modelGeometries": "1176",
+        "modelTriangles": "225696",
+        "viewPitch": "65",
+        "viewZoom": "15.66380675817557"
+      },
+      "tags": 6
+    }
+  ]
+}

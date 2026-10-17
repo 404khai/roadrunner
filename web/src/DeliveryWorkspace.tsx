@@ -179,6 +179,7 @@ export function DeliveryWorkspace({
     [playing, setPlaying] = useState(false),
     [speed, setSpeed] = useState(4),
     [selected, setSelected] = useState("1"),
+    [selectionRevision, setSelectionRevision] = useState(0),
     [edge, setEdge] = useState<number>(),
     [traffic, setTraffic] = useState(false),
     [busy, setBusy] = useState(false),
@@ -302,11 +303,14 @@ export function DeliveryWorkspace({
   return (
     <main className="delivery-workspace">
       <DeliveryMap
+        reduced={reduced}
         scene={scene}
         at={at}
         selected={selected}
+        selectionRevision={selectionRevision}
         onSelect={(id) => {
           setSelected(id);
+          setSelectionRevision((v) => v + 1);
           setInspectOpen(true);
         }}
         traffic={traffic}
@@ -485,6 +489,7 @@ export function DeliveryWorkspace({
                   }
                   onClick={() => {
                     setSelected(r.id);
+                    setSelectionRevision((v) => v + 1);
                     setInspectOpen(true);
                   }}
                 >

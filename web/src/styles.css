@@ -3037,3 +3037,195 @@ h1 > span {
 .delivery-legend .customer-legend {
   color: #d8c5fa;
 }
+
+.navigation-card {
+  position: absolute;
+  top: 140px;
+  left: 20px;
+  width: 270px;
+  padding: 0;
+  background: #1b1b1bf2;
+  border: 1px solid #ffffff1d;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px #0004;
+  font-size: 10px;
+}
+.navigation-card summary {
+  padding: 14px;
+  cursor: pointer;
+  color: #dadad4;
+}
+.navigation-card-body {
+  padding: 0 14px 14px;
+  display: grid;
+  gap: 9px;
+}
+.navigation-card [role="group"] {
+  display: flex;
+  gap: 5px;
+}
+.navigation-card [role="group"] button {
+  flex: 1;
+  font-size: 9px;
+}
+.navigation-card button[aria-pressed="true"] {
+  background: #e4e4dd;
+  color: #20201e;
+}
+.navigation-card label {
+  font-size: 10px;
+}
+.navigation-card small {
+  font-size: 8px;
+  line-height: 1.7;
+  color: #a0a098;
+}
+.navigation-card input {
+  accent-color: #d9d9d0;
+}
+.delivery-workspace:has(.scene-setup.is-open) .navigation-card {
+  display: none;
+}
+.scooter-marker[data-view="perspective"] img {
+  width: 64px;
+  height: 77px;
+  left: -9px;
+  top: 0;
+}
+.scooter-marker[data-view="perspective"] {
+  width: 46px;
+  height: 74px;
+  border-radius: 12px !important;
+}
+.scooter-marker[data-view="perspective"] span {
+  top: 56px;
+}
+@media (max-width: 780px) {
+  .navigation-card {
+    top: auto;
+    bottom: 205px;
+    left: 12px;
+    width: 220px;
+    z-index: 2;
+  }
+  .navigation-card-body {
+    max-height: 28dvh;
+    overflow: auto;
+  }
+  .delivery-workspace:has(.scene-inspector.is-open) .navigation-card {
+    left: auto;
+    right: 12px;
+    bottom: 205px;
+  }
+}
+
+.ambient-marker {
+  pointer-events: none;
+  opacity: 0.8;
+}
+.ambient-marker img {
+  width: 24px;
+  height: 40px;
+  display: block;
+}
+.navigation-card select {
+  max-width: 130px;
+  background: #292929;
+  color: #eee;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 4px;
+}
+.camera-gizmo {
+  position: absolute;
+  right: 20px;
+  bottom: 215px;
+  width: 84px;
+  border: 1px solid #ffffff25;
+  border-radius: 12px;
+  background: #202020e8;
+  box-shadow: 0 4px 16px #0005;
+}
+.camera-gizmo svg {
+  display: block;
+  width: 84px;
+  height: 84px;
+  touch-action: none;
+  cursor: grab;
+}
+.camera-gizmo svg:active {
+  cursor: grabbing;
+}
+.camera-gizmo [role="button"] {
+  cursor: pointer;
+  outline: none;
+}
+.camera-gizmo [role="button"]:focus circle {
+  stroke: white;
+  stroke-width: 2;
+}
+.camera-gizmo button {
+  width: 100%;
+  min-height: 26px;
+  font-size: 9px;
+  border-radius: 0 0 10px 10px;
+}
+@media (max-width: 780px) {
+  .camera-gizmo {
+    right: 12px;
+    bottom: 250px;
+    transform: scale(0.85);
+    transform-origin: right bottom;
+  }
+}
+.navigation-card-body {
+  max-height: max(100px, calc(100dvh - 430px));
+  overflow-y: auto;
+}
+.delivery-workspace:has(.scene-setup.is-open) .camera-gizmo {
+  display: none;
+}
+@media (min-width: 781px) {
+  .camera-gizmo {
+    right: 335px;
+    bottom: 185px;
+  }
+}
+.camera-gizmo button {
+  width: 50%;
+  font-size: 8px;
+}
+.camera-gizmo button:last-child {
+  border-radius: 0 0 10px 0;
+}
+.scooter-marker[data-view="tag"] {
+  width: 30px;
+  height: 36px;
+  border-radius: 50% !important;
+  background: transparent !important;
+}
+.scooter-marker[data-view="tag"] img {
+  width: 30px;
+  height: 37px;
+  left: 0;
+  top: 0;
+}
+.scooter-marker[data-view="tag"] span {
+  top: 22px;
+  left: 23px;
+  font-size: 8px;
+  padding: 1px 3px;
+}
+@media (max-width: 780px) {
+  .navigation-card-body {
+    max-height: 28dvh;
+  }
+  .camera-gizmo {
+    right: 0;
+    bottom: 260px;
+    transform: scale(0.7);
+  }
+  .delivery-map:has(.navigation-card[open]) .camera-gizmo {
+    bottom: calc(205px + 28dvh + 52px);
+  }
+}

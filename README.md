@@ -391,4 +391,4 @@ The [Phase 30 execution lab](docs/live-delivery-visualization.md) adds a full-sc
 distinct scooters, accepted execution inspection and bounded synthetic traffic.
 Its Distributed Fleet Demo uses six valid graph starts and actual engine assignments;
 positions are illustrative estimates rather than GPS. See [completion and screenshots](docs/phase-30-completion.md).
-Perspective/ambient/3D navigation remains the [unimplemented Phase 30.5 proposal](docs/phase-30.5-proposal.md).
+Perspective navigation, synthetic ambient vehicles and procedural 3D models are described in [Phase 30.5 implementation](docs/phase-30.5-completion.md).
