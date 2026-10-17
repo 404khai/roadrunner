@@ -1,0 +1,94 @@
+{
+  "phase": 29,
+  "verdict": "supported_debugger_implemented_and_verified_with_explicit_producer_gaps",
+  "baseline": "d201fae274f74315598e8684451214873a931de9",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "rustc": "1.96.0"
+  },
+  "checks": {
+    "workspace_tests": {
+      "command": "cargo test --workspace --all-features --locked",
+      "passed": 312,
+      "failed": 0,
+      "ignored": 13,
+      "log": "workspace-tests.log"
+    },
+    "clippy": {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "result": "passed",
+      "log": "clippy.log"
+    },
+    "rustfmt": {
+      "command": "cargo fmt --all -- --check",
+      "result": "passed",
+      "log": "rustfmt.log"
+    },
+    "client_tests": {
+      "command": "cd web && npm test",
+      "passed": 33,
+      "log": "client-tests.log"
+    },
+    "client_lint": "passed",
+    "client_format": "passed",
+    "client_build": "passed_with_existing_large_bundle_warning",
+    "diff_check": "passed"
+  },
+  "browser_record": "browser.json",
+  "phase_30_started": false,
+  "unsupported_required_data": [
+    "road_class_not_retained_in_frozen_graph_or_compiled_provenance"
+  ],
+  "not_claimed": [
+    "explored-node membership or ordered search trace",
+    "road class inferred from basemap or speed",
+    "opt-in PostgreSQL/broker/process suites rerun",
+    "large-network performance",
+    "standalone edge evaluation establishes maneuver or route legality",
+    "Phase 30 delivery movement"
+  ],
+  "source_sha256": {
+    "crates/roadrunner-api/src/graph_debug.rs": "eeb44a07913718123e9a494853453fe55ca89b3d2b2c03d2737dfed791ff9d81",
+    "crates/roadrunner-api/src/http.rs": "f69678896d08e705432a963dfd0f337bbc426e1e9d4b21df49f8a1cc32dcd0ff",
+    "crates/roadrunner-api/src/lib.rs": "84b195d105bd7e191829c21a71903b37bcf94c698cd6d3c8d13e4e8252365e2f",
+    "crates/roadrunner-api/tests/graph_debug.rs": "953856485633b44efafea5432a6b859442f6689f8ed17c49421cd4e6cd2b36b9",
+    "crates/roadrunner-api/tests/http.rs": "9176e25a25889acae9b683aba28800a91fd4a9407cee1ffb0d3a8c0f3edcef0e",
+    "web/src/GraphPanel.tsx": "b30f6a20e170ee952ae51a7ca719ae622246a2eb48232ec4af264d5c45ca263a",
+    "web/src/graphContracts.ts": "49fac10d6f1ab64336914bcb590d4873c4a54ae6608a5c95bca053cf2588c943",
+    "web/src/useGraphDebugger.ts": "4c63e3af12ec8b30b34079c926a30d60f1997549abf3eca5c7a6963831d37aae",
+    "web/src/App.tsx": "c8204e8d9cd94a07817279e9bdc81aa49f578a75cb8812205f1e722e3f28ecfb",
+    "web/src/MapView.tsx": "7b1e30f98a8b34f5d6d970a90b22bfb16ebb07a7b6bf12c54228d194b6b622c6",
+    "web/src/styles.css": "3682d303f670454f0e9226716d908436a0d8e560f328db111064dd8e7abd25a8",
+    "web/tests/GraphDebugger.test.tsx": "b215e39482355df257aade06dec2b45103a2748ccc6c3efd11da501a12107d42",
+    "web/tests/graphContracts.test.ts": "6d9b9706df8fa0767bf19c1d529fc2dbfca457f1e9370e3accc3fd3763c9f03b",
+    "web/tests/graph-page.json": "6edd53e6154b2a59b715ec5be8f5a11475f23d1e87df80eaa59087a7c97a722a",
+    "web/tests/graph-no-traffic.json": "e6072d7cbc0c9eb478348c33fdca9fb525ac6c9308e8bb5cf19cff51b9f6c7ee",
+    "web/tests/graph-traffic.json": "6ad2d778b8abe8859d4ba2496987461f245c9742fbc710a3b17fdef9106dbf9a",
+    "docs/phase-29-completion.md": "d8113566dd77faa5ce8b7c3f62c4fcfda25bba243dd8be108e2120b0dbe5a2a9",
+    "docs/graph-debugger.md": "5ea31c21cfd20443777d9f777b9ca0d200953edaf1e11800e6dd3e1ebdcbc106"
+  },
+  "artifact_sha256": {
+    "browser-source.json": "4901c8b78185fe0b4a50e3a5abc62e7d6f54a90324cd6d6542d84384dec11ddf",
+    "browser.json": "2fe5aaa7381782ad9161a7d03099c1950845347dc129e3c69dede45ae778f168",
+    "client-build.log": "d6daa62b6608eb73bd527cea57098a15a200933ea5b2b2df140d31559ead635d",
+    "client-format.log": "16b7e664d42fdda9aaa86ac1f3356599010b8797a8cecb52bfe52889247dc71b",
+    "client-lint.log": "4f1473ea8154f73b72e954c5532d448447e129034f859e5885f141519c422f84",
+    "client-tests.log": "16dd1812335662064356b332705682d83e6bd6edb689a5fb1af596e6e55bcf6d",
+    "clippy.log": "810604897264074fdc2dfecd05d60583210bf903313697de0040899ef1100827",
+    "desktop-graph.png": "1b1803e447201542b1e099468b44b0ebe9aea53d0c9e6f2e61a294ad1f761ab1",
+    "engine-unavailable.png": "78d52d164cd1a06cf759e1357f79a4331f7830c7cb6afd7103fcf4e4883b785c",
+    "focused-reverse-edge.png": "1db841c2375c555f0df26174fa8f2bbe7291300139d2de423c2982d112e2a09a",
+    "mobile-inspector.png": "182a2c49c1dd34fd59ef6e769504618917f0d58101766a78e2e1469d4538dca8",
+    "mobile-one-way.png": "349259238bc45f5baa03e126f10e5fe9ce575d09e103f35e81bf02b3659ea9ab",
+    "node-focus.png": "53c62510e030737294729e67e5ed291ca4d32b73d0868e70dc374e9bb6f24246",
+    "rustfmt.log": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "search-summary.png": "d3cd7539733675adebc905a0b88a8ea5473b130cdd7f4c6feaf3dc1091a9bedc",
+    "tablet-graph.png": "36a00e29670f835dde82ba70eb23dde8fdcd5526cbcba06f4327f3998b46e88c",
+    "traffic-edge.png": "cbb757a8941f4ce0061ff65c397b54db7950d18ebefc5d7ddada5f7ceb10e0e2",
+    "traffic-unavailable.png": "74261397f795cd4c0cd52ad7b00f05fc67aa8564151fd48d0a5e860d68cc16db",
+    "weight-overlay.png": "61ab983dd8b910473b585506b01f4bee8560be94ec4fa1ae76eff4ab4061c866",
+    "workspace-tests.log": "735feb2d9ba804291dd9ba0c4c84b0a45fd0aefa0287cd7accbed747b6953633"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "phase": 29,
+  "date": "2026-10-17",
+  "application": "production Vite preview at 127.0.0.1:5174 with actual Roadrunner API at 127.0.0.1:3100",
+  "browser": "Chrome, actual MapLibre WebGL rendering",
+  "native_preview_fallback": {
+    "attempts": 2,
+    "error": "Preview snapshot failed: Preview automation snapshot timed out after 15000ms.",
+    "fallback": "Chrome CUA"
+  },
+  "graph": {
+    "fixture": "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph",
+    "digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+    "nodes": 58,
+    "directed_edges": 114,
+    "directed_points": 527
+  },
+  "download": {
+    "file": "browser-source.json",
+    "graph_view_id": "graph-view-v1:c1247580ba976a89bcf29d233855fb4a66a364d93fc5a8fd49d0bec984520f43",
+    "method": "Actual UI Download graph evidence control; completed browser download copied unchanged",
+    "geometry_check": "Exact nodes and all directed edge point arrays match graph-page.json producer capture"
+  },
+  "checked": [
+    "Node 23 and opposite edges 55 / 58 picked on actual map; exact source fields",
+    "Reverse curve edge 3: distance 68.3474m, base 12.3025s; real disposable adopted factor 2 produces 24.6050s under traffic-aware objective",
+    "Distance objective retains adopted factor but evaluates distance instead; capture replaces on objective change",
+    "Curved one-way edge 105, 51 to 52, 7 exact vertices, 65.4848m, base 11.7873s; mobile focus",
+    "Layer toggles keep capture ID; edge/node picks cannot change route endpoints",
+    "Original route evaluation ID unchanged across developer interactions and returning to Routing",
+    "Explicit selected-entity focus; page fit; collapsed floating workspace; no horizontal overflow at 390x844 and 768x1024",
+    "Actual Dijkstra 23 / A* 5 expanded-state summary for 0 to 35; optional explored membership disabled",
+    "Stopped disposable API: pinned view retained until explicit refresh, HTTP 502 unavailable/retry, restart retry restores graph",
+    "Restart without traffic overlay: traffic-aware costs unavailable/null while geometry remains available",
+    "Compact plug opens Connect your engine modal and closes correctly",
+    "Final camera recovery build: startup, node 33 focus, interrupted focus/mobile resize, tablet/desktop transitions, overview; no warnings/errors attributed to final asset index-DebwqL1n.js"
+  ],
+  "refinements": [
+    "Local direction icon replaced unreliable font glyph",
+    "Offset hit-line width distinguishes opposite traversals",
+    "Inspector density and mobile legend/caption spacing",
+    "Canonical curve vertices included in framing",
+    "Selected-entity focus button",
+    "Capture-qualified hits and stale-layer hiding",
+    "Startup readiness, direct point focus and finite camera fallback after intermittent Invalid LngLat fit error"
+  ],
+  "screenshots": {
+    "desktop-graph.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "engine-unavailable.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "focused-reverse-edge.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "mobile-inspector.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "mobile-one-way.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "node-focus.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "search-summary.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "tablet-graph.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "traffic-edge.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "traffic-unavailable.png": {
+      "width": 65536,
+      "height": 4293001752
+    },
+    "weight-overlay.png": {
+      "width": 65536,
+      "height": 4293001752
+    }
+  },
+  "limits": [
+    "Real browser fixture is small, not a large graph performance test",
+    "Graph pagination independently verified by backend and synthetic transport consumer tests, not a large-network browser run",
+    "Road class, explored-node membership and ordered traces unavailable",
+    "External map context is not canonical source evidence",
+    "Earlier screenshots precede final camera-only recovery refinement; final desktop and node screenshots capture final build"
+  ],
+  "phase_30_started": false
+}

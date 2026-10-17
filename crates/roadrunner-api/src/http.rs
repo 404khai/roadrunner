@@ -101,6 +101,63 @@ async fn state(State(api): State<Api>, headers: HeaderMap) -> Result<Json<Value>
         json!({"schema_version":1,"namespace":api.namespace(),"revision":c.state.revision().number.to_string(),"time_domain":api.inner.clock.time_domain(),"now_seconds":api.inner.clock.now().map_err(ApiError::invalid)?,"graph":api.inner.graph.metadata(),"references":references,"world":c.state.data(),"plan_revisions":c.state.plan_revisions(),"execution":c.state.execution(),"contexts":c.state.contexts(),"history":c.state.history(),"publications":c.state.publications()}),
     ))
 }
+#[utoipa::path(get,path="/v1/visualization/graph",params(crate::graph_debug::GraphQuery),responses((status=200,body=Object),(status=401,body=ErrorBody),(status=413,body=ErrorBody),(status=503,body=ErrorBody)),security(("bearer"=[])))]
+async fn debug_graph(
+    State(api): State<Api>,
+    headers: HeaderMap,
+    Query(query): Query<crate::graph_debug::GraphQuery>,
+) -> Result<axum::response::Response, ApiError> {
+    crate::persistence::check_async(&api).await?;
+    read(&api, &headers)?;
+    let busy = || {
+        ApiError::new(
+            StatusCode::SERVICE_UNAVAILABLE,
+            "visualization_busy",
+            "graph inspection capacity unavailable; retry later",
+        )
+    };
+    let export_permit = api
+        .inner
+        .export_admission
+        .clone()
+        .try_acquire_owned()
+        .map_err(|_| busy())?;
+    let worker = api
+        .inner
+        .workers
+        .clone()
+        .try_acquire_owned()
+        .map_err(|_| busy())?;
+    let (traffic, departure) = {
+        let c = api
+            .inner
+            .coordinator
+            .lock()
+            .map_err(|_| ApiError::internal())?;
+        (
+            c.traffic.clone(),
+            roadrunner_core::geo::Seconds::new(
+                api.inner.clock.now().map_err(ApiError::invalid)?.value(),
+            )
+            .map_err(ApiError::invalid)?,
+        )
+    };
+    tokio::task::spawn_blocking(move || {
+        let _worker = worker;
+        let response = crate::graph_debug::export(&api, &query, traffic.as_ref(), departure)?;
+        let bytes = encode_export(&response, 4 * 1024 * 1024)?;
+        axum::response::Response::builder()
+            .header(axum::http::header::CONTENT_TYPE, "application/json")
+            .body(axum::body::Body::new(HeldExportBody {
+                bytes: bytes.into(),
+                _permit: export_permit,
+            }))
+            .map_err(|_| ApiError::internal())
+    })
+    .await
+    .map_err(|_| ApiError::internal())?
+}
+
 /// Bounded immutable node catalog for explicit route-anchor selection.
 #[derive(serde::Deserialize, utoipa::IntoParams)]
 #[serde(deny_unknown_fields)]
@@ -467,6 +524,7 @@ resource_handler!(
 #[openapi(
     paths(
         anchors,
+        debug_graph,
         visualization_route,
         visualization_alternatives,
         state,
@@ -515,6 +573,7 @@ pub(crate) fn router(api: Api) -> Router {
     Router::new()
         .route("/v1/state", get(state))
         .route("/v1/visualization/anchors", get(anchors))
+        .route("/v1/visualization/graph", get(debug_graph))
         .route("/v1/routes", post(route))
         .route("/v1/visualization/routes", post(visualization_route))
         .route(
@@ -766,5 +825,51 @@ mod anchor_catalog_tests {
         assert_eq!(last["anchors"][0]["node"], 500);
         assert_eq!(last["next_offset"], json!(null));
         assert_eq!(last["graph"], first["graph"]);
+    }
+}
+
+#[cfg(test)]
+mod graph_admission_tests {
+    #[tokio::test]
+    #[allow(clippy::unwrap_used)]
+    async fn graph_read_rejects_saturation_and_holds_body_admission() {
+        let (api, _, digest) = crate::test_support::fixture();
+        let held = api
+            .inner
+            .export_admission
+            .clone()
+            .acquire_many_owned(4)
+            .await
+            .unwrap();
+        let headers = axum::http::HeaderMap::from_iter([(
+            axum::http::header::AUTHORIZATION,
+            axum::http::HeaderValue::from_static("Bearer test-operator-token-1234"),
+        )]);
+        let query = || crate::graph_debug::GraphQuery {
+            graph_digest: digest.clone(),
+            node_offset: 0,
+            edge_offset: 0,
+            objective: crate::model::Objective::TravelTime,
+        };
+        let e = super::debug_graph(
+            axum::extract::State(api.clone()),
+            headers.clone(),
+            axum::extract::Query(query()),
+        )
+        .await
+        .unwrap_err();
+        assert_eq!(e.status, axum::http::StatusCode::SERVICE_UNAVAILABLE);
+        drop(held);
+        let response = super::debug_graph(
+            axum::extract::State(api.clone()),
+            headers,
+            axum::extract::Query(query()),
+        )
+        .await
+        .unwrap();
+        assert_eq!(api.inner.workers.available_permits(), 4);
+        assert_eq!(api.inner.export_admission.available_permits(), 3);
+        drop(response);
+        assert_eq!(api.inner.export_admission.available_permits(), 4);
     }
 }

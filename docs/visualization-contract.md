@@ -241,3 +241,12 @@ weights/delay marked unavailable. Supported extension values must match the memb
 full graph/evaluation/traffic identity, occurrence ordinals and directed edges, and
 reconcile to its totals. User selection, line visibility, inspected occurrence and
 reveal progress are renderer state. They cannot rewrite engine ranks or source bytes.
+
+## Phase 29 graph view representation
+
+The independently versioned [bounded graph view](graph-debugger.md#http-contract)
+adds a read-only inspection endpoint without altering portable route evidence.
+It preserves the full graph identity, exact directed geometry and original static
+cost inputs. Its graph-view identity scopes dense node/edge selection to a specific
+capture/page; it is not a route evaluation or operational commitment identity.
+Road class and search-node membership remain unavailable in current sources.

@@ -151,3 +151,18 @@ Each member may additionally expose the independently versioned, bounded
 It uses captured static inputs for the returned path, with checked sums and no new
 routing/search semantics, world mutation or historical trace retention. Existing
 portable route identities, legacy responses and single-route responses are unchanged.
+
+## Phase 29 bounded graph inspection
+
+`GET /v1/visualization/graph` exports independently versioned directed graph pages
+under the existing read capability. It requires the full graph digest; optional
+node/edge offsets and a static objective select the capture. Limits are 500 node-page
+entries plus edge endpoints (900 nodes total), 200 edges, 20,000 directed vertices,
+and 4 MiB encoded output. Pages stop at edge boundaries; oversized single geometry
+rejects rather than clips. Existing worker/body-admission limits apply.
+
+Exact E7 geometry, base time, adopted traffic factor, default-access evaluation and
+provenance are exposed. A standalone edge cost is not incoming-maneuver or route
+feasibility. Road class/search membership remain explicitly unavailable. The endpoint
+never records routes or changes graph/dispatch semantics. See the full
+[debugger wire contract and limitations](graph-debugger.md#http-contract).
