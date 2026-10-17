@@ -1,0 +1,11 @@
+
+ RUN  v5.0.5 /Users/admin/Developer/roadrunner/web
+
+
+ Test Files  14 passed (14)
+      Tests  65 passed (65)
+   Start at  14:30:47
+   Duration  17.10s (tests 52%, environment 31%, import 14%, transform 2%, worker 1%)
+
+    Isolate  14 workers spawned · ~454ms startup each (spawn + environment, per file)
+             at least ~5.90s faster with isolate: false — reuses workers across files instead of one per file

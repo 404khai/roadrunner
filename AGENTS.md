@@ -2233,10 +2233,10 @@ vehicles, a city simulator, a 3D pipeline or new vehicle-routing semantics.
 
 # PHASE 30.5 — Perspective 2.5D, Ambient Traffic and Immersive 3D Navigation
 
-**Proposed roadmap only; implementation is not authorized.** Added at the user's
-request after Phase 30 authorization. Each milestone requires separate authorization;
-Phase 30 completion does not start Phase 30.5 or Phase 31. See
-[the proposed specification](docs/phase-30.5-proposal.md) for acceptance details.
+**Authorized by the user on 2026-10-17.** The user accepted the proposal and then
+requested all three milestones together on the existing feature branch before a PR.
+Phase 31 remains outside this authorization. See [the accepted specification](docs/phase-30.5-proposal.md)
+and [implementation and verification](docs/phase-30.5-completion.md).
 
 ## 30.5A — Independently usable perspective 2.5D
 
@@ -2245,13 +2245,18 @@ evidence-qualified progress and accepted execution stages.
 
 Deliver overhead ↔ tilted perspective switching, smooth pitch/bearing transitions,
 route-aligned rider-follow camera, perspective route highlights/reveals, and a
-camera-compatible rider representation. Optional building extrusions require a
+camera-compatible rider representation. Projected buildings are enabled by default
+in perspective, following the supplied references. Building extrusions require a
 supported provider; absent buildings/terrain must have a useful fallback. This
 milestone must work without a complete 3D city or rigged scooter model.
 
 Accept only when view changes preserve rider, ActionId, route, selection, time and
 progress, reduced motion remains usable, and heading/placement are verified under
-camera changes. Camera and visual assets remain renderer-owned.
+camera changes. Camera and visual assets remain renderer-owned. Selecting a rider in perspective/3D
+cinematically follows from behind by default, with an auto-follow preference and
+manual interruption. A compact XYZ camera gizmo supports orbit and front/rear views.
+At distant zooms, use a small helmet/face location tag instead of a tiny scooter;
+preserve rider/action/position identity through these presentation changes.
 
 ## 30.5B — Separate synthetic ambient vehicle layer
 

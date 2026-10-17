@@ -1,7 +1,7 @@
-# Proposed Phase 30.5 specification
+# Phase 30.5 specification (accepted)
 
-Status: **proposal recorded in AGENTS.md at the user's request; no implementation authorization**.
-Phase 30 stops at evidence-qualified overhead 2D delivery execution. This proposal
+Status: **accepted and authorized on 2026-10-17; all A/B/C milestones requested together before opening a PR**.
+Phase 30 stops at evidence-qualified overhead 2D delivery execution. This specification
 does not amend the engine's routing/access capabilities or authorize Phase 31.
 
 ## A: perspective 2.5D
@@ -52,7 +52,7 @@ animations (including wheel animation where supported), supported urban scenery,
 road-surface/terrain placement, follow/orbit modes and smooth transitions sharing the
 same geographic progress and route-reveal state.
 
-Prerequisites: separate authorization, renderer evaluation driven by actual model/rig
+Prerequisites: user authorization (received), renderer evaluation driven by actual model/rig
 needs, asset rights/provenance, supported geographic alignment, loading/failure policy,
 and explicit device/fidelity/resource budgets. MapLibre is not assumed to implement
 all advanced model/rig functions. Evaluate a complementary renderer only when needed.
@@ -71,3 +71,16 @@ presentation timing. Ambient actors have their own identity and trajectory scope
 Do not combine these into one ambiguous vehicle type. A future interacting traffic
 simulator that generates congestion and routing costs is separate engine work requiring
 design, quantitative verification and explicit authorization.
+
+## Accepted visual refinements
+
+Use the supplied `references/2.5dview.webp` for projected-building navigation composition
+and `rider_top_back_front_views.png` / `rider_rear_view.png` for scooter silhouettes.
+Retain the monochrome workspace and distinct rider palettes. Perspective buildings
+are enabled by default where provider geometry/heights exist. Selecting a rider
+starts a cinematic rear-follow transition unless auto-follow is disabled. Manual
+camera changes exit follow; a small XYZ gizmo provides orbit, axis and front/rear
+controls. Distant perspective/3D riders become compact face/helmet location tags,
+using the same identity/coordinate, rather than unreadably small vehicle models.
+
+See [the completion evidence](phase-30.5-completion.md) for actual fidelity and limitations.

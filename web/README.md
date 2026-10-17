@@ -220,7 +220,7 @@ send operational lifecycle or traffic-adoption commands.
 
 See the [bounded producer/motion contract](../docs/live-delivery-visualization.md),
 [completion and screenshots](../docs/phase-30-completion.md), and
-[proposed, unimplemented Phase 30.5](../docs/phase-30.5-proposal.md).
+[Phase 30.5 navigation and renderer evidence](../docs/phase-30.5-completion.md).
 
 Reproduce the checked-in scene fixtures with a running local API:
 
