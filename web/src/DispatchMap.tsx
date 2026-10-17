@@ -13,7 +13,9 @@ export function DispatchMap({
   routeProgress,
   reduced,
   onInspect,
+  cooperativeGestures = false,
 }: {
+  cooperativeGestures?: boolean;
   evidence?: DispatchEvidence;
   inspected: string;
   sequence: number;
@@ -37,6 +39,7 @@ export function DispatchMap({
     try {
       m = new ml.Map({
         container: container.current,
+        cooperativeGestures,
         style,
         center: [3.38, 6.524],
         zoom: 15,
@@ -161,7 +164,7 @@ export function DispatchMap({
       m.remove();
       map.current = null;
     };
-  }, []);
+  }, [cooperativeGestures]);
   useEffect(() => {
     const m = map.current;
     if (!m || !ready || !evidence) return;

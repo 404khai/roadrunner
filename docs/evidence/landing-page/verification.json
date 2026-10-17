@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-17",
+  "browser": "Headless installed Google Chrome via temporary Playwright",
+  "desktop_viewport": [
+    1440,
+    1000
+  ],
+  "mobile_viewport": [
+    390,
+    844
+  ],
+  "javascript_errors": [],
+  "fresh_engine_requests": {
+    "/v1/visualization/anchors": 200,
+    "/v1/visualization/deliveries": 200,
+    "/v1/visualization/dispatch": 200,
+    "/v1/visualization/routes": 200
+  },
+  "landing_mobile_horizontal_overflow": false,
+  "docs_mobile_horizontal_overflow": false,
+  "landing_normal_wheel_scroll_pixels": 600,
+  "reduced_motion_disables_automatic_landing_playback": true,
+  "overhead_tags_observed": true,
+  "frontend_tests": {
+    "files": 19,
+    "passed": 79,
+    "command": "npm test -- --maxWorkers=1 --testTimeout=15000"
+  },
+  "limits": [
+    "T3 image snapshots timed out twice; local browser fallback used",
+    "Initial parallel test runs timed out on existing tests under host load; serial run passed",
+    "No earlier Phase 31 mobile acceptance is claimed",
+    "External basemap requires network and WebGL; replay evidence is deterministic, not live GPS"
+  ],
+  "mini_autoplay_advances": true,
+  "mini_perspective_preserves_paused_time": true,
+  "mini_3d_preserves_paused_time": true,
+  "mini_3d_model_visually_observed": true,
+  "mini_synthetic_ambient_control_available": true
+}

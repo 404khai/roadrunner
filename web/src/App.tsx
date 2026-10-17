@@ -51,8 +51,14 @@ function message(error: unknown) {
   };
 }
 export function App() {
-  const [deliveryMode, setDeliveryMode] = useState(false);
-  const [dispatchMode, setDispatchMode] = useState(false);
+  const [deliveryMode, setDeliveryMode] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("mode") === "delivery",
+  );
+  const [dispatchMode, setDispatchMode] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("mode") === "dispatch",
+  );
   const [catalog, setCatalog] = useState<Catalog>(),
     [origin, setOrigin] = useState<Anchor>(),
     [destination, setDestination] = useState<Anchor>();

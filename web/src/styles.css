@@ -3506,3 +3506,8 @@ h1 > span {
     padding: 8px;
   }
 }
+
+/* Keep the collapsed retained-audit handle clear of navigation controls. */
+.delivery-workspace:has(.delivery-dispatch-audit:not([open])) .navigation-card {
+  top: 174px;
+}

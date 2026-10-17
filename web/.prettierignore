@@ -1,3 +1,6 @@
 node_modules
 dist
 package-lock.json
+# Exact producer/fixture bytes; maintained by scripts/export_web_reference.py
+public/demos/*.json
+public/docs/openapi.json
