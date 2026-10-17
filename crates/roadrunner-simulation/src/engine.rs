@@ -122,6 +122,7 @@ struct Engine<'a> {
     arrivals: Vec<crate::ArrivalEvidence>,
     schedules: Vec<crate::ScheduleChange>,
     run_identity: String,
+    scene_frames: Option<Vec<crate::SceneFrame>>,
 }
 
 /// Executes a validated fixed scenario through its inclusive horizon without sleeping.
@@ -166,6 +167,46 @@ pub fn simulate_with_run_identity(
     }
     let mut engine = Engine::new(graph, scenario)?;
     run_identity.clone_into(&mut engine.run_identity);
+    engine.run()
+}
+
+/// Executes a bounded synthetic scene with coherent event-boundary captures.
+/// Existing nonvisual simulations do not allocate captures.
+/// # Errors
+/// Rejects oversized input or more than 2,000 processed queue entries; never truncates.
+pub fn simulate_scene(
+    graph: &FrozenGraph,
+    scenario: &SimulationScenario,
+) -> Result<SimulationResult, SimulationError> {
+    if graph.edge_count() > 10_000
+        || scenario.riders.len() > 32
+        || scenario.orders.len() > 64
+        || scenario.dynamic_events.len() + scenario.traffic_changes.len() > 128
+        || scenario.end_seconds.value() - scenario.start_seconds.value() > 86_400.0
+    {
+        return Err(invalid(
+            "scene limits: 10000 graph edges, 32 riders, 64 orders, 128 interventions, 86400 seconds",
+        ));
+    }
+    let work_budget = match scenario.dispatch {
+        DispatchPolicy::Dynamic { work_budget, .. }
+        | DispatchPolicy::FleetBatch { work_budget, .. }
+        | DispatchPolicy::MultiOrder { work_budget, .. } => work_budget,
+        _ => 0,
+    };
+    if work_budget > 10_000
+        || scenario.initial_traffic.len() > 10_000
+        || scenario
+            .traffic_changes
+            .iter()
+            .any(|c| c.overrides.len() > 10_000)
+    {
+        return Err(invalid("scene planning/traffic budget exceeded"));
+    }
+    let mut engine = Engine::new(graph, scenario)?;
+    engine.run_identity = format!("scene:{}", graph.metadata().snapshot_digest());
+    engine.scene_frames = Some(Vec::new());
+    engine.capture_scene()?;
     engine.run()
 }
 
@@ -283,6 +324,7 @@ impl<'a> Engine<'a> {
             arrivals: Vec::new(),
             schedules: Vec::new(),
             run_identity: String::new(),
+            scene_frames: None,
         };
         engine.initialize_riders()?;
         engine.initialize_orders()?;
@@ -1542,6 +1584,35 @@ impl<'a> Engine<'a> {
         Ok(Some(event))
     }
 
+    fn capture_scene(&mut self) -> Result<(), SimulationError> {
+        if let Some(frames) = &mut self.scene_frames {
+            if frames.len() >= 2001 {
+                return Err(invalid("scene exceeds 2000 processed queue entries"));
+            }
+            frames.push(crate::SceneFrame {
+                at: self.now,
+                revision: self.world.revision(),
+                world: self.world.data().clone(),
+                execution: self.world.execution().clone(),
+                plan_revisions: self.world.plan_revisions().clone(),
+                traffic: self
+                    .graph
+                    .edges()
+                    .iter()
+                    .filter_map(|edge| {
+                        let multiplier = self.traffic.multiplier(edge.id())?;
+                        (multiplier.value() > 1.0).then_some(TrafficOverride {
+                            edge_id: edge.id().value(),
+                            multiplier,
+                        })
+                    })
+                    .collect(),
+                traffic_digest: self.traffic.traffic_snapshot_digest().to_owned(),
+            });
+        }
+        Ok(())
+    }
+
     fn run(mut self) -> Result<SimulationResult, SimulationError> {
         while self.queue.peek().is_some_and(|event| event.at <= self.end) {
             let event = self.queue.pop().ok_or_else(|| invalid("queue invariant"))?;
@@ -1562,6 +1633,7 @@ impl<'a> Engine<'a> {
                 None
             };
             let processed = self.process(event.action)?;
+            self.capture_scene()?;
             if let Some(processed) = processed {
                 if matches!(processed, SimulationEvent::RiderMoved { .. }) {
                     self.arrivals
@@ -1638,6 +1710,7 @@ impl<'a> Engine<'a> {
             final_revision: self.world.revision(),
         };
         Ok(SimulationResult {
+            scene_frames: self.scene_frames,
             trace,
             scenario_id: self.scenario.scenario_id.clone(),
             schema_version: self.scenario.schema_version,

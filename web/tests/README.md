@@ -35,3 +35,13 @@ factor 1. Road class and explored-node membership are not invented by these file
 The UI paging test is explicitly synthetic transport pagination using real directed
 shapes; actual producer page/point limits, edge-boundary stops and endpoint unions
 are independently tested in Rust. No large-network performance claim follows.
+
+Phase 30 `delivery-{solo,fleet,delayed,traffic,unfinished}.json` are actual responses
+from `POST /v1/visualization/deliveries` over the Phase 10 checked-in graph. The source
+scenarios and reproduction proof are in `docs/evidence/phase-30`; reproduce with
+`scripts/verify_delivery_scene.py`. `deliveryScene.test.ts` tests real directed paths,
+causal delays, custody, no-travel and unavailable evidence. `DeliveryMap.test.tsx`
+uses a renderer mock to assert stable DOM identity, no duplicate markers and no
+per-frame geometry uploads. Workspace tests cover engine errors, reduced motion and
+floating-card interactions; visual screenshots cover the real MapLibre renderer.
+Mutated evidence used for negative tests is explicitly test-only, not engine output.

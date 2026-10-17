@@ -12,7 +12,7 @@ mod trace;
 pub use trace::{ArrivalEvidence, PendingEvent, ScheduleChange, StartedAction, SyntheticTrace};
 
 pub use comparison::{StrategyComparison, compare_strategies};
-pub use engine::{simulate, simulate_with_run_identity};
+pub use engine::{simulate, simulate_scene, simulate_with_run_identity};
 pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};
 pub use metrics::{
@@ -59,4 +59,27 @@ pub enum SimulationError {
     /// Monotonic event/decision counters exhausted their integer domain.
     #[error("simulation sequence counter exhausted")]
     SequenceExhausted,
+}
+
+/// Coherent synthetic state after one queue entry; vector order disambiguates equal times.
+#[derive(Debug, Clone, PartialEq, serde::Serialize)]
+pub struct SceneFrame {
+    /// Logical simulation time; no civil epoch.
+    pub at: roadrunner_dispatch::DispatchInstant,
+    /// Accepted operational boundary.
+    pub revision: roadrunner_dispatch::OperationalRevision,
+    /// Original authoritative world, never interpolated.
+    pub world: roadrunner_dispatch::WorldData,
+    /// Frozen actions and accepted stages.
+    pub execution: std::collections::BTreeMap<
+        roadrunner_dispatch::RiderId,
+        roadrunner_dispatch::ActiveExecution,
+    >,
+    /// Editable plan revisions, separate from action identity.
+    pub plan_revisions:
+        std::collections::BTreeMap<roadrunner_dispatch::RiderId, roadrunner_dispatch::PlanRevision>,
+    /// Current synthetic static context; omitted edges default to one.
+    pub traffic: Vec<TrafficOverride>,
+    /// Full synthetic static context identity.
+    pub traffic_digest: String,
 }

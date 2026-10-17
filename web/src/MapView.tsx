@@ -27,7 +27,7 @@ import type { GraphDebugger } from "./useGraphDebugger";
 import type { GraphSelection } from "./graphContracts";
 import { presentationPath, revealPrefix, type Position } from "./geometry";
 const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
-const style: StyleSpecification = {
+export const style: StyleSpecification = {
   version: 8,
   glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
   sources: {

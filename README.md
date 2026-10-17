@@ -383,3 +383,12 @@ Phase 29 adds the [developer graph debugger](docs/graph-debugger.md): bounded,
 graph-qualified nodes and directed edges, direction/weight overlays and pinned
 standalone edge inspection. Road class and explored-node membership remain explicit
 source limitations. See [verification and screenshots](docs/phase-29-completion.md).
+
+### Delivery execution visualization
+
+The [Phase 30 execution lab](docs/live-delivery-visualization.md) adds a full-screen
+2D simulation map with collapsible floating cards, helmet-portrait rider selection,
+distinct scooters, accepted execution inspection and bounded synthetic traffic.
+Its Distributed Fleet Demo uses six valid graph starts and actual engine assignments;
+positions are illustrative estimates rather than GPS. See [completion and screenshots](docs/phase-30-completion.md).
+Perspective/ambient/3D navigation remains the [unimplemented Phase 30.5 proposal](docs/phase-30.5-proposal.md).

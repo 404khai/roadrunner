@@ -1,0 +1,75 @@
+{
+  "schema_version": 4,
+  "scenario_id": "delivery-traffic/v1",
+  "graph_snapshot_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+  "seed": 30,
+  "start_seconds": 0,
+  "end_seconds": 900,
+  "routing_epoch_seconds": 0,
+  "dispatch": {
+    "kind": "dynamic",
+    "work_budget": 256,
+    "forecast_validity_seconds": 2000,
+    "algorithm": "Greedy",
+    "recovery": {
+      "version": 1,
+      "reroute_penalty": 10,
+      "assignment_stability_penalty": 10,
+      "minimum_improvement": 1,
+      "cooldown": 5
+    }
+  },
+  "riders": [
+    {
+      "id": 1,
+      "node": 0,
+      "capacity": 2,
+      "available": true
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "pickup_node": 35,
+      "dropoff_node": 22,
+      "created_at_seconds": 0,
+      "expected_ready_at_seconds": 120,
+      "actual_readiness": {
+        "kind": "fixed",
+        "at_seconds": 120
+      },
+      "demand": 1,
+      "admission": {
+        "id": "scene-service/v1",
+        "version": 1,
+        "deadline": "SoftObserved",
+        "max_completion_delay": null,
+        "pickup_service": 15,
+        "dropoff_service": 10,
+        "readiness": "CreatedAtFallbackV1"
+      }
+    }
+  ],
+  "initial_traffic": [
+    {
+      "edge_id": 3,
+      "multiplier": 2
+    }
+  ],
+  "traffic_changes": [
+    {
+      "at_seconds": 10,
+      "overrides": [
+        {
+          "edge_id": 3,
+          "multiplier": 3
+        },
+        {
+          "edge_id": 21,
+          "multiplier": 1.5
+        }
+      ]
+    }
+  ],
+  "dynamic_events": []
+}

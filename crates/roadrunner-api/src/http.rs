@@ -158,6 +158,57 @@ async fn debug_graph(
     .map_err(|_| ApiError::internal())?
 }
 
+#[utoipa::path(post,path="/v1/visualization/deliveries",request_body=Object,responses((status=200,body=Object),(status=403,body=ErrorBody),(status=413,body=ErrorBody),(status=503,body=ErrorBody)),security(("bearer"=[])))]
+async fn delivery_scene(
+    State(api): State<Api>,
+    headers: HeaderMap,
+    input: Result<Json<roadrunner_simulation::SimulationScenario>, JsonRejection>,
+) -> Result<axum::response::Response, ApiError> {
+    crate::persistence::check_async(&api).await?;
+    let principal = read(&api, &headers)?;
+    if !principal.simulate || principal.resources.is_some() {
+        return Err(ApiError::new(
+            StatusCode::FORBIDDEN,
+            "forbidden",
+            "scene requires namespace-wide read and simulation capabilities",
+        ));
+    }
+    let scenario = body(input)?;
+    let busy = || {
+        ApiError::new(
+            StatusCode::SERVICE_UNAVAILABLE,
+            "visualization_busy",
+            "scene export capacity unavailable; retry later",
+        )
+    };
+    let export_permit = api
+        .inner
+        .export_admission
+        .clone()
+        .try_acquire_owned()
+        .map_err(|_| busy())?;
+    let worker = api
+        .inner
+        .workers
+        .clone()
+        .try_acquire_owned()
+        .map_err(|_| busy())?;
+    tokio::task::spawn_blocking(move || {
+        let _worker = worker;
+        let response = crate::delivery_scene::export(&api, &scenario)?;
+        let bytes = encode_export(&response, 8 * 1024 * 1024)?;
+        axum::response::Response::builder()
+            .header(axum::http::header::CONTENT_TYPE, "application/json")
+            .body(axum::body::Body::new(HeldExportBody {
+                bytes: bytes.into(),
+                _permit: export_permit,
+            }))
+            .map_err(|_| ApiError::internal())
+    })
+    .await
+    .map_err(|_| ApiError::internal())?
+}
+
 /// Bounded immutable node catalog for explicit route-anchor selection.
 #[derive(serde::Deserialize, utoipa::IntoParams)]
 #[serde(deny_unknown_fields)]
@@ -525,6 +576,7 @@ resource_handler!(
     paths(
         anchors,
         debug_graph,
+        delivery_scene,
         visualization_route,
         visualization_alternatives,
         state,
@@ -574,6 +626,7 @@ pub(crate) fn router(api: Api) -> Router {
         .route("/v1/state", get(state))
         .route("/v1/visualization/anchors", get(anchors))
         .route("/v1/visualization/graph", get(debug_graph))
+        .route("/v1/visualization/deliveries", post(delivery_scene))
         .route("/v1/routes", post(route))
         .route("/v1/visualization/routes", post(visualization_route))
         .route(

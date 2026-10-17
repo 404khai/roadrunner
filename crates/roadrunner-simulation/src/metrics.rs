@@ -155,6 +155,9 @@ pub struct SimulationSummary {
 /// Full deterministic artifact; contains no wall-clock timing or machine-specific values.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct SimulationResult {
+    /// Opt-in bounded visualization captures; absent in ordinary simulation artifacts.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scene_frames: Option<Vec<crate::SceneFrame>>,
     /// Complete Phase 23 source trace, independent of completed-only metrics.
     pub trace: crate::SyntheticTrace,
     /// Named schema 2 scenario identity; absent for historical schema 1 fixtures.

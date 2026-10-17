@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="144" viewBox="0 0 80 144">
+<defs><linearGradient id="blue" x1="0" x2="1"><stop stop-color="#1141a8"/><stop offset=".48" stop-color="#4388ff"/><stop offset="1" stop-color="#164ab8"/></linearGradient><linearGradient id="box" x2="0" y2="1"><stop stop-color="#536074"/><stop offset="1" stop-color="#242e40"/></linearGradient><radialGradient id="helmet" cx=".35" cy=".2"><stop stop-color="#e6edf9"/><stop offset=".65" stop-color="#a0afc8"/><stop offset="1" stop-color="#596780"/></radialGradient></defs>
+<ellipse cx="41" cy="80" rx="27" ry="58" fill="#000" opacity=".25"/>
+<rect x="34" y="2" width="12" height="29" rx="6" fill="#101722" stroke="#8c9ab1"/>
+<rect x="34" y="117" width="12" height="25" rx="6" fill="#101722" stroke="#8c9ab1"/>
+<path d="M40 10C25 10 22 32 23 47L20 104Q20 131 40 134Q60 131 60 104L57 47C58 32 55 10 40 10" fill="url(#blue)" stroke="#8db8ff" stroke-width="1.4"/>
+<path d="M31 22Q40 15 49 22L53 40Q40 44 27 40Z" fill="#478dff" stroke="#7bacff"/>
+<rect x="25" y="30" width="4" height="11" rx="2" fill="#e5f4ff"/><rect x="51" y="30" width="4" height="11" rx="2" fill="#e5f4ff"/>
+<path d="M12 47L29 51H51L68 47" fill="none" stroke="#1d2636" stroke-width="5"/>
+<ellipse cx="9" cy="44" rx="7" ry="4" fill="#202a39" stroke="#9aa7bd"/><ellipse cx="71" cy="44" rx="7" ry="4" fill="#202a39" stroke="#9aa7bd"/>
+<ellipse cx="40" cy="49" rx="9" ry="5" fill="#d8e9ff" stroke="#17253b" stroke-width="2"/>
+<path d="M29 68L21 61L19 51M51 68L59 61L61 51" fill="none" stroke="#1b2433" stroke-width="10" stroke-linecap="round"/>
+<path d="M19 51L19 48M61 51L61 48" stroke="#f4c4a5" stroke-width="7" stroke-linecap="round"/>
+<path d="M25 68Q40 60 55 68L52 93Q40 101 28 93Z" fill="#242e40" stroke="#5a6b85"/>
+<path d="M31 84Q40 89 49 84" fill="none" stroke="#6d89b5"/>
+<ellipse cx="40" cy="64" rx="13" ry="15" fill="url(#helmet)" stroke="#e1eafb" stroke-width=".8"/>
+<path d="M30 58Q40 50 50 58" fill="none" stroke="#f4f7ff" opacity=".65"/>
+<rect x="22" y="94" width="36" height="33" rx="5" fill="url(#box)" stroke="#8d9db7" stroke-width="1.4"/>
+<path d="M25 119H55" stroke="#7d8da6"/><path d="M29 102H51M40 98V115" stroke="#8191aa" opacity=".45"/>
+<rect x="35" y="125" width="10" height="5" rx="2" fill="#ff4a57"/><rect x="37" y="118" width="6" height="7" rx="1" fill="#152037"/>
+</svg>

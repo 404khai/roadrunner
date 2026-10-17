@@ -2,7 +2,7 @@
 
 The TypeScript / React / MapLibre GL client consumes the real version-1
 portable route and alternative endpoints. This is a local engineering interface. No hosted deployment
-or fleet visualization is included.
+is included. Phase 30 adds bounded synthetic delivery execution visualization.
 
 ## Run
 
@@ -124,8 +124,8 @@ canonical overlay and reports unavailable context. WebGL failure keeps route met
 and evidence available with a map error.
 
 DM Sans and Space Grotesk are bundled through Fontsource under OFL-1.1; their licenses
-ship in the respective npm packages. Icons use Lucide (ISC). No supplied reference
-image, proprietary navigation asset or scooter asset is redistributed.
+ship in the respective npm packages. Icons use Lucide (ISC). Original Phase 30 SVG scooters and helmet portraits are authored locally; supplied reference
+bitmaps and proprietary navigation assets are not redistributed.
 
 Full alternative comparison, graph/search animation, dispatch/fleet views, scooter
 journeys, guidance, physical telemetry, historical playback, streaming and immersive
@@ -194,3 +194,40 @@ that original route/alternative result intact.
 The debugger uses the same API/proxy/setup; no new service, dependency or migration.
 See [controls, semantics and limits](../docs/graph-debugger.md) and
 [completion/visual evidence](../docs/phase-29-completion.md). Phase 30 is not included.
+
+## Delivery simulation (Phase 30)
+
+Choose **Delivery simulation** for actual isolated Roadrunner execution results.
+The map stays full screen; setup, helmet-portrait rider roster, selected execution,
+orders and traffic are separate collapsible floating cards in the routing workspace's
+monochrome style. Riders have stable distinct cosmetic palettes shared by their
+portraits, overhead scooters and route accents. Collapsed cards retain rider portraits,
+with overlapping portraits for the fleet. No sidebar reserves map space.
+
+Run the supplied one-rider, two-rider or delay/suffix preset using explicit graph
+nodes (default 0/35/22 on the Phase 10 graph). Play/pause, time selection, event step
+and speed sample that finite run; they cannot mutate live authority or complete work.
+The selected rider card shows actual assigned orders, onboard scalar load/capacity,
+next stops, arrival/service predictions and separate action/generation/plan identities.
+Positions are labeled simulated estimates; accepted engine effects establish fulfillment.
+
+Scenario JSON accepts existing synthetic traffic overrides/changes. The Traffic card
+styles/inspects the bounded first graph page under the current simulation context,
+separately from original frozen action traffic. No physical observations or road-user
+density are inferred. Missing/unsupported traffic disables its overlay. Original scene
+JSON is downloadable. Read **and simulation** capability are required; the UI does not
+send operational lifecycle or traffic-adoption commands.
+
+See the [bounded producer/motion contract](../docs/live-delivery-visualization.md),
+[completion and screenshots](../docs/phase-30-completion.md), and
+[proposed, unimplemented Phase 30.5](../docs/phase-30.5-proposal.md).
+
+Reproduce the checked-in scene fixtures with a running local API:
+
+```sh
+ROADRUNNER_API_URL=http://127.0.0.1:3110 \
+ROADRUNNER_API_TOKEN="$ROADRUNNER_API_TOKEN" python3 scripts/verify_delivery_scene.py
+```
+
+Run this command from the repository root. It compares all five actual source artifacts
+and checks that namespace, revision, world, execution, plans and publications are unchanged.

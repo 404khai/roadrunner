@@ -1,0 +1,12 @@
+
+> roadrunner-web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/admin/Developer/roadrunner/web
+
+
+ Test Files  10 passed (10)
+      Tests  52 passed (52)
+   Start at  09:26:44
+   Duration  8.80s (tests 42%, import 31%, environment 23%, transform 4%)
