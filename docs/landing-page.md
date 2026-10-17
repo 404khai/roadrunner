@@ -111,3 +111,12 @@ now retains the existing hosted `/v1/*` API proxy and adds explicit rewrites for
 those four entry paths. The rules deliberately do not rewrite `/docs/*` assets:
 OpenAPI JSON and guide images remain static files with their original content types.
 The Vercel project uses repository root directory `web`.
+
+Production verification on 2026-10-17: deployment
+`dpl_8fMCNpXjc1uXWpRobbucSXb9q7Ak` is aliased to
+https://roadrunner-engine.vercel.app. Direct app entry URLs, slash variants and
+workspace query parameters returned 200. OpenAPI and PNG content types were
+preserved, and the API proxy returned 58 anchors. A browser directly opened and
+refreshed `/docs`, loaded and filtered the API reference, and reported no JavaScript
+exceptions. See [HTTP checks](evidence/landing-page/hosted-routes-verification.json)
+and [hosted docs screenshot](evidence/landing-page/hosted-docs.png).
