@@ -176,3 +176,21 @@ visibility, segment inspection and collapse never rerun routing. Reduced motion
 and large-route static fallbacks still apply. Source download contains the **entire
 original alternative envelope**, retaining every member and result-set identity.
 See [completion/visual QA](../docs/phase-28-completion.md) for evidence and limits.
+
+## Developer graph debugger (Phase 29)
+
+Use **Developer graph** inside SPATIAL WORKSPACE. Toggle nodes, directed edges,
+direction arrows and objective weights; select an edge from the map or selector.
+Node picks inspect exact E7 coordinates and page-local degree counts. The crosshair
+focuses the selected entity, while Fit loaded graph page restores the page view.
+
+Cost selection, page navigation and Refresh capture a new immutable view without
+rerunning routing. Traffic-aware cost requires an already adopted engine snapshot;
+missing input stays unavailable. Road class and explored-node overlays are unsupported
+by the current producer and are labeled accordingly. Existing search summaries can
+be inspected under their original routed-result context. Returning to Routing keeps
+that original route/alternative result intact.
+
+The debugger uses the same API/proxy/setup; no new service, dependency or migration.
+See [controls, semantics and limits](../docs/graph-debugger.md) and
+[completion/visual evidence](../docs/phase-29-completion.md). Phase 30 is not included.

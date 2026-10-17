@@ -376,5 +376,10 @@ See [setup and run commands](web/README.md#run) and [verification/screenshots](d
 Phase 28 adds ranked alternative comparison, map visibility/selection, objective differences,
 and bounded selected-route segment inspection under the pinned evaluation context.
 See [Phase 28 verification and limitations](docs/phase-28-completion.md).
-Fleet/dispatch, scooter journeys, global graph/search debugging and historical playback
+Fleet/dispatch, scooter journeys, detailed search replay and historical playback
 remain later phases.
+
+Phase 29 adds the [developer graph debugger](docs/graph-debugger.md): bounded,
+graph-qualified nodes and directed edges, direction/weight overlays and pinned
+standalone edge inspection. Road class and explored-node membership remain explicit
+source limitations. See [verification and screenshots](docs/phase-29-completion.md).

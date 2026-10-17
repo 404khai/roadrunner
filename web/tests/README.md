@@ -25,3 +25,13 @@ the implemented API, not synthesized in tests. Test mutations labeled budget,
 unknown-version or inconsistent evidence are adversarial fixtures, not claims that
 the graph produced those outcomes. Rust producer tests independently cover totals,
 reverse curves, no travel, actual traffic factors and noninterference.
+
+Phase 29 `graph-page.json`, `graph-no-traffic.json`, and `graph-traffic.json` were
+captured from the actual bounded producer with the same checked-in graph. They
+contain 58 nodes, 114 directed edges and 527 directed vertices. The first two were
+captured before any overlay adoption; the traffic fixture adopts a real 2× factor
+on directed edge 3. Edge 20, the opposite direction of physical segment 27, retains
+factor 1. Road class and explored-node membership are not invented by these files.
+The UI paging test is explicitly synthetic transport pagination using real directed
+shapes; actual producer page/point limits, edge-boundary stops and endpoint unions
+are independently tested in Rust. No large-network performance claim follows.

@@ -35,6 +35,8 @@ import {
 } from "./contracts";
 import { distanceLabel, durationLabel } from "./geometry";
 import { ComparisonPanel, SegmentPanel, routeName } from "./ComparisonPanel";
+import { GraphPanel } from "./GraphPanel";
+import { useGraphDebugger } from "./useGraphDebugger";
 import { MapView } from "./MapView";
 import { useReducedMotion, useReveal } from "./useReveal";
 function message(error: unknown) {
@@ -106,6 +108,7 @@ export function App() {
   const [revealId, setRevealId] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
   const resultPanel = useRef<HTMLDivElement>(null);
+  const panelBody = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (comparison)
       resultPanel.current?.scrollIntoView?.({
@@ -264,6 +267,7 @@ export function App() {
     URL.revokeObjectURL(url);
   }
   const route = result?.evidence;
+  const debug = useGraphDebugger(catalog?.graph.snapshot_digest, token);
   const noRoute = error?.code === "no_route";
   return (
     <div
@@ -283,18 +287,45 @@ export function App() {
             <span className="status-dot" />
             <span>SPATIAL WORKSPACE</span>
             <span className="panel-toggle-meta">
-              {origin ? `A${origin.node}` : "A"} →{" "}
-              {destination ? `B${destination.node}` : "B"}
+              {debug.enabled
+                ? "GRAPH INSPECTION"
+                : `${origin ? `A${origin.node}` : "A"} → ${destination ? `B${destination.node}` : "B"}`}
             </span>
             <ChevronDown size={16} />
           </button>
           <div
             id="spatial-workspace-content"
+            ref={panelBody}
             className="panel-body"
             tabIndex={collapsed ? -1 : 0}
             hidden={collapsed}
           >
-            <div className="panel-intro">
+            <div
+              className="workspace-modes"
+              role="group"
+              aria-label="Workspace mode"
+            >
+              <button
+                aria-pressed={!debug.enabled}
+                onClick={() => {
+                  debug.setEnabled(false);
+                  panelBody.current?.scrollTo?.({ top: 0 });
+                }}
+              >
+                Routing
+              </button>
+              <button
+                aria-pressed={debug.enabled}
+                onClick={() => {
+                  debug.setEnabled(true);
+                  panelBody.current?.scrollTo?.({ top: 0 });
+                }}
+              >
+                Developer graph
+              </button>
+            </div>
+            {debug.enabled && <GraphPanel debug={debug} route={route} />}
+            <div hidden={debug.enabled} className="panel-intro">
               <h1>Route planner</h1>
               <p>Inspect the path your engine chooses.</p>
             </div>
@@ -304,6 +335,7 @@ export function App() {
                 void calculate();
               }}
               className="route-form"
+              hidden={debug.enabled}
             >
               <div className="section-label">
                 ROUTE ENDPOINTS <span>GRAPH NODES</span>
@@ -472,6 +504,7 @@ export function App() {
             <div
               ref={resultPanel}
               className="result-panel"
+              hidden={debug.enabled}
               aria-live="polite"
               aria-atomic="true"
             >
@@ -667,6 +700,11 @@ export function App() {
             connected={!!catalog}
             panelOpen={!collapsed}
             catalog={catalog}
+            debug={debug}
+            onInspectGraph={(selection) => {
+              debug.setSelection(selection);
+              setCollapsed(false);
+            }}
             origin={result?.request.origin ?? origin}
             destination={result?.request.destination ?? destination}
             result={result}
@@ -681,7 +719,7 @@ export function App() {
             selection={selection}
             onSelect={(node) => changeAnchor(selection, node)}
           />
-          {route && collapsed && (
+          {route && collapsed && !debug.enabled && (
             <div className="floating-metrics">
               <span>
                 {durationLabel(route.predicted_elapsed_seconds)}
@@ -717,7 +755,7 @@ export function App() {
               </span>
             </div>
           )}
-          {route && (
+          {route && !debug.enabled && (
             <div className="reveal-bar" data-testid="reveal-controls">
               <div className="reveal-status">
                 <span className="reveal-symbol">

@@ -578,3 +578,20 @@ applicable pinned traffic factors. Its separate semantic version does not redefi
 portable route IDs or claim retained search history. Unknown extensions degrade to
 unavailable diagnostics. Global graph exploration/search traces remain Phase 29.
 See [Phase 28 completion and evidence](phase-28-completion.md).
+
+## Phase 29: bounded developer graph inspection
+
+The graph debugger consumes complete replacements of small graph-page captures.
+Each has the original graph digest, directed E7 geometry, standalone static cost
+context, applicable traffic evidence and a separate graph-view identity. Source
+traffic/departure are captured together; expensive geometry/encoding stays on the
+existing blocking worker and bounded export/body-admission path. Representation
+limits do not change graph topology, route search or legality.
+
+React retains routing evidence separately from debugger selection, layers, pages
+and camera state. Map features carry their capture identity, so late source frames
+cannot select an entity from a newer page by dense ID alone. Bidirectional line
+offsets and local direction arrows are presentation derivatives. Unsupported road
+class and explored-node/trace fields stay unavailable, with exact existing search
+summaries qualified separately. No Phase 30 execution/movement producer is added.
+See [contract](graph-debugger.md) and [completion evidence](phase-29-completion.md).

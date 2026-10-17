@@ -14,6 +14,7 @@ import {
   Compass,
   Map as MapIcon,
   Plug,
+  Crosshair,
 } from "lucide-react";
 import type { FeatureCollection } from "geojson";
 import type {
@@ -22,6 +23,8 @@ import type {
   RouteResult,
   AlternativeMember,
 } from "./contracts";
+import type { GraphDebugger } from "./useGraphDebugger";
+import type { GraphSelection } from "./graphContracts";
 import { presentationPath, revealPrefix, type Position } from "./geometry";
 const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
 const style: StyleSpecification = {
@@ -198,8 +201,12 @@ export function MapView({
   onSelectMember,
   segment,
   onSelectSegment,
+  debug,
+  onInspectGraph,
 }: {
   catalog?: Catalog;
+  debug: GraphDebugger;
+  onInspectGraph: (selection: GraphSelection) => void;
   panelOpen: boolean;
   connected: boolean;
   onConnect: () => void;
@@ -221,6 +228,8 @@ export function MapView({
     mapRef = useRef<LibreMap | null>(null),
     selectRef = useRef(onSelect);
   selectRef.current = onSelect;
+  const graphRef = useRef({ debug, onInspectGraph });
+  graphRef.current = { debug, onInspectGraph };
   const memberRef = useRef(onSelectMember),
     segmentRef = useRef(onSelectSegment);
   memberRef.current = onSelectMember;
@@ -239,29 +248,72 @@ export function MapView({
     () => (result ? presentationPath(result.evidence) : undefined),
     [result],
   );
-  const fit = () => {
+  const fit = (selectedEntity = false) => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !ready) return;
+    const selected = debug.selection;
+    const selectedPoints =
+      selected?.kind === "edge"
+        ? debug.view?.edges
+            .find((e) => e.edge === selected.id)
+            ?.points_e7.map(
+              (p) => [p.longitude_e7 / 1e7, p.latitude_e7 / 1e7] as Position,
+            )
+        : selected?.kind === "node"
+          ? debug.view?.nodes
+              .filter((n) => n.node === selected.id)
+              .map(
+                (n) =>
+                  [
+                    n.coordinate_e7.longitude_e7 / 1e7,
+                    n.coordinate_e7.latitude_e7 / 1e7,
+                  ] as Position,
+              )
+          : undefined;
     const points =
-      (comparisonPaths?.length
-        ? comparisonPaths.flatMap((p) => p.path.points)
-        : path?.points) ??
-      catalog?.anchors.map(
-        (a) => [a.coordinate.longitude, a.coordinate.latitude] as Position,
-      );
+      selectedEntity && selectedPoints?.length
+        ? selectedPoints
+        : debug.enabled && debug.view
+          ? [
+              ...debug.view.nodes.map(
+                (n) =>
+                  [
+                    n.coordinate_e7.longitude_e7 / 1e7,
+                    n.coordinate_e7.latitude_e7 / 1e7,
+                  ] as Position,
+              ),
+              ...debug.view.edges.flatMap((e) =>
+                e.points_e7.map(
+                  (p) =>
+                    [p.longitude_e7 / 1e7, p.latitude_e7 / 1e7] as Position,
+                ),
+              ),
+            ]
+          : ((comparisonPaths?.length
+              ? comparisonPaths.flatMap((p) => p.path.points)
+              : path?.points) ??
+            catalog?.anchors.map(
+              (a) =>
+                [a.coordinate.longitude, a.coordinate.latitude] as Position,
+            ));
     if (!points?.length) return;
     const bounds = new maplibregl.LngLatBounds(points[0], points[0]);
     points.forEach((p) => bounds.extend(p));
     const { clientWidth: width, clientHeight: height } = map.getContainer();
     if (!width || !height) return;
     const padding = {
-      top:
-        path && width <= 760
+      top: debug.enabled
+        ? width <= 760
+          ? panelOpen
+            ? 200
+            : 90
+          : 100
+        : path && width <= 760
           ? 280
           : path && !panelOpen && width <= 1050
             ? 340
             : 190,
-      bottom: path ? 180 : 90,
+      bottom: debug.enabled ? (width <= 760 ? 200 : 110) : path ? 180 : 90,
       left: panelOpen && width > 760 ? 415 : 55,
       right: 65,
     };
@@ -279,9 +331,48 @@ export function MapView({
     padding.right *= horizontal;
     padding.top *= vertical;
     padding.bottom *= vertical;
-    map.fitBounds(bounds, {
-      padding,
-      maxZoom: 17,
+    // A point has no extent. Fit it directly; dividing zero-sized bounds during
+    // responsive transitions can otherwise produce an invalid MapLibre center.
+    if (
+      bounds.getWest() === bounds.getEast() &&
+      bounds.getSouth() === bounds.getNorth()
+    ) {
+      map.easeTo({
+        center: points[0],
+        zoom: selectedEntity ? 19 : 17,
+        offset: [
+          (padding.left - padding.right) / 2,
+          (padding.top - padding.bottom) / 2,
+        ],
+        duration: reduced ? 0 : 900,
+      });
+      return;
+    }
+    // MapLibre may have a transient projection during resize/style startup.
+    // Recover with a finite center instead of leaking a camera exception.
+    try {
+      const camera = map.cameraForBounds(bounds, {
+        padding,
+        maxZoom: selectedEntity ? 19 : 17,
+      });
+      const center = camera?.center
+        ? maplibregl.LngLat.convert(camera.center)
+        : undefined;
+      if (
+        center &&
+        Number.isFinite(camera?.zoom) &&
+        Number.isFinite(center.lng) &&
+        Number.isFinite(center.lat)
+      ) {
+        map.flyTo({ ...camera, duration: reduced ? 0 : 900 });
+        return;
+      }
+    } catch {
+      // The next explicit fit/resize will compute full framing again.
+    }
+    map.easeTo({
+      center: bounds.getCenter(),
+      zoom: selectedEntity ? 19 : 14,
       duration: reduced ? 0 : 900,
     });
   };
@@ -312,6 +403,8 @@ export function MapView({
     map.on("style.load", () => {
       for (const id of [
         "anchors",
+        "debug-edges",
+        "debug-nodes",
         "alternatives",
         "alternative-labels",
         "selected-segments",
@@ -333,6 +426,152 @@ export function MapView({
           "circle-stroke-color": "#1b1b1b",
         },
       });
+      map.addLayer({
+        id: "debug-edge-halo",
+        type: "line",
+        source: "debug-edges",
+        layout: {
+          visibility: "none",
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: { "line-color": "#111", "line-width": 7, "line-offset": 3.5 },
+      });
+      map.addLayer({
+        id: "debug-edges",
+        type: "line",
+        source: "debug-edges",
+        layout: {
+          visibility: "none",
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: {
+          "line-color": "#a8a8a8",
+          "line-width": 2.5,
+          "line-offset": 3.5,
+        },
+      });
+      map.addLayer({
+        id: "debug-selected-edge",
+        type: "line",
+        source: "debug-edges",
+        filter: ["==", ["get", "edge"], -1],
+        layout: {
+          visibility: "none",
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: { "line-color": "#fff", "line-width": 6, "line-offset": 3.5 },
+      });
+      map.addLayer({
+        id: "debug-edge-hit",
+        type: "line",
+        source: "debug-edges",
+        layout: { visibility: "none" },
+        paint: { "line-width": 6, "line-offset": 3.5, "line-opacity": 0 },
+      });
+      // Authored direction glyph: no font/glyph-service dependency, motion or telemetry.
+      const arrow = new Uint8Array(28 * 20 * 4);
+      for (let y = 0; y < 20; y++)
+        for (let x = 0; x < 28; x++) {
+          const margin = (22 - x) * 0.47 - Math.abs(y - 10);
+          if (x >= 5 && x <= 22 && margin >= 0) {
+            const i = (y * 28 + x) * 4;
+            const c = x < 7 || margin < 1.5 ? 17 : 255;
+            arrow[i] = c;
+            arrow[i + 1] = c;
+            arrow[i + 2] = c;
+            arrow[i + 3] = 255;
+          }
+        }
+      map.addImage("graph-direction", { width: 28, height: 20, data: arrow });
+      map.addLayer({
+        id: "debug-directions",
+        type: "symbol",
+        source: "debug-edges",
+        layout: {
+          visibility: "none",
+          "symbol-placement": "line-center",
+          "icon-image": "graph-direction",
+          "icon-size": 0.7,
+          "icon-offset": [0, 5],
+          "icon-rotation-alignment": "map",
+          "icon-keep-upright": false,
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
+        },
+      });
+      map.addLayer({
+        id: "debug-weights",
+        type: "symbol",
+        source: "debug-edges",
+        layout: {
+          visibility: "none",
+          "symbol-placement": "line",
+          "symbol-spacing": 180,
+          "text-field": ["get", "weight_text"],
+          "text-font": ["Noto Sans Regular"],
+          "text-size": 10,
+          "text-offset": [0, 1.3],
+        },
+        paint: {
+          "text-color": "#fff",
+          "text-halo-color": "#111",
+          "text-halo-width": 2,
+        },
+      });
+      map.addLayer({
+        id: "debug-nodes",
+        type: "circle",
+        source: "debug-nodes",
+        layout: { visibility: "none" },
+        paint: {
+          "circle-radius": 4,
+          "circle-color": "#eee",
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#191919",
+        },
+      });
+      map.addLayer({
+        id: "debug-selected-node",
+        type: "circle",
+        source: "debug-nodes",
+        filter: ["==", ["get", "node"], -1],
+        layout: { visibility: "none" },
+        paint: {
+          "circle-radius": 8,
+          "circle-color": "#fff",
+          "circle-stroke-width": 3,
+          "circle-stroke-color": "#111",
+        },
+      });
+      map.addLayer({
+        id: "debug-node-label",
+        type: "symbol",
+        source: "debug-nodes",
+        filter: ["==", ["get", "node"], -1],
+        layout: {
+          visibility: "none",
+          "text-field": ["to-string", ["get", "node"]],
+          "text-font": ["Noto Sans Regular"],
+          "text-size": 12,
+          "text-offset": [0, -1.6],
+        },
+        paint: {
+          "text-color": "#fff",
+          "text-halo-color": "#111",
+          "text-halo-width": 2,
+        },
+      });
+      for (const layer of ["debug-edge-hit", "debug-nodes"]) {
+        map.on("mouseenter", layer, () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", layer, () => {
+          map.getCanvas().style.cursor = "";
+        });
+      }
       for (let rank = 1; rank <= 5; rank++) {
         map.addLayer({
           id: `alternative-${rank}`,
@@ -468,6 +707,20 @@ export function MapView({
       // Resolve a single topmost hit before React can update any layer sources.
       // Separate delegated click handlers can otherwise select a second member on overlap.
       map.on("click", (e) => {
+        const current = graphRef.current;
+        if (current.debug.enabled) {
+          if (!current.debug.view || current.debug.busy) return;
+          const h = map.queryRenderedFeatures(e.point, {
+            layers: ["debug-edge-hit", "debug-nodes"],
+          })[0];
+          if (h?.properties.graph_view_id !== current.debug.view.graph_view_id)
+            return;
+          if (h?.layer.id === "debug-nodes")
+            current.onInspectGraph({ kind: "node", id: h.properties.node });
+          else if (h?.layer.id === "debug-edge-hit")
+            current.onInspectGraph({ kind: "edge", id: h.properties.edge });
+          return;
+        }
         const hit = map.queryRenderedFeatures(e.point, {
           layers: [
             "segment-hit",
@@ -694,11 +947,113 @@ export function MapView({
         : empty,
     );
   }, [ready, path, progress, result]);
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    const map = mapRef.current,
+      view = debug.view;
+    source(map, "debug-edges", {
+      type: "FeatureCollection",
+      features:
+        view?.edges.map((e) => ({
+          type: "Feature",
+          properties: {
+            edge: e.edge,
+            graph_view_id: view.graph_view_id,
+            weight_text:
+              e.objective_cost === null
+                ? e.cost_status === "forbidden"
+                  ? "Forbidden"
+                  : "Cost unavailable"
+                : `${e.objective_cost.toFixed(1)} ${view.evaluation.objective_unit === "meters" ? "m" : "s"}`,
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: e.points_e7.map((p) => [
+              p.longitude_e7 / 1e7,
+              p.latitude_e7 / 1e7,
+            ]),
+          },
+        })) ?? [],
+    });
+    source(map, "debug-nodes", {
+      type: "FeatureCollection",
+      features:
+        view?.nodes.map((n) => ({
+          type: "Feature",
+          properties: { node: n.node, graph_view_id: view.graph_view_id },
+          geometry: {
+            type: "Point",
+            coordinates: [
+              n.coordinate_e7.longitude_e7 / 1e7,
+              n.coordinate_e7.latitude_e7 / 1e7,
+            ],
+          },
+        })) ?? [],
+    });
+    if (debug.enabled && view) fitRef.current();
+  }, [ready, debug.view, debug.enabled]);
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    const map = mapRef.current,
+      developer = debug.enabled,
+      enabled = developer && !!debug.view,
+      l = debug.layers;
+    const visibility = (id: string, on: boolean) =>
+      map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+    for (const id of [
+      "debug-edge-halo",
+      "debug-edges",
+      "debug-selected-edge",
+      "debug-edge-hit",
+    ])
+      visibility(id, enabled && l.edges);
+    visibility("debug-directions", enabled && l.edges && l.directions);
+    visibility("debug-weights", enabled && l.edges && l.weights);
+    for (const id of ["debug-nodes", "debug-selected-node", "debug-node-label"])
+      visibility(id, enabled && l.nodes);
+    for (const id of [
+      "anchors",
+      "route-halo",
+      "route-underlay",
+      "selected-route",
+      "segment-hit",
+      "inspected-halo",
+      "inspected-segment",
+      "head-halo",
+      "head",
+      "alternative-labels",
+      "endpoint-outline",
+      "endpoint-label",
+      ...Array.from({ length: 5 }, (_, i) => `alternative-${i + 1}`),
+    ])
+      visibility(id, !developer);
+    map.setFilter("debug-selected-edge", [
+      "==",
+      ["get", "edge"],
+      debug.selection?.kind === "edge" ? debug.selection.id : -1,
+    ]);
+    for (const id of ["debug-selected-node", "debug-node-label"])
+      map.setFilter(id, [
+        "==",
+        ["get", "node"],
+        debug.selection?.kind === "node" ? debug.selection.id : -1,
+      ]);
+  }, [ready, debug.enabled, debug.view, debug.layers, debug.selection]);
+  useEffect(() => {
+    if (ready) fitRef.current();
+  }, [ready, debug.enabled, panelOpen]);
   return (
     <section
       className="map-area"
       aria-label="Interactive route map"
       data-map-ready={ready}
+      data-developer-mode={debug.enabled}
+      data-graph-view={debug.view?.graph_view_id}
+      data-graph-selection={
+        debug.selection
+          ? `${debug.selection.kind}:${debug.selection.id}`
+          : undefined
+      }
       data-reveal-progress={progress.toFixed(3)}
       data-selected-evaluation={result?.evidence.evaluation_id}
       data-visible-route-count={comparisonPaths?.length}
@@ -707,11 +1062,12 @@ export function MapView({
       <div ref={container} className="map-canvas" />
       <div className="map-heading">
         <span className="map-tag">
-          <span className="status-dot" /> CANONICAL OVERLAY
+          <span className="status-dot" />{" "}
+          {debug.enabled ? "GRAPH INSPECTION" : "CANONICAL OVERLAY"}
         </span>
         <span className="map-tag muted-tag">2D / WGS84</span>
       </div>
-      {!result && (
+      {!result && !debug.enabled && (
         <div className="map-instruction">
           <MapIcon size={16} />
           <span>
@@ -724,6 +1080,19 @@ export function MapView({
                 : "Your graph supplies the route. The basemap supplies context."}
             </small>
           </span>
+        </div>
+      )}
+      {debug.enabled && (
+        <div className="graph-map-key">
+          <strong>DIRECTED GRAPH</strong>
+          <span>
+            {debug.view
+              ? `${debug.view.nodes.length} nodes · ${debug.view.edges.length} edges · ${debug.view.evaluation.objective_unit}`
+              : "Graph capture unavailable"}
+          </span>
+          <small>
+            Arrows follow canonical direction · line offset is presentation only
+          </small>
         </div>
       )}
       <div className="map-tools">
@@ -744,8 +1113,21 @@ export function MapView({
           <Plug size={19} />
           <span className={`engine-status ${connected ? "connected" : ""}`} />
         </button>
+        {debug.enabled && debug.selection && (
+          <button
+            aria-label="Focus selected graph entity"
+            title="Focus selected graph entity"
+            onClick={() => fit(true)}
+          >
+            <Crosshair size={19} />
+          </button>
+        )}
         <button
-          aria-label="Fit route or loaded nodes"
+          aria-label={
+            debug.enabled
+              ? "Fit loaded graph page"
+              : "Fit route or loaded nodes"
+          }
           onClick={() => fitRef.current()}
         >
           <LocateFixed size={19} />
