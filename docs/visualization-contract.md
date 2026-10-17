@@ -195,3 +195,49 @@ continuous interpolation and snapshot-plus-stream/scoped projections need later 
 Retained frozen routes must use original dependencies; the durable adapter is still single-graph.
 No conditional historical resolver, timeline wrapper or new snapshot service was necessary here.
 The cinematic addendum's future acceptance matrix remains binding and **unexecuted**.
+
+## Phase 28 selected-path inspection extension
+
+The alternative envelope optionally adds `segment_inspection` to each member.
+Portable route evidence, its version/identities, result-set/member identity, search
+and selection semantics are unchanged. The extension is versioned independently:
+
+```text
+schema_version: 1
+semantics: pinned_static_path_evaluation/v1
+evaluation_id, graph_digest, traffic_digest
+base_seconds
+traffic_delay_seconds: number | null
+segments[]:
+  ordinal, edge
+  objective_cost                  # unit inherited from member.route.objective_unit
+  predicted_elapsed_seconds
+  base_seconds
+  traffic_factor: number | null
+```
+
+The API evaluates only returned directed occurrences using the **same captured
+static evaluator, immutable graph, routing/access context and traffic snapshot**
+used by that query. It does not invoke another search, fetch current traffic after
+selection, or retain a search-event history. Geometry export must succeed first;
+its 20,000-occurrence bound also bounds this array. Existing worker admission,
+200,000-point/route, five-route and 32 MiB response limits still apply. The route
+and prediction totals are checked against the sums before export. Export failure
+returns an error; it cannot silently substitute a new path or drop geometry.
+
+`base_seconds` is the sum of the returned path's directed free-flow times. For a
+traffic-aware query, `traffic_factor` comes from the pinned snapshot, including its
+actual default of 1, and `traffic_delay_seconds` is the evaluated elapsed road time
+minus that same path's base time. This is **not** the time difference against the
+free-flow optimal route. With distance/free-flow objectives, traffic factor and
+traffic delay are null (not applied), even if the server has adopted an overlay.
+No pickup, wait, service, maneuver penalty, legal speed or observed travel claim is
+introduced. Portable `cost_breakdown: unavailable_not_retained` remains truthful;
+this additive export describes bounded static path evaluation, not original
+search diagnostics or a retained component ledger.
+
+Clients may render older responses or unknown extension versions with inspection
+weights/delay marked unavailable. Supported extension values must match the member's
+full graph/evaluation/traffic identity, occurrence ordinals and directed edges, and
+reconcile to its totals. User selection, line visibility, inspected occurrence and
+reveal progress are renderer state. They cannot rewrite engine ranks or source bytes.

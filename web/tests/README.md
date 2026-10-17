@@ -14,3 +14,14 @@ mutations. `presentation.test.tsx` drives a controlled animation clock.
 `App.test.tsx` uses the real evidence fixtures and a controlled transport/map boundary
 for lifecycle and noninterference tests. Mocked map tests do not establish rendered
 fidelity; actual browser screenshots and live-engine checks are recorded separately.
+
+Phase 28 `alternatives*.json` and paired `*-request.json` files were captured from
+the actual producer with the checked-in Phase 10 graph and explicit departure time.
+They cover 0→22, 22→0, no travel, and traffic-aware comparison. For the traffic case,
+a disposable trusted-local engine adopted overrides of 2× on edges 53,72,80,94;
+normal factors on every other directed edge are supplied by its real snapshot.
+The UI never adopts these overrides. The selected-path extension is captured from
+the implemented API, not synthesized in tests. Test mutations labeled budget,
+unknown-version or inconsistent evidence are adversarial fixtures, not claims that
+the graph produced those outcomes. Rust producer tests independently cover totals,
+reverse curves, no travel, actual traffic factors and noninterference.

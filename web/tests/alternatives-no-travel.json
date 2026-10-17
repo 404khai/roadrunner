@@ -1,0 +1,105 @@
+{
+  "provenance": {
+    "departure_seconds": 1792152000.0,
+    "evaluator": "free-flow-travel-time/v1",
+    "heuristic": null,
+    "routing_context": {
+      "departure_time": 1792152000.0,
+      "permit_access": false,
+      "private_access": false
+    },
+    "time_domain": "unix_seconds",
+    "traffic_digest": null
+  },
+  "result_set_id": "alternatives-v1:5415866d7ea983701088c7accbf2d4685ddd7d3ca73fb1eb8c3d1e21b78d6b98",
+  "routes": [
+    {
+      "max_shared_distance_ratio": 0.0,
+      "member_id": "alternatives-v1:5415866d7ea983701088c7accbf2d4685ddd7d3ca73fb1eb8c3d1e21b78d6b98/evaluation-v1:365065f600ed78591dbf16562e3e4d02179547b9672c1bfec8a05d1584006673",
+      "rank": 1,
+      "route": {
+        "cost_breakdown": "unavailable_not_retained",
+        "distance_meters": 0.0,
+        "evaluation_id": "evaluation-v1:365065f600ed78591dbf16562e3e4d02179547b9672c1bfec8a05d1584006673",
+        "geometry": {
+          "encoding": "wgs84_e7",
+          "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+          "no_travel": true,
+          "nodes": [0],
+          "occurrences": [],
+          "path_id": "path-v1:0b0d3046b5b3fdcd5478d26ae2d0df34418924ff7854284b73313af0b1113610",
+          "points_e7": [
+            {
+              "latitude_e7": 65232933,
+              "longitude_e7": 33801305
+            }
+          ],
+          "schema_version": 1
+        },
+        "jurisdiction_policy": "ng_v2",
+        "objective": {
+          "kind": "travel_time",
+          "value": 0.0
+        },
+        "objective_unit": "seconds",
+        "optional_capabilities": [],
+        "predicted_elapsed_seconds": 0.0,
+        "provenance": {
+          "departure_seconds": 1792152000.0,
+          "evaluator": "free-flow-travel-time/v1",
+          "heuristic": null,
+          "routing_context": {
+            "departure_time": 1792152000.0,
+            "permit_access": false,
+            "private_access": false
+          },
+          "time_domain": "unix_seconds",
+          "traffic_digest": null
+        },
+        "routing_profile": "delivery_motorcycle_v2",
+        "search": {
+          "algorithm": "yen",
+          "counter_semantics": "originating_root_or_spur_search_path_pops_including_goal",
+          "detailed_trace": "deferred",
+          "expanded_states": 1,
+          "relaxation": "loopless_path_enumeration",
+          "state_mode": "loopless_path",
+          "termination": "route_found"
+        },
+        "semantics": {
+          "authority": "deterministic_prediction",
+          "geometry": "wgs84_e7",
+          "schema_version": 1
+        }
+      },
+      "segment_inspection": {
+        "base_seconds": 0.0,
+        "evaluation_id": "evaluation-v1:365065f600ed78591dbf16562e3e4d02179547b9672c1bfec8a05d1584006673",
+        "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+        "schema_version": 1,
+        "segments": [],
+        "semantics": "pinned_static_path_evaluation/v1",
+        "traffic_delay_seconds": null,
+        "traffic_digest": null
+      }
+    }
+  ],
+  "schema_version": 1,
+  "summary": {
+    "candidate_history": "not_retained",
+    "options": {
+      "max_candidate_paths": 1000,
+      "max_cost_factor": 1.5,
+      "max_routes": 3,
+      "max_search_states": 50000,
+      "max_shared_distance_ratio": 0.8
+    },
+    "overlap": "shared_physical_segment_distance_over_shorter_route",
+    "ranked_paths": 1,
+    "scope": "selected_diverse_legal_loopless_paths_static_nonnegative;not_all_candidates_or_legal_walks",
+    "search_states": 1,
+    "termination": "exhausted",
+    "truncated": false,
+    "work_unit": "loopless_path_pops_across_root_and_spur_searches"
+  }
+}

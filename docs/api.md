@@ -135,3 +135,19 @@ bounded slice is serialized without taking the operational coordinator lock. No
 edges, operational entities, search traces, snapping or routing changes are added.
 The [web client](../web/README.md) uses this catalog and the unchanged Phase 26
 portable single-route endpoint; it does not fetch `/v1/state`.
+
+## Phase 28 alternative comparison and selected-segment inspection
+
+The web client now consumes `POST /v1/visualization/routes/alternatives` with
+`algorithm: dijkstra` and `alternatives: 2..5` (including the primary). The actual
+returned algorithm is Yen; A* alternative enumeration is unsupported. The endpoint
+continues to require read capability and never publishes an operational plan.
+Its primary is a legal **loopless** optimum, not a claim about unrestricted walks.
+Fewer routes, cost limits, exhausted enumeration and partial budget results are
+rendered with their original semantics.
+
+Each member may additionally expose the independently versioned, bounded
+`segment_inspection` described in the [visualization contract](visualization-contract.md#phase-28-selected-path-inspection-extension).
+It uses captured static inputs for the returned path, with checked sums and no new
+routing/search semantics, world mutation or historical trace retention. Existing
+portable route identities, legacy responses and single-route responses are unchanged.

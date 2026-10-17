@@ -1,0 +1,1247 @@
+{
+  "provenance": {
+    "departure_seconds": 1792152000.0,
+    "evaluator": "free-flow-travel-time/v1",
+    "heuristic": null,
+    "routing_context": {
+      "departure_time": 1792152000.0,
+      "permit_access": false,
+      "private_access": false
+    },
+    "time_domain": "unix_seconds",
+    "traffic_digest": null
+  },
+  "result_set_id": "alternatives-v1:23888c5555aa3ca8cc892b95b1f18397182a022e5a8a9b33f2b13270c4fe96c7",
+  "routes": [
+    {
+      "max_shared_distance_ratio": 0.0,
+      "member_id": "alternatives-v1:23888c5555aa3ca8cc892b95b1f18397182a022e5a8a9b33f2b13270c4fe96c7/evaluation-v1:22059a6bf6f0e2ca477b4844e7d167a9197d8832f45a3f70de461da7e4cded96",
+      "rank": 1,
+      "route": {
+        "cost_breakdown": "unavailable_not_retained",
+        "distance_meters": 607.312320579204,
+        "evaluation_id": "evaluation-v1:22059a6bf6f0e2ca477b4844e7d167a9197d8832f45a3f70de461da7e4cded96",
+        "geometry": {
+          "encoding": "wgs84_e7",
+          "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+          "no_travel": false,
+          "nodes": [22, 31, 17, 32, 43, 35, 21, 7, 9, 0],
+          "occurrences": [
+            {
+              "distance_meters": 169.8937841480369,
+              "edge": 54,
+              "from": 22,
+              "ordinal": 0,
+              "orientation": "reverse",
+              "point_end": 10,
+              "point_start": 0,
+              "segment": 32,
+              "to": 31
+            },
+            {
+              "distance_meters": 65.8208665784874,
+              "edge": 68,
+              "from": 31,
+              "ordinal": 1,
+              "orientation": "reverse",
+              "point_end": 15,
+              "point_start": 10,
+              "segment": 31,
+              "to": 17
+            },
+            {
+              "distance_meters": 55.345048148126466,
+              "edge": 41,
+              "from": 17,
+              "ordinal": 2,
+              "orientation": "forward",
+              "point_end": 17,
+              "point_start": 15,
+              "segment": 11,
+              "to": 32
+            },
+            {
+              "distance_meters": 85.64312182803619,
+              "edge": 75,
+              "from": 32,
+              "ordinal": 3,
+              "orientation": "forward",
+              "point_end": 24,
+              "point_start": 17,
+              "segment": 16,
+              "to": 43
+            },
+            {
+              "distance_meters": 18.27352886256836,
+              "edge": 95,
+              "from": 43,
+              "ordinal": 4,
+              "orientation": "forward",
+              "point_end": 26,
+              "point_start": 24,
+              "segment": 17,
+              "to": 35
+            },
+            {
+              "distance_meters": 47.141529041824924,
+              "edge": 78,
+              "from": 35,
+              "ordinal": 5,
+              "orientation": "forward",
+              "point_end": 29,
+              "point_start": 26,
+              "segment": 18,
+              "to": 21
+            },
+            {
+              "distance_meters": 35.339949172106934,
+              "edge": 52,
+              "from": 21,
+              "ordinal": 6,
+              "orientation": "forward",
+              "point_end": 31,
+              "point_start": 29,
+              "segment": 41,
+              "to": 7
+            },
+            {
+              "distance_meters": 61.50713350096701,
+              "edge": 17,
+              "from": 7,
+              "ordinal": 7,
+              "orientation": "forward",
+              "point_end": 35,
+              "point_start": 31,
+              "segment": 26,
+              "to": 9
+            },
+            {
+              "distance_meters": 68.34735929904986,
+              "edge": 20,
+              "from": 9,
+              "ordinal": 8,
+              "orientation": "forward",
+              "point_end": 38,
+              "point_start": 35,
+              "segment": 27,
+              "to": 0
+            }
+          ],
+          "path_id": "path-v1:9eb7bb0fa5a8a65ecd28b2be7239de04e3b274e9f759be05f0ee6500400cb6dd",
+          "points_e7": [
+            {
+              "latitude_e7": 65262410,
+              "longitude_e7": 33765914
+            },
+            {
+              "latitude_e7": 65261197,
+              "longitude_e7": 33766919
+            },
+            {
+              "latitude_e7": 65260091,
+              "longitude_e7": 33768207
+            },
+            {
+              "latitude_e7": 65259039,
+              "longitude_e7": 33769521
+            },
+            {
+              "latitude_e7": 65257653,
+              "longitude_e7": 33771224
+            },
+            {
+              "latitude_e7": 65256494,
+              "longitude_e7": 33772914
+            },
+            {
+              "latitude_e7": 65256107,
+              "longitude_e7": 33773504
+            },
+            {
+              "latitude_e7": 65255774,
+              "longitude_e7": 33774121
+            },
+            {
+              "latitude_e7": 65254975,
+              "longitude_e7": 33775516
+            },
+            {
+              "latitude_e7": 65253482,
+              "longitude_e7": 33778265
+            },
+            {
+              "latitude_e7": 65253482,
+              "longitude_e7": 33778265
+            },
+            {
+              "latitude_e7": 65252456,
+              "longitude_e7": 33779915
+            },
+            {
+              "latitude_e7": 65251630,
+              "longitude_e7": 33781189
+            },
+            {
+              "latitude_e7": 65250644,
+              "longitude_e7": 33782436
+            },
+            {
+              "latitude_e7": 65250178,
+              "longitude_e7": 33783200
+            },
+            {
+              "latitude_e7": 65250178,
+              "longitude_e7": 33783200
+            },
+            {
+              "latitude_e7": 65253802,
+              "longitude_e7": 33786634
+            },
+            {
+              "latitude_e7": 65253802,
+              "longitude_e7": 33786634
+            },
+            {
+              "latitude_e7": 65252656,
+              "longitude_e7": 33787747
+            },
+            {
+              "latitude_e7": 65251764,
+              "longitude_e7": 33788685
+            },
+            {
+              "latitude_e7": 65250711,
+              "longitude_e7": 33789450
+            },
+            {
+              "latitude_e7": 65250111,
+              "longitude_e7": 33789933
+            },
+            {
+              "latitude_e7": 65248909,
+              "longitude_e7": 33790657
+            },
+            {
+              "latitude_e7": 65247673,
+              "longitude_e7": 33791208
+            },
+            {
+              "latitude_e7": 65247673,
+              "longitude_e7": 33791208
+            },
+            {
+              "latitude_e7": 65246268,
+              "longitude_e7": 33792066
+            },
+            {
+              "latitude_e7": 65246268,
+              "longitude_e7": 33792066
+            },
+            {
+              "latitude_e7": 65244988,
+              "longitude_e7": 33792641
+            },
+            {
+              "latitude_e7": 65242410,
+              "longitude_e7": 33793835
+            },
+            {
+              "latitude_e7": 65242410,
+              "longitude_e7": 33793835
+            },
+            {
+              "latitude_e7": 65243699,
+              "longitude_e7": 33796759
+            },
+            {
+              "latitude_e7": 65243699,
+              "longitude_e7": 33796759
+            },
+            {
+              "latitude_e7": 65242201,
+              "longitude_e7": 33797456
+            },
+            {
+              "latitude_e7": 65240102,
+              "longitude_e7": 33798402
+            },
+            {
+              "latitude_e7": 65238646,
+              "longitude_e7": 33799023
+            },
+            {
+              "latitude_e7": 65238646,
+              "longitude_e7": 33799023
+            },
+            {
+              "latitude_e7": 65236833,
+              "longitude_e7": 33799771
+            },
+            {
+              "latitude_e7": 65232933,
+              "longitude_e7": 33801305
+            }
+          ],
+          "schema_version": 1
+        },
+        "jurisdiction_policy": "ng_v2",
+        "objective": {
+          "kind": "travel_time",
+          "value": 105.99551481536915
+        },
+        "objective_unit": "seconds",
+        "optional_capabilities": [],
+        "predicted_elapsed_seconds": 105.99551481536915,
+        "provenance": {
+          "departure_seconds": 1792152000.0,
+          "evaluator": "free-flow-travel-time/v1",
+          "heuristic": null,
+          "routing_context": {
+            "departure_time": 1792152000.0,
+            "permit_access": false,
+            "private_access": false
+          },
+          "time_domain": "unix_seconds",
+          "traffic_digest": null
+        },
+        "routing_profile": "delivery_motorcycle_v2",
+        "search": {
+          "algorithm": "yen",
+          "counter_semantics": "originating_root_or_spur_search_path_pops_including_goal",
+          "detailed_trace": "deferred",
+          "expanded_states": 148,
+          "relaxation": "loopless_path_enumeration",
+          "state_mode": "loopless_path",
+          "termination": "route_found"
+        },
+        "semantics": {
+          "authority": "deterministic_prediction",
+          "geometry": "wgs84_e7",
+          "schema_version": 1
+        }
+      },
+      "segment_inspection": {
+        "base_seconds": 105.99551481536915,
+        "evaluation_id": "evaluation-v1:22059a6bf6f0e2ca477b4844e7d167a9197d8832f45a3f70de461da7e4cded96",
+        "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+        "schema_version": 1,
+        "segments": [
+          {
+            "base_seconds": 30.580881146646643,
+            "edge": 54,
+            "objective_cost": 30.580881146646643,
+            "ordinal": 0,
+            "predicted_elapsed_seconds": 30.580881146646643,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 11.847755984127732,
+            "edge": 68,
+            "objective_cost": 11.847755984127732,
+            "ordinal": 1,
+            "predicted_elapsed_seconds": 11.847755984127732,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 6.641405777775176,
+            "edge": 41,
+            "objective_cost": 6.641405777775176,
+            "ordinal": 2,
+            "predicted_elapsed_seconds": 6.641405777775176,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 15.415761929046514,
+            "edge": 75,
+            "objective_cost": 15.415761929046514,
+            "ordinal": 3,
+            "predicted_elapsed_seconds": 15.415761929046514,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 3.2892351952623047,
+            "edge": 95,
+            "objective_cost": 3.2892351952623047,
+            "ordinal": 4,
+            "predicted_elapsed_seconds": 3.2892351952623047,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 8.485475227528486,
+            "edge": 78,
+            "objective_cost": 8.485475227528486,
+            "ordinal": 5,
+            "predicted_elapsed_seconds": 8.485475227528486,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 6.3611908509792485,
+            "edge": 52,
+            "objective_cost": 6.3611908509792485,
+            "ordinal": 6,
+            "predicted_elapsed_seconds": 6.3611908509792485,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 11.071284030174063,
+            "edge": 17,
+            "objective_cost": 11.071284030174063,
+            "ordinal": 7,
+            "predicted_elapsed_seconds": 11.071284030174063,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 12.302524673828975,
+            "edge": 20,
+            "objective_cost": 12.302524673828975,
+            "ordinal": 8,
+            "predicted_elapsed_seconds": 12.302524673828975,
+            "traffic_factor": null
+          }
+        ],
+        "semantics": "pinned_static_path_evaluation/v1",
+        "traffic_delay_seconds": null,
+        "traffic_digest": null
+      }
+    },
+    {
+      "max_shared_distance_ratio": 0.6601366037104177,
+      "member_id": "alternatives-v1:23888c5555aa3ca8cc892b95b1f18397182a022e5a8a9b33f2b13270c4fe96c7/evaluation-v1:e3866d2c0061d68e5d217e62f67f6dab617f085f075b4a931aa54d0cf9475ade",
+      "rank": 2,
+      "route": {
+        "cost_breakdown": "unavailable_not_retained",
+        "distance_meters": 644.0523132319433,
+        "evaluation_id": "evaluation-v1:e3866d2c0061d68e5d217e62f67f6dab617f085f075b4a931aa54d0cf9475ade",
+        "geometry": {
+          "encoding": "wgs84_e7",
+          "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+          "no_travel": false,
+          "nodes": [22, 31, 17, 14, 12, 13, 6, 21, 7, 9, 0],
+          "occurrences": [
+            {
+              "distance_meters": 169.8937841480369,
+              "edge": 54,
+              "from": 22,
+              "ordinal": 0,
+              "orientation": "reverse",
+              "point_end": 10,
+              "point_start": 0,
+              "segment": 32,
+              "to": 31
+            },
+            {
+              "distance_meters": 65.8208665784874,
+              "edge": 68,
+              "from": 31,
+              "ordinal": 1,
+              "orientation": "reverse",
+              "point_end": 15,
+              "point_start": 10,
+              "segment": 31,
+              "to": 17
+            },
+            {
+              "distance_meters": 34.00394878150509,
+              "edge": 39,
+              "from": 17,
+              "ordinal": 2,
+              "orientation": "reverse",
+              "point_end": 17,
+              "point_start": 15,
+              "segment": 10,
+              "to": 14
+            },
+            {
+              "distance_meters": 57.021158132519865,
+              "edge": 33,
+              "from": 14,
+              "ordinal": 3,
+              "orientation": "reverse",
+              "point_end": 19,
+              "point_start": 17,
+              "segment": 8,
+              "to": 12
+            },
+            {
+              "distance_meters": 35.94659052157928,
+              "edge": 28,
+              "from": 12,
+              "ordinal": 4,
+              "orientation": "forward",
+              "point_end": 23,
+              "point_start": 19,
+              "segment": 30,
+              "to": 13
+            },
+            {
+              "distance_meters": 13.009228325791536,
+              "edge": 30,
+              "from": 13,
+              "ordinal": 5,
+              "orientation": "reverse",
+              "point_end": 25,
+              "point_start": 23,
+              "segment": 39,
+              "to": 6
+            },
+            {
+              "distance_meters": 103.16229477189955,
+              "edge": 14,
+              "from": 6,
+              "ordinal": 6,
+              "orientation": "forward",
+              "point_end": 30,
+              "point_start": 25,
+              "segment": 40,
+              "to": 21
+            },
+            {
+              "distance_meters": 35.339949172106934,
+              "edge": 52,
+              "from": 21,
+              "ordinal": 7,
+              "orientation": "forward",
+              "point_end": 32,
+              "point_start": 30,
+              "segment": 41,
+              "to": 7
+            },
+            {
+              "distance_meters": 61.50713350096701,
+              "edge": 17,
+              "from": 7,
+              "ordinal": 8,
+              "orientation": "forward",
+              "point_end": 36,
+              "point_start": 32,
+              "segment": 26,
+              "to": 9
+            },
+            {
+              "distance_meters": 68.34735929904986,
+              "edge": 20,
+              "from": 9,
+              "ordinal": 9,
+              "orientation": "forward",
+              "point_end": 39,
+              "point_start": 36,
+              "segment": 27,
+              "to": 0
+            }
+          ],
+          "path_id": "path-v1:a702aa3a4cb79ec5193456fa4efa282aad146558bfe18b8e8fe91a55d896ac7e",
+          "points_e7": [
+            {
+              "latitude_e7": 65262410,
+              "longitude_e7": 33765914
+            },
+            {
+              "latitude_e7": 65261197,
+              "longitude_e7": 33766919
+            },
+            {
+              "latitude_e7": 65260091,
+              "longitude_e7": 33768207
+            },
+            {
+              "latitude_e7": 65259039,
+              "longitude_e7": 33769521
+            },
+            {
+              "latitude_e7": 65257653,
+              "longitude_e7": 33771224
+            },
+            {
+              "latitude_e7": 65256494,
+              "longitude_e7": 33772914
+            },
+            {
+              "latitude_e7": 65256107,
+              "longitude_e7": 33773504
+            },
+            {
+              "latitude_e7": 65255774,
+              "longitude_e7": 33774121
+            },
+            {
+              "latitude_e7": 65254975,
+              "longitude_e7": 33775516
+            },
+            {
+              "latitude_e7": 65253482,
+              "longitude_e7": 33778265
+            },
+            {
+              "latitude_e7": 65253482,
+              "longitude_e7": 33778265
+            },
+            {
+              "latitude_e7": 65252456,
+              "longitude_e7": 33779915
+            },
+            {
+              "latitude_e7": 65251630,
+              "longitude_e7": 33781189
+            },
+            {
+              "latitude_e7": 65250644,
+              "longitude_e7": 33782436
+            },
+            {
+              "latitude_e7": 65250178,
+              "longitude_e7": 33783200
+            },
+            {
+              "latitude_e7": 65250178,
+              "longitude_e7": 33783200
+            },
+            {
+              "latitude_e7": 65248066,
+              "longitude_e7": 33780974
+            },
+            {
+              "latitude_e7": 65248066,
+              "longitude_e7": 33780974
+            },
+            {
+              "latitude_e7": 65243316,
+              "longitude_e7": 33782919
+            },
+            {
+              "latitude_e7": 65243316,
+              "longitude_e7": 33782919
+            },
+            {
+              "latitude_e7": 65242587,
+              "longitude_e7": 33783259
+            },
+            {
+              "latitude_e7": 65241158,
+              "longitude_e7": 33783710
+            },
+            {
+              "latitude_e7": 65240278,
+              "longitude_e7": 33784018
+            },
+            {
+              "latitude_e7": 65240278,
+              "longitude_e7": 33784018
+            },
+            {
+              "latitude_e7": 65239572,
+              "longitude_e7": 33784957
+            },
+            {
+              "latitude_e7": 65239572,
+              "longitude_e7": 33784957
+            },
+            {
+              "latitude_e7": 65239745,
+              "longitude_e7": 33785708
+            },
+            {
+              "latitude_e7": 65240332,
+              "longitude_e7": 33787868
+            },
+            {
+              "latitude_e7": 65241238,
+              "longitude_e7": 33790844
+            },
+            {
+              "latitude_e7": 65242410,
+              "longitude_e7": 33793835
+            },
+            {
+              "latitude_e7": 65242410,
+              "longitude_e7": 33793835
+            },
+            {
+              "latitude_e7": 65243699,
+              "longitude_e7": 33796759
+            },
+            {
+              "latitude_e7": 65243699,
+              "longitude_e7": 33796759
+            },
+            {
+              "latitude_e7": 65242201,
+              "longitude_e7": 33797456
+            },
+            {
+              "latitude_e7": 65240102,
+              "longitude_e7": 33798402
+            },
+            {
+              "latitude_e7": 65238646,
+              "longitude_e7": 33799023
+            },
+            {
+              "latitude_e7": 65238646,
+              "longitude_e7": 33799023
+            },
+            {
+              "latitude_e7": 65236833,
+              "longitude_e7": 33799771
+            },
+            {
+              "latitude_e7": 65232933,
+              "longitude_e7": 33801305
+            }
+          ],
+          "schema_version": 1
+        },
+        "jurisdiction_policy": "ng_v2",
+        "objective": {
+          "kind": "travel_time",
+          "value": 113.88917945485952
+        },
+        "objective_unit": "seconds",
+        "optional_capabilities": [],
+        "predicted_elapsed_seconds": 113.88917945485952,
+        "provenance": {
+          "departure_seconds": 1792152000.0,
+          "evaluator": "free-flow-travel-time/v1",
+          "heuristic": null,
+          "routing_context": {
+            "departure_time": 1792152000.0,
+            "permit_access": false,
+            "private_access": false
+          },
+          "time_domain": "unix_seconds",
+          "traffic_digest": null
+        },
+        "routing_profile": "delivery_motorcycle_v2",
+        "search": {
+          "algorithm": "yen",
+          "counter_semantics": "originating_root_or_spur_search_path_pops_including_goal",
+          "detailed_trace": "deferred",
+          "expanded_states": 25,
+          "relaxation": "loopless_path_enumeration",
+          "state_mode": "loopless_path",
+          "termination": "route_found"
+        },
+        "semantics": {
+          "authority": "deterministic_prediction",
+          "geometry": "wgs84_e7",
+          "schema_version": 1
+        }
+      },
+      "segment_inspection": {
+        "base_seconds": 113.88917945485952,
+        "evaluation_id": "evaluation-v1:e3866d2c0061d68e5d217e62f67f6dab617f085f075b4a931aa54d0cf9475ade",
+        "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+        "schema_version": 1,
+        "segments": [
+          {
+            "base_seconds": 30.580881146646643,
+            "edge": 54,
+            "objective_cost": 30.580881146646643,
+            "ordinal": 0,
+            "predicted_elapsed_seconds": 30.580881146646643,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 11.847755984127732,
+            "edge": 68,
+            "objective_cost": 11.847755984127732,
+            "ordinal": 1,
+            "predicted_elapsed_seconds": 11.847755984127732,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 4.08047385378061,
+            "edge": 39,
+            "objective_cost": 4.08047385378061,
+            "ordinal": 2,
+            "predicted_elapsed_seconds": 4.08047385378061,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 10.263808463853577,
+            "edge": 33,
+            "objective_cost": 10.263808463853577,
+            "ordinal": 3,
+            "predicted_elapsed_seconds": 10.263808463853577,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 6.470386293884271,
+            "edge": 28,
+            "objective_cost": 6.470386293884271,
+            "ordinal": 4,
+            "predicted_elapsed_seconds": 6.470386293884271,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 2.3416610986424766,
+            "edge": 30,
+            "objective_cost": 2.3416610986424766,
+            "ordinal": 5,
+            "predicted_elapsed_seconds": 2.3416610986424766,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 18.56921305894192,
+            "edge": 14,
+            "objective_cost": 18.56921305894192,
+            "ordinal": 6,
+            "predicted_elapsed_seconds": 18.56921305894192,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 6.3611908509792485,
+            "edge": 52,
+            "objective_cost": 6.3611908509792485,
+            "ordinal": 7,
+            "predicted_elapsed_seconds": 6.3611908509792485,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 11.071284030174063,
+            "edge": 17,
+            "objective_cost": 11.071284030174063,
+            "ordinal": 8,
+            "predicted_elapsed_seconds": 11.071284030174063,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 12.302524673828975,
+            "edge": 20,
+            "objective_cost": 12.302524673828975,
+            "ordinal": 9,
+            "predicted_elapsed_seconds": 12.302524673828975,
+            "traffic_factor": null
+          }
+        ],
+        "semantics": "pinned_static_path_evaluation/v1",
+        "traffic_delay_seconds": null,
+        "traffic_digest": null
+      }
+    },
+    {
+      "max_shared_distance_ratio": 0.58333083938885,
+      "member_id": "alternatives-v1:23888c5555aa3ca8cc892b95b1f18397182a022e5a8a9b33f2b13270c4fe96c7/evaluation-v1:de7841c8df0495df9c5f33bdb8c71b34f10ab05bd2f58009d5fcb7c8c25563bb",
+      "rank": 3,
+      "route": {
+        "cost_breakdown": "unavailable_not_retained",
+        "distance_meters": 664.6767703559674,
+        "evaluation_id": "evaluation-v1:de7841c8df0495df9c5f33bdb8c71b34f10ab05bd2f58009d5fcb7c8c25563bb",
+        "geometry": {
+          "encoding": "wgs84_e7",
+          "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+          "no_travel": false,
+          "nodes": [22, 31, 17, 14, 12, 13, 6, 42, 2, 0],
+          "occurrences": [
+            {
+              "distance_meters": 169.8937841480369,
+              "edge": 54,
+              "from": 22,
+              "ordinal": 0,
+              "orientation": "reverse",
+              "point_end": 10,
+              "point_start": 0,
+              "segment": 32,
+              "to": 31
+            },
+            {
+              "distance_meters": 65.8208665784874,
+              "edge": 68,
+              "from": 31,
+              "ordinal": 1,
+              "orientation": "reverse",
+              "point_end": 15,
+              "point_start": 10,
+              "segment": 31,
+              "to": 17
+            },
+            {
+              "distance_meters": 34.00394878150509,
+              "edge": 39,
+              "from": 17,
+              "ordinal": 2,
+              "orientation": "reverse",
+              "point_end": 17,
+              "point_start": 15,
+              "segment": 10,
+              "to": 14
+            },
+            {
+              "distance_meters": 57.021158132519865,
+              "edge": 33,
+              "from": 14,
+              "ordinal": 3,
+              "orientation": "reverse",
+              "point_end": 19,
+              "point_start": 17,
+              "segment": 8,
+              "to": 12
+            },
+            {
+              "distance_meters": 35.94659052157928,
+              "edge": 28,
+              "from": 12,
+              "ordinal": 4,
+              "orientation": "forward",
+              "point_end": 23,
+              "point_start": 19,
+              "segment": 30,
+              "to": 13
+            },
+            {
+              "distance_meters": 13.009228325791536,
+              "edge": 30,
+              "from": 13,
+              "ordinal": 5,
+              "orientation": "reverse",
+              "point_end": 25,
+              "point_start": 23,
+              "segment": 39,
+              "to": 6
+            },
+            {
+              "distance_meters": 48.02583967560716,
+              "edge": 15,
+              "from": 6,
+              "ordinal": 6,
+              "orientation": "reverse",
+              "point_end": 28,
+              "point_start": 25,
+              "segment": 3,
+              "to": 42
+            },
+            {
+              "distance_meters": 116.80185578341465,
+              "edge": 91,
+              "from": 42,
+              "ordinal": 7,
+              "orientation": "reverse",
+              "point_end": 39,
+              "point_start": 28,
+              "segment": 2,
+              "to": 2
+            },
+            {
+              "distance_meters": 124.15349840902553,
+              "edge": 5,
+              "from": 2,
+              "ordinal": 8,
+              "orientation": "forward",
+              "point_end": 42,
+              "point_start": 39,
+              "segment": 42,
+              "to": 0
+            }
+          ],
+          "path_id": "path-v1:b9f43de125da83ca0fb87f2b2c564b6ca1378f3552bc52b99eccaa8dbffa3765",
+          "points_e7": [
+            {
+              "latitude_e7": 65262410,
+              "longitude_e7": 33765914
+            },
+            {
+              "latitude_e7": 65261197,
+              "longitude_e7": 33766919
+            },
+            {
+              "latitude_e7": 65260091,
+              "longitude_e7": 33768207
+            },
+            {
+              "latitude_e7": 65259039,
+              "longitude_e7": 33769521
+            },
+            {
+              "latitude_e7": 65257653,
+              "longitude_e7": 33771224
+            },
+            {
+              "latitude_e7": 65256494,
+              "longitude_e7": 33772914
+            },
+            {
+              "latitude_e7": 65256107,
+              "longitude_e7": 33773504
+            },
+            {
+              "latitude_e7": 65255774,
+              "longitude_e7": 33774121
+            },
+            {
+              "latitude_e7": 65254975,
+              "longitude_e7": 33775516
+            },
+            {
+              "latitude_e7": 65253482,
+              "longitude_e7": 33778265
+            },
+            {
+              "latitude_e7": 65253482,
+              "longitude_e7": 33778265
+            },
+            {
+              "latitude_e7": 65252456,
+              "longitude_e7": 33779915
+            },
+            {
+              "latitude_e7": 65251630,
+              "longitude_e7": 33781189
+            },
+            {
+              "latitude_e7": 65250644,
+              "longitude_e7": 33782436
+            },
+            {
+              "latitude_e7": 65250178,
+              "longitude_e7": 33783200
+            },
+            {
+              "latitude_e7": 65250178,
+              "longitude_e7": 33783200
+            },
+            {
+              "latitude_e7": 65248066,
+              "longitude_e7": 33780974
+            },
+            {
+              "latitude_e7": 65248066,
+              "longitude_e7": 33780974
+            },
+            {
+              "latitude_e7": 65243316,
+              "longitude_e7": 33782919
+            },
+            {
+              "latitude_e7": 65243316,
+              "longitude_e7": 33782919
+            },
+            {
+              "latitude_e7": 65242587,
+              "longitude_e7": 33783259
+            },
+            {
+              "latitude_e7": 65241158,
+              "longitude_e7": 33783710
+            },
+            {
+              "latitude_e7": 65240278,
+              "longitude_e7": 33784018
+            },
+            {
+              "latitude_e7": 65240278,
+              "longitude_e7": 33784018
+            },
+            {
+              "latitude_e7": 65239572,
+              "longitude_e7": 33784957
+            },
+            {
+              "latitude_e7": 65239572,
+              "longitude_e7": 33784957
+            },
+            {
+              "latitude_e7": 65237200,
+              "longitude_e7": 33785145
+            },
+            {
+              "latitude_e7": 65235268,
+              "longitude_e7": 33785319
+            },
+            {
+              "latitude_e7": 65235268,
+              "longitude_e7": 33785319
+            },
+            {
+              "latitude_e7": 65234082,
+              "longitude_e7": 33785413
+            },
+            {
+              "latitude_e7": 65232977,
+              "longitude_e7": 33785561
+            },
+            {
+              "latitude_e7": 65232563,
+              "longitude_e7": 33785614
+            },
+            {
+              "latitude_e7": 65231271,
+              "longitude_e7": 33786084
+            },
+            {
+              "latitude_e7": 65229845,
+              "longitude_e7": 33787009
+            },
+            {
+              "latitude_e7": 65228953,
+              "longitude_e7": 33787653
+            },
+            {
+              "latitude_e7": 65228433,
+              "longitude_e7": 33788404
+            },
+            {
+              "latitude_e7": 65228233,
+              "longitude_e7": 33788940
+            },
+            {
+              "latitude_e7": 65228153,
+              "longitude_e7": 33789691
+            },
+            {
+              "latitude_e7": 65228340,
+              "longitude_e7": 33791073
+            },
+            {
+              "latitude_e7": 65228340,
+              "longitude_e7": 33791073
+            },
+            {
+              "latitude_e7": 65228979,
+              "longitude_e7": 33792132
+            },
+            {
+              "latitude_e7": 65232933,
+              "longitude_e7": 33801305
+            }
+          ],
+          "schema_version": 1
+        },
+        "jurisdiction_policy": "ng_v2",
+        "objective": {
+          "kind": "travel_time",
+          "value": 117.60158173718384
+        },
+        "objective_unit": "seconds",
+        "optional_capabilities": [],
+        "predicted_elapsed_seconds": 117.60158173718384,
+        "provenance": {
+          "departure_seconds": 1792152000.0,
+          "evaluator": "free-flow-travel-time/v1",
+          "heuristic": null,
+          "routing_context": {
+            "departure_time": 1792152000.0,
+            "permit_access": false,
+            "private_access": false
+          },
+          "time_domain": "unix_seconds",
+          "traffic_digest": null
+        },
+        "routing_profile": "delivery_motorcycle_v2",
+        "search": {
+          "algorithm": "yen",
+          "counter_semantics": "originating_root_or_spur_search_path_pops_including_goal",
+          "detailed_trace": "deferred",
+          "expanded_states": 7,
+          "relaxation": "loopless_path_enumeration",
+          "state_mode": "loopless_path",
+          "termination": "route_found"
+        },
+        "semantics": {
+          "authority": "deterministic_prediction",
+          "geometry": "wgs84_e7",
+          "schema_version": 1
+        }
+      },
+      "segment_inspection": {
+        "base_seconds": 117.60158173718384,
+        "evaluation_id": "evaluation-v1:de7841c8df0495df9c5f33bdb8c71b34f10ab05bd2f58009d5fcb7c8c25563bb",
+        "graph_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+        "schema_version": 1,
+        "segments": [
+          {
+            "base_seconds": 30.580881146646643,
+            "edge": 54,
+            "objective_cost": 30.580881146646643,
+            "ordinal": 0,
+            "predicted_elapsed_seconds": 30.580881146646643,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 11.847755984127732,
+            "edge": 68,
+            "objective_cost": 11.847755984127732,
+            "ordinal": 1,
+            "predicted_elapsed_seconds": 11.847755984127732,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 4.08047385378061,
+            "edge": 39,
+            "objective_cost": 4.08047385378061,
+            "ordinal": 2,
+            "predicted_elapsed_seconds": 4.08047385378061,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 10.263808463853577,
+            "edge": 33,
+            "objective_cost": 10.263808463853577,
+            "ordinal": 3,
+            "predicted_elapsed_seconds": 10.263808463853577,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 6.470386293884271,
+            "edge": 28,
+            "objective_cost": 6.470386293884271,
+            "ordinal": 4,
+            "predicted_elapsed_seconds": 6.470386293884271,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 2.3416610986424766,
+            "edge": 30,
+            "objective_cost": 2.3416610986424766,
+            "ordinal": 5,
+            "predicted_elapsed_seconds": 2.3416610986424766,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 8.64465114160929,
+            "edge": 15,
+            "objective_cost": 8.64465114160929,
+            "ordinal": 6,
+            "predicted_elapsed_seconds": 8.64465114160929,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 21.024334041014637,
+            "edge": 91,
+            "objective_cost": 21.024334041014637,
+            "ordinal": 7,
+            "predicted_elapsed_seconds": 21.024334041014637,
+            "traffic_factor": null
+          },
+          {
+            "base_seconds": 22.347629713624595,
+            "edge": 5,
+            "objective_cost": 22.347629713624595,
+            "ordinal": 8,
+            "predicted_elapsed_seconds": 22.347629713624595,
+            "traffic_factor": null
+          }
+        ],
+        "semantics": "pinned_static_path_evaluation/v1",
+        "traffic_delay_seconds": null,
+        "traffic_digest": null
+      }
+    }
+  ],
+  "schema_version": 1,
+  "summary": {
+    "candidate_history": "not_retained",
+    "options": {
+      "max_candidate_paths": 1000,
+      "max_cost_factor": 1.5,
+      "max_routes": 3,
+      "max_search_states": 50000,
+      "max_shared_distance_ratio": 0.8
+    },
+    "overlap": "shared_physical_segment_distance_over_shorter_route",
+    "ranked_paths": 4,
+    "scope": "selected_diverse_legal_loopless_paths_static_nonnegative;not_all_candidates_or_legal_walks",
+    "search_states": 598,
+    "termination": "requested_count",
+    "truncated": false,
+    "work_unit": "loopless_path_pops_across_root_and_spur_searches"
+  }
+}

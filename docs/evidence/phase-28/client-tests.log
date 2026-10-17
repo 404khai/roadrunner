@@ -1,0 +1,11 @@
+> roadrunner-web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/admin/.t3/worktrees/roadrunner/feat-routing-visualization-ui/web
+
+
+ Test Files  4 passed (4)
+      Tests  25 passed (25)
+   Start at  23:01:09
+   Duration  3.57s (tests 63%, environment 25%, import 11%, transform 1%)

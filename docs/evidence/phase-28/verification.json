@@ -1,0 +1,98 @@
+{
+  "phase": 28,
+  "verdict": "implemented_and_verified_with_declared_limits",
+  "baseline": "08cf487bf975f97a52e5a828c4d1f30a233128d7",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "rustc": "1.96.0"
+  },
+  "checks": {
+    "workspace_tests": {
+      "command": "cargo test --workspace --all-features --locked",
+      "passed": 306,
+      "failed": 0,
+      "ignored": 13,
+      "log": "workspace-tests.log"
+    },
+    "clippy": {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "result": "passed",
+      "log": "clippy.log"
+    },
+    "rustfmt": "passed",
+    "client_tests": {
+      "passed": 25,
+      "log": "client-tests.log"
+    },
+    "client_lint": "passed",
+    "client_format": "passed",
+    "client_build": "passed_with_existing_large_bundle_warning",
+    "diff_check": "passed"
+  },
+  "browser_record": "browser.json",
+  "phase_29_started": false,
+  "not_claimed": [
+    "opt-in PostgreSQL/broker integration suites rerun",
+    "large-network rendering performance",
+    "physical telemetry or learned ETA",
+    "unrestricted legal-walk optimality",
+    "detailed search traces",
+    "production readiness"
+  ],
+  "source_sha256": {
+    "crates/roadrunner-api/src/routing/inspection.rs": "f9249efbb0d0d1d1b9b36e9fa3d5f4c98b6be2542e2cd5e84fbfcd70f780936c",
+    "crates/roadrunner-api/src/routing.rs": "66dcbfc3ededf204ca02a2acef9d77eef66009d57a92bb61aca5cd1e58991de9",
+    "crates/roadrunner-api/tests/visualization.rs": "5a69c83c400dbe65f99cfa03c94e4a4db4c99eb78d194cc62e8b5fcf0bf1f211",
+    "web/src/App.tsx": "f92702e87c15b57aff21a91c79cec3543ed6a551adb30602f0ee22778551878b",
+    "web/src/ComparisonPanel.tsx": "d35529787748a63acb3841267d6ab7c469851ea70593a3b9b8eb31652160470d",
+    "web/src/MapView.tsx": "6e13b2e6141ad2f5b681f6d9d10802255b47997dad32251d41b882afb1704423",
+    "web/src/contracts.ts": "dec043cdd9f70ce1d290729ca505c722f68a612d486b2769ccf0db72ebc9bc5f",
+    "web/src/geometry.ts": "7c15dc5ca9455d74c56fe8a5dc398690b20783b914fd1c0de2d41ce8372e87c5",
+    "web/src/main.tsx": "695db2855cad69d733ddae7f63c34c29fed11f89bce6864735212d0542a2fa17",
+    "web/src/styles.css": "7b503a197d107e8d4bbe77b6907d66418406451dd4baa89ae2a9f46a2777dfe7",
+    "web/src/useReveal.ts": "bfb3e0e6461ff49c6c341e2819e56899d0eecf8040a85f14bd31458c5588271a",
+    "web/tests/App.test.tsx": "fc939348e8a93fbf03367154dc16030085508de4a69f36a4f68d587af78a9223",
+    "web/tests/README.md": "d17c73ff278f8b9096140aee7215a6f6ea0b3f29803d34b93d5e0c863d713aa5",
+    "web/tests/alternatives-no-travel-request.json": "e803cc9f4b58b27b4cfae0ba3070b36957ea1f17f79b41ffa9a16d9a2a11441b",
+    "web/tests/alternatives-no-travel.json": "3a9d1f0ca72c1d4171dcd20200ec14f99693f08eb61512d95a70e3888621000f",
+    "web/tests/alternatives-request.json": "df7cd5858b2b3e0a82ffd10bbbd48b79e74c739704e700922d598aefe53cdb25",
+    "web/tests/alternatives-reverse-request.json": "ccb2cc5ae0299019b0f858a4d7df17dec91dd50c58ee58ff9a3734986943ffa5",
+    "web/tests/alternatives-reverse.json": "467335cd7c381ae7952c32330dc3a22824099fd46675aac14722b9b89a50bf3a",
+    "web/tests/alternatives-traffic-request.json": "ee9843e123745b8b64db5210c305192a57fd948d2a50b7fc5440a220e4bf5c85",
+    "web/tests/alternatives-traffic.json": "025237d2cabd77ca4111bd61f4bb6fb8220ca2726ef1e63206d3fa9c39c18e20",
+    "web/tests/alternatives.json": "ab7256a4fd710858ceb547f1a6336ddd2bbc4f41185eb6aaaffa09ae86b89872",
+    "web/tests/alternatives.test.ts": "f619a534478fb134b67796e0abfb2837b47c171566215c6cf7171af069fa330f",
+    "web/tests/catalog.json": "a956129bf016e8b34ac7dca4e9c8a9a8dbb371d92d69b3a39f86049c253c38ac",
+    "web/tests/contracts.test.ts": "a6430d2ba3ed295163b18178ecb04b7744c3c8726006cc953a61cc53faf7b70d",
+    "web/tests/forward-request.json": "824fcac388c44a54ec1a27da2035856af765dd8b334a647af6636f6763471200",
+    "web/tests/forward.json": "bf8c4d58ea7b55d93e18ec36f6a213aff924196416623f0681080e870c930bec",
+    "web/tests/no-travel-request.json": "2e089f5da97f1d44c324fe738585bec9ff640e76a7c8b9098c4d054e7d186ab6",
+    "web/tests/no-travel.json": "65e9217467abd97dc5bb53b5a757e4052c773b754a781fdd3da6abb796f562c1",
+    "web/tests/presentation.test.tsx": "395e047f29d53c9cd14141f202a0bea3b9772800f8be9fadbd0ed42e1112a7ec",
+    "web/tests/reverse-request.json": "89738fcf30562a7a4f25690e72e359bf231dd430975a954d6c806b0ed9e23613",
+    "web/tests/reverse.json": "1663149cbcb3ae24552a11a56e34d74ccb87478e3a7701c899a8ea3139c4e89c"
+  },
+  "artifact_sha256": {
+    "docs/evidence/phase-28/browser-source.json": "7bbfa8ec3a8de00d187c307a5ad8e81e052099c027a3c0a876278eafdf158172",
+    "docs/evidence/phase-28/browser.json": "02ee09b83806bfa60b511c9288db438edefe311a262eda8fc6f81ac0103f89f9",
+    "docs/evidence/phase-28/client-build.log": "971139d3cf113aa091a7327214057901b773e28438036719531d170582586642",
+    "docs/evidence/phase-28/client-format.log": "57dd1613028fe8fd324b685ddb76f29029f79cc2dee3e17955eed1df720cf0a8",
+    "docs/evidence/phase-28/client-lint.log": "c48ec5fef3820dd15d9bca34db8825f6b92306d30a969d4e6d7e178de9202f44",
+    "docs/evidence/phase-28/client-tests.log": "49966813d1e3cba91cbd649f54852a34446134ff58f50b8ff148acf3bf2b1a7a",
+    "docs/evidence/phase-28/clippy.log": "966b98ca316847061272d4a3d27148c6dc3f914349c747a3b295c26aa853d6cd",
+    "docs/evidence/phase-28/desktop-comparison.png": "556aa1f3c0863c93540aa6aac31e4a3402cf083c10774cf97cde7423a2e6215b",
+    "docs/evidence/phase-28/mobile-comparison.png": "e2bfcd62be85c1d79b9de1720485018d54f0097395ccfcfb0dfefbb05bff348d",
+    "docs/evidence/phase-28/no-travel.png": "8a37f5e1e4dcb5d0828b60e9ee3c396ce4533a35dfaa03351be7aec9c4cb32e0",
+    "docs/evidence/phase-28/reveal-paused.png": "5e6c47f0b1d0b417d1a68841393405b008b13272244a7c8ae5532fb03e2f7cff",
+    "docs/evidence/phase-28/rustfmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/phase-28/segment-reverse.png": "b8ab037b13bc7f85726bf4bada4dcbc748db23b817ae9f1adb2e0e1ed95d799d",
+    "docs/evidence/phase-28/tablet-comparison.png": "ab74ce1db11f9cb4b152d98892ecf173c80097f74ad7452b1ec6fc32b6ec627a",
+    "docs/evidence/phase-28/traffic-comparison.png": "7f5f7fdbc039fe73e1bbb6b713ab08833f3733212c4dbf11e0f96f0e56fd7cf8",
+    "docs/evidence/phase-28/traffic-segment.png": "90cf76aa8e53d58aa5519ba4eb01b79da353b3725c9723c5287fb229ed3d4270",
+    "docs/evidence/phase-28/unreachable.png": "f82f8eb7a2cf1547858e012a7d4ab0d1e38266020262c273af4aa3584383dabf",
+    "docs/evidence/phase-28/workspace-tests.log": "de5f2f49f0c5afe3e0eb225e6e77aa8c098f636ac1a8559216b70f94d5186df7"
+  },
+  "log_normalization": "Leading/trailing blank lines and trailing whitespace removed; command results unchanged."
+}

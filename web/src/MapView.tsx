@@ -16,7 +16,12 @@ import {
   Plug,
 } from "lucide-react";
 import type { FeatureCollection } from "geojson";
-import type { Anchor, Catalog, RouteResult } from "./contracts";
+import type {
+  Anchor,
+  Catalog,
+  RouteResult,
+  AlternativeMember,
+} from "./contracts";
 import { presentationPath, revealPrefix, type Position } from "./geometry";
 const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
 const style: StyleSpecification = {
@@ -187,6 +192,12 @@ export function MapView({
   reduced,
   onSelect,
   selection,
+  alternatives,
+  visible,
+  selectedMember,
+  onSelectMember,
+  segment,
+  onSelectSegment,
 }: {
   catalog?: Catalog;
   panelOpen: boolean;
@@ -195,6 +206,12 @@ export function MapView({
   origin?: Anchor;
   destination?: Anchor;
   result?: RouteResult;
+  alternatives?: AlternativeMember[];
+  visible: Set<string>;
+  selectedMember: string;
+  onSelectMember: (id: string) => void;
+  segment?: number;
+  onSelectSegment: (ordinal: number) => void;
   progress: number;
   reduced: boolean;
   onSelect: (node: number) => void;
@@ -204,6 +221,17 @@ export function MapView({
     mapRef = useRef<LibreMap | null>(null),
     selectRef = useRef(onSelect);
   selectRef.current = onSelect;
+  const memberRef = useRef(onSelectMember),
+    segmentRef = useRef(onSelectSegment);
+  memberRef.current = onSelectMember;
+  segmentRef.current = onSelectSegment;
+  const comparisonPaths = useMemo(
+    () =>
+      alternatives
+        ?.filter((m) => visible.has(m.member_id))
+        .map((m) => ({ member: m, path: presentationPath(m.route) })),
+    [alternatives, visible],
+  );
   const [ready, setReady] = useState(false),
     [failed, setFailed] = useState(false),
     [tilesFailed, setTilesFailed] = useState(false);
@@ -215,25 +243,44 @@ export function MapView({
     const map = mapRef.current;
     if (!map) return;
     const points =
-      path?.points ??
+      (comparisonPaths?.length
+        ? comparisonPaths.flatMap((p) => p.path.points)
+        : path?.points) ??
       catalog?.anchors.map(
         (a) => [a.coordinate.longitude, a.coordinate.latitude] as Position,
       );
     if (!points?.length) return;
     const bounds = new maplibregl.LngLatBounds(points[0], points[0]);
     points.forEach((p) => bounds.extend(p));
+    const { clientWidth: width, clientHeight: height } = map.getContainer();
+    if (!width || !height) return;
+    const padding = {
+      top:
+        path && width <= 760
+          ? 280
+          : path && !panelOpen && width <= 1050
+            ? 340
+            : 190,
+      bottom: path ? 180 : 90,
+      left: panelOpen && width > 760 ? 415 : 55,
+      right: 65,
+    };
+    // A resize or virtual keyboard may temporarily leave less room than overlays.
+    // Keep a real fitting area instead of asking MapLibre to fit negative space.
+    const horizontal = Math.min(
+      1,
+      Math.max(1, width - 80) / (padding.left + padding.right),
+    );
+    const vertical = Math.min(
+      1,
+      Math.max(1, height - 80) / (padding.top + padding.bottom),
+    );
+    padding.left *= horizontal;
+    padding.right *= horizontal;
+    padding.top *= vertical;
+    padding.bottom *= vertical;
     map.fitBounds(bounds, {
-      padding: {
-        top:
-          path && map.getContainer().clientWidth <= 760
-            ? 280
-            : path && !panelOpen && map.getContainer().clientWidth <= 1050
-              ? 340
-              : 190,
-        bottom: path ? 180 : 90,
-        left: panelOpen && map.getContainer().clientWidth > 760 ? 415 : 55,
-        right: 65,
-      },
+      padding,
       maxZoom: 17,
       duration: reduced ? 0 : 900,
     });
@@ -263,7 +310,17 @@ export function MapView({
     }
     mapRef.current = map;
     map.on("style.load", () => {
-      for (const id of ["anchors", "full-route", "reveal", "head", "endpoints"])
+      for (const id of [
+        "anchors",
+        "alternatives",
+        "alternative-labels",
+        "selected-segments",
+        "inspected",
+        "full-route",
+        "reveal",
+        "head",
+        "endpoints",
+      ])
         map.addSource(id, { type: "geojson", data: empty });
       map.addLayer({
         id: "anchors",
@@ -276,6 +333,26 @@ export function MapView({
           "circle-stroke-color": "#1b1b1b",
         },
       });
+      for (let rank = 1; rank <= 5; rank++) {
+        map.addLayer({
+          id: `alternative-${rank}`,
+          type: "line",
+          source: "alternatives",
+          filter: ["==", ["get", "rank"], rank],
+          layout: { "line-join": "round", "line-cap": "round" },
+          paint: {
+            "line-color": rank % 2 === 0 ? "#c0c0c0" : "#8f8f8f",
+            "line-width": 5,
+            "line-dasharray": rank % 2 === 0 ? [2, 1.5] : [0.6, 1.4],
+          },
+        });
+        map.on("mouseenter", `alternative-${rank}`, () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", `alternative-${rank}`, () => {
+          map.getCanvas().style.cursor = "";
+        });
+      }
       map.addLayer({
         id: "route-halo",
         type: "line",
@@ -298,6 +375,35 @@ export function MapView({
         paint: { "line-color": "#ffffff", "line-width": 6 },
       });
       map.addLayer({
+        id: "segment-hit",
+        type: "line",
+        source: "selected-segments",
+        paint: { "line-width": 14, "line-opacity": 0 },
+      });
+      map.on("mouseenter", "segment-hit", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", "segment-hit", () => {
+        map.getCanvas().style.cursor = "";
+      });
+      map.addLayer({
+        id: "inspected-halo",
+        type: "line",
+        source: "inspected",
+        layout: { "line-cap": "round" },
+        paint: { "line-width": 12, "line-color": "#fff" },
+      });
+      map.addLayer({
+        id: "inspected-segment",
+        type: "line",
+        source: "inspected",
+        paint: {
+          "line-width": 5,
+          "line-color": "#111",
+          "line-dasharray": [1, 1],
+        },
+      });
+      map.addLayer({
         id: "head-halo",
         type: "circle",
         source: "head",
@@ -316,6 +422,24 @@ export function MapView({
           "circle-radius": 7,
           "circle-stroke-color": "#111",
           "circle-stroke-width": 2,
+        },
+      });
+      map.addLayer({
+        id: "alternative-labels",
+        type: "symbol",
+        source: "alternative-labels",
+        layout: {
+          "symbol-placement": "line",
+          "symbol-spacing": 800,
+          "text-field": ["get", "label"],
+          "text-font": ["Noto Sans Regular"],
+          "text-size": 11,
+          "text-offset": [0, 1.2],
+        },
+        paint: {
+          "text-color": "#ddd",
+          "text-halo-color": "#111",
+          "text-halo-width": 2,
         },
       });
       map.addLayer({
@@ -341,9 +465,32 @@ export function MapView({
         },
         paint: { "text-color": "#fff" },
       });
-      map.on("click", "anchors", (e) => {
-        const id = e.features?.[0]?.properties?.node;
-        if (typeof id === "number") selectRef.current(id);
+      // Resolve a single topmost hit before React can update any layer sources.
+      // Separate delegated click handlers can otherwise select a second member on overlap.
+      map.on("click", (e) => {
+        const hit = map.queryRenderedFeatures(e.point, {
+          layers: [
+            "segment-hit",
+            ...Array.from({ length: 5 }, (_, i) => `alternative-${i + 1}`),
+            "anchors",
+          ],
+        })[0];
+        if (!hit) return;
+        if (
+          hit.layer.id === "segment-hit" &&
+          typeof hit.properties.ordinal === "number"
+        )
+          segmentRef.current(hit.properties.ordinal);
+        else if (
+          hit.layer.id.startsWith("alternative-") &&
+          typeof hit.properties.member === "string"
+        )
+          memberRef.current(hit.properties.member);
+        else if (
+          hit.layer.id === "anchors" &&
+          typeof hit.properties.node === "number"
+        )
+          selectRef.current(hit.properties.node);
       });
       map.on("mouseenter", "anchors", () => {
         map.getCanvas().style.cursor = "pointer";
@@ -364,6 +511,7 @@ export function MapView({
     };
     canvas.addEventListener("webglcontextlost", lost);
     const resize = new ResizeObserver(() => {
+      map.setPadding({ top: 0, bottom: 0, left: 0, right: 0 });
       map.resize();
       fitRef.current();
     });
@@ -431,7 +579,94 @@ export function MapView({
       path && !result?.evidence.geometry.no_travel ? line(path.points) : empty,
     );
     if (path) fitRef.current();
-  }, [ready, path, result, panelOpen]);
+  }, [ready, path, result, panelOpen, comparisonPaths]);
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    const map = mapRef.current;
+    source(map, "alternatives", {
+      type: "FeatureCollection",
+      features: (comparisonPaths ?? [])
+        .filter(
+          (p) =>
+            p.member.member_id !== selectedMember && p.path.points.length >= 2,
+        )
+        .map((p) => ({
+          type: "Feature",
+          properties: {
+            member: p.member.member_id,
+            rank: p.member.rank,
+            label: `Route ${String.fromCharCode(64 + p.member.rank)}`,
+          },
+          geometry: { type: "LineString", coordinates: p.path.points },
+        })),
+    });
+    // Label only a physical segment exclusive to this visible route. A shared
+    // prefix must not put an alternative's label on the selected white line.
+    const usage = new Map<number, number>();
+    for (const p of comparisonPaths ?? [])
+      for (const id of new Set(
+        p.member.route.geometry.occurrences.map((o) => o.segment),
+      ))
+        usage.set(id, (usage.get(id) ?? 0) + 1);
+    const labels: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [],
+    };
+    for (const p of comparisonPaths ?? []) {
+      if (p.member.member_id === selectedMember) continue;
+      const geometry = p.member.route.geometry;
+      const exclusive = geometry.occurrences
+        .filter((o) => usage.get(o.segment) === 1)
+        .reduce<(typeof geometry.occurrences)[number] | undefined>(
+          (best, o) =>
+            !best || o.distance_meters > best.distance_meters ? o : best,
+          undefined,
+        );
+      if (exclusive)
+        labels.features.push({
+          type: "Feature",
+          properties: {
+            label: `Route ${String.fromCharCode(64 + p.member.rank)}`,
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: geometry.points_e7
+              .slice(exclusive.point_start, exclusive.point_end)
+              .map((p) => [p.longitude_e7 / 1e7, p.latitude_e7 / 1e7]),
+          },
+        });
+    }
+    source(map, "alternative-labels", labels);
+    const g = result?.evidence.geometry;
+    source(map, "selected-segments", {
+      type: "FeatureCollection",
+      features:
+        !alternatives || !g
+          ? []
+          : g.occurrences.map((o) => ({
+              type: "Feature",
+              properties: { ordinal: o.ordinal },
+              geometry: {
+                type: "LineString",
+                coordinates: g.points_e7
+                  .slice(o.point_start, o.point_end)
+                  .map((p) => [p.longitude_e7 / 1e7, p.latitude_e7 / 1e7]),
+              },
+            })),
+    });
+    const o = segment === undefined ? undefined : g?.occurrences[segment];
+    source(
+      map,
+      "inspected",
+      o && g
+        ? line(
+            g.points_e7
+              .slice(o.point_start, o.point_end)
+              .map((p) => [p.longitude_e7 / 1e7, p.latitude_e7 / 1e7]),
+          )
+        : empty,
+    );
+  }, [ready, comparisonPaths, selectedMember, result, segment, alternatives]);
   useEffect(() => {
     if (!ready || !mapRef.current) return;
     const map = mapRef.current;
@@ -465,6 +700,9 @@ export function MapView({
       aria-label="Interactive route map"
       data-map-ready={ready}
       data-reveal-progress={progress.toFixed(3)}
+      data-selected-evaluation={result?.evidence.evaluation_id}
+      data-visible-route-count={comparisonPaths?.length}
+      data-inspected-ordinal={segment}
     >
       <div ref={container} className="map-canvas" />
       <div className="map-heading">
@@ -544,7 +782,11 @@ export function MapView({
         {catalog ? (
           <>
             <span>{catalog.graph.build_identity.source_dataset}</span>
-            <span>Graph-qualified road geometry</span>
+            <span>
+              {alternatives
+                ? `White: Route ${String.fromCharCode(64 + (alternatives.find((m) => m.member_id === selectedMember)?.rank ?? 1))} · dashed: alternatives`
+                : "Graph-qualified road geometry"}
+            </span>
           </>
         ) : (
           <>

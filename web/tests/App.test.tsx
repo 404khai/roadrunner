@@ -12,10 +12,29 @@ import "@testing-library/jest-dom/vitest";
 import { App } from "../src/App";
 import catalog from "./catalog.json";
 import forward from "./forward.json";
+import alternatives from "./alternatives.json";
+import { type RouteResult } from "../src/contracts";
 import noTravel from "./no-travel.json";
 vi.mock("../src/MapView", () => ({
-  MapView: ({ progress }: { progress: number }) => (
-    <div data-testid="map-progress">{progress}</div>
+  MapView: ({
+    progress,
+    result,
+    visible,
+    segment,
+  }: {
+    progress: number;
+    result?: RouteResult;
+    visible: Set<string>;
+    segment?: number;
+  }) => (
+    <div
+      data-testid="map-progress"
+      data-evaluation={result?.evidence.evaluation_id}
+      data-visible={visible.size}
+      data-segment={segment}
+    >
+      {progress}
+    </div>
   ),
 }));
 let fetcher: ReturnType<typeof vi.fn>;
@@ -181,4 +200,101 @@ it("collapses the floating workspace without discarding route evidence or rerout
   expect(screen.getByLabelText("Origin")).toHaveValue("0");
   expect(screen.getByLabelText("Destination")).toHaveValue("35");
   expect(fetcher).toHaveBeenCalledTimes(calls);
+});
+
+it("compares, selects, hides and inspects real alternatives without rerouting or rewriting rank", async () => {
+  await ready();
+  fireEvent.change(screen.getByLabelText("Destination"), {
+    target: { value: "22" },
+  });
+  fireEvent.change(screen.getByLabelText("Route results"), {
+    target: { value: "3" },
+  });
+  expect(screen.getByLabelText("Algorithm")).toBeDisabled();
+  fetcher.mockResolvedValueOnce(new Response(JSON.stringify(alternatives)));
+  fireEvent.click(screen.getByRole("button", { name: "Find route" }));
+  await screen.findByRole("button", { name: "Select Route B" });
+  const count = fetcher.mock.calls.length,
+    bytes = JSON.stringify(alternatives);
+  expect(fetcher.mock.calls.at(-1)![0]).toBe(
+    "/v1/visualization/routes/alternatives",
+  );
+  expect(JSON.parse(fetcher.mock.calls.at(-1)![1].body)).toMatchObject({
+    algorithm: "dijkstra",
+    alternatives: 3,
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Select Route B" }));
+  expect(screen.getByTestId("map-progress")).toHaveAttribute(
+    "data-evaluation",
+    alternatives.routes[1].route.evaluation_id,
+  );
+  expect(screen.getByText("ENGINE PRIMARY")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Hide Route B" }));
+  expect(
+    screen.getByRole("button", { name: "Select Route A" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByTestId("map-progress")).toHaveAttribute(
+    "data-visible",
+    "2",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Select Route B" }));
+  expect(screen.getByTestId("map-progress")).toHaveAttribute(
+    "data-visible",
+    "3",
+  );
+  fireEvent.click(screen.getByText("Inspect selected route segments"));
+  fireEvent.click(screen.getByRole("button", { name: "Next segment" }));
+  expect(screen.getByTestId("map-progress")).toHaveAttribute(
+    "data-segment",
+    "1",
+  );
+  fireEvent.change(screen.getByLabelText("Traversal number"), {
+    target: { value: "" },
+  });
+  expect(screen.getByLabelText("Traversal number")).toHaveDisplayValue("");
+  fireEvent.change(screen.getByLabelText("Traversal number"), {
+    target: { value: "4" },
+  });
+  expect(screen.getByTestId("map-progress")).toHaveAttribute(
+    "data-segment",
+    "3",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Replay reveal" }));
+  fireEvent.click(screen.getByRole("button", { name: /SPATIAL WORKSPACE/ }));
+  fireEvent.click(screen.getByRole("button", { name: "View Route C" }));
+  expect(screen.getByTestId("map-progress")).toHaveAttribute(
+    "data-evaluation",
+    alternatives.routes[2].route.evaluation_id,
+  );
+  expect(fetcher).toHaveBeenCalledTimes(count);
+  expect(JSON.stringify(alternatives)).toBe(bytes);
+});
+it("labels partial comparisons, unavailable optional inspection, and invalidates on objective change", async () => {
+  await ready();
+  fireEvent.change(screen.getByLabelText("Destination"), {
+    target: { value: "22" },
+  });
+  fireEvent.change(screen.getByLabelText("Route results"), {
+    target: { value: "3" },
+  });
+  const partial = structuredClone(alternatives);
+  partial.summary.termination = "budget";
+  partial.summary.truncated = true;
+  partial.routes.forEach((m) => {
+    m.segment_inspection.schema_version = 2;
+  });
+  fetcher.mockResolvedValueOnce(new Response(JSON.stringify(partial)));
+  fireEvent.click(screen.getByRole("button", { name: "Find route" }));
+  await screen.findByText("Partial comparison · search budget reached");
+  fireEvent.click(screen.getByText("Inspect selected route segments"));
+  expect(screen.getAllByText("Unavailable").length).toBeGreaterThan(0);
+  fireEvent.change(screen.getByLabelText("Optimize for"), {
+    target: { value: "distance" },
+  });
+  expect(
+    screen.queryByRole("button", { name: "Select Route A" }),
+  ).not.toBeInTheDocument();
+  expect(screen.getByTestId("map-progress")).not.toHaveAttribute(
+    "data-evaluation",
+  );
 });
