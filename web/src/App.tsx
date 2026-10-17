@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import {
   ArrowDownUp,
+  Bike,
+  ScanLine,
   ArrowRight,
   Check,
   ChevronDown,
@@ -51,8 +53,14 @@ function message(error: unknown) {
   };
 }
 export function App() {
-  const [deliveryMode, setDeliveryMode] = useState(false);
-  const [dispatchMode, setDispatchMode] = useState(false);
+  const [deliveryMode, setDeliveryMode] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("mode") === "delivery",
+  );
+  const [dispatchMode, setDispatchMode] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("mode") === "dispatch",
+  );
   const [catalog, setCatalog] = useState<Catalog>(),
     [origin, setOrigin] = useState<Anchor>(),
     [destination, setDestination] = useState<Anchor>();
@@ -344,18 +352,24 @@ export function App() {
                 Developer graph
               </button>
             </div>
-            <button
-              className="delivery-entry"
-              onClick={() => setDeliveryMode(true)}
+            <div
+              className="workspace-launchers"
+              role="group"
+              aria-label="Engine workspaces"
             >
-              Delivery simulation <ArrowRight size={15} />
-            </button>
-            <button
-              className="delivery-entry"
-              onClick={() => setDispatchMode(true)}
-            >
-              Dispatch visualization <ArrowRight size={15} />
-            </button>
+              <button
+                className="delivery-entry"
+                onClick={() => setDeliveryMode(true)}
+              >
+                <Bike size={19} aria-hidden="true" /> Delivery simulation
+              </button>
+              <button
+                className="delivery-entry"
+                onClick={() => setDispatchMode(true)}
+              >
+                <ScanLine size={19} aria-hidden="true" /> Dispatch visualization
+              </button>
+            </div>
             {debug.enabled && <GraphPanel debug={debug} route={route} />}
             <div hidden={debug.enabled} className="panel-intro">
               <h1>Route planner</h1>

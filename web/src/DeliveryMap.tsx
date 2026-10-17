@@ -63,7 +63,13 @@ export function DeliveryMap({
   reduced = false,
   selectionRevision = 0,
   dispatchFocus,
+  showNetwork = false,
+  mini = false,
+  cooperativeGestures = false,
 }: {
+  mini?: boolean;
+  showNetwork?: boolean;
+  cooperativeGestures?: boolean;
   scene?: Scene;
   at: number;
   selected: string;
@@ -110,7 +116,7 @@ export function DeliveryMap({
     followTarget = useRef("");
   const [autoFollow, setAutoFollow] = useState(true);
   const [navigationOpen, setNavigationOpen] = useState(
-    () => window.innerWidth > 780,
+    () => !mini && window.innerWidth > 780,
   );
   const [fitId, setFitId] = useState(0);
   const [ready, setReady] = useState(false),
@@ -124,6 +130,7 @@ export function DeliveryMap({
     try {
       m = new ml.Map({
         container: container.current,
+        cooperativeGestures,
         style,
         center: [3.4, 6.5],
         zoom: 12,
@@ -161,6 +168,7 @@ export function DeliveryMap({
     });
     m.on("style.load", () => {
       for (const id of [
+        "delivery-network",
         "delivery-roads",
         "delivery-routes",
         "delivery-stops",
@@ -187,6 +195,16 @@ export function DeliveryMap({
           "fill-extrusion-height": ["coalesce", ["get", "render_height"], 0],
           "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
           "fill-extrusion-opacity": 1,
+        },
+      });
+      m.addLayer({
+        id: "delivery-network",
+        type: "line",
+        source: "delivery-network",
+        paint: {
+          "line-color": "#777b72",
+          "line-width": 2,
+          "line-opacity": 0.65,
         },
       });
       m.addLayer({
@@ -335,7 +353,7 @@ export function DeliveryMap({
       m.remove();
       map.current = null;
     };
-  }, []);
+  }, [cooperativeGestures]);
   useEffect(() => {
     const m = map.current;
     if (!m || !ready || !scene) return;
@@ -506,7 +524,7 @@ export function DeliveryMap({
         markers.current.set(key, entry);
       }
       entry.marker.setLngLat(sample.position);
-      const tag = (perspective || immersive) && cameraZoom < 18;
+      const tag = cameraZoom < 18;
       entry.img.style.visibility =
         immersive && !tag && modelsReady && !modelError ? "hidden" : "visible";
       const visualId = scene!.visualIds.get(r.id) ?? r.id;
@@ -755,6 +773,22 @@ export function DeliveryMap({
         ),
     );
     source(
+      "delivery-network",
+      showNetwork && scene
+        ? scene.roads.edges.map((e) => ({
+            type: "Feature" as const,
+            properties: {},
+            geometry: {
+              type: "LineString" as const,
+              coordinates: e.points_e7.map((p) => [
+                p.longitude_e7 / 1e7,
+                p.latitude_e7 / 1e7,
+              ]),
+            },
+          }))
+        : [],
+    );
+    source(
       "delivery-roads",
       traffic && scene?.trafficSupported && f
         ? scene.roads.edges.map((e) => ({
@@ -774,7 +808,41 @@ export function DeliveryMap({
           }))
         : [],
     );
-  }, [ready, scene, frame, selected, traffic]);
+  }, [ready, scene, frame, selected, traffic, showNetwork]);
+  const viewButtons = (
+    <>
+      <div role="group" aria-label="Map perspective">
+        <button
+          aria-pressed={!perspective && !immersive}
+          onClick={() => {
+            setPerspective(false);
+            setImmersive(false);
+          }}
+        >
+          Overhead 2D
+        </button>
+        <button
+          aria-pressed={perspective && !immersive}
+          onClick={() => {
+            setPerspective(true);
+            setImmersive(false);
+          }}
+        >
+          Perspective 2.5D
+        </button>
+      </div>
+      <button
+        aria-pressed={immersive}
+        onClick={() => {
+          setPerspective(true);
+          setImmersive(true);
+          setBuildings(true);
+        }}
+      >
+        Immersive 3D
+      </button>
+    </>
+  );
   return (
     <div className="delivery-map" aria-label="Synthetic delivery map">
       <div className="delivery-canvas" ref={container} />
@@ -829,44 +897,16 @@ export function DeliveryMap({
           }}
         />
       )}
+      {mini && <div className="mini-view-modes">{viewButtons}</div>}
       <details
         open={navigationOpen}
         onToggle={(e) => setNavigationOpen(e.currentTarget.open)}
         className="navigation-card"
         aria-label="Navigation presentation"
       >
-        <summary>Navigation view</summary>
+        <summary>{mini ? "Scene controls" : "Navigation view"}</summary>
         <div className="navigation-card-body">
-          <div role="group" aria-label="Map perspective">
-            <button
-              aria-pressed={!perspective && !immersive}
-              onClick={() => {
-                setPerspective(false);
-                setImmersive(false);
-              }}
-            >
-              Overhead 2D
-            </button>
-            <button
-              aria-pressed={perspective && !immersive}
-              onClick={() => {
-                setPerspective(true);
-                setImmersive(false);
-              }}
-            >
-              Perspective 2.5D
-            </button>
-          </div>
-          <button
-            aria-pressed={immersive}
-            onClick={() => {
-              setPerspective(true);
-              setImmersive(true);
-              setBuildings(true);
-            }}
-          >
-            Immersive 3D
-          </button>
+          {!mini && viewButtons}
           <label>
             <input
               type="checkbox"

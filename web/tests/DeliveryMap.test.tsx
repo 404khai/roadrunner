@@ -259,6 +259,33 @@ it("auto-follows new rider selections, can disable auto-follow, and retains mark
   expect(first.element.dataset.action).toBe("0");
 });
 
+it("uses the same rider and action for overhead zoom tags", () => {
+  render(
+    <DeliveryMap
+      scene={scene}
+      selected="1"
+      at={5}
+      onSelect={vi.fn()}
+      onEdge={vi.fn()}
+      traffic={false}
+      reduced
+    />,
+  );
+  const first = engine.markers[0],
+    position = first.position,
+    action = first.element.dataset.action;
+  engine.zoom = 16;
+  act(() => engine.events.zoom({}));
+  expect(first.element.dataset.view).toBe("tag");
+  expect(first.position).toEqual(position);
+  expect(first.element.dataset.action).toBe(action);
+  expect(engine.markers).toHaveLength(1);
+  engine.zoom = 19;
+  act(() => engine.events.zoom({}));
+  expect(first.element.dataset.view).toBe("overhead");
+  expect(engine.markers[0]).toBe(first);
+});
+
 it("uses a compact portrait tag when zoomed out without replacing rider markers", () => {
   render(
     <DeliveryMap

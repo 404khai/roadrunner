@@ -392,3 +392,10 @@ distinct scooters, accepted execution inspection and bounded synthetic traffic.
 Its Distributed Fleet Demo uses six valid graph starts and actual engine assignments;
 positions are illustrative estimates rather than GPS. See [completion and screenshots](docs/phase-30-completion.md).
 Perspective navigation, synthetic ambient vehicles and procedural 3D models are described in [Phase 30.5 implementation](docs/phase-30.5-completion.md).
+
+## Web landing page and documentation
+
+Run the web app to explore the landing page at `/`, the illustrated field guide and
+generated HTTP reference at `/docs`, and engine workspaces at `/workspace`. See
+[landing-page implementation and verification](docs/landing-page.md) for evidence
+provenance, API export maintenance and deployment requirements.
