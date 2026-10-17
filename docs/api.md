@@ -166,3 +166,13 @@ provenance are exposed. A standalone edge cost is not incoming-maneuver or route
 feasibility. Road class/search membership remain explicitly unavailable. The endpoint
 never records routes or changes graph/dispatch semantics. See the full
 [debugger wire contract and limitations](graph-debugger.md#http-contract).
+
+## Bounded delivery simulation view (Phase 30)
+
+`POST /v1/visualization/deliveries` accepts the strict existing SimulationScenario with
+exact server graph digest and requires namespace-wide read plus simulation capability.
+It exports an isolated real engine run with coherent queue-boundary frames, original
+checked frozen paths, schedule changes, accepted effects and bounded graph geometry.
+It is read-only with respect to the live world and requires no command idempotency key.
+Version/identity, admission limits, errors, traffic interpretation and motion boundaries
+are specified in [live delivery visualization](live-delivery-visualization.md).

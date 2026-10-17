@@ -2,8 +2,8 @@
 
 ## Branch and pull request naming
 
-Use descriptive branch names and PR titles. Phase numbers are not required in
-either; put phase scope and completion evidence in the PR description when useful.
+Use descriptive branch names and Conventional Commit PR titles, for example
+`feat(web): visualize delivery execution`. Phase numbers are not required in either; put phase scope and completion evidence in the PR description when useful.
 
 # Roadrunner
 
@@ -2194,6 +2194,99 @@ No fake real-time data.
 
 Use simulation data until an actual data source exists.
 
+## Authorized Phase 30 visual and evidence requirements
+
+The approved Q1–Q49 audit, cinematic product contract and implemented Phase 26–29
+producers govern this phase. See [Phase 30's bounded contract](docs/live-delivery-visualization.md).
+Use an overhead blue delivery scooter based on the supplied reference, following
+original directed geometry with route-derived bearing. Preserve rider/ActionId
+across schedule generations and editable plan suffix changes. Causal interpolation
+must preserve pre-delay progress; label estimated/simulated positions and retain
+accepted arrival/wait/service/completion authority. Predicted arrival cannot complete
+an action. Unknown geometry/position must remain unavailable; do not invent GPS.
+
+The map must cover the full viewport. Stats, controls and inspections are independent
+collapsible floating cards, using the routing workspace's monochrome palette. Rider
+portraits show head/helmet, with stable distinct cosmetic color combinations shared
+by each scooter and route. Collapsed fleet cards show overlapping rider portraits;
+collapsed selected-rider cards retain that rider's portrait. Do not reserve map space
+for a sidebar. Pickup and customer stops must be visually distinct: gold restaurant
+glyphs for pickup and lavender person glyphs for customer/delivery, with labels and
+a legend that do not rely only on color.
+
+Expose pickup/customer locations, riders, active routes, assigned orders, scalar
+capacity/custody, next stops, applicable ETA and execution inspection. Support multiple
+riders without duplication or teleportation, reduced motion, and loading/error/empty/
+unsupported states. Verify with real engine scenarios and the running application,
+including curved/reverse routes, waiting/service, accepted arrival, delays and suffix
+changes. Document the motion model, evidence limits, interfaces, tests and screenshots.
+
+Display bounded traffic only where existing producers support graph/context identity,
+edge factors or effective road costs. Do not invent live observations, vehicle counts,
+road density or unretained base/traffic/turn ledgers. Document unsupported dependencies.
+Keep authoritative entities, derived presentation state and future synthetic ambient
+actors separate. Phase 30 does not authorize perspective/3D rendering, ambient
+vehicles, a city simulator, a 3D pipeline or new vehicle-routing semantics.
+
+
+---
+
+# PHASE 30.5 — Perspective 2.5D, Ambient Traffic and Immersive 3D Navigation
+
+**Proposed roadmap only; implementation is not authorized.** Added at the user's
+request after Phase 30 authorization. Each milestone requires separate authorization;
+Phase 30 completion does not start Phase 30.5 or Phase 31. See
+[the proposed specification](docs/phase-30.5-proposal.md) for acceptance details.
+
+## 30.5A — Independently usable perspective 2.5D
+
+Prerequisite: verified Phase 30 actor/action identity, original directed geometry,
+evidence-qualified progress and accepted execution stages.
+
+Deliver overhead ↔ tilted perspective switching, smooth pitch/bearing transitions,
+route-aligned rider-follow camera, perspective route highlights/reveals, and a
+camera-compatible rider representation. Optional building extrusions require a
+supported provider; absent buildings/terrain must have a useful fallback. This
+milestone must work without a complete 3D city or rigged scooter model.
+
+Accept only when view changes preserve rider, ActionId, route, selection, time and
+progress, reduced motion remains usable, and heading/placement are verified under
+camera changes. Camera and visual assets remain renderer-owned.
+
+## 30.5B — Separate synthetic ambient vehicle layer
+
+Prerequisite: explicit scene configuration, renderer-owned actor identity and
+trajectories, resource controls, and visual separation from dispatch riders.
+
+Deliver a small consistent family of car, truck, van and motorcycle presets across
+supported map modes. Declare trajectories, density, seeds and deterministic time
+sampling where applicable; avoid uncontrolled per-frame randomness. The scene must
+remain useful with ambient traffic disabled.
+
+Accept only when actors remain stable and reproducible, counts/quality can be
+bounded by scenario and rendering resources, and no actor is misrepresented as a
+real tracked road user or evidence-backed dispatch candidate. Cosmetic actors must
+not change traffic multipliers, ETA, capacity, decisions, accessibility or frozen
+execution. Motorcycle profile support is not legal car/truck routing support.
+No claims of collisions, traffic-law compliance, real density or congestion effects
+without separately implemented and verified engine support.
+
+## 30.5C — Immersive 3D
+
+Prerequisite: separately evaluated rendering/asset approach, asset rights and budgets,
+consistent vehicle presets and a supported geographic placement/fallback policy.
+
+Deliver a stylized scooter/rider, reusable vehicle assets and supported animations,
+urban scenery where available, road-surface/terrain placement, follow/orbit cameras,
+and smooth 2D/2.5D/3D transitions sharing movement/reveal semantics. Evaluate a
+complementary renderer only when the actual milestone needs model/rig capabilities
+beyond MapLibre. Do not require a full city model as the baseline.
+
+Accept only when missing assets/geography degrade gracefully, transitions preserve
+authoritative identity/time/progress, and frame-time/memory/resource evidence supports
+the declared devices, actor counts and fidelity. No unmeasured scalability targets.
+A physically interacting traffic simulator needs separate engine design and approval.
+
 ---
 
 # PHASE 31 — Dispatch Visualization
@@ -2227,6 +2320,24 @@ RIDER    PICKUP    DELIVERY    WAIT    SCORE
 ```
 
 Clicking a rider should show the hypothetical route if that rider had been selected.
+
+---
+
+## Phase 31 cinematic discovery acceptance requirements
+
+Implement the previously approved pickup/search-center highlight, expanding circular
+pulse or radar beam, supported candidate emphasis, recommendation/selection highlight,
+and existing directed route-line reveal before returning to normal fleet presentation.
+Use original Basic Dispatch Spatial CandidatePolicy center/radius/units/eligibility/limit
+and retained candidate results where available. A geographic radius pulse requires
+that original association; canonical result order is not discovery order.
+
+For fleet, insertion and recovery (nonradial policies), explicitly label a decorative
+search metaphor instead of claiming radius coverage. Keep recommendation, publication
+commitment and active execution distinct. Do not invent discovered candidates, search
+chronology, coverage, successful assignment or hypothetical leg geometry. Reduced motion
+must preserve meaning. Test supported spatial, nonradial, incomplete, unassigned and
+unavailable-evidence cases. Full dispatch radar is Phase 31 work, not Phase 30 scope.
 
 ---
 

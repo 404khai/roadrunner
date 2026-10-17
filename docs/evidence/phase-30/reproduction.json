@@ -1,0 +1,62 @@
+{
+  "semantics": "phase30-engine-reproduction/v1",
+  "scenes": [
+    {
+      "scenario": "solo",
+      "frames": 13,
+      "actions": 2,
+      "schedule_changes": 0,
+      "accepted_effects": 4,
+      "delivered": 1,
+      "run_identity": "scene-v1:5de8eca54c4c93b89219790cac9a25fc54136b554d1607f43d5edf5d3c0f6d41"
+    },
+    {
+      "scenario": "fleet",
+      "frames": 22,
+      "actions": 4,
+      "schedule_changes": 0,
+      "accepted_effects": 8,
+      "delivered": 2,
+      "run_identity": "scene-v1:a255f5a4b61ea048b0e5ab7ea9ce4793cc9e4f6e4a8611db2536f3b5f354a95a"
+    },
+    {
+      "scenario": "delayed",
+      "frames": 28,
+      "actions": 4,
+      "schedule_changes": 1,
+      "accepted_effects": 8,
+      "delivered": 2,
+      "run_identity": "scene-v1:7655dfd9c1907df478c419d9c179f9a6f6926e8ba38ae3606bcba1f248160560"
+    },
+    {
+      "scenario": "traffic",
+      "frames": 15,
+      "actions": 2,
+      "schedule_changes": 0,
+      "accepted_effects": 4,
+      "delivered": 1,
+      "run_identity": "scene-v1:403015e127752d5681f6c92a1896bfa56b599ef088b31228c9727c2d8611ae83"
+    },
+    {
+      "scenario": "unfinished",
+      "frames": 4,
+      "actions": 1,
+      "schedule_changes": 0,
+      "accepted_effects": 0,
+      "delivered": 0,
+      "run_identity": "scene-v1:f36bce0e90ebb23be18353d706fcc9191a3a73fa321fe2f858bfa9bb5b538939"
+    },
+    {
+      "scenario": "distributed",
+      "frames": 54,
+      "actions": 10,
+      "schedule_changes": 0,
+      "accepted_effects": 20,
+      "delivered": 5,
+      "run_identity": "scene-v1:5deb6a6f9776d0a499786b7e47c51c2b5c321d9fcc37be6511a84cc5d8874e9d"
+    }
+  ],
+  "live_authority_unchanged": true,
+  "physical_gps": false,
+  "source": "real local Roadrunner API over checked-in phase-10 graph; synthetic scenarios"
+}

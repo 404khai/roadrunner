@@ -250,3 +250,12 @@ It preserves the full graph identity, exact directed geometry and original stati
 cost inputs. Its graph-view identity scopes dense node/edge selection to a specific
 capture/page; it is not a route evaluation or operational commitment identity.
 Road class and search-node membership remain unavailable in current sources.
+
+## Phase 30 bounded execution adapter
+
+The separately authorized [delivery scene](live-delivery-visualization.md) adds opt-in
+coherent captures around the existing deterministic simulation engine, checked original
+frozen-route geometry and causal illustrative motion. It does not change the finite
+Phase 26 package, existing simulation outputs by default, live state authority or GPS
+capabilities. Native action, generation, plan, effect and revision scopes are retained.
+Current synthetic traffic and original frozen traffic remain separate contexts.

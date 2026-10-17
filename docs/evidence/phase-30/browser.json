@@ -1,0 +1,94 @@
+{
+  "browser": "Chrome through cua_repl; real local Rust API and Vite",
+  "t3_preview_fallback_reason": "Preview automation snapshot timed out after 15000ms. (twice)",
+  "desktop_viewport": [
+    1456,
+    846
+  ],
+  "mobile_viewport": [
+    390,
+    844
+  ],
+  "map_bounds_match_full_viewport": true,
+  "distributed_at_seconds": 20,
+  "distributed_markers": [
+    {
+      "rider": "1",
+      "action": "0",
+      "stage": "Travelling"
+    },
+    {
+      "rider": "2",
+      "action": null,
+      "stage": "Idle"
+    },
+    {
+      "rider": "3",
+      "action": "1",
+      "stage": "Travelling"
+    },
+    {
+      "rider": "4",
+      "action": "3",
+      "stage": "Servicing"
+    },
+    {
+      "rider": "5",
+      "action": "2",
+      "stage": "Travelling"
+    },
+    {
+      "rider": "6",
+      "action": null,
+      "stage": "Idle"
+    }
+  ],
+  "delay_identity_samples": [
+    {
+      "at_seconds": 1,
+      "marker_count": 1,
+      "rider": "1",
+      "action": "0",
+      "generation": "0"
+    },
+    {
+      "at_seconds": 5,
+      "marker_count": 1,
+      "rider": "1",
+      "action": "0",
+      "generation": "1",
+      "originating_plan": "1",
+      "current_plan": "2"
+    }
+  ],
+  "waiting_sample": {
+    "at_seconds": 50,
+    "rider": "3",
+    "stage": "Waiting",
+    "accepted_arrival_seconds": 43.634449500445264
+  },
+  "traffic_sample": {
+    "at_seconds": 20,
+    "edge": 3,
+    "direction": "reverse",
+    "factor": 3,
+    "base_seconds_display": 12.3,
+    "derived_standalone_seconds_display": 36.9
+  },
+  "service_sample": {
+    "at_seconds": 125,
+    "rider": "1",
+    "stage": "Servicing",
+    "onboard": "0",
+    "capacity": "2",
+    "accepted_arrival_seconds": 50.52299945633975,
+    "predicted_service_end_seconds": 135
+  },
+  "collapsed_cards_show_overlapping_fleet_and_selected_portraits": true,
+  "physical_position_claim": "none; simulated estimates and accepted synthetic endpoints",
+  "frame_rate_benchmark": "not performed; no quantitative performance claim",
+  "negative_missing_geometry_traffic_and_expired_prediction_checks": "automated tests; not represented as real engine physical observations",
+  "pickup_customer_markers": "gold restaurant utensil glyphs versus lavender person glyphs, verified after fresh map reload",
+  "final_source_reload": "distributed preset explicitly present and selected; node controls hidden for its fixed graph-bound inputs",
+  "development_console_note": "One earlier HMR retained an old scene object after visualIds was added; a fresh reload resolved it. Final fresh-run scene verified."
+}

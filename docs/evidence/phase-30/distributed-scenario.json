@@ -1,0 +1,170 @@
+{
+  "schema_version": 4,
+  "scenario_id": "distributed-fleet/v1",
+  "graph_snapshot_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+  "seed": 30,
+  "start_seconds": 0,
+  "end_seconds": 900,
+  "routing_epoch_seconds": 0,
+  "dispatch": {
+    "kind": "dynamic",
+    "work_budget": 256,
+    "forecast_validity_seconds": 2000,
+    "algorithm": "Greedy",
+    "recovery": {
+      "version": 1,
+      "reroute_penalty": 10,
+      "assignment_stability_penalty": 10,
+      "minimum_improvement": 1,
+      "cooldown": 5
+    }
+  },
+  "riders": [
+    {
+      "id": 1,
+      "node": 1,
+      "capacity": 1,
+      "available": true
+    },
+    {
+      "id": 2,
+      "node": 22,
+      "capacity": 1,
+      "available": true
+    },
+    {
+      "id": 3,
+      "node": 23,
+      "capacity": 1,
+      "available": true
+    },
+    {
+      "id": 4,
+      "node": 49,
+      "capacity": 1,
+      "available": true
+    },
+    {
+      "id": 5,
+      "node": 24,
+      "capacity": 1,
+      "available": true
+    },
+    {
+      "id": 6,
+      "node": 5,
+      "capacity": 1,
+      "available": true
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "pickup_node": 0,
+      "dropoff_node": 35,
+      "created_at_seconds": 0,
+      "expected_ready_at_seconds": 90,
+      "actual_readiness": {
+        "kind": "fixed",
+        "at_seconds": 90
+      },
+      "demand": 1,
+      "admission": {
+        "id": "scene-service/v1",
+        "version": 1,
+        "deadline": "SoftObserved",
+        "max_completion_delay": null,
+        "pickup_service": 15,
+        "dropoff_service": 10,
+        "readiness": "CreatedAtFallbackV1"
+      }
+    },
+    {
+      "id": 2,
+      "pickup_node": 16,
+      "dropoff_node": 18,
+      "created_at_seconds": 0,
+      "expected_ready_at_seconds": 0,
+      "actual_readiness": {
+        "kind": "fixed",
+        "at_seconds": 0
+      },
+      "demand": 1,
+      "admission": {
+        "id": "scene-service/v1",
+        "version": 1,
+        "deadline": "SoftObserved",
+        "max_completion_delay": null,
+        "pickup_service": 15,
+        "dropoff_service": 10,
+        "readiness": "CreatedAtFallbackV1"
+      }
+    },
+    {
+      "id": 3,
+      "pickup_node": 26,
+      "dropoff_node": 23,
+      "created_at_seconds": 0,
+      "expected_ready_at_seconds": 150,
+      "actual_readiness": {
+        "kind": "fixed",
+        "at_seconds": 150
+      },
+      "demand": 1,
+      "admission": {
+        "id": "scene-service/v1",
+        "version": 1,
+        "deadline": "SoftObserved",
+        "max_completion_delay": null,
+        "pickup_service": 15,
+        "dropoff_service": 10,
+        "readiness": "CreatedAtFallbackV1"
+      }
+    },
+    {
+      "id": 4,
+      "pickup_node": 55,
+      "dropoff_node": 50,
+      "created_at_seconds": 5,
+      "expected_ready_at_seconds": 20,
+      "actual_readiness": {
+        "kind": "fixed",
+        "at_seconds": 20
+      },
+      "demand": 1,
+      "admission": {
+        "id": "scene-service/v1",
+        "version": 1,
+        "deadline": "SoftObserved",
+        "max_completion_delay": null,
+        "pickup_service": 15,
+        "dropoff_service": 10,
+        "readiness": "CreatedAtFallbackV1"
+      }
+    },
+    {
+      "id": 5,
+      "pickup_node": 25,
+      "dropoff_node": 24,
+      "created_at_seconds": 0,
+      "expected_ready_at_seconds": 45,
+      "actual_readiness": {
+        "kind": "fixed",
+        "at_seconds": 45
+      },
+      "demand": 1,
+      "admission": {
+        "id": "scene-service/v1",
+        "version": 1,
+        "deadline": "SoftObserved",
+        "max_completion_delay": null,
+        "pickup_service": 15,
+        "dropoff_service": 10,
+        "readiness": "CreatedAtFallbackV1"
+      }
+    }
+  ],
+  "initial_traffic": [],
+  "traffic_changes": [],
+  "dynamic_events": []
+}
