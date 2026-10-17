@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CodeBlock } from "./CodeBlock";
 const repository = "https://github.com/404khai/roadrunner";
 type OpenApi = {
   paths: Record<
@@ -73,25 +74,21 @@ export function Documentation() {
               recommended), and npm. PostgreSQL is optional. The checked Lagos
               graph lets you start without downloading OSM data.
             </p>
-            <pre>
-              <code>
-                {
-                  'git clone https://github.com/404khai/roadrunner.git\ncd roadrunner\nexport ROADRUNNER_API_TOKEN="$(openssl rand -hex 32)"\ncargo run -p roadrunner-api -- --trusted-local \\\n  data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph'
-                }
-              </code>
-            </pre>
+            <CodeBlock language="shell">
+              {
+                'git clone https://github.com/404khai/roadrunner.git\ncd roadrunner\nexport ROADRUNNER_API_TOKEN="$(openssl rand -hex 32)"\ncargo run -p roadrunner-api -- --trusted-local \\\n  data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph'
+              }
+            </CodeBlock>
             <p>
               In another terminal, use the same token value. Keep it in the
               server environment; do not use a VITE-prefixed variable or commit
               credentials.
             </p>
-            <pre>
-              <code>
-                {
-                  'cd web\nnpm ci\nROADRUNNER_API_URL=http://127.0.0.1:3000 \\\nROADRUNNER_API_TOKEN="$ROADRUNNER_API_TOKEN" npm run dev'
-                }
-              </code>
-            </pre>
+            <CodeBlock language="shell">
+              {
+                'cd web\nnpm ci\nROADRUNNER_API_URL=http://127.0.0.1:3000 \\\nROADRUNNER_API_TOKEN="$ROADRUNNER_API_TOKEN" npm run dev'
+              }
+            </CodeBlock>
             <p>
               Open the Vite URL shown in the terminal. Landing demos replay
               retained engine output without an API. Open a workspace to compute
@@ -262,13 +259,11 @@ export function Documentation() {
               do not infer a write request from a read response.
             </p>
             <h3>First request</h3>
-            <pre>
-              <code>
-                {
-                  'curl http://127.0.0.1:3000/v1/state \\\n  -H "Authorization: Bearer $ROADRUNNER_API_TOKEN"\n\n# Inspect graph-bound anchors before building a route request\ncurl http://127.0.0.1:3000/v1/visualization/anchors \\\n  -H "Authorization: Bearer $ROADRUNNER_API_TOKEN"'
-                }
-              </code>
-            </pre>
+            <CodeBlock language="shell">
+              {
+                'curl http://127.0.0.1:3000/v1/state \\\n  -H "Authorization: Bearer $ROADRUNNER_API_TOKEN"\n\n# Inspect graph-bound anchors before building a route request\ncurl http://127.0.0.1:3000/v1/visualization/anchors \\\n  -H "Authorization: Bearer $ROADRUNNER_API_TOKEN"'
+              }
+            </CodeBlock>
             <p>
               <a href="/demos/route-request.json" download>
                 Download a concrete fixture route request
@@ -325,9 +320,9 @@ export function Documentation() {
                             {operation.description && (
                               <p>{operation.description}</p>
                             )}
-                            <pre>
-                              <code>{JSON.stringify(operation, null, 2)}</code>
-                            </pre>
+                            <CodeBlock language="json">
+                              {JSON.stringify(operation, null, 2)}
+                            </CodeBlock>
                           </details>
                         )),
                     )}
@@ -342,9 +337,9 @@ export function Documentation() {
                   ([name, schema]) => (
                     <details key={name} id={"schema-" + name}>
                       <summary>{name}</summary>
-                      <pre>
-                        <code>{JSON.stringify(schema, null, 2)}</code>
-                      </pre>
+                      <CodeBlock language="json">
+                        {JSON.stringify(schema, null, 2)}
+                      </CodeBlock>
                     </details>
                   ),
                 )}

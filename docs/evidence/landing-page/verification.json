@@ -22,8 +22,8 @@
   "reduced_motion_disables_automatic_landing_playback": true,
   "overhead_tags_observed": true,
   "frontend_tests": {
-    "files": 19,
-    "passed": 79,
+    "files": 20,
+    "passed": 81,
     "command": "npm test -- --maxWorkers=1 --testTimeout=15000"
   },
   "limits": [
@@ -36,5 +36,7 @@
   "mini_perspective_preserves_paused_time": true,
   "mini_3d_preserves_paused_time": true,
   "mini_3d_model_visually_observed": true,
-  "mini_synthetic_ambient_control_available": true
+  "mini_synthetic_ambient_control_available": true,
+  "docs_copy_exact_browser_verified": true,
+  "docs_syntax_highlighting_browser_verified": true
 }

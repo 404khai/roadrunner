@@ -917,3 +917,81 @@ body[data-surface="site"] {
 .site .demo-stage .camera-gizmo {
   right: 58px;
 }
+.site .code-block {
+  position: relative;
+  margin: 20px 0;
+  background: #252923;
+  border: 1px solid #444b40;
+  border-radius: 9px;
+  overflow: hidden;
+}
+.site .code-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #ffffff16;
+  background: #30362d;
+  color: #c8d0c2;
+  font:
+    10px ui-monospace,
+    monospace;
+  letter-spacing: 0.06em;
+}
+.site .code-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #76816c;
+  border-radius: 5px;
+  background: #3b4435;
+  color: #f3f6ef;
+  font:
+    12px "DM Sans Variable",
+    sans-serif;
+  letter-spacing: 0;
+}
+.site .code-toolbar button:hover {
+  background: #4a5742;
+}
+.site .code-block pre {
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #e1e6db;
+}
+.site .syntax-command {
+  color: #9fc9ec;
+  font-weight: 600;
+}
+.site .syntax-string {
+  color: #c4df9e;
+}
+.site .syntax-variable {
+  color: #e9c886;
+}
+.site .syntax-flag {
+  color: #d6b5ed;
+}
+.site .syntax-comment {
+  color: #a2b29a;
+  font-style: italic;
+}
+.site .syntax-key {
+  color: #9fd6e0;
+}
+.site .syntax-value {
+  color: #f0c58e;
+}
+.site .copy-status {
+  display: block;
+  color: #e0e9d8;
+  font-size: 12px;
+  padding: 0 16px;
+}
+.site .copy-status:not(:empty) {
+  padding: 10px 16px;
+  border-top: 1px solid #ffffff16;
+}

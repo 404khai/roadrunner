@@ -82,7 +82,7 @@ portrait identity. Existing renderer/evidence tests remain applicable. Browser c
 and the final verification results are retained under `docs/evidence/landing-page`.
 Guide screenshots in `web/public/docs/{delivery,dispatch,routing}.png` are actual running workspaces. The bento uses the user-supplied immersive, perspective dispatch and alternatives screenshots from `references`, copied as `engine-*.png`; these are reference captures, not new browser-verification evidence.
 
-Final checks: 79/79 frontend tests in 19 files passed using one worker and a 15-second
+Final checks: 81/81 frontend tests in 20 files passed using one worker and a 15-second
 per-test timeout on this busy host; initial parallel runs hit existing interaction-test
 timeouts. Lint, format, production build and public-reference drift check passed.
 The build retains Vite's large-chunk advisory for the MapLibre/3D workspace bundle.
@@ -97,3 +97,5 @@ not a load test or a claim of physical device telemetry.
 The delivery mini-view exposes overhead, perspective 2.5D and immersive 3D via the existing renderer. Scene controls expose follow, buildings, route reveal and explicitly labeled synthetic ambient actors. Camera mode changes do not reset the evidence clock or rider identity.
 
 User-requested follow-up verified automatic playback and paused-time preservation when switching the mini-view to perspective and immersive modes. See [mini perspective](evidence/landing-page/mini-perspective.png), [mini 3D](evidence/landing-page/mini-3d.png), and [mobile 3D](evidence/landing-page/mini-3d-mobile.png). Delivery playback spans the captured event interval through its final retained frame, rather than padding the demonstration with the scenario’s idle configured horizon.
+
+Every shell snippet, API operation and schema code block includes a copy control and syntax coloring. Copying preserves exact source bytes; success and clipboard-denial states are announced. Browser verification confirmed exact clipboard content and no mobile horizontal overflow. See [mobile copy controls](evidence/landing-page/docs-copy-mobile.png). React text rendering keeps example markup inert.
