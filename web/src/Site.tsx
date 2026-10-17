@@ -5,6 +5,7 @@ import {
   ScanLine,
   FlaskConical,
   BookOpen,
+  Github,
   ArrowUpRight,
 } from "lucide-react";
 import { EngineDemo } from "./EngineDemo";
@@ -43,8 +44,12 @@ export function Site() {
           <img src="/roadrunner-mark.png" alt="" /> roadrunner
         </a>
         <span>Routing, dispatch & delivery simulation.</span>
-        <a href={repository}>GitHub ↗</a>
-        <a href="/docs">Documentation ↗</a>
+        <a className="footer-icon-link" href={repository}>
+          <Github size={16} aria-hidden="true" /> GitHub
+        </a>
+        <a className="footer-icon-link" href="/docs">
+          <BookOpen size={16} aria-hidden="true" /> Documentation
+        </a>
       </footer>
     </div>
   );
@@ -265,10 +270,10 @@ function Landing() {
         </p>
         <div className="site-actions">
           <a className="site-button" href={repository}>
-            View on GitHub ↗
+            <Github size={18} aria-hidden="true" /> View on GitHub
           </a>
           <a className="site-button secondary" href="/docs">
-            Read the documentation →
+            <BookOpen size={18} aria-hidden="true" /> Read the documentation
           </a>
         </div>
         <p className="eyebrow">

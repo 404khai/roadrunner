@@ -995,3 +995,11 @@ body[data-surface="site"] {
   padding: 10px 16px;
   border-top: 1px solid #ffffff16;
 }
+.site .footer-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.site .footer-icon-link svg {
+  flex-shrink: 0;
+}
