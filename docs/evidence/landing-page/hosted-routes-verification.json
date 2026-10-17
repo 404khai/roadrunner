@@ -1,0 +1,64 @@
+{
+  "origin": "https://roadrunner-engine.vercel.app",
+  "deployment": "dpl_8fMCNpXjc1uXWpRobbucSXb9q7Ak",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 632
+    },
+    {
+      "path": "/docs",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 632,
+      "app_html": true
+    },
+    {
+      "path": "/docs/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 632
+    },
+    {
+      "path": "/workspace",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 632,
+      "app_html": true
+    },
+    {
+      "path": "/workspace?mode=delivery",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 632
+    },
+    {
+      "path": "/workspace/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 632
+    },
+    {
+      "path": "/docs/openapi.json",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 105320,
+      "openapi": "3.1.0"
+    },
+    {
+      "path": "/docs/delivery.png",
+      "status": 200,
+      "content_type": "image/png",
+      "bytes": 449106
+    },
+    {
+      "path": "/v1/visualization/anchors",
+      "status": 200,
+      "content_type": "application/json",
+      "bytes": 4866,
+      "anchors": 58
+    }
+  ]
+}

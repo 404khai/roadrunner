@@ -101,3 +101,22 @@ User-requested follow-up verified automatic playback and paused-time preservatio
 Every shell snippet, API operation and schema code block includes a copy control and syntax coloring. Copying preserves exact source bytes; success and clipboard-denial states are announced. Browser verification confirmed exact clipboard content and no mobile horizontal overflow. See [mobile copy controls](evidence/landing-page/docs-copy-mobile.png). React text rendering keeps example markup inert.
 
 Navigation follow-up: a sticky site header provides an accessible mobile hamburger dropdown (Escape, outside-pointer and link-selection dismissal). Landing hover links have no underline; GitHub actions use the filled GitHub mark. Routing-workspace launchers now use dark text and icons on visible light button surfaces. Browser checks confirm sticky positioning, menu dismissal, no mobile overflow and delivery-workspace entry. See [mobile navigation](evidence/landing-page/mobile-menu.png), [workspace buttons](evidence/landing-page/workspace-buttons.png), and [sticky header and GitHub CTA](evidence/landing-page/sticky-header-github.png). Bento captures are matched to their actual scene: immersive fleet, tilted dispatch and alternative routes.
+
+## Hosted route entry points
+
+The frontend is a Vite single-page application. Vercel must serve `index.html` for
+`/docs` and `/workspace` (including trailing-slash entry points); otherwise direct
+navigation and refresh return a host-level 404 before React runs. `web/vercel.json`
+now retains the existing hosted `/v1/*` API proxy and adds explicit rewrites for
+those four entry paths. The rules deliberately do not rewrite `/docs/*` assets:
+OpenAPI JSON and guide images remain static files with their original content types.
+The Vercel project uses repository root directory `web`.
+
+Production verification on 2026-10-17: deployment
+`dpl_8fMCNpXjc1uXWpRobbucSXb9q7Ak` is aliased to
+https://roadrunner-engine.vercel.app. Direct app entry URLs, slash variants and
+workspace query parameters returned 200. OpenAPI and PNG content types were
+preserved, and the API proxy returned 58 anchors. A browser directly opened and
+refreshed `/docs`, loaded and filtered the API reference, and reported no JavaScript
+exceptions. See [HTTP checks](evidence/landing-page/hosted-routes-verification.json)
+and [hosted docs screenshot](evidence/landing-page/hosted-docs.png).
