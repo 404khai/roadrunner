@@ -1,17 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Route,
   ScanLine,
   FlaskConical,
   BookOpen,
-  Github,
+  Menu,
+  X,
   ArrowUpRight,
 } from "lucide-react";
 import { EngineDemo } from "./EngineDemo";
 import { Documentation } from "./Documentation";
 const repository = "https://github.com/404khai/roadrunner";
 export function Site() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const header = useRef<HTMLElement>(null),
+    menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    const outside = (event: PointerEvent) => {
+      if (!header.current?.contains(event.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", key);
+    document.addEventListener("pointerdown", outside);
+    return () => {
+      document.removeEventListener("keydown", key);
+      document.removeEventListener("pointerdown", outside);
+    };
+  }, [menuOpen]);
   const docs = window.location.pathname.startsWith("/docs");
   useEffect(() => {
     document.title = docs
@@ -23,18 +45,37 @@ export function Site() {
       <a className="skip-content" href="#content">
         Skip to content
       </a>
-      <header className="site-header">
+      <header className="site-header" ref={header}>
         <a className="brand" href="/" aria-label="Roadrunner home">
           <img src="/roadrunner-mark.png" alt="" /> roadrunner
         </a>
-        <nav aria-label="Main navigation">
+        <button
+          ref={menuButton}
+          className="menu-toggle"
+          type="button"
+          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={menuOpen}
+          aria-controls="site-navigation"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          {menuOpen ? <X size={23} /> : <Menu size={23} />}
+        </button>
+        <nav
+          id="site-navigation"
+          aria-label="Main navigation"
+          data-open={menuOpen}
+          onClick={() => setMenuOpen(false)}
+        >
           <a href="/#engine">The engine</a>
           <a href="/#how-it-works">How it works</a>
           <a href="/docs" aria-current={docs ? "page" : undefined}>
             Documentation
           </a>
+          <a className="site-button compact mobile-workspace" href="/workspace">
+            <Route size={16} /> Open workspace
+          </a>
         </nav>
-        <a className="site-button compact" href="/workspace">
+        <a className="site-button compact desktop-workspace" href="/workspace">
           Open workspace <ArrowUpRight size={15} />
         </a>
       </header>
@@ -45,7 +86,7 @@ export function Site() {
         </a>
         <span>Routing, dispatch & delivery simulation.</span>
         <a className="footer-icon-link" href={repository}>
-          <Github size={16} aria-hidden="true" /> GitHub
+          <GitHubMark size={16} /> GitHub
         </a>
         <a className="footer-icon-link" href="/docs">
           <BookOpen size={16} aria-hidden="true" /> Documentation
@@ -270,7 +311,7 @@ function Landing() {
         </p>
         <div className="site-actions">
           <a className="site-button" href={repository}>
-            <Github size={18} aria-hidden="true" /> View on GitHub
+            <GitHubMark size={18} /> View on GitHub
           </a>
           <a className="site-button secondary" href="/docs">
             <BookOpen size={18} aria-hidden="true" /> Read the documentation
@@ -281,5 +322,20 @@ function Landing() {
         </p>
       </section>
     </main>
+  );
+}
+
+function GitHubMark({ size }: { size: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="github-mark"
+    >
+      <path d="M12 .297C5.37.297 0 5.67 0 12.297c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.31.467-2.381 1.235-3.221-.123-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 0 1 3.003-.404c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.654 1.652.242 2.873.119 3.176.77.84 1.233 1.911 1.233 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.597 24 12.297c0-6.627-5.373-12-12-12" />
+    </svg>
   );
 }
