@@ -14,7 +14,7 @@ pub use trace::{
 };
 
 pub use comparison::{StrategyComparison, compare_strategies};
-pub use engine::{simulate, simulate_scene, simulate_with_run_identity};
+pub use engine::{simulate, simulate_observed, simulate_scene, simulate_with_run_identity};
 pub use event::{ExecutedLeg, RecordedEvent, SimulationEvent};
 pub use metrics::{Distribution, OrderOutcome, RiderMetrics, SimulationResult, SimulationSummary};
 pub use metrics::{
@@ -84,4 +84,32 @@ pub struct SceneFrame {
     pub traffic: Vec<TrafficOverride>,
     /// Full synthetic static context identity.
     pub traffic_digest: String,
+}
+
+/// Noncanonical observation of one completed serial queue entry.
+/// No timings or samples become part of `SimulationResult`.
+pub struct SimulationProgress<'a> {
+    /// Wall time processing this queue action, capture and recording; excludes observer.
+    /// Not an HTTP request latency or a canonical search-work counter.
+    pub processing_ns: u128,
+    /// Logical boundary time.
+    pub at: roadrunner_dispatch::DispatchInstant,
+    /// All processed queue entries, including entries without emitted domain events.
+    pub processed_entries: u64,
+    /// Entries immediately before this pop; includes future external arrivals.
+    pub queue_depth_before: usize,
+    /// Remaining entries, including future arrivals and work beyond the horizon.
+    pub queue_depth: usize,
+    /// Currently unassigned pending orders; distinct from queue depth.
+    pub pending_orders: usize,
+    /// Riders holding responsibility, including travel/wait/service.
+    pub riders_with_work: usize,
+    /// Riders waiting for pickup readiness.
+    pub waiting_riders: usize,
+    /// Cumulative original committed starts.
+    pub started_actions: usize,
+    /// Queue-action class; not an HTTP operation latency definition.
+    pub operation: &'static str,
+    /// Only records appended by this entry, in their canonical order.
+    pub events: &'a [RecordedEvent],
 }

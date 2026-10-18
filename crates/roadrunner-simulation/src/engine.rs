@@ -171,6 +171,27 @@ pub fn simulate_with_run_identity(
     engine.run()
 }
 
+/// Executes the same serial authority with a read-only diagnostic observer.
+/// The observer sees each completed queue boundary, including entries producing no
+/// domain event. It receives only new event records and constant-time cardinalities;
+/// no world copies or movement frames are produced. Observer time is outside domain
+/// identity. A slow observer slows wall-clock execution but cannot alter queue order.
+/// # Errors
+/// Same validation and execution failures as [`simulate_with_run_identity`].
+pub fn simulate_observed(
+    graph: &FrozenGraph,
+    scenario: &SimulationScenario,
+    run_identity: &str,
+    observer: &mut dyn FnMut(crate::SimulationProgress<'_>),
+) -> Result<SimulationResult, SimulationError> {
+    if run_identity.is_empty() {
+        return Err(invalid("empty simulation run identity"));
+    }
+    let mut engine = Engine::new(graph, scenario)?;
+    run_identity.clone_into(&mut engine.run_identity);
+    engine.run_observed(Some(observer))
+}
+
 /// Executes a bounded synthetic scene with coherent event-boundary captures.
 /// Existing nonvisual simulations do not allocate captures.
 /// # Errors
@@ -1632,8 +1653,18 @@ impl<'a> Engine<'a> {
         Ok(())
     }
 
-    fn run(mut self) -> Result<SimulationResult, SimulationError> {
+    fn run(self) -> Result<SimulationResult, SimulationError> {
+        self.run_observed(None)
+    }
+
+    fn run_observed(
+        mut self,
+        mut observer: Option<&mut dyn FnMut(crate::SimulationProgress<'_>)>,
+    ) -> Result<SimulationResult, SimulationError> {
+        let mut entries = 0_u64;
         while self.queue.peek().is_some_and(|event| event.at <= self.end) {
+            let queue_before = self.queue.len();
+            let first_record = self.events.len();
             let event = self.queue.pop().ok_or_else(|| invalid("queue invariant"))?;
             self.now = event.at;
             let arrival = if let Action::Move { rider, .. } = &event.action {
@@ -1651,6 +1682,13 @@ impl<'a> Engine<'a> {
             } else {
                 None
             };
+            let operation = match &event.action {
+                Action::Assign(_) => "dispatch",
+                Action::Fleet => "fleet",
+                Action::Recover => "recovery",
+                _ => "transition",
+            };
+            let measured = observer.as_ref().map(|_| std::time::Instant::now());
             let processed = self.process(event.action)?;
             self.capture_scene()?;
             if let Some(processed) = processed {
@@ -1662,6 +1700,22 @@ impl<'a> Engine<'a> {
                     at: self.now,
                     sequence: event.sequence,
                     event: processed,
+                });
+            }
+            entries += 1;
+            if let (Some(observer), Some(measured)) = (observer.as_mut(), measured) {
+                observer(crate::SimulationProgress {
+                    processing_ns: measured.elapsed().as_nanos(),
+                    queue_depth_before: queue_before,
+                    at: self.now,
+                    processed_entries: entries,
+                    queue_depth: self.queue.len(),
+                    pending_orders: self.pending.len(),
+                    riders_with_work: self.busy_since.len(),
+                    waiting_riders: self.waiting.len(),
+                    started_actions: self.starts.len(),
+                    operation,
+                    events: &self.events[first_record..],
                 });
             }
         }

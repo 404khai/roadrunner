@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "case_id": "fleet",
+  "seed": 34,
+  "riders": 2,
+  "available_riders": 2,
+  "orders": 8,
+  "capacity": 3,
+  "arrival": {
+    "kind": "sustained",
+    "interval_seconds": 2,
+    "burst_size": 4,
+    "burst_interval_seconds": 40
+  },
+  "geography": "dispersed",
+  "horizon_seconds": 400,
+  "readiness_seconds": 3,
+  "policy": {
+    "kind": "fleet_batch",
+    "work_budget": 1000,
+    "forecast_validity_seconds": 10000,
+    "algorithm": "Greedy"
+  },
+  "scenario_schema": 3,
+  "admission": {
+    "id": "phase34-explicit/v1",
+    "version": 1,
+    "deadline": "SoftObserved",
+    "max_completion_delay": null,
+    "pickup_service": 2,
+    "dropoff_service": 3,
+    "readiness": "ValidForecastV1"
+  },
+  "traffic_changes": [],
+  "grid": {
+    "side": 8,
+    "spacing_e7": 1000
+  }
+}
