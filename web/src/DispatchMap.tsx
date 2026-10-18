@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as ml from "maplibre-gl";
+import { DispatchRadar } from "./DispatchRadar";
 import { style } from "./MapView";
 import { riderTagAsset } from "./riderPortraitAsset";
 import { riderVisual } from "./riderVisual";
@@ -10,6 +11,7 @@ export function DispatchMap({
   evidence,
   inspected,
   sequence,
+  playing,
   routeProgress,
   reduced,
   onInspect,
@@ -19,6 +21,7 @@ export function DispatchMap({
   evidence?: DispatchEvidence;
   inspected: string;
   sequence: number;
+  playing: boolean;
   routeProgress: number;
   reduced: boolean;
   onInspect: (id: string) => void;
@@ -28,7 +31,8 @@ export function DispatchMap({
     markers = useRef(
       new Map<string, { marker: ml.Marker; element: HTMLButtonElement }>(),
     ),
-    handler = useRef(onInspect);
+    handler = useRef(onInspect),
+    pulsed = useRef(new Set<string>());
   handler.current = onInspect;
   const [ready, setReady] = useState(false),
     [error, setError] = useState(""),
@@ -59,12 +63,7 @@ export function DispatchMap({
       ),
     );
     m.on("load", () => {
-      for (const id of [
-        "dispatch-boundary",
-        "dispatch-pulse",
-        "dispatch-path",
-        "dispatch-stops",
-      ])
+      for (const id of ["dispatch-boundary", "dispatch-path", "dispatch-stops"])
         m.addSource(id, {
           type: "geojson",
           data: { type: "FeatureCollection", features: [] },
@@ -91,16 +90,6 @@ export function DispatchMap({
           "line-width": 2,
           "line-dasharray": [3, 3],
           "line-opacity": 0.65,
-        },
-      });
-      m.addLayer({
-        id: "dispatch-pulse",
-        type: "line",
-        source: "dispatch-pulse",
-        paint: {
-          "line-color": "#d9eddf",
-          "line-width": 4,
-          "line-opacity": 0.8,
         },
       });
       m.addLayer({
@@ -213,12 +202,6 @@ export function DispatchMap({
         : [],
     );
     set(
-      "dispatch-pulse",
-      center && radius !== null && radius !== undefined && sequence < 0.3
-        ? [line(radiusRing(center, (radius * sequence) / 0.3))]
-        : [],
-    );
-    set(
       "dispatch-stops",
       evidence
         ? [evidence.pickup, evidence.customer].map((c, i) => ({
@@ -264,8 +247,17 @@ export function DispatchMap({
         img.src = riderTagAsset(r.id);
         img.alt = "";
         const label = document.createElement("span");
+        label.className = "dispatch-rider-id";
         label.textContent = `R${r.id}`;
-        element.append(img, label);
+        const star = document.createElement("span");
+        star.className = "dispatch-recommendation-star";
+        star.setAttribute("aria-hidden", "true");
+        star.innerHTML =
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.76 5.82 21 7 14.14 2 9.27l6.91-1.01Z"/></svg>';
+        const pulse = document.createElement("span");
+        pulse.className = "dispatch-scan-pulse";
+        pulse.setAttribute("aria-hidden", "true");
+        element.append(pulse, star, img, label);
         element.addEventListener("click", () => handler.current(r.id));
         e = {
           element,
@@ -275,16 +267,18 @@ export function DispatchMap({
         };
         markers.current.set(key, e);
       }
-      e.element.setAttribute("aria-label", `Inspect dispatch rider ${r.id}`);
+      const recommended = sequence >= 1 && evidence!.selected === r.id;
+      e.element.setAttribute(
+        "aria-label",
+        `Inspect dispatch rider ${r.id}${recommended ? ", recommended candidate" : ""}`,
+      );
       e.element.dataset.candidate = String(
         sequence >= 0.3 &&
           sequence < 1 &&
           evidence!.candidates.some((c) => c.rider === r.id),
       );
-      e.element.dataset.recommended = String(
-        sequence >= 0.55 && sequence < 1 && evidence!.selected === r.id,
-      );
-      e.element.dataset.inspected = String(inspected === r.id);
+      e.element.dataset.recommended = String(recommended);
+      e.element.dataset.inspected = String(sequence >= 1 && inspected === r.id);
       e.element.style.setProperty("--rider-color", riderVisual(r.id).body);
     }
     for (const [key, e] of markers.current)
@@ -293,6 +287,19 @@ export function DispatchMap({
         markers.current.delete(key);
       }
   }, [ready, evidence, inspected, sequence]);
+  useEffect(() => {
+    if (sequence === 0) pulsed.current.clear();
+    markers.current.forEach(({ element }) => {
+      element
+        .querySelector(".dispatch-scan-pulse")
+        ?.getAnimations()
+        .forEach((animation) => {
+          if (sequence === 0 || sequence >= 1) animation.cancel();
+          else if (playing) animation.play();
+          else animation.pause();
+        });
+    });
+  }, [sequence, playing]);
   return (
     <>
       <div
@@ -335,11 +342,54 @@ export function DispatchMap({
           {error}
         </p>
       )}
-      {evidence &&
-        evidence.request.radius_meters === null &&
-        sequence < 0.3 && (
-          <div className="dispatch-decorative-pulse" aria-hidden="true" />
-        )}
+      {evidence && ready && map.current && sequence < 1 && !reduced && (
+        <DispatchRadar
+          key={evidence.evaluation_id}
+          map={map.current}
+          longitude={evidence.pickup.longitude}
+          latitude={evidence.pickup.latitude}
+          radius={evidence.request.radius_meters}
+          paused={!playing}
+          progress={sequence}
+          onSweep={(from, to, bounds) => {
+            if (to < from) {
+              pulsed.current.clear();
+              markers.current.forEach(({ element }) =>
+                element
+                  .querySelector(".dispatch-scan-pulse")
+                  ?.getAnimations()
+                  .forEach((animation) => animation.cancel()),
+              );
+              return;
+            }
+            const tau = Math.PI * 2;
+            markers.current.forEach(({ element }, key) => {
+              if (pulsed.current.has(key)) return;
+              const tag = element.getBoundingClientRect();
+              const dx = tag.x + tag.width / 2 - (bounds.x + bounds.width / 2);
+              const dy = tag.y + 17 - (bounds.y + bounds.height / 2);
+              const bearing = (Math.atan2(dx, -dy) + tau) % tau;
+              if (
+                Math.hypot(dx, dy) > bounds.width * 0.47 ||
+                bearing < from ||
+                bearing >= to
+              )
+                return;
+              pulsed.current.add(key);
+              element.querySelector(".dispatch-scan-pulse")?.animate(
+                [
+                  {
+                    transform: "translate(-50%, -50%) scale(0.5)",
+                    opacity: 0.95,
+                  },
+                  { transform: "translate(-50%, -50%) scale(2.8)", opacity: 0 },
+                ],
+                { duration: 550, easing: "ease-out" },
+              );
+            });
+          }}
+        />
+      )}
     </>
   );
 }

@@ -3363,27 +3363,6 @@ h1 > span {
 .dispatch-rider-tag[data-inspected="true"] {
   box-shadow: 0 0 0 2px #fff8;
 }
-.dispatch-decorative-pulse {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 100px;
-  height: 100px;
-  border: 2px solid #d6e9dc;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: dispatch-metaphor 0.8s ease-out;
-}
-@keyframes dispatch-metaphor {
-  from {
-    transform: translate(-50%, -50%) scale(0.2);
-    opacity: 0.9;
-  }
-  to {
-    transform: translate(-50%, -50%) scale(1.8);
-    opacity: 0;
-  }
-}
 @media (max-width: 780px) {
   .dispatch-setup {
     top: 66px;
@@ -3416,9 +3395,6 @@ h1 > span {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dispatch-decorative-pulse {
-    animation: none;
-  }
   .dispatch-rider-tag {
     transition: none;
   }
@@ -3476,7 +3452,7 @@ h1 > span {
     max-height: 32dvh;
   }
 }
-.dispatch-rider-tag span {
+.dispatch-rider-tag .dispatch-rider-id {
   position: absolute;
   right: -10px;
   bottom: 0;
@@ -3555,4 +3531,69 @@ h1 > span {
   text-align: left;
   font-size: 11px;
   margin-bottom: 4px;
+}
+
+/* React Bits scope stays beneath authoritative rider tags and cannot intercept map input. */
+.dispatch-radar {
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle, #b5eacd08 0%, transparent 70%);
+  box-shadow: inset 0 0 0 1px #a9edc51c;
+}
+.dispatch-rider-tag {
+  z-index: 1;
+  overflow: visible;
+}
+/* MapLibre transforms create a stacking context: raise the whole picked marker
+   so the star can paint above neighboring markers, controls and floating cards. */
+.dispatch-rider-tag[data-recommended="true"] {
+  z-index: 20;
+}
+.dispatch-recommendation-star {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  width: 22px;
+  height: 22px;
+  transform: translateX(-50%) scale(0.6);
+  color: #f5d784;
+  filter: drop-shadow(0 2px 3px #17140d) drop-shadow(0 0 7px #f5d78466);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 250ms ease;
+}
+.dispatch-recommendation-star svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.dispatch-rider-tag[data-recommended="true"] .dispatch-recommendation-star {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dispatch-recommendation-star {
+    transition: none;
+  }
+}
+
+.dispatch-scan-pulse {
+  position: absolute;
+  left: 50%;
+  top: 17px;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #9ff3c4;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #3ef09a66;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
 }
