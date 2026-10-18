@@ -128,7 +128,7 @@ def last_progress(path):
     return None
 
 
-def run(bundle, output, binary, source_revision, seconds, rss_mib, disk_mib, observed=True):
+def run(bundle, output, binary, source_revision, seconds, rss_mib, disk_mib, observed=True, routing=None):
     if seconds <= 0 or rss_mib <= 0 or disk_mib <= 0:
         raise ValueError('positive external safety envelopes required')
     output.mkdir()
@@ -140,6 +140,9 @@ def run(bundle, output, binary, source_revision, seconds, rss_mib, disk_mib, obs
     stop = None
     engine_output = output/'engine'
     command = [str(binary), 'run' if observed else 'unobserved', str(bundle.resolve()), str(engine_output.resolve())]
+    if routing is not None:
+        command = [str(binary), 'routes', str(bundle.resolve()), str(engine_output.resolve()), str(routing['queries']), str(routing['concurrency']), routing['algorithm']]
+        config['routing'] = routing
     timer = ['/usr/bin/time', '-l' if platform.system() == 'Darwin' else '-v', '-o', str((output/'resources.txt').resolve())]
     with (output/'stdout.log').open('wb') as stdout, (output/'stderr.log').open('wb') as stderr:
         child = subprocess.Popen(timer+command, stdout=stdout, stderr=stderr, start_new_session=True, env=env)
@@ -167,7 +170,7 @@ def run(bundle, output, binary, source_revision, seconds, rss_mib, disk_mib, obs
     report_path = engine_output/'report.json'
     report = json.loads(report_path.read_text()) if report_path.exists() and code == 0 and stop is None else None
     outcome = 'completed' if report is not None else stop or 'engine_failure'
-    record = dict(schema_version=1, outcome=outcome, exit_code=code, configuration=config,
+    record = dict(schema_version=1, plane='routing' if routing is not None else 'simulation', outcome=outcome, exit_code=code, configuration=config,
                   source_revision=source_revision, compiler=subprocess.check_output(['rustc', '--version', '--verbose'], text=True).strip(), harness_sha256=sha(Path(__file__).read_bytes()), binary_sha256=sha(binary.read_bytes()), bundle=json.loads((bundle/'bundle.json').read_text()),
                   hardware=dict(os=platform.platform(), machine=platform.machine(), logical_cpus=os.cpu_count()),
                   wall_seconds=time.monotonic()-began, resource_samples=samples, final=report,
@@ -195,11 +198,14 @@ def main():
     execute.add_argument('--rss-mib', type=int, required=True)
     execute.add_argument('--disk-mib', type=int, required=True)
     execute.add_argument('--unobserved', action='store_true')
+    execute.add_argument('--routing', choices=['dijkstra', 'astar'])
+    execute.add_argument('--queries', type=int, default=128)
+    execute.add_argument('--concurrency', type=int, default=1)
     args = parser.parse_args()
     if args.command == 'generate':
         result = generate(args.manifest, args.bundle, args.binary, args.artifact)
     else:
-        result = run(args.bundle, args.output, args.binary, args.source_revision, args.seconds, args.rss_mib, args.disk_mib, not args.unobserved)
+        result = run(args.bundle, args.output, args.binary, args.source_revision, args.seconds, args.rss_mib, args.disk_mib, not args.unobserved, None if args.routing is None else dict(algorithm=args.routing, queries=args.queries, concurrency=args.concurrency))
     print(json.dumps({k:v for k,v in result.items() if k not in ['resource_samples', 'final']}, indent=2))
     if args.command == 'run' and result['outcome'] != 'completed':
         raise SystemExit(2)

@@ -88,6 +88,24 @@ class EngineContracts(unittest.TestCase):
                     self.assertEqual(a['final']['summary']['assigned_orders'], 0)
                     self.assertGreater(a['final']['summary']['outstanding_orders'], 0)
 
+    def test_concurrent_routing_preserves_algorithm_results_and_cost_oracle(self):
+        binary = Path(os.environ['PHASE34_BINARY']).resolve()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            generate(ROOT/'benchmarks/phase34/smoke.json', root/'bundle', binary)
+            routes = {}
+            for algorithm in ['dijkstra', 'astar']:
+                for concurrency in [1, 4]:
+                    destination = root/f'{algorithm}-{concurrency}'
+                    record = run(root/'bundle', destination, binary, 'test-build', 30, 1024, 128,
+                                 routing=dict(algorithm=algorithm, queries=24, concurrency=concurrency))
+                    self.assertEqual(record['outcome'], 'completed')
+                    self.assertEqual(record['final']['successful'], 24)
+                    routes[(algorithm, concurrency)] = json.loads((destination/'engine/routes.json').read_text())
+                self.assertEqual(routes[(algorithm, 1)], routes[(algorithm, 4)])
+            for d, a in zip(routes[('dijkstra', 1)], routes[('astar', 1)], strict=True):
+                self.assertEqual(d['result']['route']['total_cost'], a['result']['route']['total_cost'])
+
     def test_harness_timeout_does_not_invent_engine_result(self):
         binary = Path(os.environ['PHASE34_BINARY']).resolve()
         with tempfile.TemporaryDirectory() as tmp:
@@ -100,6 +118,17 @@ class EngineContracts(unittest.TestCase):
 
 
 class SummaryContracts(unittest.TestCase):
+    def test_summary_retains_failure_without_fabricating_counts(self):
+        from summarize_phase34 import summarize
+        stopped = dict(bundle=dict(scenario_sha256='input'), configuration=dict(diagnostics=True),
+                       hardware={}, binary_sha256='binary', source_revision='source', compiler='rustc',
+                       outcome='harness_wall_timeout', final=None, resource_samples=[], last_observed_boundary=None)
+        case = summarize([stopped])['cases'][0]
+        self.assertEqual(case['completed'], 0)
+        self.assertIsNone(case['execution_ns'])
+        self.assertEqual(case['outcomes'], ['harness_wall_timeout'])
+        self.assertEqual(case['final_counts'], [])
+
     def test_histogram_upper_bounds_and_empty_population(self):
         from summarize_phase34 import histogram_quantiles
         self.assertIsNone(histogram_quantiles([0]*65))
