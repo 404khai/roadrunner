@@ -158,3 +158,12 @@ simulation and independent routing under declared resource envelopes.
 Tier B and generated/unexecuted Tier C, with full losslessly retained outputs.
 [Completion and unsupported claims](../docs/phase-34-completion.md) distinguish
 synthetic work from operational, durable and browser throughput.
+
+## Unified comparison suite (Phase 37)
+
+The [versioned five-comparison suite](suite/README.md) covers Dijkstra/A*, static/traffic
+routing, nearest/pickup-ETA dispatch, basic/preparation-aware dispatch and single/multi
+order execution. It retains matched inputs, deterministic replay, raw samples,
+percentiles and explicit unfinished populations. See the [debug baseline](results/phase37/developer-debug/index.json)
+and [completion scope](../docs/phase-37-completion.md). These small fixtures do not
+establish production latency or supported scale.

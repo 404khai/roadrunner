@@ -62,6 +62,11 @@ jobs:
           PHASE34_BINARY: target/debug/examples/phase34_workload
         run: python3 -m unittest discover -s scripts -p test_phase34.py -v
 
+      - name: Build comparison-suite adapters
+        run: cargo build --locked -p roadrunner-cli --bin roadrunner --example routing_comparison
+      - name: Verify benchmark suite accounting, matched inputs and replay (no timing thresholds)
+        run: python3 -m unittest discover -s scripts -p test_benchmark_suite.py -v
+
   web:
     name: Routing visualization client
     runs-on: ubuntu-latest
