@@ -842,3 +842,117 @@ fn fifo_traffic_identity_and_nonzero_epoch_are_used_for_each_leg() {
         seconds(feasible(&d, fast()).0.pickup_departure.value() - 90.0)
     );
 }
+
+#[test]
+fn snapshot_eligibility_matches_defensive_boundary_across_equal_identity_worlds() {
+    let f = Fixture::new();
+    let provider = ok(CoreRouteProvider::new(&f.graph, TrafficContext::FreeFlow));
+    for mask in 0..4 {
+        let mut data = f.data.clone();
+        for (bit, rider) in [near(), fast()].into_iter().enumerate() {
+            if mask & (1 << bit) != 0 {
+                ok(data.riders.get_mut(&rider).ok_or("rider")).availability =
+                    Availability::Unavailable;
+            }
+        }
+        // Deliberately the same caller identity/version with different contents.
+        let world = ok(World::new(7, data));
+        let snapshot = ok(DispatchSnapshot::new(
+            &world,
+            instant(100.0),
+            RoutingEpoch(instant(0.0)),
+            &provider,
+            &f.anchors,
+        ));
+        let expected: Vec<_> = world
+            .data()
+            .profiles
+            .keys()
+            .copied()
+            .filter(|r| ok(basic_dispatch_eligible(world.data(), *r)))
+            .collect();
+        assert_eq!(
+            ok(generate_candidates(
+                &snapshot,
+                order_id(),
+                CandidatePolicy::Exhaustive
+            )),
+            expected
+        );
+        let locator = ok(spatial::LinearRiderLocator::new(
+            expected.iter().map(|id| spatial::RiderLocation {
+                id: *id,
+                coordinate: world.data().riders[id].coordinate,
+            }),
+            ok(KilometersPerHour::new(30.0)),
+        ));
+        let mut spatial_expected: Vec<_> = spatial::RiderLookup::nearest_riders(
+            &locator,
+            world.data().orders[&order_id()].pickup,
+            ok(Meters::new(2000.0)),
+            1,
+        )
+        .into_iter()
+        .map(|r| r.rider_id)
+        .collect();
+        spatial_expected.sort();
+        assert_eq!(
+            ok(generate_candidates(
+                &snapshot,
+                order_id(),
+                CandidatePolicy::Spatial {
+                    radius: ok(Meters::new(2000.0)),
+                    limit: 1
+                }
+            )),
+            spatial_expected
+        );
+    }
+    let mut corrupt = f.data.clone();
+    corrupt.fulfillment.remove(&order_id());
+    assert!(matches!(
+        basic_dispatch_eligible(&corrupt, near()),
+        Err(DispatchEvaluationError::InvalidWorldState)
+    ));
+    assert!(World::new(7, corrupt).is_err());
+    let world = f.world();
+    let mut wrong = f.anchors.clone();
+    ok(wrong.riders.get_mut(&near()).ok_or("rider")).graph_digest = "another graph".into();
+    assert!(
+        DispatchSnapshot::new(
+            &world,
+            instant(100.0),
+            RoutingEpoch(instant(0.0)),
+            &provider,
+            &wrong
+        )
+        .is_err()
+    );
+}
+
+#[test]
+fn snapshot_eligibility_refreshes_after_assignment_without_position_change() {
+    let f = Fixture::new();
+    let mut world = f.world();
+    let decision = ok(f.decide(&world, CandidatePolicy::Exhaustive));
+    let coordinates = world.data().riders.clone();
+    ok(world.commit(&decision));
+    assert_eq!(world.data().riders, coordinates);
+    let provider = ok(CoreRouteProvider::new(&f.graph, TrafficContext::FreeFlow));
+    let snapshot = ok(DispatchSnapshot::new(
+        &world,
+        instant(100.0),
+        RoutingEpoch(instant(0.0)),
+        &provider,
+        &f.anchors,
+    ));
+    assert_eq!(
+        ok(generate_candidates(
+            &snapshot,
+            order_id(),
+            CandidatePolicy::Exhaustive
+        )),
+        vec![near()]
+    );
+    assert!(!ok(basic_dispatch_eligible(world.data(), fast())));
+}
