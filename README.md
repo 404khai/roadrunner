@@ -399,3 +399,10 @@ Run the web app to explore the landing page at `/`, the illustrated field guide 
 generated HTTP reference at `/docs`, and engine workspaces at `/workspace`. See
 [landing-page implementation and verification](docs/landing-page.md) for evidence
 provenance, API export maintenance and deployment requirements.
+
+### Reproducible comparison suite
+
+[Phase 37 benchmark definitions and reproduction](benchmarks/suite/README.md) cover
+all five routing/dispatch comparisons with structured raw results, matched inputs
+and independently verified accounting. The retained debug baseline is explicitly
+separate from release performance and large-scale capacity claims.

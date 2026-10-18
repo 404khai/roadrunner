@@ -2600,6 +2600,8 @@ benchmarks/results/*.json
 
 The README may summarize results but must link them to reproducible benchmark definitions.
 
+Implementation, reproduction and qualified evidence: [Phase 37 completion](docs/phase-37-completion.md).
+
 ---
 
 # PHASE 38 — Demo Scenario

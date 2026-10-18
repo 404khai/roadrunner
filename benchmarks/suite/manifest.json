@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "suite_id": "roadrunner-comparisons/v1",
+  "description": "Small correctness-qualified comparisons, not a supported-scale or production latency claim",
+  "routing": {
+    "snapshot": "data/fixtures/phase-10/snapshot.semantic-v2",
+    "traffic": "data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json",
+    "from_osm": "5602610872",
+    "to_osm": "5594385916",
+    "expect_traffic_path_change": true
+  },
+  "simulation": [
+    {
+      "id": "nearest-vs-pickup-eta",
+      "scenario": "data/fixtures/phase-16/paired-strategies.json",
+      "policies": [
+        {
+          "kind": "nearest_rider"
+        },
+        {
+          "kind": "lowest_pickup_eta"
+        }
+      ]
+    },
+    {
+      "id": "basic-vs-preparation",
+      "scenario": "data/fixtures/phase-16/paired-strategies.json",
+      "policies": [
+        {
+          "kind": "basic"
+        },
+        {
+          "kind": "preparation_aware",
+          "idle_penalty_weight": 1.0
+        }
+      ]
+    },
+    {
+      "id": "single-vs-multi-order",
+      "scenario": "data/fixtures/phase-17/successful-pooling.json",
+      "policies": [
+        {
+          "kind": "basic"
+        },
+        {
+          "kind": "multi_order",
+          "work_budget": 1000,
+          "forecast_validity_seconds": 1000
+        }
+      ],
+      "legacy_admission_adapter": true
+    }
+  ]
+}
