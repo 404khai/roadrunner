@@ -1,0 +1,948 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "suite_id": "roadrunner-comparisons/v1",
+  "collected_at": "2026-10-18T21:44:33.285484+00:00",
+  "hardware": {
+    "operating_system": "macOS-27.0-arm64-arm-64bit",
+    "architecture": "arm64",
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184,
+    "logical_cpus": 8
+  },
+  "python": "3.9.6",
+  "collection_environment": "developer workstation; no CPU pinning, isolation or frequency control; background load unmeasured",
+  "source_files": [
+    {
+      "path": "scripts/benchmark_suite.py",
+      "sha256": "7a709d30799adb17cd33aaae58126d6f63fa023a81e17f06fe8387eef3c940c7"
+    },
+    {
+      "path": "crates/roadrunner-cli/examples/routing_comparison.rs",
+      "sha256": "7cd70946fa241c919c81b5341f03c07758c33499d488654a97c754a52896497b"
+    }
+  ],
+  "source_revision": "f7aad212da5ba564a400021362640717322cef02",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "build_profile": "debug",
+  "build_command": "CARGO_INCREMENTAL=0 cargo build --locked -p roadrunner-cli --bin roadrunner --example routing_comparison",
+  "build_metadata": "profile/command operator-declared; executable SHA-256 and source revision recorded independently",
+  "binary_sha256": "3bbea09a3660aae19ebdd3a2563829e0205dfa13219c4efb79501d26fa3b7a64",
+  "routing_binary_sha256": "a7c899c2e88d04f63f1442cebe291102b47174e944b7abb7c94e8ae27442beaf",
+  "runs": 11,
+  "warmups": "one excluded process per variant; routing probe additionally performs one excluded query before each measured query",
+  "order": "alternate forward/reverse within each comparison on successive rounds",
+  "timeout_seconds_per_process": 30.0,
+  "cache": "fresh processes, graph reused within routing probe; no result cache; OS filesystem cache uncontrolled, not a cold-cache experiment",
+  "routing_measurement": "individual in-process search calls, including scratch allocation/reconstruction; excludes load/deep verification, heuristic preparation, traffic construction and serialization",
+  "simulation_measurement": "whole CLI process: launch, inline graph construction, validation, simulation, JSON serialization and capture",
+  "memory_allocations_cpu": "unmeasured; no capacity or concurrent service throughput claim",
+  "percentiles": "linear interpolation of sorted samples; descriptive small-sample tails, no SLA",
+  "definition": {
+    "path": "definition.json",
+    "sha256": "0c7c56f60cb79032297616265b480ddf0300046a9ce6b6bf05228c367175e58f"
+  },
+  "inputs": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "3cfbe3871da967a92475a50a2fd3539f2cb9ed5e86e3221883b3ef742a8881e8"
+    },
+    {
+      "path": "benchmarks/suite/manifest.json",
+      "sha256": "2648a0cacbe8ae36150afaa1175d1e503663f363185d3e80cc7198919b07a89d"
+    },
+    {
+      "path": "data/fixtures/phase-10/lagos-marina-severe.semantic-v2.json",
+      "sha256": "66686972a44835a349da66fb116bb34fd6d06278a8c3e0b906495dca8379bd8b"
+    },
+    {
+      "path": "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph",
+      "sha256": "7943c50063f8e268359b1e54f066617bfe303edd97e82bf549b388ebf4a5a317"
+    },
+    {
+      "path": "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-provenance",
+      "sha256": "b9900d560279be16e23d4d91e6dfaab8373ebcf988959b560d5d393a6cc9b9ad"
+    },
+    {
+      "path": "data/fixtures/phase-10/snapshot.semantic-v2/manifest.json",
+      "sha256": "aa4c14bf616943e0c5d6096467a7b12dfd01bdbf0cb499c79de3533a472c7f6d"
+    },
+    {
+      "path": "data/fixtures/phase-16/paired-strategies.json",
+      "sha256": "6dabddeb01290fe8aeb5dfc2da121cc0b861602bad42bc72c1e093b706f007f8"
+    },
+    {
+      "path": "data/fixtures/phase-17/successful-pooling.json",
+      "sha256": "67403d9ecfe580b959ad9474389b675ebd9b9a2e81df7a243a93a6123ca06094"
+    }
+  ],
+  "simulation": [
+    {
+      "id": "nearest-vs-pickup-eta",
+      "variants": [
+        {
+          "input": {
+            "path": "nearest-vs-pickup-eta-nearest_rider-input.json",
+            "sha256": "0b4e081fcd46241f947c4e5b8ad2aba7d525a4a74cbd8937c17e7863806d07da"
+          },
+          "replay": {
+            "path": "nearest-vs-pickup-eta-nearest_rider-replay.json",
+            "sha256": "3ff0a3a6122e46364a1593f6a17044aa97030f1b0deff06a839ad19487029b0b"
+          },
+          "facts": {
+            "counts": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1
+            },
+            "processed_events": 223,
+            "future_events": 2,
+            "insertion_submissions": 0,
+            "summary": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "uncreated_orders": 1,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1,
+              "late_deliveries": 12,
+              "outstanding_past_deadline": 1,
+              "predicted_eta": {
+                "samples": 12,
+                "mean_seconds": 113.04833157075844,
+                "median_seconds": 66.71704814011974,
+                "p95_seconds": 200.1511444203593,
+                "p99_seconds": 200.1511444203593
+              },
+              "delivered_duration": {
+                "samples": 12,
+                "mean_seconds": 242.48163620285425,
+                "median_seconds": 223.18912007187333,
+                "p95_seconds": 452.7680215179639,
+                "p99_seconds": 452.7680215179639
+              },
+              "pickup_waiting": {
+                "samples": 12,
+                "mean_seconds": 1.1278872013002659,
+                "median_seconds": 0.0,
+                "p95_seconds": 10.617402178956127,
+                "p99_seconds": 10.617402178956127
+              },
+              "completed_distance_meters": 8562.021177982035,
+              "rider_utilization": 0.7611747918137247,
+              "mean_rider_idle_seconds": 214.9426873676477
+            },
+            "graph_snapshot_digest": "75a36465a4a5760cd9098a2a98c3f33f3f7ba1692b3c24031be1fb4e98d46839",
+            "nodes": 5,
+            "directed_edges": 6,
+            "riders": 2,
+            "seed": 16,
+            "randomness": "splitmix64-upper53/v1"
+          },
+          "process_timing": {
+            "raw_ns": [
+              42289333,
+              40818708,
+              40293625,
+              39849292,
+              39458375,
+              42030167,
+              43635292,
+              39274125,
+              39388500,
+              48249500,
+              69293750
+            ],
+            "runs": 11,
+            "median_ns": 40818708,
+            "p95_ns": 58771625.0,
+            "p99_ns": 67189325.0
+          },
+          "rates": {
+            "simulation_seconds": 900,
+            "completed_orders_per_wall_second": [
+              283.7595002976282,
+              293.98284727679277,
+              297.81386013296145,
+              301.13458477505696,
+              304.1179470771414,
+              285.50921532146185,
+              275.00675370752646,
+              305.5446811354804,
+              304.6574507787806,
+              248.70724048953875,
+              173.17579146748443
+            ],
+            "events_per_wall_second": [
+              5273.197380530925,
+              5463.181245227066,
+              5534.374234137535,
+              5596.084367069809,
+              5651.525183183545,
+              5305.712918057166,
+              5110.542173064867,
+              5678.038657767678,
+              5661.550960305673,
+              4621.809552430595,
+              3218.1834581040857
+            ],
+            "simulation_seconds_per_wall_second": [
+              21281.96252232212,
+              22048.71354575946,
+              22336.03950997211,
+              22585.093858129272,
+              22808.846030785608,
+              21413.19114910964,
+              20625.506528064485,
+              22915.85108516103,
+              22849.308808408547,
+              18653.043036715408,
+              12988.184360061334
+            ],
+            "scope": "whole-process synthetic run rates; not operational service throughput"
+          }
+        },
+        {
+          "input": {
+            "path": "nearest-vs-pickup-eta-lowest_pickup_eta-input.json",
+            "sha256": "17338746d1c33c5cc55491c12c8c931c8c33bcea653498127aba1a0419d3093f"
+          },
+          "replay": {
+            "path": "nearest-vs-pickup-eta-lowest_pickup_eta-replay.json",
+            "sha256": "356a9bf8efbc766600c0cfd7995ce2b19f9d931e494739c5141b0e5f4a8c85d3"
+          },
+          "facts": {
+            "counts": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1
+            },
+            "processed_events": 204,
+            "future_events": 2,
+            "insertion_submissions": 0,
+            "summary": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "uncreated_orders": 1,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1,
+              "late_deliveries": 12,
+              "outstanding_past_deadline": 1,
+              "predicted_eta": {
+                "samples": 12,
+                "mean_seconds": 101.92882354740516,
+                "median_seconds": 66.71704814011974,
+                "p95_seconds": 200.1511444203593,
+                "p99_seconds": 200.1511444203593
+              },
+              "delivered_duration": {
+                "samples": 12,
+                "mean_seconds": 207.02396176046295,
+                "median_seconds": 184.5060814935568,
+                "p95_seconds": 414.0636518868605,
+                "p99_seconds": 414.0636518868605
+              },
+              "pickup_waiting": {
+                "samples": 12,
+                "mean_seconds": 5.800222128267463,
+                "median_seconds": 0.0,
+                "p95_seconds": 55.09543427236932,
+                "p99_seconds": 55.09543427236932
+              },
+              "completed_distance_meters": 8339.631017514968,
+              "rider_utilization": 0.7181936378378175,
+              "mean_rider_idle_seconds": 253.62572594596423
+            },
+            "graph_snapshot_digest": "75a36465a4a5760cd9098a2a98c3f33f3f7ba1692b3c24031be1fb4e98d46839",
+            "nodes": 5,
+            "directed_edges": 6,
+            "riders": 2,
+            "seed": 16,
+            "randomness": "splitmix64-upper53/v1"
+          },
+          "process_timing": {
+            "raw_ns": [
+              39934625,
+              39112916,
+              38390083,
+              37815208,
+              37410875,
+              37909792,
+              42543334,
+              37667125,
+              37736166,
+              38637209,
+              39438958
+            ],
+            "runs": 11,
+            "median_ns": 38390083,
+            "p95_ns": 41238979.5,
+            "p99_ns": 42282463.1
+          },
+          "rates": {
+            "simulation_seconds": 900,
+            "completed_orders_per_wall_second": [
+              300.49111516635,
+              306.8040235097787,
+              312.5807256004109,
+              317.33264563823104,
+              320.76234517369613,
+              316.54090848084843,
+              282.06534071824274,
+              318.58019426754765,
+              317.99732914043256,
+              310.58143977221545,
+              304.2676736033442
+            ],
+            "events_per_wall_second": [
+              5108.3489578279505,
+              5215.668399666238,
+              5313.872335206986,
+              5394.654975849928,
+              5452.959867952834,
+              5381.195444174424,
+              4795.110792210126,
+              5415.86330254831,
+              5405.954595387353,
+              5279.884476127662,
+              5172.550451256851
+            ],
+            "simulation_seconds_per_wall_second": [
+              22536.83363747625,
+              23010.301763233405,
+              23443.554420030818,
+              23799.94842286733,
+              24057.17588802721,
+              23740.568136063634,
+              21154.900553868203,
+              23893.514570066072,
+              23849.79968553244,
+              23293.607982916157,
+              22820.075520250815
+            ],
+            "scope": "whole-process synthetic run rates; not operational service throughput"
+          }
+        }
+      ]
+    },
+    {
+      "id": "basic-vs-preparation",
+      "variants": [
+        {
+          "input": {
+            "path": "basic-vs-preparation-basic-input.json",
+            "sha256": "dbf86ea1dc3d75dfbaac41d1d043ce4417be626c48579a0bcd48b3461ce76e63"
+          },
+          "replay": {
+            "path": "basic-vs-preparation-basic-replay.json",
+            "sha256": "a54953a0547060ee51f4ae4b6b6583a0607abacc0c59e90a2af7c5ab972c235c"
+          },
+          "facts": {
+            "counts": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1
+            },
+            "processed_events": 204,
+            "future_events": 2,
+            "insertion_submissions": 0,
+            "summary": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "uncreated_orders": 1,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1,
+              "late_deliveries": 12,
+              "outstanding_past_deadline": 1,
+              "predicted_eta": {
+                "samples": 12,
+                "mean_seconds": 101.92882354740516,
+                "median_seconds": 66.71704814011974,
+                "p95_seconds": 200.1511444203593,
+                "p99_seconds": 200.1511444203593
+              },
+              "delivered_duration": {
+                "samples": 12,
+                "mean_seconds": 207.02396176046295,
+                "median_seconds": 184.5060814935568,
+                "p95_seconds": 414.0636518868605,
+                "p99_seconds": 414.0636518868605
+              },
+              "pickup_waiting": {
+                "samples": 12,
+                "mean_seconds": 5.800222128267463,
+                "median_seconds": 0.0,
+                "p95_seconds": 55.09543427236932,
+                "p99_seconds": 55.09543427236932
+              },
+              "completed_distance_meters": 8339.631017514968,
+              "rider_utilization": 0.7181936378378175,
+              "mean_rider_idle_seconds": 253.62572594596423
+            },
+            "graph_snapshot_digest": "75a36465a4a5760cd9098a2a98c3f33f3f7ba1692b3c24031be1fb4e98d46839",
+            "nodes": 5,
+            "directed_edges": 6,
+            "riders": 2,
+            "seed": 16,
+            "randomness": "splitmix64-upper53/v1"
+          },
+          "process_timing": {
+            "raw_ns": [
+              41695834,
+              53069916,
+              43720167,
+              49696791,
+              47643917,
+              44993584,
+              43713541,
+              43509292,
+              42687833,
+              46152709,
+              39756959
+            ],
+            "runs": 11,
+            "median_ns": 43720167,
+            "p95_ns": 51383353.5,
+            "p99_ns": 52732603.5
+          },
+          "rates": {
+            "simulation_seconds": 900,
+            "completed_orders_per_wall_second": [
+              287.7985364197296,
+              226.11680787284456,
+              274.47287655602963,
+              241.46428287492446,
+              251.8684599337204,
+              266.7046928290931,
+              274.51448053590536,
+              275.80315487551485,
+              281.1105450117367,
+              260.0064061245029,
+              301.8339506298759
+            ],
+            "events_per_wall_second": [
+              4892.575119135403,
+              3843.9857338383576,
+              4666.0389014525035,
+              4104.892808873716,
+              4281.763818873247,
+              4533.979778094584,
+              4666.746169110391,
+              4688.653632883753,
+              4778.8792651995245,
+              4420.10890411655,
+              5131.17716070789
+            ],
+            "simulation_seconds_per_wall_second": [
+              21584.89023147972,
+              16958.760590463342,
+              20585.46574170222,
+              18109.821215619333,
+              18890.13449502903,
+              20002.851962181987,
+              20588.586040192902,
+              20685.236615663616,
+              21083.290875880255,
+              19500.480459337716,
+              22637.546297240693
+            ],
+            "scope": "whole-process synthetic run rates; not operational service throughput"
+          }
+        },
+        {
+          "input": {
+            "path": "basic-vs-preparation-preparation_aware-input.json",
+            "sha256": "e0d8cb764cf8707968a00d942f60ef700bc777b3cb93d99e625589f981b8bd00"
+          },
+          "replay": {
+            "path": "basic-vs-preparation-preparation_aware-replay.json",
+            "sha256": "14bcda9e9894b4ef32159518c7509f21809455efac9db292ce058eb8e5a60401"
+          },
+          "facts": {
+            "counts": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1
+            },
+            "processed_events": 223,
+            "future_events": 2,
+            "insertion_submissions": 0,
+            "summary": {
+              "scheduled_orders": 14,
+              "created_orders": 13,
+              "uncreated_orders": 1,
+              "assigned_orders": 12,
+              "delivered_orders": 12,
+              "unassigned_orders": 1,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 1,
+              "late_deliveries": 12,
+              "outstanding_past_deadline": 1,
+              "predicted_eta": {
+                "samples": 12,
+                "mean_seconds": 114.15524422574846,
+                "median_seconds": 66.71704814011974,
+                "p95_seconds": 200.1511444203593,
+                "p99_seconds": 200.1511444203593
+              },
+              "delivered_duration": {
+                "samples": 12,
+                "mean_seconds": 242.48163620285425,
+                "median_seconds": 223.18912007187333,
+                "p95_seconds": 452.7680215179639,
+                "p99_seconds": 452.7680215179639
+              },
+              "pickup_waiting": {
+                "samples": 12,
+                "mean_seconds": 1.1278872013002659,
+                "median_seconds": 0.0,
+                "p95_seconds": 10.617402178956127,
+                "p99_seconds": 10.617402178956127
+              },
+              "completed_distance_meters": 8562.021177982035,
+              "rider_utilization": 0.7611747918137247,
+              "mean_rider_idle_seconds": 214.9426873676477
+            },
+            "graph_snapshot_digest": "75a36465a4a5760cd9098a2a98c3f33f3f7ba1692b3c24031be1fb4e98d46839",
+            "nodes": 5,
+            "directed_edges": 6,
+            "riders": 2,
+            "seed": 16,
+            "randomness": "splitmix64-upper53/v1"
+          },
+          "process_timing": {
+            "raw_ns": [
+              43198333,
+              43958000,
+              51211125,
+              55675125,
+              44545917,
+              42332333,
+              43993625,
+              44642959,
+              43088667,
+              45811291,
+              43311125
+            ],
+            "runs": 11,
+            "median_ns": 43993625,
+            "p95_ns": 53443125.0,
+            "p99_ns": 55228725.0
+          },
+          "rates": {
+            "simulation_seconds": 900,
+            "completed_orders_per_wall_second": [
+              277.7884970700143,
+              272.9878520405842,
+              234.32408485460923,
+              215.5361124020826,
+              269.38495844636,
+              283.4712653328131,
+              272.7667929160191,
+              268.7993867073193,
+              278.49550323754505,
+              261.94415695466864,
+              277.065072772873
+            ],
+            "events_per_wall_second": [
+              5162.236237217765,
+              5073.024250420856,
+              4354.522576881488,
+              4005.379422138702,
+              5006.070477794856,
+              5267.841014101444,
+              5068.916235022688,
+              4995.188602977683,
+              5175.374768497712,
+              4867.795583407593,
+              5148.792602362557
+            ],
+            "simulation_seconds_per_wall_second": [
+              20834.13728025107,
+              20474.088903043816,
+              17574.306364095693,
+              16165.208430156197,
+              20203.871883476997,
+              21260.344899960983,
+              20457.50946870143,
+              20159.954003048948,
+              20887.16274281588,
+              19645.81177160015,
+              20779.880457965475
+            ],
+            "scope": "whole-process synthetic run rates; not operational service throughput"
+          }
+        }
+      ]
+    },
+    {
+      "id": "single-vs-multi-order",
+      "variants": [
+        {
+          "input": {
+            "path": "single-vs-multi-order-basic-input.json",
+            "sha256": "249e1a38773210e51bebefe2debb7ce0e75adbf561424f7614afe003df4e4b31"
+          },
+          "replay": {
+            "path": "single-vs-multi-order-basic-replay.json",
+            "sha256": "68a3d89438e19deca3323ade32c870d2e4e7bece9cfd923f0342609b4caf5287"
+          },
+          "facts": {
+            "counts": {
+              "scheduled_orders": 2,
+              "created_orders": 2,
+              "assigned_orders": 2,
+              "delivered_orders": 2,
+              "unassigned_orders": 0,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 0
+            },
+            "processed_events": 18,
+            "future_events": 0,
+            "insertion_submissions": 0,
+            "summary": {
+              "scheduled_orders": 2,
+              "created_orders": 2,
+              "uncreated_orders": 0,
+              "assigned_orders": 2,
+              "delivered_orders": 2,
+              "unassigned_orders": 0,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 0,
+              "late_deliveries": 0,
+              "outstanding_past_deadline": 0,
+              "predicted_eta": {
+                "samples": 2,
+                "mean_seconds": 20.015114442035927,
+                "median_seconds": 20.015114442035927,
+                "p95_seconds": 20.01511444203593,
+                "p99_seconds": 20.01511444203593
+              },
+              "delivered_duration": {
+                "samples": 2,
+                "mean_seconds": 44.51511444203592,
+                "median_seconds": 44.51511444203592,
+                "p95_seconds": 54.022671663053885,
+                "p99_seconds": 54.022671663053885
+              },
+              "pickup_waiting": {
+                "samples": 2,
+                "mean_seconds": 7.4962213894910175,
+                "median_seconds": 7.4962213894910175,
+                "p95_seconds": 14.992442778982035,
+                "p99_seconds": 14.992442778982035
+              },
+              "completed_distance_meters": 444.78032093413174,
+              "rider_utilization": 0.2751133583152694,
+              "mean_rider_idle_seconds": 144.97732833694613
+            },
+            "graph_snapshot_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "nodes": 2,
+            "directed_edges": 2,
+            "riders": 1,
+            "seed": 17,
+            "randomness": "splitmix64-upper53/v1"
+          },
+          "process_timing": {
+            "raw_ns": [
+              10193959,
+              10042209,
+              8633291,
+              9585416,
+              10173583,
+              9799458,
+              10130417,
+              9488334,
+              10655709,
+              12232000,
+              11640625
+            ],
+            "runs": 11,
+            "median_ns": 10130417,
+            "p95_ns": 11936312.5,
+            "p99_ns": 12172862.5
+          },
+          "rates": {
+            "simulation_seconds": 200,
+            "completed_orders_per_wall_second": [
+              196.19462860307758,
+              199.15936822266895,
+              231.66136760593383,
+              208.65030792612444,
+              196.58757391569912,
+              204.09292024109905,
+              197.42523925717964,
+              210.78515996591182,
+              187.69281330787092,
+              163.50555918901242,
+              171.81208053691276
+            ],
+            "events_per_wall_second": [
+              1765.751657427698,
+              1792.4343140040205,
+              2084.9523084534044,
+              1877.85277133512,
+              1769.288165241292,
+              1836.8362821698915,
+              1776.8271533146167,
+              1897.0664396932063,
+              1689.2353197708383,
+              1471.5500327011118,
+              1546.3087248322147
+            ],
+            "simulation_seconds_per_wall_second": [
+              19619.462860307758,
+              19915.936822266893,
+              23166.13676059338,
+              20865.030792612444,
+              19658.75739156991,
+              20409.292024109905,
+              19742.523925717964,
+              21078.51599659118,
+              18769.281330787093,
+              16350.555918901242,
+              17181.208053691276
+            ],
+            "scope": "whole-process synthetic run rates; not operational service throughput"
+          }
+        },
+        {
+          "input": {
+            "path": "single-vs-multi-order-multi_order-input.json",
+            "sha256": "b89d15fcbff0362c202caad85a43a54a73f6644a659ed4d001080efb0601ea9a"
+          },
+          "replay": {
+            "path": "single-vs-multi-order-multi_order-replay.json",
+            "sha256": "7f991ae8412fe83c3b5b575e72a0edd9cd768bb3a3618c982dd84884a8ab433b"
+          },
+          "facts": {
+            "counts": {
+              "scheduled_orders": 2,
+              "created_orders": 2,
+              "assigned_orders": 2,
+              "delivered_orders": 2,
+              "unassigned_orders": 0,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 0
+            },
+            "processed_events": 16,
+            "future_events": 0,
+            "insertion_submissions": 4,
+            "summary": {
+              "scheduled_orders": 2,
+              "created_orders": 2,
+              "uncreated_orders": 0,
+              "assigned_orders": 2,
+              "delivered_orders": 2,
+              "unassigned_orders": 0,
+              "assigned_unfinished_orders": 0,
+              "outstanding_orders": 0,
+              "late_deliveries": 0,
+              "outstanding_past_deadline": 0,
+              "predicted_eta": {
+                "samples": 2,
+                "mean_seconds": 42.00755722101796,
+                "median_seconds": 42.00755722101796,
+                "p95_seconds": 44.00755722101796,
+                "p99_seconds": 44.00755722101796
+              },
+              "delivered_duration": {
+                "samples": 2,
+                "mean_seconds": 43.00755722101796,
+                "median_seconds": 43.00755722101796,
+                "p95_seconds": 44.00755722101796,
+                "p99_seconds": 44.00755722101796
+              },
+              "pickup_waiting": {
+                "samples": 2,
+                "mean_seconds": 9.496221389491017,
+                "median_seconds": 9.496221389491017,
+                "p95_seconds": 16.992442778982035,
+                "p99_seconds": 16.992442778982035
+              },
+              "completed_distance_meters": 222.39016046706587,
+              "rider_utilization": 0.22503778610508982,
+              "mean_rider_idle_seconds": 154.99244277898202
+            },
+            "graph_snapshot_digest": "efc834160f9e5b25a31128d2f0ca1db110c01cb59d1cd5821e5638d00626b78a",
+            "nodes": 2,
+            "directed_edges": 2,
+            "riders": 1,
+            "seed": 17,
+            "randomness": "splitmix64-upper53/v1"
+          },
+          "process_timing": {
+            "raw_ns": [
+              10354750,
+              10381417,
+              9624834,
+              11190458,
+              9788958,
+              9683083,
+              10444208,
+              9582833,
+              16333291,
+              12143459,
+              16013875
+            ],
+            "runs": 11,
+            "median_ns": 10381417,
+            "p95_ns": 16173583.0,
+            "p99_ns": 16301349.4
+          },
+          "rates": {
+            "simulation_seconds": 200,
+            "completed_orders_per_wall_second": [
+              193.14807214080494,
+              192.65192795935275,
+              207.79579159495114,
+              178.72369477638895,
+              204.31183788918085,
+              206.5457871217256,
+              191.49369679347635,
+              208.70654847058276,
+              122.44929696042273,
+              164.69771915893156,
+              124.8916954828235
+            ],
+            "events_per_wall_second": [
+              1545.1845771264395,
+              1541.215423674822,
+              1662.3663327596091,
+              1429.7895582111116,
+              1634.4947031134468,
+              1652.3662969738048,
+              1531.9495743478108,
+              1669.652387764662,
+              979.5943756833818,
+              1317.5817532714525,
+              999.133563862588
+            ],
+            "simulation_seconds_per_wall_second": [
+              19314.807214080494,
+              19265.192795935276,
+              20779.579159495115,
+              17872.369477638895,
+              20431.183788918086,
+              20654.57871217256,
+              19149.369679347634,
+              20870.654847058275,
+              12244.929696042273,
+              16469.771915893158,
+              12489.169548282349
+            ],
+            "scope": "whole-process synthetic run rates; not operational service throughput"
+          }
+        }
+      ]
+    }
+  ],
+  "routing": {
+    "replay": {
+      "path": "routing-replay.json",
+      "sha256": "84fb892578c31a93e1d55fecfaa2590c153bedb8f08a50d1690162fe54366260"
+    },
+    "query_timing": {
+      "astar_free_flow": {
+        "raw_ns": [
+          47084,
+          46375,
+          45667,
+          46417,
+          46833,
+          46250,
+          47083,
+          46458,
+          46208,
+          46625,
+          46083
+        ],
+        "runs": 11,
+        "median_ns": 46417,
+        "p95_ns": 47083.5,
+        "p99_ns": 47083.9
+      },
+      "dijkstra_free_flow": {
+        "raw_ns": [
+          85916,
+          84541,
+          88125,
+          84000,
+          87834,
+          85000,
+          87875,
+          82792,
+          89375,
+          85083,
+          86084
+        ],
+        "runs": 11,
+        "median_ns": 85916,
+        "p95_ns": 88750.0,
+        "p99_ns": 89250.0
+      },
+      "dijkstra_traffic": {
+        "raw_ns": [
+          106292,
+          111916,
+          106292,
+          106041,
+          104542,
+          115250,
+          107709,
+          106916,
+          106959,
+          108791,
+          105167
+        ],
+        "runs": 11,
+        "median_ns": 106916,
+        "p95_ns": 113583.0,
+        "p99_ns": 114916.6
+      }
+    },
+    "heuristic_preparation_timing": {
+      "raw_ns": [
+        4167,
+        5458,
+        4334,
+        4500,
+        5167,
+        4709,
+        4541,
+        4209,
+        4375,
+        4416,
+        5417
+      ],
+      "runs": 11,
+      "median_ns": 4500,
+      "p95_ns": 5437.5,
+      "p99_ns": 5453.9
+    }
+  }
+}
