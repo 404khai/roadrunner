@@ -19,7 +19,7 @@ fn json(output: &Output) -> Value {
         "{}",
         String::from_utf8_lossy(&output.stderr)
     );
-    assert!(output.stderr.is_empty());
+    assert_eq!(output.stderr, Vec::<u8>::new());
     serde_json::from_slice(&output.stdout).unwrap_or_else(|e| panic!("JSON: {e}"))
 }
 const GRAPH: &str = "data/fixtures/phase-10/snapshot.semantic-v2";
@@ -106,7 +106,7 @@ fn coordinate_resolution_is_bounded_and_preserves_zero_length_route() {
         "route", "--graph", GRAPH, "--from", "0,0", "--to", &endpoint, "--json",
     ]);
     assert!(!fail.status.success());
-    assert!(fail.stdout.is_empty());
+    assert_eq!(fail.stdout, Vec::<u8>::new());
     let error: Value =
         serde_json::from_slice(&fail.stderr).unwrap_or_else(|e| panic!("error JSON: {e}"));
     assert!(
@@ -132,7 +132,7 @@ fn strict_options_and_machine_errors() {
         args.extend(extra);
         let output = run(&args);
         assert!(!output.status.success());
-        assert!(output.stdout.is_empty());
+        assert_eq!(output.stdout, Vec::<u8>::new());
         let error: Value =
             serde_json::from_slice(&output.stderr).unwrap_or_else(|e| panic!("error JSON: {e}"));
         assert!(error["error"].is_string());
@@ -265,6 +265,6 @@ fn serve_preserves_api_arguments_environment_and_exit_status() {
         .unwrap_or_else(|e| panic!("serve: {e}"));
     assert_eq!(output.status.code(), Some(7));
     assert_eq!(output.stdout, b"inherited\n--trusted-local\n");
-    assert!(output.stderr.is_empty());
+    assert_eq!(output.stderr, Vec::<u8>::new());
     std::fs::remove_dir_all(directory).unwrap_or_else(|e| panic!("cleanup: {e}"));
 }
