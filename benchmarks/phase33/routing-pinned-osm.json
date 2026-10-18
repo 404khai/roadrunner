@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "routing-pinned-osm",
+  "workload": "routing",
+  "grid_side": 2,
+  "artifact_path": "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph",
+  "riders": 1,
+  "orders": 0,
+  "history_orders": 0,
+  "queries": 25,
+  "seed": 33,
+  "capture": false,
+  "churn": false,
+  "diagnostics": true
+}

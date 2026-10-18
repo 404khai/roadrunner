@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "routing-grid32",
+  "workload": "routing",
+  "grid_side": 32,
+  "artifact_path": null,
+  "riders": 1,
+  "orders": 0,
+  "history_orders": 0,
+  "queries": 25,
+  "seed": 33,
+  "capture": false,
+  "churn": false,
+  "diagnostics": true
+}

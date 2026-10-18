@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "candidates-aged128",
+  "workload": "candidates",
+  "grid_side": 8,
+  "artifact_path": null,
+  "riders": 128,
+  "orders": 0,
+  "history_orders": 256,
+  "queries": 5,
+  "seed": 33,
+  "capture": false,
+  "churn": false,
+  "diagnostics": true
+}
