@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import sys
 import unittest
 from phase34 import Rng, encode, generate, run, scenario, sha
 
@@ -50,6 +51,24 @@ class GeneratorContracts(unittest.TestCase):
             self.assertEqual(len(times), m['orders'])
             if kind == 'mass':
                 self.assertEqual(set(times), {0})
+
+
+class ExternalBoundaryContracts(unittest.TestCase):
+    def test_sampled_memory_and_output_stops_are_external(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            bundle = root/'bundle'
+            bundle.mkdir()
+            (bundle/'bundle.json').write_text('{"scenario_sha256":"fake-child-input"}')
+            fake = root/'isolated-child'
+            fake.write_text('#!'+sys.executable+"\nimport pathlib,sys,time\noutput=pathlib.Path(sys.argv[3]); output.mkdir()\npayload=bytearray(16*1024*1024)\n(output/'payload').write_bytes(payload)\ntime.sleep(30)\n")
+            fake.chmod(0o700)
+            memory = run(bundle, root/'memory', fake, 'test-fake-child', 10, 1, 128)
+            self.assertEqual(memory['outcome'], 'harness_sampled_rss_stop')
+            self.assertIsNone(memory['final'])
+            disk = run(bundle, root/'disk', fake, 'test-fake-child', 10, 1024, 1)
+            self.assertEqual(disk['outcome'], 'harness_output_stop')
+            self.assertIsNone(disk['final'])
 
 
 @unittest.skipUnless(os.environ.get('PHASE34_BINARY'), 'requires built Phase 34 example; CI invokes explicitly')

@@ -107,7 +107,7 @@ fn main() -> Result<()> {
             let meta: serde_json::Value = serde_json::from_slice(&std::fs::read(root.join("bundle.json"))?)?;
             let graph = decode_graph_artifact(&std::fs::read(root.join("graph.rrgraph"))?)?;
             let scenario_bytes = std::fs::read(root.join("scenario.json"))?;
-            if meta["manifest_sha256"] != hash(&std::fs::read(root.join("manifest.json"))?)
+            if meta["schema_version"] != 1 || meta["manifest_sha256"] != hash(&std::fs::read(root.join("manifest.json"))?)
                 || meta["scenario_sha256"] != hash(&scenario_bytes) || meta["graph_digest"] != graph.metadata().snapshot_digest() || meta["artifact_sha256"] != hash(&std::fs::read(root.join("graph.rrgraph"))?) { return Err("bundle identity mismatch".into()); }
             let scenario: SimulationScenario = serde_json::from_slice(&scenario_bytes)?;
             if scenario.graph_snapshot_digest.as_deref() != Some(graph.metadata().snapshot_digest()) { return Err("scenario graph binding missing".into()); }
@@ -177,24 +177,7 @@ fn routing_workload(args: &[String]) -> Result<()> {
         return Err("routing harness envelope".into());
     }
     std::fs::create_dir(output)?;
-    let meta: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(root.join("bundle.json"))?)?;
-    let bytes = std::fs::read(root.join("graph.rrgraph"))?;
-    let scenario_bytes = std::fs::read(root.join("scenario.json"))?;
-    if meta["artifact_sha256"] != hash(&bytes)
-        || meta["scenario_sha256"] != hash(&scenario_bytes)
-        || meta["manifest_sha256"] != hash(&std::fs::read(root.join("manifest.json"))?)
-    {
-        return Err("routing bundle identity mismatch".into());
-    }
-    let graph = decode_graph_artifact(&bytes)?;
-    let scenario: SimulationScenario = serde_json::from_slice(&scenario_bytes)?;
-    if scenario.graph_snapshot_digest.as_deref() != Some(graph.metadata().snapshot_digest())
-        || meta["graph_digest"] != graph.metadata().snapshot_digest()
-        || scenario.orders.is_empty()
-    {
-        return Err("routing graph binding or query population".into());
-    }
+    let (graph, scenario, scenario_hash) = routing_inputs(root)?;
     let prepare = Instant::now();
     let maximum = KilometersPerHour::new(
         graph
@@ -263,11 +246,34 @@ fn routing_workload(args: &[String]) -> Result<()> {
         .iter()
         .filter(|(_, value, _)| value.get("route").is_some())
         .count();
-    let report = json!({"schema_version":1,"plane":"routing","graph_digest":graph.metadata().snapshot_digest(),"scenario_sha256":hash(&scenario_bytes),"algorithm":algorithm,"traffic":"free_flow","departure_seconds":0,"queries":queries,"concurrency":concurrency,"successful":successful,"errors":queries-successful,"execution_ns":execution_ns,"heuristic_preparation_ns":preparation_ns,"query_ns":rows.iter().map(|row|row.2).collect::<Vec<_>>(),"result_sha256":hash(&data),"limits":"Fixed order pickup/dropoff pairs, repeated modulo input orders. Saturated closed-loop threads, not open-loop service ingress. Graph and admissible heuristic prepared outside timing. Algorithm-specific complete outputs retained in query order; timing is separate."});
+    let report = json!({"schema_version":1,"plane":"routing","graph_digest":graph.metadata().snapshot_digest(),"scenario_sha256":scenario_hash,"algorithm":algorithm,"traffic":"free_flow","departure_seconds":0,"queries":queries,"concurrency":concurrency,"successful":successful,"errors":queries-successful,"execution_ns":execution_ns,"heuristic_preparation_ns":preparation_ns,"query_ns":rows.iter().map(|row|row.2).collect::<Vec<_>>(),"result_sha256":hash(&data),"limits":"Fixed order pickup/dropoff pairs, repeated modulo input orders. Saturated closed-loop threads, not open-loop service ingress. Graph and admissible heuristic prepared outside timing. Algorithm-specific complete outputs retained in query order; timing is separate."});
     std::fs::write(
         output.join("report.json"),
         serde_json::to_vec_pretty(&report)?,
     )?;
     println!("{report}");
     Ok(())
+}
+
+fn routing_inputs(root: &Path) -> Result<(FrozenGraph, SimulationScenario, String)> {
+    let meta: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(root.join("bundle.json"))?)?;
+    let bytes = std::fs::read(root.join("graph.rrgraph"))?;
+    let scenario_bytes = std::fs::read(root.join("scenario.json"))?;
+    if meta["schema_version"] != 1
+        || meta["artifact_sha256"] != hash(&bytes)
+        || meta["scenario_sha256"] != hash(&scenario_bytes)
+        || meta["manifest_sha256"] != hash(&std::fs::read(root.join("manifest.json"))?)
+    {
+        return Err("routing bundle identity mismatch".into());
+    }
+    let graph = decode_graph_artifact(&bytes)?;
+    let scenario: SimulationScenario = serde_json::from_slice(&scenario_bytes)?;
+    if scenario.graph_snapshot_digest.as_deref() != Some(graph.metadata().snapshot_digest())
+        || meta["graph_digest"] != graph.metadata().snapshot_digest()
+        || scenario.orders.is_empty()
+    {
+        return Err("routing graph binding or query population".into());
+    }
+    Ok((graph, scenario, hash(&scenario_bytes)))
 }
