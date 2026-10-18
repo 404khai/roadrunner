@@ -111,13 +111,13 @@ export function DispatchWorkspace({
   const inspectedRider = evidence?.riders.find((r) => r.id === inspected);
   const candidate = evidence?.candidates.find((c) => c.rider === inspected),
     stage =
-      sequence.progress < 0.3
-        ? "Search policy"
-        : sequence.progress < 0.55
-          ? "Evaluated candidates"
-          : sequence.progress < 0.7
-            ? "Recommendation / publication"
-            : "Fleet result";
+      sequence.progress < 0.55
+        ? "Seeking a rider"
+        : sequence.progress < 1
+          ? "Evaluating candidates"
+          : evidence?.selected
+            ? "Candidate picked"
+            : "No candidate selected";
   function download() {
     if (!evidence) return;
     const url = URL.createObjectURL(
@@ -135,6 +135,7 @@ export function DispatchWorkspace({
         evidence={evidence}
         inspected={inspected}
         sequence={sequence.progress}
+        playing={sequence.playing}
         routeProgress={
           sequence.progress < 0.65
             ? 0

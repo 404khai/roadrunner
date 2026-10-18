@@ -178,6 +178,7 @@ export function EngineDemo() {
               evidence={data.dispatch}
               inspected={selected || data.dispatch.selected || ""}
               sequence={progress}
+              playing={playing}
               routeProgress={progress}
               reduced={reduced}
               onInspect={setSelected}
