@@ -39,14 +39,18 @@ def collect(binary, manifest, timeout, environment):
     diagnostics = run.stderr.decode()
     match = re.search(r'(\d+)\s+maximum resident set size', diagnostics) if platform.system() == 'Darwin' else re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)', diagnostics)
     rss = int(match[1]) * (1 if platform.system() == 'Darwin' else 1024) if match else None
+    cpu = re.search(r'([0-9.]+) real\s+([0-9.]+) user\s+([0-9.]+) sys', diagnostics)
     result = json.loads(run.stdout)
-    return dict(process_ns=elapsed, peak_process_rss_bytes=rss, probe=result)
+    return dict(process_ns=elapsed, peak_process_rss_bytes=rss,
+                process_user_seconds=float(cpu[2]) if cpu else None,
+                process_system_seconds=float(cpu[3]) if cpu else None, probe=result)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--binary', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--source-revision', required=True, help='Exact source used to build this binary, independent of collector checkout')
     parser.add_argument('--runs', type=int, default=7)
     parser.add_argument('--timeout', type=float, default=120)
     parser.add_argument('--cases', nargs='*', type=Path)
@@ -66,6 +70,8 @@ def main():
         warmup = collect(binary, manifest, args.timeout, environment)
         expected = warmup['probe']['result']['semantic_hash']
         reference = references.get(str(manifest))
+        if args.reference and reference is None:
+            raise RuntimeError(f'{manifest}: reference is missing this workload')
         if reference:
             if reference['manifest_sha256'] != digest(manifest) or reference['graph_digest'] != warmup['probe']['graph_digest']:
                 raise RuntimeError(f'{manifest}: comparison identity differs')
@@ -84,7 +90,7 @@ def main():
     hardware = dict(os=platform.platform(), architecture=platform.machine(), logical_cpus=os.cpu_count())
     if platform.system() == 'Darwin':
         hardware.update(cpu=output(['sysctl', '-n', 'machdep.cpu.brand_string']), memory_bytes=int(output(['sysctl', '-n', 'hw.memsize'])))
-    record = dict(schema_version=1, baseline_revision=output(['git','rev-parse','HEAD']), tracked_diff_sha256=hashlib.sha256(subprocess.check_output(['git','diff','HEAD'])).hexdigest(), binary_sha256=digest(binary), compiler=output(['rustc','+1.99.0','--version']), hardware=hardware, configuration=dict(runs=args.runs, excluded_warmups=1, process_timeout_seconds=args.timeout, concurrency=1, cache='one excluded process warmup; OS/filesystem caches uncontrolled, no cold-cache claim; no route cache', build='cargo +1.99.0 build --release -p roadrunner-simulation --example phase33_probe', timing='stage ns and whole process ns separately; includes timer launcher for process time', rss='whole-process peak, includes setup and serialization; not per-operation allocated bytes', diagnostic_modes='manifest diagnostics flag controls post-execution retained-buffer inventory only; stage clocks always enabled', percentiles='linear interpolation across process/stage samples; small descriptive sample, not service-tail evidence'), unavailable=['per-query allocator attribution','CPU utilization sampling','coordinator/SQL/anchor attribution','operational open-loop throughput'], cases=rows)
+    record = dict(schema_version=1, source_revision=output(['git','rev-parse',args.source_revision]), collector_revision=output(['git','rev-parse','HEAD']), tracked_diff_sha256=hashlib.sha256(subprocess.check_output(['git','diff','HEAD'])).hexdigest(), binary_sha256=digest(binary), compiler=output(['rustc','+1.99.0','--version']), hardware=hardware, configuration=dict(runs=args.runs, excluded_warmups=1, process_timeout_seconds=args.timeout, concurrency=1, cache='one excluded process warmup; OS/filesystem caches uncontrolled, no cold-cache claim; no route cache', build='cargo +1.99.0 build --release -p roadrunner-simulation --example phase33_probe', timing='stage ns and whole process ns separately; includes timer launcher for process time', rss='whole-process peak, includes setup and serialization; not per-operation allocated bytes', diagnostic_modes='manifest diagnostics flag controls post-execution retained-buffer inventory only; stage clocks always enabled', percentiles='linear interpolation across process/stage samples; small descriptive sample, not service-tail evidence'), unavailable=['per-query allocator attribution','CPU utilization sampling (coarse process user/system seconds only where available)','coordinator/SQL/anchor attribution','operational open-loop throughput'], cases=rows)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(record, indent=2)+'\n')
 
