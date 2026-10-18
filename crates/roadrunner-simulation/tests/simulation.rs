@@ -637,3 +637,35 @@ fn original_traffic_shares_storage_only_within_its_immutable_context() {
     assert_eq!(original, ok(serde_json::to_vec(&starts[0].traffic)));
     assert_eq!(starts[0].traffic, starts[1].traffic);
 }
+
+#[test]
+fn diagnostic_observer_preserves_full_evidence_and_sees_non_emitting_entries() {
+    use roadrunner_simulation::{simulate_observed, simulate_with_run_identity};
+    let g = graph();
+    let mut s = scenario();
+    s.orders.push(order(2, 0.0, 0.0));
+    let reference = ok(simulate_with_run_identity(
+        &g,
+        &s,
+        "observer-equivalence/v1",
+    ));
+    let mut records = Vec::new();
+    let mut entries = 0;
+    let observed = ok(simulate_observed(
+        &g,
+        &s,
+        "observer-equivalence/v1",
+        &mut |p| {
+            assert_eq!(p.processed_entries, entries + 1);
+            entries = p.processed_entries;
+            records.extend_from_slice(p.events);
+        },
+    ));
+    assert_eq!(records, reference.events);
+    assert!(entries >= u64::try_from(records.len()).unwrap_or(u64::MAX));
+    assert_eq!(
+        ok(serde_json::to_vec(&reference)),
+        ok(serde_json::to_vec(&observed))
+    );
+    assert!(simulate_observed(&g, &s, "", &mut |_| {}).is_err());
+}

@@ -1,0 +1,2960 @@
+{
+  "generation": [
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/backlog-drain-bundle",
+      "generation_ns": 598588542,
+      "scenario_bytes": 5523,
+      "schema_version": 1,
+      "manifest_sha256": "1eb753437d7a85904410e331f13150006e7410b1d61a1197049c14eb6be9b258",
+      "scenario_sha256": "22ecb17f564887c9e4a0ab33b71989eeb6fca923a7ea5b00dd37cbc841c68e39",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/budget-incomplete-bundle",
+      "generation_ns": 11152708,
+      "scenario_bytes": 3364,
+      "schema_version": 1,
+      "manifest_sha256": "f3ec8b512b1d761acbc873b20d084ec66dc5168c59ca320670f4dd4e1c3ce570",
+      "scenario_sha256": "81de4cbdc83c9d52fe89c3205adddb06f5c6bd510e934806183f27735aeabdd1",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/burst-bundle",
+      "generation_ns": 9654333,
+      "scenario_bytes": 5415,
+      "schema_version": 1,
+      "manifest_sha256": "1dbd42c051c9fd8ae934799a7239450e9ca7218c0e8fef415b219dcfde99ef68",
+      "scenario_sha256": "e25586e23c3ef8d51ccd21020360f41839bccb2d7f72be8cfde082bcdd8902d4",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/fleet-bundle",
+      "generation_ns": 8816625,
+      "scenario_bytes": 3376,
+      "schema_version": 1,
+      "manifest_sha256": "6f8b10aaccaaa154c5005ddcbf7e33e890452cb31df1afa7807bfb92eaf5f021",
+      "scenario_sha256": "f7ad373bbcc7f0d7a7c8295a82e39ee2f448af4f857d81a772cfd14d88f06980",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/history-aged-bundle",
+      "generation_ns": 12688208,
+      "scenario_bytes": 13667,
+      "schema_version": 1,
+      "manifest_sha256": "d345ca3dcd87b7f4498bad241a2dc75c5654339cf56818f43e233e4cf8ac751a",
+      "scenario_sha256": "b59e8a9a3bdda7eca7526a3c8fc896f73aeeffcf6e22da3d4a948fd683c9e13d",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/history-fresh-bundle",
+      "generation_ns": 17552125,
+      "scenario_bytes": 2052,
+      "schema_version": 1,
+      "manifest_sha256": "e2cafb1fd0902cd7e9b27a1ea72cb95dea11435d9b5dfe2ce4d07ff8ecd575b2",
+      "scenario_sha256": "db858f1675f460ddef218aee405929541abf33600562da8205fa8cd0fa0a18a9",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/hotspot-bundle",
+      "generation_ns": 10832167,
+      "scenario_bytes": 2944,
+      "schema_version": 1,
+      "manifest_sha256": "dd0bf0780d03c1bfcdab576ef32d8e503b5419df30e391951a24cd6c49451190",
+      "scenario_sha256": "77b74438ec2bfd1787887568ab845483b64edb0fde2d60497035fcf43986a726",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/insertion-bundle",
+      "generation_ns": 9418542,
+      "scenario_bytes": 3359,
+      "schema_version": 1,
+      "manifest_sha256": "efa9f07493d4a05f0c7b81de11f9c64b81907b1d74b8dfda2f6cf207ea936b53",
+      "scenario_sha256": "d79cd5787bcd4bb5d0a1e01eae6f2646a673c0ce80ad9a8bfde7223b5378f49f",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/mass-bundle",
+      "generation_ns": 9496125,
+      "scenario_bytes": 5318,
+      "schema_version": 1,
+      "manifest_sha256": "a8deafd042db123a1cb4e477e65e9524844dce67bdddda7e1a5b9a05b7bf2ae7",
+      "scenario_sha256": "9a67ff3c7592263c7496b3704145f63d899cb251e3e76dc439bdca3f8ef3ad05",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/recovery-bundle",
+      "generation_ns": 46367416,
+      "scenario_bytes": 3551,
+      "schema_version": 1,
+      "manifest_sha256": "ca6edd7b38807c990919ae7be42310a62b5578c9cb004bae4ac059b68ee41ecb",
+      "scenario_sha256": "61e518ccb6fb75e5111154f64c405e4a20910600fa4b0f074d2661a23ed3cd6b",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/smoke-bundle",
+      "generation_ns": 7747042,
+      "scenario_bytes": 2966,
+      "schema_version": 1,
+      "manifest_sha256": "95c6f2da1187b7b5531425c82898b5d385b7c9d9d04ed9702feb1a8ca2d7f216",
+      "scenario_sha256": "8cb3c64a1f5d4d6cfb205dd592f19668dd4c914cd1bf71293c7a468f60905c2d",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/tier-a-bundle",
+      "generation_ns": 22740375,
+      "scenario_bytes": 215734,
+      "schema_version": 1,
+      "manifest_sha256": "de4a3b84fdf449d1988395656135975bca544451e33dd054c50c7f12f1fb37d3",
+      "scenario_sha256": "37d9f4906cebebd51d4c725190cf42eba7c17f3a7e195d8eb64b68af270c35f6",
+      "artifact_sha256": "51bef476e4b5a7c9605a61bf18c91166e491aa99dafa47381fca31ce69f27f47",
+      "edges": 960,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "eba2d0d1bd705c76a9d0fa131d47a2f0c24960b85d20704499de7dd4eee7815a",
+      "nodes": 256,
+      "side": 16,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/tier-b-bundle",
+      "generation_ns": 98557000,
+      "scenario_bytes": 2195372,
+      "schema_version": 1,
+      "manifest_sha256": "4a2791ec9c96594a504b02e7872a45545d6b8f0835bed6a3ec0b12d3a2877a2e",
+      "scenario_sha256": "48c9d5eb59d1fe1688f5e9f8ca78b1ab9d42b1221a15a4bd82f02005b21d00bd",
+      "artifact_sha256": "51bef476e4b5a7c9605a61bf18c91166e491aa99dafa47381fca31ce69f27f47",
+      "edges": 960,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "eba2d0d1bd705c76a9d0fa131d47a2f0c24960b85d20704499de7dd4eee7815a",
+      "nodes": 256,
+      "side": 16,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/tier-c-bundle",
+      "generation_ns": 972787042,
+      "scenario_bytes": 22360954,
+      "schema_version": 1,
+      "manifest_sha256": "17ff7a6ef24344d1dbacff59c0643a77bf7aa9beeaea118374ba53b7dff9a491",
+      "scenario_sha256": "8fcfeda3eda35607b77a859a0c7821a29d0fa399f438dc3d35e5d67a0721cb51",
+      "artifact_sha256": "51bef476e4b5a7c9605a61bf18c91166e491aa99dafa47381fca31ce69f27f47",
+      "edges": 960,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "eba2d0d1bd705c76a9d0fa131d47a2f0c24960b85d20704499de7dd4eee7815a",
+      "nodes": 256,
+      "side": 16,
+      "spacing_e7": 1000
+    },
+    {
+      "bundle": "/tmp/rr34-qualification-20261018/traffic-churn-bundle",
+      "generation_ns": 10112208,
+      "scenario_bytes": 3035,
+      "schema_version": 1,
+      "manifest_sha256": "e56cea6c08a435edcf32a02898235c30c44b95f57f4e65b1669fdab950d24eb6",
+      "scenario_sha256": "0351be963546d3e16e81b067dd273367c3f353be55b6fb552c29c99842b5582d",
+      "artifact_sha256": "bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4",
+      "edges": 224,
+      "generator": "splitmix64-modulo-anchors/v1+grid-e7/v1",
+      "graph_digest": "213ce56c44c8ed2837ea6a672bcb41ef496448867e4bfc66454ba583b96a38dd",
+      "nodes": 64,
+      "side": 8,
+      "spacing_e7": 1000
+    }
+  ],
+  "skipped": [
+    {
+      "case": "tier-c",
+      "reason": "previous tier failed external qualification; no escalation"
+    }
+  ],
+  "summary": {
+    "schema_version": 1,
+    "cases": [
+      {
+        "scenario_sha256": "22ecb17f564887c9e4a0ab33b71989eeb6fca923a7ea5b00dd37cbc841c68e39",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            9481834,
+            10490750,
+            9657958
+          ],
+          "median": 9657958,
+          "p95": 10407470.8,
+          "p99": 10474094.16
+        },
+        "full_result_sha256": "bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 3108,
+            "p50_upper_ns": 4095,
+            "p95_upper_ns": 8191,
+            "p99_upper_ns": 131071
+          },
+          "transition": {
+            "samples": 504,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 131071
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2759.82144110656,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 67.49582030443959,
+              "median_seconds": 63.74538053971456,
+              "p95_seconds": 132.00281725840946,
+              "p99_seconds": 139.6793268522465,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 462.008927944672,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 11.499256004610666,
+              "median_seconds": 11.083763629551783,
+              "p95_seconds": 21.04127891886951,
+              "p99_seconds": 24.39142710605816,
+              "samples": 24
+            },
+            "rider_utilization": 0.22998512009221334,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2759.82144110656,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 67.49582030443959,
+              "median_seconds": 63.74538053971456,
+              "p95_seconds": 132.00281725840946,
+              "p99_seconds": 139.6793268522465,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 462.008927944672,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 11.499256004610666,
+              "median_seconds": 11.083763629551783,
+              "p95_seconds": 21.04127891886951,
+              "p99_seconds": 24.39142710605816,
+              "samples": 24
+            },
+            "rider_utilization": 0.22998512009221334,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2759.82144110656,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 67.49582030443959,
+              "median_seconds": 63.74538053971456,
+              "p95_seconds": 132.00281725840946,
+              "p99_seconds": 139.6793268522465,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 462.008927944672,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 11.499256004610666,
+              "median_seconds": 11.083763629551783,
+              "p95_seconds": 21.04127891886951,
+              "p99_seconds": 24.39142710605816,
+              "samples": 24
+            },
+            "rider_utilization": 0.22998512009221334,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          129.5780008948982,
+          127.33511241000473,
+          119.28928398913543
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1245184,
+          1277952
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 24,
+            "delivered": 23,
+            "elapsed_ns": 9290667,
+            "entries": 1200,
+            "logical_seconds": 136.4338714769496,
+            "outstanding": 1,
+            "peak_outstanding": 24,
+            "peak_pending": 22,
+            "peak_queue": 48,
+            "pending": 0,
+            "queue_depth": 1,
+            "riders_with_work": 1,
+            "started_actions": 47,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 23,
+            "elapsed_ns": 10263792,
+            "entries": 1200,
+            "logical_seconds": 136.4338714769496,
+            "outstanding": 1,
+            "peak_outstanding": 24,
+            "peak_pending": 22,
+            "peak_queue": 48,
+            "pending": 0,
+            "queue_depth": 1,
+            "riders_with_work": 1,
+            "started_actions": 47,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 23,
+            "elapsed_ns": 9464083,
+            "entries": 1200,
+            "logical_seconds": 136.4338714769496,
+            "outstanding": 1,
+            "peak_outstanding": 24,
+            "peak_pending": 22,
+            "peak_queue": 48,
+            "pending": 0,
+            "queue_depth": 1,
+            "riders_with_work": 1,
+            "started_actions": 47,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "81de4cbdc83c9d52fe89c3205adddb06f5c6bd510e934806183f27735aeabdd1",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2887250,
+            2885292,
+            3148000
+          ],
+          "median": 2887250,
+          "p95": 3121925.0,
+          "p99": 3142785.0
+        },
+        "full_result_sha256": "aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 237,
+            "p50_upper_ns": 65535,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 131071
+          },
+          "transition": {
+            "samples": 48,
+            "p50_upper_ns": 8191,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 32767
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 0,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 0.0,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "delivered_orders": 0,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 400.0,
+            "outstanding_orders": 8,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "predicted_eta": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "rider_utilization": 0.0,
+            "scheduled_orders": 8,
+            "unassigned_orders": 8,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 0,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 0.0,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "delivered_orders": 0,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 400.0,
+            "outstanding_orders": 8,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "predicted_eta": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "rider_utilization": 0.0,
+            "scheduled_orders": 8,
+            "unassigned_orders": 8,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 0,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 0.0,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "delivered_orders": 0,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 400.0,
+            "outstanding_orders": 8,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "predicted_eta": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "rider_utilization": 0.0,
+            "scheduled_orders": 8,
+            "unassigned_orders": 8,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1212416,
+          1376256
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 80875,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 78792,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 80375,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "e25586e23c3ef8d51ccd21020360f41839bccb2d7f72be8cfde082bcdd8902d4",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            8202292,
+            10312375,
+            10065125
+          ],
+          "median": 10065125,
+          "p95": 10287650.0,
+          "p99": 10307430.0
+        },
+        "full_result_sha256": "4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 72,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 524287
+          },
+          "transition": {
+            "samples": 504,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 262143
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2592.885834390906,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 11.170834032810058,
+              "median_seconds": 9.807462161638902,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 432.97499580313956,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.3671430561812823,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034642,
+              "p99_seconds": 1.8951976370076409,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.803690976628777,
+              "median_seconds": 9.415837535896575,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "rider_utilization": 0.13405000839372072,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2592.885834390906,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 11.170834032810058,
+              "median_seconds": 9.807462161638902,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 432.97499580313956,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.3671430561812823,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034642,
+              "p99_seconds": 1.8951976370076409,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.803690976628777,
+              "median_seconds": 9.415837535896575,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "rider_utilization": 0.13405000839372072,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2592.885834390906,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 11.170834032810058,
+              "median_seconds": 9.807462161638902,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 432.97499580313956,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.3671430561812823,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034642,
+              "p99_seconds": 1.8951976370076409,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.803690976628777,
+              "median_seconds": 9.415837535896575,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "rider_utilization": 0.13405000839372072,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          120.45360780989863,
+          39.15163036883127,
+          123.62594908671328
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1359872,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 16,
+            "delivered": 12,
+            "elapsed_ns": 3832250,
+            "entries": 100,
+            "logical_seconds": 120.0,
+            "outstanding": 4,
+            "peak_outstanding": 4,
+            "peak_pending": 4,
+            "peak_queue": 48,
+            "pending": 4,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 24,
+            "waiting_riders": 0
+          },
+          {
+            "created": 16,
+            "delivered": 12,
+            "elapsed_ns": 4496708,
+            "entries": 100,
+            "logical_seconds": 120.0,
+            "outstanding": 4,
+            "peak_outstanding": 4,
+            "peak_pending": 4,
+            "peak_queue": 48,
+            "pending": 4,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 24,
+            "waiting_riders": 0
+          },
+          {
+            "created": 16,
+            "delivered": 12,
+            "elapsed_ns": 4197042,
+            "entries": 100,
+            "logical_seconds": 120.0,
+            "outstanding": 4,
+            "peak_outstanding": 4,
+            "peak_pending": 4,
+            "peak_queue": 48,
+            "pending": 4,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 24,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "f7ad373bbcc7f0d7a7c8295a82e39ee2f448af4f857d81a772cfd14d88f06980",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            14413959,
+            14887500,
+            17603000
+          ],
+          "median": 14887500,
+          "p95": 17331450.0,
+          "p99": 17548690.0
+        },
+        "full_result_sha256": "67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0",
+        "queue_action_latency_buckets": {
+          "fleet": {
+            "samples": 24,
+            "p50_upper_ns": 1048575,
+            "p95_upper_ns": 4194303,
+            "p99_upper_ns": 8388607
+          },
+          "transition": {
+            "samples": 168,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          44.11743425708182,
+          40.685051437881675,
+          41.58469759644288
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1261568,
+          1359872
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 77000,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 75041,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 72083,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "b59e8a9a3bdda7eca7526a3c8fc896f73aeeffcf6e22da3d4a948fd683c9e13d",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            27389834,
+            31325041,
+            55214541
+          ],
+          "median": 31325041,
+          "p95": 52825591.0,
+          "p99": 54736751.0
+        },
+        "full_result_sha256": "a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 192,
+            "p50_upper_ns": 262143,
+            "p95_upper_ns": 524287,
+            "p99_upper_ns": 1048575
+          },
+          "transition": {
+            "samples": 1344,
+            "p50_upper_ns": 65535,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 524287
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 64,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 6129.28582836183,
+            "created_orders": 64,
+            "delivered_duration": {
+              "mean_seconds": 9.982272595039312,
+              "median_seconds": 9.258635858944956,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "delivered_orders": 64,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1180.567276958742,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.4052634882239392,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951971975977813,
+              "p99_seconds": 1.8951974172985047,
+              "samples": 64
+            },
+            "predicted_eta": {
+              "mean_seconds": 9.577009106815371,
+              "median_seconds": 8.877734661202169,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "rider_utilization": 0.21295514869417198,
+            "scheduled_orders": 64,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 64,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 6129.28582836183,
+            "created_orders": 64,
+            "delivered_duration": {
+              "mean_seconds": 9.982272595039312,
+              "median_seconds": 9.258635858944956,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "delivered_orders": 64,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1180.567276958742,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.4052634882239392,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951971975977813,
+              "p99_seconds": 1.8951974172985047,
+              "samples": 64
+            },
+            "predicted_eta": {
+              "mean_seconds": 9.577009106815371,
+              "median_seconds": 8.877734661202169,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "rider_utilization": 0.21295514869417198,
+            "scheduled_orders": 64,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 64,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 6129.28582836183,
+            "created_orders": 64,
+            "delivered_duration": {
+              "mean_seconds": 9.982272595039312,
+              "median_seconds": 9.258635858944956,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "delivered_orders": 64,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1180.567276958742,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.4052634882239392,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951971975977813,
+              "p99_seconds": 1.8951974172985047,
+              "samples": 64
+            },
+            "predicted_eta": {
+              "mean_seconds": 9.577009106815371,
+              "median_seconds": 8.877734661202169,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "rider_utilization": 0.21295514869417198,
+            "scheduled_orders": 64,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          332.93479477766624,
+          311.7662532516253,
+          242.17503513978684
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1343488,
+          1605632,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 63,
+            "delivered": 62,
+            "elapsed_ns": 26125000,
+            "entries": 500,
+            "logical_seconds": 1242.2096034077242,
+            "outstanding": 1,
+            "peak_outstanding": 2,
+            "peak_pending": 1,
+            "peak_queue": 128,
+            "pending": 0,
+            "queue_depth": 3,
+            "riders_with_work": 1,
+            "started_actions": 125,
+            "waiting_riders": 1
+          },
+          {
+            "created": 63,
+            "delivered": 62,
+            "elapsed_ns": 29804708,
+            "entries": 500,
+            "logical_seconds": 1242.2096034077242,
+            "outstanding": 1,
+            "peak_outstanding": 2,
+            "peak_pending": 1,
+            "peak_queue": 128,
+            "pending": 0,
+            "queue_depth": 3,
+            "riders_with_work": 1,
+            "started_actions": 125,
+            "waiting_riders": 1
+          },
+          {
+            "created": 63,
+            "delivered": 62,
+            "elapsed_ns": 52617625,
+            "entries": 500,
+            "logical_seconds": 1242.2096034077242,
+            "outstanding": 1,
+            "peak_outstanding": 2,
+            "peak_pending": 1,
+            "peak_queue": 128,
+            "pending": 0,
+            "queue_depth": 3,
+            "riders_with_work": 1,
+            "started_actions": 125,
+            "waiting_riders": 1
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "db858f1675f460ddef218aee405929541abf33600562da8205fa8cd0fa0a18a9",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            1438292,
+            1514167,
+            1440209
+          ],
+          "median": 1440209,
+          "p95": 1506771.2,
+          "p99": 1512687.84
+        },
+        "full_result_sha256": "3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 24,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 168,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 831.3895383527878,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1458.4305230823607,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "rider_utilization": 0.02771298461175959,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 831.3895383527878,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1458.4305230823607,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "rider_utilization": 0.02771298461175959,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 831.3895383527878,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1458.4305230823607,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "rider_utilization": 0.02771298461175959,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          44.66085307410029,
+          45.01101028388491,
+          43.06291252520782
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1376256,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 84167,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 84083,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 75542,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "77b74438ec2bfd1787887568ab845483b64edb0fde2d60497035fcf43986a726",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2080500,
+            2154500,
+            1844666
+          ],
+          "median": 2080500,
+          "p95": 2147100.0,
+          "p99": 2153020.0
+        },
+        "full_result_sha256": "375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 36,
+            "p50_upper_ns": 65535,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 131071
+          },
+          "transition": {
+            "samples": 252,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 220.96060441959915,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 4.565137614638808,
+              "median_seconds": 4.1048030220997145,
+              "p95_seconds": 6.314409066294246,
+              "p99_seconds": 6.314409066294246,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 386.3045871560836,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.7237992444754795,
+              "median_seconds": 3.0,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 1.8413383701633288,
+              "median_seconds": 1.6572045331446716,
+              "p95_seconds": 3.314409066294246,
+              "p99_seconds": 3.314409066294246,
+              "samples": 12
+            },
+            "rider_utilization": 0.03423853210979107,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 220.96060441959915,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 4.565137614638808,
+              "median_seconds": 4.1048030220997145,
+              "p95_seconds": 6.314409066294246,
+              "p99_seconds": 6.314409066294246,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 386.3045871560836,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.7237992444754795,
+              "median_seconds": 3.0,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 1.8413383701633288,
+              "median_seconds": 1.6572045331446716,
+              "p95_seconds": 3.314409066294246,
+              "p99_seconds": 3.314409066294246,
+              "samples": 12
+            },
+            "rider_utilization": 0.03423853210979107,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 220.96060441959915,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 4.565137614638808,
+              "median_seconds": 4.1048030220997145,
+              "p95_seconds": 6.314409066294246,
+              "p99_seconds": 6.314409066294246,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 386.3045871560836,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.7237992444754795,
+              "median_seconds": 3.0,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 1.8413383701633288,
+              "median_seconds": 1.6572045331446716,
+              "p95_seconds": 3.314409066294246,
+              "p99_seconds": 3.314409066294246,
+              "samples": 12
+            },
+            "rider_utilization": 0.03423853210979107,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          63.22587653035859,
+          66.46965798591393,
+          66.84588158930545
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1261568,
+          1425408,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 142542,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 87500,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 79166,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "d79cd5787bcd4bb5d0a1e01eae6f2646a673c0ce80ad9a8bfde7223b5378f49f",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            13489125,
+            13159041,
+            16735125
+          ],
+          "median": 13489125,
+          "p95": 16410525.0,
+          "p99": 16670205.0
+        },
+        "full_result_sha256": "df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 24,
+            "p50_upper_ns": 1048575,
+            "p95_upper_ns": 4194303,
+            "p99_upper_ns": 8388607
+          },
+          "transition": {
+            "samples": 168,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          41.7284806733734,
+          41.67726680192571,
+          41.04213680755038
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          2572288,
+          1196032,
+          1540096
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 89125,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 81000,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 74875,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "9a67ff3c7592263c7496b3704145f63d899cb251e3e76dc439bdca3f8ef3ad05",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            8635500,
+            9411584,
+            12080584
+          ],
+          "median": 9411584,
+          "p95": 11813684.0,
+          "p99": 12027204.0
+        },
+        "full_result_sha256": "85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 762,
+            "p50_upper_ns": 8191,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 504,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 262143
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2571.7905950054096,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 35.281527733386945,
+              "median_seconds": 34.35966780088178,
+              "p95_seconds": 67.61453631462481,
+              "p99_seconds": 68.75507472245712,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 535.7052351248648,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.715794145855872,
+              "median_seconds": 10.538512754925453,
+              "p95_seconds": 16.622068588087537,
+              "p99_seconds": 24.384276030161182,
+              "samples": 24
+            },
+            "rider_utilization": 0.10715794145855874,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2571.7905950054096,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 35.281527733386945,
+              "median_seconds": 34.35966780088178,
+              "p95_seconds": 67.61453631462481,
+              "p99_seconds": 68.75507472245712,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 535.7052351248648,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.715794145855872,
+              "median_seconds": 10.538512754925453,
+              "p95_seconds": 16.622068588087537,
+              "p99_seconds": 24.384276030161182,
+              "samples": 24
+            },
+            "rider_utilization": 0.10715794145855874,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2571.7905950054096,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 35.281527733386945,
+              "median_seconds": 34.35966780088178,
+              "p95_seconds": 67.61453631462481,
+              "p99_seconds": 68.75507472245712,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 535.7052351248648,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.715794145855872,
+              "median_seconds": 10.538512754925453,
+              "p95_seconds": 16.622068588087537,
+              "p99_seconds": 24.384276030161182,
+              "samples": 24
+            },
+            "rider_utilization": 0.10715794145855874,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          118.70404854995569,
+          120.94036211036033,
+          73.0577205458479
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1409024,
+          1392640,
+          2703360
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 24,
+            "delivered": 19,
+            "elapsed_ns": 7537292,
+            "entries": 400,
+            "logical_seconds": 52.08296793782215,
+            "outstanding": 5,
+            "peak_outstanding": 24,
+            "peak_pending": 24,
+            "peak_queue": 48,
+            "pending": 1,
+            "queue_depth": 4,
+            "riders_with_work": 4,
+            "started_actions": 43,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 19,
+            "elapsed_ns": 8063209,
+            "entries": 400,
+            "logical_seconds": 52.08296793782215,
+            "outstanding": 5,
+            "peak_outstanding": 24,
+            "peak_pending": 24,
+            "peak_queue": 48,
+            "pending": 1,
+            "queue_depth": 4,
+            "riders_with_work": 4,
+            "started_actions": 43,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 19,
+            "elapsed_ns": 9323709,
+            "entries": 400,
+            "logical_seconds": 52.08296793782215,
+            "outstanding": 5,
+            "peak_outstanding": 24,
+            "peak_pending": 24,
+            "peak_queue": 48,
+            "pending": 1,
+            "queue_depth": 4,
+            "riders_with_work": 4,
+            "started_actions": 43,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "61e518ccb6fb75e5111154f64c405e4a20910600fa4b0f074d2661a23ed3cd6b",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            502539833,
+            491978250,
+            240490000
+          ],
+          "median": 491978250,
+          "p95": 501483674.7,
+          "p99": 502328601.34
+        },
+        "full_result_sha256": "0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06",
+        "queue_action_latency_buckets": {
+          "fleet": {
+            "samples": 24,
+            "p50_upper_ns": 4194303,
+            "p95_upper_ns": 16777215,
+            "p99_upper_ns": 33554431
+          },
+          "recovery": {
+            "samples": 96,
+            "p50_upper_ns": 262143,
+            "p95_upper_ns": 134217727,
+            "p99_upper_ns": 268435455
+          },
+          "transition": {
+            "samples": 171,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 524287
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 454.6845371448003,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 50.99385615956279,
+              "median_seconds": 49.38468810754427,
+              "p95_seconds": 79.46845371448002,
+              "p99_seconds": 79.46845371448002,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 357.26577314276,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.9999999999999991,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 31.468495044883877,
+              "median_seconds": 32.95097716631555,
+              "p95_seconds": 46.16793669990534,
+              "p99_seconds": 46.16793669990534,
+              "samples": 8
+            },
+            "rider_utilization": 0.10683556714310002,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 454.6845371448003,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 50.99385615956279,
+              "median_seconds": 49.38468810754427,
+              "p95_seconds": 79.46845371448002,
+              "p99_seconds": 79.46845371448002,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 357.26577314276,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.9999999999999991,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 31.468495044883877,
+              "median_seconds": 32.95097716631555,
+              "p95_seconds": 46.16793669990534,
+              "p99_seconds": 46.16793669990534,
+              "samples": 8
+            },
+            "rider_utilization": 0.10683556714310002,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 454.6845371448003,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 50.99385615956279,
+              "median_seconds": 49.38468810754427,
+              "p95_seconds": 79.46845371448002,
+              "p99_seconds": 79.46845371448002,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 357.26577314276,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.9999999999999991,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 31.468495044883877,
+              "median_seconds": 32.95097716631555,
+              "p95_seconds": 46.16793669990534,
+              "p99_seconds": 46.16793669990534,
+              "samples": 8
+            },
+            "rider_utilization": 0.10683556714310002,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          12.12425391281805,
+          12.451139006850472,
+          23.546070055244815
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          7290880,
+          7389184,
+          7225344
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 366542,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 17,
+            "pending": 1,
+            "queue_depth": 17,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 155125,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 17,
+            "pending": 1,
+            "queue_depth": 17,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 95333,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 17,
+            "pending": 1,
+            "queue_depth": 17,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "8cb3c64a1f5d4d6cfb205dd592f19668dd4c914cd1bf71293c7a468f60905c2d",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2681333,
+            2716083,
+            2648000
+          ],
+          "median": 2681333,
+          "p95": 2712608.0,
+          "p99": 2715388.0
+        },
+        "full_result_sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 36,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 252,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          66.49088139896848,
+          65.14881969313288,
+          64.12525800396742
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1196032,
+          1261568
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 91833,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 87458,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 85125,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "37d9f4906cebebd51d4c725190cf42eba7c17f3a7e195d8eb64b68af270c35f6",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            27435304584,
+            25597792041,
+            23464315000
+          ],
+          "median": 25597792041,
+          "p95": 27251553329.7,
+          "p99": 27398554333.14
+        },
+        "full_result_sha256": "12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 3000,
+            "p50_upper_ns": 16777215,
+            "p95_upper_ns": 33554431,
+            "p99_upper_ns": 67108863
+          },
+          "transition": {
+            "samples": 21000,
+            "p50_upper_ns": 2097151,
+            "p95_upper_ns": 4194303,
+            "p99_upper_ns": 8388607
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 1000,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 132259.62876991555,
+            "created_orders": 1000,
+            "delivered_duration": {
+              "mean_seconds": 14.960315274459273,
+              "median_seconds": 14.248109241493921,
+              "p95_seconds": 25.460480241399182,
+              "p99_seconds": 29.608157419460667,
+              "samples": 1000
+            },
+            "delivered_orders": 1000,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 2450.396847255408,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.7343523974677273,
+              "median_seconds": 1.895197197597767,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 1000
+            },
+            "predicted_eta": {
+              "mean_seconds": 13.225962876991568,
+              "median_seconds": 13.275490006170003,
+              "p95_seconds": 24.369967945653386,
+              "p99_seconds": 28.789180913367545,
+              "samples": 1000
+            },
+            "rider_utilization": 0.05753967413253575,
+            "scheduled_orders": 1000,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 1000,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 132259.62876991555,
+            "created_orders": 1000,
+            "delivered_duration": {
+              "mean_seconds": 14.960315274459273,
+              "median_seconds": 14.248109241493921,
+              "p95_seconds": 25.460480241399182,
+              "p99_seconds": 29.608157419460667,
+              "samples": 1000
+            },
+            "delivered_orders": 1000,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 2450.396847255408,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.7343523974677273,
+              "median_seconds": 1.895197197597767,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 1000
+            },
+            "predicted_eta": {
+              "mean_seconds": 13.225962876991568,
+              "median_seconds": 13.275490006170003,
+              "p95_seconds": 24.369967945653386,
+              "p99_seconds": 28.789180913367545,
+              "samples": 1000
+            },
+            "rider_utilization": 0.05753967413253575,
+            "scheduled_orders": 1000,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 1000,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 132259.62876991555,
+            "created_orders": 1000,
+            "delivered_duration": {
+              "mean_seconds": 14.960315274459273,
+              "median_seconds": 14.248109241493921,
+              "p95_seconds": 25.460480241399182,
+              "p99_seconds": 29.608157419460667,
+              "samples": 1000
+            },
+            "delivered_orders": 1000,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 2450.396847255408,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.7343523974677273,
+              "median_seconds": 1.895197197597767,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 1000
+            },
+            "predicted_eta": {
+              "mean_seconds": 13.225962876991568,
+              "median_seconds": 13.275490006170003,
+              "p95_seconds": 24.369967945653386,
+              "p99_seconds": 28.789180913367545,
+              "samples": 1000
+            },
+            "rider_utilization": 0.05753967413253575,
+            "scheduled_orders": 1000,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          32.894603478293455,
+          36.07307880860039,
+          39.50041208692335
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          127959040,
+          164003840,
+          163577856
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1000,
+            "delivered": 1000,
+            "elapsed_ns": 27433908417,
+            "entries": 8000,
+            "logical_seconds": 2008.7479145181678,
+            "outstanding": 0,
+            "peak_outstanding": 12,
+            "peak_pending": 1,
+            "peak_queue": 2000,
+            "pending": 0,
+            "queue_depth": 0,
+            "riders_with_work": 0,
+            "started_actions": 2000,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1000,
+            "delivered": 1000,
+            "elapsed_ns": 25596666083,
+            "entries": 8000,
+            "logical_seconds": 2008.7479145181678,
+            "outstanding": 0,
+            "peak_outstanding": 12,
+            "peak_pending": 1,
+            "peak_queue": 2000,
+            "pending": 0,
+            "queue_depth": 0,
+            "riders_with_work": 0,
+            "started_actions": 2000,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1000,
+            "delivered": 1000,
+            "elapsed_ns": 23463163584,
+            "entries": 8000,
+            "logical_seconds": 2008.7479145181678,
+            "outstanding": 0,
+            "peak_outstanding": 12,
+            "peak_pending": 1,
+            "peak_queue": 2000,
+            "pending": 0,
+            "queue_depth": 0,
+            "riders_with_work": 0,
+            "started_actions": 2000,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "48c9d5eb59d1fe1688f5e9f8ca78b1ab9d42b1221a15a4bd82f02005b21d00bd",
+        "diagnostics": true,
+        "runs": 1,
+        "completed": 0,
+        "outcomes": [
+          "harness_wall_timeout"
+        ],
+        "execution_ns": null,
+        "full_result_sha256": null,
+        "queue_action_latency_buckets": {},
+        "final_counts": [],
+        "delivered_per_wall_second": [],
+        "peak_sampled_process_group_rss_bytes": [
+          80904192
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 253,
+            "delivered": 243,
+            "elapsed_ns": 56285719417,
+            "entries": 2000,
+            "logical_seconds": 504.0,
+            "outstanding": 10,
+            "peak_outstanding": 11,
+            "peak_pending": 1,
+            "peak_queue": 20000,
+            "pending": 0,
+            "queue_depth": 19504,
+            "riders_with_work": 10,
+            "started_actions": 504,
+            "waiting_riders": 2
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "0351be963546d3e16e81b067dd273367c3f353be55b6fb552c29c99842b5582d",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2723500,
+            3044625,
+            2812666
+          ],
+          "median": 2812666,
+          "p95": 3021429.1,
+          "p99": 3039985.82
+        },
+        "full_result_sha256": "bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 36,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 255,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_wall_second": [
+          62.12691493272326,
+          64.34704506303184,
+          64.11058374754211
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1261568,
+          1425408,
+          1294336
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 97625,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 25,
+            "pending": 1,
+            "queue_depth": 25,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 96000,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 25,
+            "pending": 1,
+            "queue_depth": 25,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 103333,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 25,
+            "pending": 1,
+            "queue_depth": 25,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      }
+    ],
+    "limits": "No cold-cache, city capacity, operational service, durable throughput or rendering claims. Histograms give bucket upper bounds for queue-action processing, not HTTP requests. Run quantiles describe small repeated-run samples, not per-order tails. Incomplete runs excluded from timing quantiles but retained in outcomes."
+  }
+}

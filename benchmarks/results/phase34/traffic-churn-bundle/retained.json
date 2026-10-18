@@ -1,0 +1,8 @@
+{
+  "scenario": {
+    "path": "objects/0351be963546d3e16e81b067dd273367c3f353be55b6fb552c29c99842b5582d.json.gz",
+    "sha256": "0351be963546d3e16e81b067dd273367c3f353be55b6fb552c29c99842b5582d",
+    "uncompressed_bytes": 3035
+  },
+  "graph": "objects/bd3726dc0170259549874fcf2a628eeaedc57393f13b6a2dba9bc341545cf1d4.rrgraph"
+}

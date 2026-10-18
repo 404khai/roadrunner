@@ -149,3 +149,12 @@ validation/candidate generation, headless execution, retained traffic and serial
 The [completion package](../docs/phase-33-completion.md) links matched raw data, semantic
 comparison, remaining limits and the separately authorized Phase 34 plan. These
 measurements establish two scoped improvements, not large-fleet service capacity.
+
+## Phase 34 scale qualification
+
+[Versioned workloads and reproduction](phase34/README.md) execute real headless
+simulation and independent routing under declared resource envelopes.
+[Raw evidence](results/phase34/index.json) includes completed Tier A, resource-incomplete
+Tier B and generated/unexecuted Tier C, with full losslessly retained outputs.
+[Completion and unsupported claims](../docs/phase-34-completion.md) distinguish
+synthetic work from operational, durable and browser throughput.

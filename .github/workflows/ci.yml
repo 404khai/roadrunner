@@ -55,6 +55,13 @@ jobs:
       - name: Exercise bounded profiling probe without timing thresholds
         run: cargo run --locked -p roadrunner-simulation --example phase33_probe -- benchmarks/phase33/candidates-fresh64.json
 
+      - name: Build bounded scale harness
+        run: cargo build --locked -p roadrunner-simulation --example phase34_workload
+      - name: Verify workload generation, evidence equivalence and external stop classification
+        env:
+          PHASE34_BINARY: target/debug/examples/phase34_workload
+        run: python3 -m unittest discover -s scripts -p test_phase34.py -v
+
   web:
     name: Routing visualization client
     runs-on: ubuntu-latest

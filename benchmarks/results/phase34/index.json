@@ -1,0 +1,4204 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "run": "backlog-drain-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6832128,
+        "coarse_os_wall_seconds": 0.03,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9.json.gz",
+        "sha256": "bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9",
+        "uncompressed_bytes": 1336787,
+        "complete": true
+      }
+    },
+    {
+      "run": "backlog-drain-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6438912,
+        "coarse_os_wall_seconds": 0.03,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9.json.gz",
+        "sha256": "bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9",
+        "uncompressed_bytes": 1336787,
+        "complete": true
+      }
+    },
+    {
+      "run": "backlog-drain-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6651904,
+        "coarse_os_wall_seconds": 0.05,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9.json.gz",
+        "sha256": "bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9",
+        "uncompressed_bytes": 1336787,
+        "complete": true
+      }
+    },
+    {
+      "run": "backlog-drain-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6553600,
+        "coarse_os_wall_seconds": 0.06,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9.json.gz",
+        "sha256": "bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9",
+        "uncompressed_bytes": 1336787,
+        "complete": true
+      }
+    },
+    {
+      "run": "budget-incomplete-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5144576,
+        "coarse_os_wall_seconds": 0.06,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b.json.gz",
+        "sha256": "aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b",
+        "uncompressed_bytes": 445893,
+        "complete": true
+      }
+    },
+    {
+      "run": "budget-incomplete-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5128192,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b.json.gz",
+        "sha256": "aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b",
+        "uncompressed_bytes": 445893,
+        "complete": true
+      }
+    },
+    {
+      "run": "budget-incomplete-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5128192,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b.json.gz",
+        "sha256": "aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b",
+        "uncompressed_bytes": 445893,
+        "complete": true
+      }
+    },
+    {
+      "run": "budget-incomplete-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5177344,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b.json.gz",
+        "sha256": "aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b",
+        "uncompressed_bytes": 445893,
+        "complete": true
+      }
+    },
+    {
+      "run": "burst-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5308416,
+        "coarse_os_wall_seconds": 0.03,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02.json.gz",
+        "sha256": "4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02",
+        "uncompressed_bytes": 617001,
+        "complete": true
+      }
+    },
+    {
+      "run": "burst-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5259264,
+        "coarse_os_wall_seconds": 0.05,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02.json.gz",
+        "sha256": "4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02",
+        "uncompressed_bytes": 617001,
+        "complete": true
+      }
+    },
+    {
+      "run": "burst-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5111808,
+        "coarse_os_wall_seconds": 0.04,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02.json.gz",
+        "sha256": "4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02",
+        "uncompressed_bytes": 617001,
+        "complete": true
+      }
+    },
+    {
+      "run": "burst-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5505024,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02.json.gz",
+        "sha256": "4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02",
+        "uncompressed_bytes": 617001,
+        "complete": true
+      }
+    },
+    {
+      "run": "fleet-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5357568,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0.json.gz",
+        "sha256": "67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0",
+        "uncompressed_bytes": 324624,
+        "complete": true
+      }
+    },
+    {
+      "run": "fleet-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5324800,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0.json.gz",
+        "sha256": "67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0",
+        "uncompressed_bytes": 324624,
+        "complete": true
+      }
+    },
+    {
+      "run": "fleet-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5357568,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0.json.gz",
+        "sha256": "67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0",
+        "uncompressed_bytes": 324624,
+        "complete": true
+      }
+    },
+    {
+      "run": "fleet-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5308416,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0.json.gz",
+        "sha256": "67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0",
+        "uncompressed_bytes": 324624,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-aged-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6406144,
+        "coarse_os_wall_seconds": 0.06,
+        "coarse_user_seconds": 0.04,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5.json.gz",
+        "sha256": "a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5",
+        "uncompressed_bytes": 1616672,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-aged-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6275072,
+        "coarse_os_wall_seconds": 0.05,
+        "coarse_user_seconds": 0.04,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5.json.gz",
+        "sha256": "a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5",
+        "uncompressed_bytes": 1616672,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-aged-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6668288,
+        "coarse_os_wall_seconds": 0.05,
+        "coarse_user_seconds": 0.04,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5.json.gz",
+        "sha256": "a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5",
+        "uncompressed_bytes": 1616672,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-aged-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6373376,
+        "coarse_os_wall_seconds": 0.09,
+        "coarse_user_seconds": 0.07,
+        "coarse_system_seconds": 0.01
+      },
+      "result.json": {
+        "path": "objects/a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5.json.gz",
+        "sha256": "a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5",
+        "uncompressed_bytes": 1616672,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-fresh-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4931584,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86.json.gz",
+        "sha256": "3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86",
+        "uncompressed_bytes": 202565,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-fresh-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4718592,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86.json.gz",
+        "sha256": "3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86",
+        "uncompressed_bytes": 202565,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-fresh-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4718592,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86.json.gz",
+        "sha256": "3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86",
+        "uncompressed_bytes": 202565,
+        "complete": true
+      }
+    },
+    {
+      "run": "history-fresh-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4718592,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86.json.gz",
+        "sha256": "3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86",
+        "uncompressed_bytes": 202565,
+        "complete": true
+      }
+    },
+    {
+      "run": "hotspot-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4915200,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458.json.gz",
+        "sha256": "375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458",
+        "uncompressed_bytes": 320295,
+        "complete": true
+      }
+    },
+    {
+      "run": "hotspot-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4964352,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458.json.gz",
+        "sha256": "375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458",
+        "uncompressed_bytes": 320295,
+        "complete": true
+      }
+    },
+    {
+      "run": "hotspot-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4915200,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458.json.gz",
+        "sha256": "375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458",
+        "uncompressed_bytes": 320295,
+        "complete": true
+      }
+    },
+    {
+      "run": "hotspot-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4833280,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458.json.gz",
+        "sha256": "375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458",
+        "uncompressed_bytes": 320295,
+        "complete": true
+      }
+    },
+    {
+      "run": "insertion-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5488640,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389.json.gz",
+        "sha256": "df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389",
+        "uncompressed_bytes": 280392,
+        "complete": true
+      }
+    },
+    {
+      "run": "insertion-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5308416,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389.json.gz",
+        "sha256": "df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389",
+        "uncompressed_bytes": 280392,
+        "complete": true
+      }
+    },
+    {
+      "run": "insertion-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5226496,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389.json.gz",
+        "sha256": "df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389",
+        "uncompressed_bytes": 280392,
+        "complete": true
+      }
+    },
+    {
+      "run": "insertion-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5259264,
+        "coarse_os_wall_seconds": 0.03,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389.json.gz",
+        "sha256": "df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389",
+        "uncompressed_bytes": 280392,
+        "complete": true
+      }
+    },
+    {
+      "run": "mass-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5488640,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0.json.gz",
+        "sha256": "85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0",
+        "uncompressed_bytes": 765864,
+        "complete": true
+      }
+    },
+    {
+      "run": "mass-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5406720,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0.json.gz",
+        "sha256": "85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0",
+        "uncompressed_bytes": 765864,
+        "complete": true
+      }
+    },
+    {
+      "run": "mass-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5668864,
+        "coarse_os_wall_seconds": 0.02,
+        "coarse_user_seconds": 0.01,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0.json.gz",
+        "sha256": "85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0",
+        "uncompressed_bytes": 765864,
+        "complete": true
+      }
+    },
+    {
+      "run": "mass-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5750784,
+        "coarse_os_wall_seconds": 0.04,
+        "coarse_user_seconds": 0.02,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0.json.gz",
+        "sha256": "85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0",
+        "uncompressed_bytes": 765864,
+        "complete": true
+      }
+    },
+    {
+      "run": "recovery-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6963200,
+        "coarse_os_wall_seconds": 0.72,
+        "coarse_user_seconds": 0.36,
+        "coarse_system_seconds": 0.02
+      },
+      "result.json": {
+        "path": "objects/0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06.json.gz",
+        "sha256": "0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06",
+        "uncompressed_bytes": 806386,
+        "complete": true
+      }
+    },
+    {
+      "run": "recovery-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6815744,
+        "coarse_os_wall_seconds": 0.53,
+        "coarse_user_seconds": 0.36,
+        "coarse_system_seconds": 0.02
+      },
+      "result.json": {
+        "path": "objects/0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06.json.gz",
+        "sha256": "0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06",
+        "uncompressed_bytes": 806386,
+        "complete": true
+      }
+    },
+    {
+      "run": "recovery-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6881280,
+        "coarse_os_wall_seconds": 0.5,
+        "coarse_user_seconds": 0.32,
+        "coarse_system_seconds": 0.01
+      },
+      "result.json": {
+        "path": "objects/0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06.json.gz",
+        "sha256": "0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06",
+        "uncompressed_bytes": 806386,
+        "complete": true
+      }
+    },
+    {
+      "run": "recovery-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 6799360,
+        "coarse_os_wall_seconds": 0.25,
+        "coarse_user_seconds": 0.23,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06.json.gz",
+        "sha256": "0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06",
+        "uncompressed_bytes": 806386,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-astar-1-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4227072,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c.json.gz",
+        "sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c",
+        "uncompressed_bytes": 50699,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-astar-1-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4243456,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c.json.gz",
+        "sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c",
+        "uncompressed_bytes": 50699,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-astar-1-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4259840,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c.json.gz",
+        "sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c",
+        "uncompressed_bytes": 50699,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-astar-4-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4292608,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c.json.gz",
+        "sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c",
+        "uncompressed_bytes": 50699,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-astar-4-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4308992,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c.json.gz",
+        "sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c",
+        "uncompressed_bytes": 50699,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-astar-4-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4325376,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c.json.gz",
+        "sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c",
+        "uncompressed_bytes": 50699,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-dijkstra-1-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4276224,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0.json.gz",
+        "sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0",
+        "uncompressed_bytes": 51083,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-dijkstra-1-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4243456,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0.json.gz",
+        "sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0",
+        "uncompressed_bytes": 51083,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-dijkstra-1-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4276224,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0.json.gz",
+        "sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0",
+        "uncompressed_bytes": 51083,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-dijkstra-4-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4325376,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0.json.gz",
+        "sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0",
+        "uncompressed_bytes": 51083,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-dijkstra-4-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4325376,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0.json.gz",
+        "sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0",
+        "uncompressed_bytes": 51083,
+        "complete": true
+      }
+    },
+    {
+      "run": "routes-dijkstra-4-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4341760,
+        "coarse_os_wall_seconds": 0.0,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "routes.json": {
+        "path": "objects/e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0.json.gz",
+        "sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0",
+        "uncompressed_bytes": 51083,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5111808,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4931584,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4915200,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4931584,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-unobserved-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4947968,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-unobserved-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4931584,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "smoke-unobserved-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4931584,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a.json.gz",
+        "sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "uncompressed_bytes": 322762,
+        "complete": true
+      }
+    },
+    {
+      "run": "tier-a-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 157908992,
+        "coarse_os_wall_seconds": 31.1,
+        "coarse_user_seconds": 25.85,
+        "coarse_system_seconds": 0.71
+      },
+      "result.json": {
+        "path": "objects/12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9.json.gz",
+        "sha256": "12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9",
+        "uncompressed_bytes": 147094085,
+        "complete": true
+      }
+    },
+    {
+      "run": "tier-a-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 128024576,
+        "coarse_os_wall_seconds": 30.03,
+        "coarse_user_seconds": 25.38,
+        "coarse_system_seconds": 1.03
+      },
+      "result.json": {
+        "path": "objects/12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9.json.gz",
+        "sha256": "12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9",
+        "uncompressed_bytes": 147094085,
+        "complete": true
+      }
+    },
+    {
+      "run": "tier-a-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 163708928,
+        "coarse_os_wall_seconds": 27.4,
+        "coarse_user_seconds": 24.57,
+        "coarse_system_seconds": 0.7
+      },
+      "result.json": {
+        "path": "objects/12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9.json.gz",
+        "sha256": "12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9",
+        "uncompressed_bytes": 147094085,
+        "complete": true
+      }
+    },
+    {
+      "run": "tier-a-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 163594240,
+        "coarse_os_wall_seconds": 25.05,
+        "coarse_user_seconds": 23.85,
+        "coarse_system_seconds": 0.58
+      },
+      "result.json": {
+        "path": "objects/12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9.json.gz",
+        "sha256": "12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9",
+        "uncompressed_bytes": 147094085,
+        "complete": true
+      }
+    },
+    {
+      "run": "tier-b-run-0",
+      "outcome": "harness_wall_timeout",
+      "os_resources": {
+        "peak_process_rss_bytes": null,
+        "coarse_os_wall_seconds": null,
+        "coarse_user_seconds": null,
+        "coarse_system_seconds": null
+      }
+    },
+    {
+      "run": "traffic-churn-run-0",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4915200,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7.json.gz",
+        "sha256": "bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7",
+        "uncompressed_bytes": 322920,
+        "complete": true
+      }
+    },
+    {
+      "run": "traffic-churn-run-1",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4931584,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7.json.gz",
+        "sha256": "bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7",
+        "uncompressed_bytes": 322920,
+        "complete": true
+      }
+    },
+    {
+      "run": "traffic-churn-run-2",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 5046272,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7.json.gz",
+        "sha256": "bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7",
+        "uncompressed_bytes": 322920,
+        "complete": true
+      }
+    },
+    {
+      "run": "traffic-churn-run-3",
+      "outcome": "completed",
+      "os_resources": {
+        "peak_process_rss_bytes": 4997120,
+        "coarse_os_wall_seconds": 0.01,
+        "coarse_user_seconds": 0.0,
+        "coarse_system_seconds": 0.0
+      },
+      "result.json": {
+        "path": "objects/bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7.json.gz",
+        "sha256": "bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7",
+        "uncompressed_bytes": 322920,
+        "complete": true
+      }
+    }
+  ],
+  "simulation_summary": {
+    "schema_version": 1,
+    "cases": [
+      {
+        "scenario_sha256": "22ecb17f564887c9e4a0ab33b71989eeb6fca923a7ea5b00dd37cbc841c68e39",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            9481834,
+            10490750,
+            9657958
+          ],
+          "median": 9657958,
+          "p95": 10407470.8,
+          "p99": 10474094.16
+        },
+        "full_result_sha256": "bce25b8da713773eb5f0dcac190fcb41f3dde809f3230c108fce405661dd14c9",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 3108,
+            "p50_upper_ns": 4095,
+            "p95_upper_ns": 8191,
+            "p99_upper_ns": 131071
+          },
+          "transition": {
+            "samples": 504,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 131071
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2759.82144110656,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 67.49582030443959,
+              "median_seconds": 63.74538053971456,
+              "p95_seconds": 132.00281725840946,
+              "p99_seconds": 139.6793268522465,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 462.008927944672,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 11.499256004610666,
+              "median_seconds": 11.083763629551783,
+              "p95_seconds": 21.04127891886951,
+              "p99_seconds": 24.39142710605816,
+              "samples": 24
+            },
+            "rider_utilization": 0.22998512009221334,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2759.82144110656,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 67.49582030443959,
+              "median_seconds": 63.74538053971456,
+              "p95_seconds": 132.00281725840946,
+              "p99_seconds": 139.6793268522465,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 462.008927944672,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 11.499256004610666,
+              "median_seconds": 11.083763629551783,
+              "p95_seconds": 21.04127891886951,
+              "p99_seconds": 24.39142710605816,
+              "samples": 24
+            },
+            "rider_utilization": 0.22998512009221334,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2759.82144110656,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 67.49582030443959,
+              "median_seconds": 63.74538053971456,
+              "p95_seconds": 132.00281725840946,
+              "p99_seconds": 139.6793268522465,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 462.008927944672,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 11.499256004610666,
+              "median_seconds": 11.083763629551783,
+              "p95_seconds": 21.04127891886951,
+              "p99_seconds": 24.39142710605816,
+              "samples": 24
+            },
+            "rider_utilization": 0.22998512009221334,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          129.5780008948982,
+          127.33511241000473,
+          119.28928398913543
+        ],
+        "delivered_per_execution_second": [
+          2531.1558924149062,
+          2287.729666611062,
+          2484.9973462299176
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1245184,
+          1277952
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 24,
+            "delivered": 23,
+            "elapsed_ns": 9290667,
+            "entries": 1200,
+            "logical_seconds": 136.4338714769496,
+            "outstanding": 1,
+            "peak_outstanding": 24,
+            "peak_pending": 22,
+            "peak_queue": 48,
+            "pending": 0,
+            "queue_depth": 1,
+            "riders_with_work": 1,
+            "started_actions": 47,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 23,
+            "elapsed_ns": 10263792,
+            "entries": 1200,
+            "logical_seconds": 136.4338714769496,
+            "outstanding": 1,
+            "peak_outstanding": 24,
+            "peak_pending": 22,
+            "peak_queue": 48,
+            "pending": 0,
+            "queue_depth": 1,
+            "riders_with_work": 1,
+            "started_actions": 47,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 23,
+            "elapsed_ns": 9464083,
+            "entries": 1200,
+            "logical_seconds": 136.4338714769496,
+            "outstanding": 1,
+            "peak_outstanding": 24,
+            "peak_pending": 22,
+            "peak_queue": 48,
+            "pending": 0,
+            "queue_depth": 1,
+            "riders_with_work": 1,
+            "started_actions": 47,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "81de4cbdc83c9d52fe89c3205adddb06f5c6bd510e934806183f27735aeabdd1",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2887250,
+            2885292,
+            3148000
+          ],
+          "median": 2887250,
+          "p95": 3121925.0,
+          "p99": 3142785.0
+        },
+        "full_result_sha256": "aa056276d684245e4a3dc6ffd6ee2fb9178dc423ecdc57334b04656d51d42a0b",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 237,
+            "p50_upper_ns": 65535,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 131071
+          },
+          "transition": {
+            "samples": 48,
+            "p50_upper_ns": 8191,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 32767
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 0,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 0.0,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "delivered_orders": 0,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 400.0,
+            "outstanding_orders": 8,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "predicted_eta": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "rider_utilization": 0.0,
+            "scheduled_orders": 8,
+            "unassigned_orders": 8,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 0,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 0.0,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "delivered_orders": 0,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 400.0,
+            "outstanding_orders": 8,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "predicted_eta": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "rider_utilization": 0.0,
+            "scheduled_orders": 8,
+            "unassigned_orders": 8,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 0,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 0.0,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "delivered_orders": 0,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 400.0,
+            "outstanding_orders": 8,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "predicted_eta": {
+              "mean_seconds": null,
+              "median_seconds": null,
+              "p95_seconds": null,
+              "p99_seconds": null,
+              "samples": 0
+            },
+            "rider_utilization": 0.0,
+            "scheduled_orders": 8,
+            "unassigned_orders": 8,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "delivered_per_execution_second": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1212416,
+          1376256
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 80875,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 78792,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 80375,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "e25586e23c3ef8d51ccd21020360f41839bccb2d7f72be8cfde082bcdd8902d4",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            8202292,
+            10312375,
+            10065125
+          ],
+          "median": 10065125,
+          "p95": 10287650.0,
+          "p99": 10307430.0
+        },
+        "full_result_sha256": "4716387644b4f88182c805ec8abb625e03aff5b59efc38332c9216723a33bc02",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 72,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 524287
+          },
+          "transition": {
+            "samples": 504,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 262143
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2592.885834390906,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 11.170834032810058,
+              "median_seconds": 9.807462161638902,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 432.97499580313956,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.3671430561812823,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034642,
+              "p99_seconds": 1.8951976370076409,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.803690976628777,
+              "median_seconds": 9.415837535896575,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "rider_utilization": 0.13405000839372072,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2592.885834390906,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 11.170834032810058,
+              "median_seconds": 9.807462161638902,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 432.97499580313956,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.3671430561812823,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034642,
+              "p99_seconds": 1.8951976370076409,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.803690976628777,
+              "median_seconds": 9.415837535896575,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "rider_utilization": 0.13405000839372072,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2592.885834390906,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 11.170834032810058,
+              "median_seconds": 9.807462161638902,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 432.97499580313956,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.3671430561812823,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034642,
+              "p99_seconds": 1.8951976370076409,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.803690976628777,
+              "median_seconds": 9.415837535896575,
+              "p95_seconds": 19.9436274121189,
+              "p99_seconds": 19.972218532893862,
+              "samples": 24
+            },
+            "rider_utilization": 0.13405000839372072,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          120.45360780989863,
+          39.15163036883127,
+          123.62594908671328
+        ],
+        "delivered_per_execution_second": [
+          2926.011412419846,
+          2327.3009369810543,
+          2384.4711317544493
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1359872,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 16,
+            "delivered": 12,
+            "elapsed_ns": 3832250,
+            "entries": 100,
+            "logical_seconds": 120.0,
+            "outstanding": 4,
+            "peak_outstanding": 4,
+            "peak_pending": 4,
+            "peak_queue": 48,
+            "pending": 4,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 24,
+            "waiting_riders": 0
+          },
+          {
+            "created": 16,
+            "delivered": 12,
+            "elapsed_ns": 4496708,
+            "entries": 100,
+            "logical_seconds": 120.0,
+            "outstanding": 4,
+            "peak_outstanding": 4,
+            "peak_pending": 4,
+            "peak_queue": 48,
+            "pending": 4,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 24,
+            "waiting_riders": 0
+          },
+          {
+            "created": 16,
+            "delivered": 12,
+            "elapsed_ns": 4197042,
+            "entries": 100,
+            "logical_seconds": 120.0,
+            "outstanding": 4,
+            "peak_outstanding": 4,
+            "peak_pending": 4,
+            "peak_queue": 48,
+            "pending": 4,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 24,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "f7ad373bbcc7f0d7a7c8295a82e39ee2f448af4f857d81a772cfd14d88f06980",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            14413959,
+            14887500,
+            17603000
+          ],
+          "median": 14887500,
+          "p95": 17331450.0,
+          "p99": 17548690.0
+        },
+        "full_result_sha256": "67ac23abd6a0881680d19f0bca5d4b8e9b6c50d1c7b8abbe699975069c08adc0",
+        "queue_action_latency_buckets": {
+          "fleet": {
+            "samples": 24,
+            "p50_upper_ns": 1048575,
+            "p95_upper_ns": 4194303,
+            "p99_upper_ns": 8388607
+          },
+          "transition": {
+            "samples": 168,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          44.11743425708182,
+          40.685051437881675,
+          41.58469759644288
+        ],
+        "delivered_per_execution_second": [
+          555.017535432146,
+          537.3635600335853,
+          454.4679884110663
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1261568,
+          1359872
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 77000,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 75041,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 72083,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "b59e8a9a3bdda7eca7526a3c8fc896f73aeeffcf6e22da3d4a948fd683c9e13d",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            27389834,
+            31325041,
+            55214541
+          ],
+          "median": 31325041,
+          "p95": 52825591.0,
+          "p99": 54736751.0
+        },
+        "full_result_sha256": "a88f95f4546ae1e34ed0a43ff08539647b467c898da9bdfd982082ad58a25fb5",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 192,
+            "p50_upper_ns": 262143,
+            "p95_upper_ns": 524287,
+            "p99_upper_ns": 1048575
+          },
+          "transition": {
+            "samples": 1344,
+            "p50_upper_ns": 65535,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 524287
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 64,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 6129.28582836183,
+            "created_orders": 64,
+            "delivered_duration": {
+              "mean_seconds": 9.982272595039312,
+              "median_seconds": 9.258635858944956,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "delivered_orders": 64,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1180.567276958742,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.4052634882239392,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951971975977813,
+              "p99_seconds": 1.8951974172985047,
+              "samples": 64
+            },
+            "predicted_eta": {
+              "mean_seconds": 9.577009106815371,
+              "median_seconds": 8.877734661202169,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "rider_utilization": 0.21295514869417198,
+            "scheduled_orders": 64,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 64,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 6129.28582836183,
+            "created_orders": 64,
+            "delivered_duration": {
+              "mean_seconds": 9.982272595039312,
+              "median_seconds": 9.258635858944956,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "delivered_orders": 64,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1180.567276958742,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.4052634882239392,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951971975977813,
+              "p99_seconds": 1.8951974172985047,
+              "samples": 64
+            },
+            "predicted_eta": {
+              "mean_seconds": 9.577009106815371,
+              "median_seconds": 8.877734661202169,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "rider_utilization": 0.21295514869417198,
+            "scheduled_orders": 64,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 64,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 6129.28582836183,
+            "created_orders": 64,
+            "delivered_duration": {
+              "mean_seconds": 9.982272595039312,
+              "median_seconds": 9.258635858944956,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "delivered_orders": 64,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1180.567276958742,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.4052634882239392,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951971975977813,
+              "p99_seconds": 1.8951974172985047,
+              "samples": 64
+            },
+            "predicted_eta": {
+              "mean_seconds": 9.577009106815371,
+              "median_seconds": 8.877734661202169,
+              "p95_seconds": 15.524417960139658,
+              "p99_seconds": 24.391424469481365,
+              "samples": 64
+            },
+            "rider_utilization": 0.21295514869417198,
+            "scheduled_orders": 64,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          332.93479477766624,
+          311.7662532516253,
+          242.17503513978684
+        ],
+        "delivered_per_execution_second": [
+          2336.63336550342,
+          2043.0938941149352,
+          1159.1149512589448
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1343488,
+          1605632,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 63,
+            "delivered": 62,
+            "elapsed_ns": 26125000,
+            "entries": 500,
+            "logical_seconds": 1242.2096034077242,
+            "outstanding": 1,
+            "peak_outstanding": 2,
+            "peak_pending": 1,
+            "peak_queue": 128,
+            "pending": 0,
+            "queue_depth": 3,
+            "riders_with_work": 1,
+            "started_actions": 125,
+            "waiting_riders": 1
+          },
+          {
+            "created": 63,
+            "delivered": 62,
+            "elapsed_ns": 29804708,
+            "entries": 500,
+            "logical_seconds": 1242.2096034077242,
+            "outstanding": 1,
+            "peak_outstanding": 2,
+            "peak_pending": 1,
+            "peak_queue": 128,
+            "pending": 0,
+            "queue_depth": 3,
+            "riders_with_work": 1,
+            "started_actions": 125,
+            "waiting_riders": 1
+          },
+          {
+            "created": 63,
+            "delivered": 62,
+            "elapsed_ns": 52617625,
+            "entries": 500,
+            "logical_seconds": 1242.2096034077242,
+            "outstanding": 1,
+            "peak_outstanding": 2,
+            "peak_pending": 1,
+            "peak_queue": 128,
+            "pending": 0,
+            "queue_depth": 3,
+            "riders_with_work": 1,
+            "started_actions": 125,
+            "waiting_riders": 1
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "db858f1675f460ddef218aee405929541abf33600562da8205fa8cd0fa0a18a9",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            1438292,
+            1514167,
+            1440209
+          ],
+          "median": 1440209,
+          "p95": 1506771.2,
+          "p99": 1512687.84
+        },
+        "full_result_sha256": "3e341363f87016c22800e88f9c5ee8618fcab59b8e506fc7531311218ae44b86",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 24,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 168,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 831.3895383527878,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1458.4305230823607,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "rider_utilization": 0.02771298461175959,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 831.3895383527878,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1458.4305230823607,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "rider_utilization": 0.02771298461175959,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 831.3895383527878,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 1458.4305230823607,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.392369229409846,
+              "median_seconds": 11.07661672813395,
+              "p95_seconds": 14.41246715779707,
+              "p99_seconds": 14.41246715779707,
+              "samples": 8
+            },
+            "rider_utilization": 0.02771298461175959,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          44.66085307410029,
+          45.01101028388491,
+          43.06291252520782
+        ],
+        "delivered_per_execution_second": [
+          5562.1528868964015,
+          5283.433069139665,
+          5554.749345407507
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1376256,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 84167,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 84083,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 75542,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "77b74438ec2bfd1787887568ab845483b64edb0fde2d60497035fcf43986a726",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2080500,
+            2154500,
+            1844666
+          ],
+          "median": 2080500,
+          "p95": 2147100.0,
+          "p99": 2153020.0
+        },
+        "full_result_sha256": "375cec6bc1d6b16f61400068ee3d3be0b94d01f38cfb58314c16acc63d73e458",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 36,
+            "p50_upper_ns": 65535,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 131071
+          },
+          "transition": {
+            "samples": 252,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 220.96060441959915,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 4.565137614638808,
+              "median_seconds": 4.1048030220997145,
+              "p95_seconds": 6.314409066294246,
+              "p99_seconds": 6.314409066294246,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 386.3045871560836,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.7237992444754795,
+              "median_seconds": 3.0,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 1.8413383701633288,
+              "median_seconds": 1.6572045331446716,
+              "p95_seconds": 3.314409066294246,
+              "p99_seconds": 3.314409066294246,
+              "samples": 12
+            },
+            "rider_utilization": 0.03423853210979107,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 220.96060441959915,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 4.565137614638808,
+              "median_seconds": 4.1048030220997145,
+              "p95_seconds": 6.314409066294246,
+              "p99_seconds": 6.314409066294246,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 386.3045871560836,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.7237992444754795,
+              "median_seconds": 3.0,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 1.8413383701633288,
+              "median_seconds": 1.6572045331446716,
+              "p95_seconds": 3.314409066294246,
+              "p99_seconds": 3.314409066294246,
+              "samples": 12
+            },
+            "rider_utilization": 0.03423853210979107,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 220.96060441959915,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 4.565137614638808,
+              "median_seconds": 4.1048030220997145,
+              "p95_seconds": 6.314409066294246,
+              "p99_seconds": 6.314409066294246,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 386.3045871560836,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.7237992444754795,
+              "median_seconds": 3.0,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 1.8413383701633288,
+              "median_seconds": 1.6572045331446716,
+              "p95_seconds": 3.314409066294246,
+              "p99_seconds": 3.314409066294246,
+              "samples": 12
+            },
+            "rider_utilization": 0.03423853210979107,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          63.22587653035859,
+          66.46965798591393,
+          66.84588158930545
+        ],
+        "delivered_per_execution_second": [
+          5767.844268204759,
+          5569.737758180552,
+          6505.242683499344
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1261568,
+          1425408,
+          1196032
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 142542,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 87500,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 79166,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "d79cd5787bcd4bb5d0a1e01eae6f2646a673c0ce80ad9a8bfde7223b5378f49f",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            13489125,
+            13159041,
+            16735125
+          ],
+          "median": 13489125,
+          "p95": 16410525.0,
+          "p99": 16670205.0
+        },
+        "full_result_sha256": "df0057cb0b7320fc9d451504966df78d797838c25b97deb89a42c83cf5da7389",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 24,
+            "p50_upper_ns": 1048575,
+            "p95_upper_ns": 4194303,
+            "p99_upper_ns": 8388607
+          },
+          "transition": {
+            "samples": 168,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 521.25860770945,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 51.0516193022148,
+              "median_seconds": 47.6643602830956,
+              "p95_seconds": 86.125860770945,
+              "p99_seconds": 86.125860770945,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 353.9370696145275,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 2.0,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 42.76573964473949,
+              "median_seconds": 42.94760865575803,
+              "p95_seconds": 70.68520600093966,
+              "p99_seconds": 70.68520600093966,
+              "samples": 8
+            },
+            "rider_utilization": 0.11515732596368125,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          41.7284806733734,
+          41.67726680192571,
+          41.04213680755038
+        ],
+        "delivered_per_execution_second": [
+          593.0703437027977,
+          607.9470380858302,
+          478.0364652191125
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          2572288,
+          1196032,
+          1540096
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 89125,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 81000,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 74875,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 16,
+            "pending": 1,
+            "queue_depth": 16,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "9a67ff3c7592263c7496b3704145f63d899cb251e3e76dc439bdca3f8ef3ad05",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            8635500,
+            9411584,
+            12080584
+          ],
+          "median": 9411584,
+          "p95": 11813684.0,
+          "p99": 12027204.0
+        },
+        "full_result_sha256": "85b03cf888c8c7c15be66d1e3543f67d27bcacbcf0e159435ee8c4966eaa2fe0",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 762,
+            "p50_upper_ns": 8191,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 504,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 262143
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2571.7905950054096,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 35.281527733386945,
+              "median_seconds": 34.35966780088178,
+              "p95_seconds": 67.61453631462481,
+              "p99_seconds": 68.75507472245712,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 535.7052351248648,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.715794145855872,
+              "median_seconds": 10.538512754925453,
+              "p95_seconds": 16.622068588087537,
+              "p99_seconds": 24.384276030161182,
+              "samples": 24
+            },
+            "rider_utilization": 0.10715794145855874,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2571.7905950054096,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 35.281527733386945,
+              "median_seconds": 34.35966780088178,
+              "p95_seconds": 67.61453631462481,
+              "p99_seconds": 68.75507472245712,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 535.7052351248648,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.715794145855872,
+              "median_seconds": 10.538512754925453,
+              "p95_seconds": 16.622068588087537,
+              "p99_seconds": 24.384276030161182,
+              "samples": 24
+            },
+            "rider_utilization": 0.10715794145855874,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 24,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 2571.7905950054096,
+            "created_orders": 24,
+            "delivered_duration": {
+              "mean_seconds": 35.281527733386945,
+              "median_seconds": 34.35966780088178,
+              "p95_seconds": 67.61453631462481,
+              "p99_seconds": 68.75507472245712,
+              "samples": 24
+            },
+            "delivered_orders": 24,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 535.7052351248648,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.0,
+              "median_seconds": 0.0,
+              "p95_seconds": 0.0,
+              "p99_seconds": 0.0,
+              "samples": 24
+            },
+            "predicted_eta": {
+              "mean_seconds": 10.715794145855872,
+              "median_seconds": 10.538512754925453,
+              "p95_seconds": 16.622068588087537,
+              "p99_seconds": 24.384276030161182,
+              "samples": 24
+            },
+            "rider_utilization": 0.10715794145855874,
+            "scheduled_orders": 24,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          118.70404854995569,
+          120.94036211036033,
+          73.0577205458479
+        ],
+        "delivered_per_execution_second": [
+          2779.2252909501476,
+          2550.0489609400497,
+          1986.658923111664
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1409024,
+          1392640,
+          2703360
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 24,
+            "delivered": 19,
+            "elapsed_ns": 7537292,
+            "entries": 400,
+            "logical_seconds": 52.08296793782215,
+            "outstanding": 5,
+            "peak_outstanding": 24,
+            "peak_pending": 24,
+            "peak_queue": 48,
+            "pending": 1,
+            "queue_depth": 4,
+            "riders_with_work": 4,
+            "started_actions": 43,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 19,
+            "elapsed_ns": 8063209,
+            "entries": 400,
+            "logical_seconds": 52.08296793782215,
+            "outstanding": 5,
+            "peak_outstanding": 24,
+            "peak_pending": 24,
+            "peak_queue": 48,
+            "pending": 1,
+            "queue_depth": 4,
+            "riders_with_work": 4,
+            "started_actions": 43,
+            "waiting_riders": 0
+          },
+          {
+            "created": 24,
+            "delivered": 19,
+            "elapsed_ns": 9323709,
+            "entries": 400,
+            "logical_seconds": 52.08296793782215,
+            "outstanding": 5,
+            "peak_outstanding": 24,
+            "peak_pending": 24,
+            "peak_queue": 48,
+            "pending": 1,
+            "queue_depth": 4,
+            "riders_with_work": 4,
+            "started_actions": 43,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "61e518ccb6fb75e5111154f64c405e4a20910600fa4b0f074d2661a23ed3cd6b",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            502539833,
+            491978250,
+            240490000
+          ],
+          "median": 491978250,
+          "p95": 501483674.7,
+          "p99": 502328601.34
+        },
+        "full_result_sha256": "0712efdcd8742ee1f25d6dc7f20ee576aec379c00da36e05e5dbb0377da42b06",
+        "queue_action_latency_buckets": {
+          "fleet": {
+            "samples": 24,
+            "p50_upper_ns": 4194303,
+            "p95_upper_ns": 16777215,
+            "p99_upper_ns": 33554431
+          },
+          "recovery": {
+            "samples": 96,
+            "p50_upper_ns": 262143,
+            "p95_upper_ns": 134217727,
+            "p99_upper_ns": 268435455
+          },
+          "transition": {
+            "samples": 171,
+            "p50_upper_ns": 32767,
+            "p95_upper_ns": 131071,
+            "p99_upper_ns": 524287
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 454.6845371448003,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 50.99385615956279,
+              "median_seconds": 49.38468810754427,
+              "p95_seconds": 79.46845371448002,
+              "p99_seconds": 79.46845371448002,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 357.26577314276,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.9999999999999991,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 31.468495044883877,
+              "median_seconds": 32.95097716631555,
+              "p95_seconds": 46.16793669990534,
+              "p99_seconds": 46.16793669990534,
+              "samples": 8
+            },
+            "rider_utilization": 0.10683556714310002,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 454.6845371448003,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 50.99385615956279,
+              "median_seconds": 49.38468810754427,
+              "p95_seconds": 79.46845371448002,
+              "p99_seconds": 79.46845371448002,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 357.26577314276,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.9999999999999991,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 31.468495044883877,
+              "median_seconds": 32.95097716631555,
+              "p95_seconds": 46.16793669990534,
+              "p99_seconds": 46.16793669990534,
+              "samples": 8
+            },
+            "rider_utilization": 0.10683556714310002,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 8,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 454.6845371448003,
+            "created_orders": 8,
+            "delivered_duration": {
+              "mean_seconds": 50.99385615956279,
+              "median_seconds": 49.38468810754427,
+              "p95_seconds": 79.46845371448002,
+              "p99_seconds": 79.46845371448002,
+              "samples": 8
+            },
+            "delivered_orders": 8,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 357.26577314276,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.9999999999999991,
+              "median_seconds": 2.0,
+              "p95_seconds": 2.0,
+              "p99_seconds": 2.0,
+              "samples": 8
+            },
+            "predicted_eta": {
+              "mean_seconds": 31.468495044883877,
+              "median_seconds": 32.95097716631555,
+              "p95_seconds": 46.16793669990534,
+              "p99_seconds": 46.16793669990534,
+              "samples": 8
+            },
+            "rider_utilization": 0.10683556714310002,
+            "scheduled_orders": 8,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          12.12425391281805,
+          12.451139006850472,
+          23.546070055244815
+        ],
+        "delivered_per_execution_second": [
+          15.919136105575136,
+          16.260881451568235,
+          33.26541644143207
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          7290880,
+          7389184,
+          7225344
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 366542,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 17,
+            "pending": 1,
+            "queue_depth": 17,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 155125,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 17,
+            "pending": 1,
+            "queue_depth": 17,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 95333,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 17,
+            "pending": 1,
+            "queue_depth": 17,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "8cb3c64a1f5d4d6cfb205dd592f19668dd4c914cd1bf71293c7a468f60905c2d",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2681333,
+            2716083,
+            2648000
+          ],
+          "median": 2681333,
+          "p95": 2712608.0,
+          "p99": 2715388.0
+        },
+        "full_result_sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 36,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 252,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 32767,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          66.49088139896848,
+          65.14881969313288,
+          64.12525800396742
+        ],
+        "delivered_per_execution_second": [
+          4475.385936771001,
+          4418.127133817339,
+          4531.722054380664
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1196032,
+          1196032,
+          1261568
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 91833,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 87458,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 85125,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 24,
+            "pending": 1,
+            "queue_depth": 24,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "8cb3c64a1f5d4d6cfb205dd592f19668dd4c914cd1bf71293c7a468f60905c2d",
+        "diagnostics": false,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            3406708,
+            2604541,
+            2686667
+          ],
+          "median": 2686667,
+          "p95": 3334703.9,
+          "p99": 3392307.1799999997
+        },
+        "full_result_sha256": "61900db53c7ac12cef970b4c9e68c082e40e0a5eef8c6b5a39bedc604dcd287a",
+        "queue_action_latency_buckets": {},
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          62.6598586799773,
+          63.314918400364846,
+          61.22456788847989
+        ],
+        "delivered_per_execution_second": [
+          3522.4621540795397,
+          4607.337722846367,
+          4466.500686538377
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1933312,
+          1376256,
+          1277952
+        ],
+        "last_observed_boundary": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "scenario_sha256": "37d9f4906cebebd51d4c725190cf42eba7c17f3a7e195d8eb64b68af270c35f6",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            27435304584,
+            25597792041,
+            23464315000
+          ],
+          "median": 25597792041,
+          "p95": 27251553329.7,
+          "p99": 27398554333.14
+        },
+        "full_result_sha256": "12e5cee4e276eaaca5af236fc488df3f407ac2a03f86c120d9c1dca08cc6d7d9",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 3000,
+            "p50_upper_ns": 16777215,
+            "p95_upper_ns": 33554431,
+            "p99_upper_ns": 67108863
+          },
+          "transition": {
+            "samples": 21000,
+            "p50_upper_ns": 2097151,
+            "p95_upper_ns": 4194303,
+            "p99_upper_ns": 8388607
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 1000,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 132259.62876991555,
+            "created_orders": 1000,
+            "delivered_duration": {
+              "mean_seconds": 14.960315274459273,
+              "median_seconds": 14.248109241493921,
+              "p95_seconds": 25.460480241399182,
+              "p99_seconds": 29.608157419460667,
+              "samples": 1000
+            },
+            "delivered_orders": 1000,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 2450.396847255408,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.7343523974677273,
+              "median_seconds": 1.895197197597767,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 1000
+            },
+            "predicted_eta": {
+              "mean_seconds": 13.225962876991568,
+              "median_seconds": 13.275490006170003,
+              "p95_seconds": 24.369967945653386,
+              "p99_seconds": 28.789180913367545,
+              "samples": 1000
+            },
+            "rider_utilization": 0.05753967413253575,
+            "scheduled_orders": 1000,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 1000,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 132259.62876991555,
+            "created_orders": 1000,
+            "delivered_duration": {
+              "mean_seconds": 14.960315274459273,
+              "median_seconds": 14.248109241493921,
+              "p95_seconds": 25.460480241399182,
+              "p99_seconds": 29.608157419460667,
+              "samples": 1000
+            },
+            "delivered_orders": 1000,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 2450.396847255408,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.7343523974677273,
+              "median_seconds": 1.895197197597767,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 1000
+            },
+            "predicted_eta": {
+              "mean_seconds": 13.225962876991568,
+              "median_seconds": 13.275490006170003,
+              "p95_seconds": 24.369967945653386,
+              "p99_seconds": 28.789180913367545,
+              "samples": 1000
+            },
+            "rider_utilization": 0.05753967413253575,
+            "scheduled_orders": 1000,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 1000,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 132259.62876991555,
+            "created_orders": 1000,
+            "delivered_duration": {
+              "mean_seconds": 14.960315274459273,
+              "median_seconds": 14.248109241493921,
+              "p95_seconds": 25.460480241399182,
+              "p99_seconds": 29.608157419460667,
+              "samples": 1000
+            },
+            "delivered_orders": 1000,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 2450.396847255408,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 1.7343523974677273,
+              "median_seconds": 1.895197197597767,
+              "p95_seconds": 3.0,
+              "p99_seconds": 3.0,
+              "samples": 1000
+            },
+            "predicted_eta": {
+              "mean_seconds": 13.225962876991568,
+              "median_seconds": 13.275490006170003,
+              "p95_seconds": 24.369967945653386,
+              "p99_seconds": 28.789180913367545,
+              "samples": 1000
+            },
+            "rider_utilization": 0.05753967413253575,
+            "scheduled_orders": 1000,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          32.894603478293455,
+          36.07307880860039,
+          39.50041208692335
+        ],
+        "delivered_per_execution_second": [
+          36.4493857517875,
+          39.06586936866661,
+          42.61790723487986
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          127959040,
+          164003840,
+          163577856
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1000,
+            "delivered": 1000,
+            "elapsed_ns": 27433908417,
+            "entries": 8000,
+            "logical_seconds": 2008.7479145181678,
+            "outstanding": 0,
+            "peak_outstanding": 12,
+            "peak_pending": 1,
+            "peak_queue": 2000,
+            "pending": 0,
+            "queue_depth": 0,
+            "riders_with_work": 0,
+            "started_actions": 2000,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1000,
+            "delivered": 1000,
+            "elapsed_ns": 25596666083,
+            "entries": 8000,
+            "logical_seconds": 2008.7479145181678,
+            "outstanding": 0,
+            "peak_outstanding": 12,
+            "peak_pending": 1,
+            "peak_queue": 2000,
+            "pending": 0,
+            "queue_depth": 0,
+            "riders_with_work": 0,
+            "started_actions": 2000,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1000,
+            "delivered": 1000,
+            "elapsed_ns": 23463163584,
+            "entries": 8000,
+            "logical_seconds": 2008.7479145181678,
+            "outstanding": 0,
+            "peak_outstanding": 12,
+            "peak_pending": 1,
+            "peak_queue": 2000,
+            "pending": 0,
+            "queue_depth": 0,
+            "riders_with_work": 0,
+            "started_actions": 2000,
+            "waiting_riders": 0
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "48c9d5eb59d1fe1688f5e9f8ca78b1ab9d42b1221a15a4bd82f02005b21d00bd",
+        "diagnostics": true,
+        "runs": 1,
+        "completed": 0,
+        "outcomes": [
+          "harness_wall_timeout"
+        ],
+        "execution_ns": null,
+        "full_result_sha256": null,
+        "queue_action_latency_buckets": {},
+        "final_counts": [],
+        "delivered_per_collector_wall_second": [],
+        "delivered_per_execution_second": [],
+        "peak_sampled_process_group_rss_bytes": [
+          80904192
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 253,
+            "delivered": 243,
+            "elapsed_ns": 56285719417,
+            "entries": 2000,
+            "logical_seconds": 504.0,
+            "outstanding": 10,
+            "peak_outstanding": 11,
+            "peak_pending": 1,
+            "peak_queue": 20000,
+            "pending": 0,
+            "queue_depth": 19504,
+            "riders_with_work": 10,
+            "started_actions": 504,
+            "waiting_riders": 2
+          }
+        ]
+      },
+      {
+        "scenario_sha256": "0351be963546d3e16e81b067dd273367c3f353be55b6fb552c29c99842b5582d",
+        "diagnostics": true,
+        "runs": 3,
+        "completed": 3,
+        "outcomes": [
+          "completed",
+          "completed",
+          "completed"
+        ],
+        "execution_ns": {
+          "raw": [
+            2723500,
+            3044625,
+            2812666
+          ],
+          "median": 2812666,
+          "p95": 3021429.1,
+          "p99": 3039985.82
+        },
+        "full_result_sha256": "bca09445a77d67c19f3865bf950591ca0854b32aebf04aaab312b71e2a88a1c7",
+        "queue_action_latency_buckets": {
+          "dispatch": {
+            "samples": 36,
+            "p50_upper_ns": 131071,
+            "p95_upper_ns": 262143,
+            "p99_upper_ns": 262143
+          },
+          "transition": {
+            "samples": 255,
+            "p50_upper_ns": 16383,
+            "p95_upper_ns": 65535,
+            "p99_upper_ns": 65535
+          }
+        },
+        "final_counts": [
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          },
+          {
+            "assigned_orders": 12,
+            "assigned_unfinished_orders": 0,
+            "completed_distance_meters": 1008.157868095806,
+            "created_orders": 12,
+            "delivered_duration": {
+              "mean_seconds": 8.690385491351241,
+              "median_seconds": 8.702659798644113,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "delivered_orders": 12,
+            "late_deliveries": 0,
+            "mean_rider_idle_seconds": 373.92884352594626,
+            "outstanding_orders": 0,
+            "outstanding_past_deadline": 0,
+            "pickup_waiting": {
+              "mean_seconds": 0.28906992388618846,
+              "median_seconds": 0.0,
+              "p95_seconds": 1.8951974173034785,
+              "p99_seconds": 1.8951974173034785,
+              "samples": 12
+            },
+            "predicted_eta": {
+              "mean_seconds": 8.401315567465053,
+              "median_seconds": 8.311035941881464,
+              "p95_seconds": 12.202862651481155,
+              "p99_seconds": 12.202862651481155,
+              "samples": 12
+            },
+            "rider_utilization": 0.0651778911851343,
+            "scheduled_orders": 12,
+            "unassigned_orders": 0,
+            "uncreated_orders": 0
+          }
+        ],
+        "delivered_per_collector_wall_second": [
+          62.12691493272326,
+          64.34704506303184,
+          64.11058374754211
+        ],
+        "delivered_per_execution_second": [
+          4406.0950982192035,
+          3941.3720901588867,
+          4266.414853381098
+        ],
+        "peak_sampled_process_group_rss_bytes": [
+          1261568,
+          1425408,
+          1294336
+        ],
+        "last_observed_boundary": [
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 97625,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 25,
+            "pending": 1,
+            "queue_depth": 25,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 96000,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 25,
+            "pending": 1,
+            "queue_depth": 25,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          },
+          {
+            "created": 1,
+            "delivered": 0,
+            "elapsed_ns": 103333,
+            "entries": 1,
+            "logical_seconds": 0.0,
+            "outstanding": 1,
+            "peak_outstanding": 1,
+            "peak_pending": 1,
+            "peak_queue": 25,
+            "pending": 1,
+            "queue_depth": 25,
+            "riders_with_work": 0,
+            "started_actions": 0,
+            "waiting_riders": 0
+          }
+        ]
+      }
+    ],
+    "limits": "No cold-cache, city capacity, operational service, durable throughput or rendering claims. Histograms give bucket upper bounds for queue-action processing, not HTTP requests. Run quantiles describe small repeated-run samples, not per-order tails. Collector wall includes polling and bookkeeping overhead; it is not exact process runtime. A null sampled RSS peak means no positive sample, not zero memory. Incomplete runs excluded from timing quantiles but retained in outcomes."
+  },
+  "routing": [
+    {
+      "run": "routes-astar-1-0",
+      "outcome": "completed",
+      "algorithm": "astar",
+      "concurrency": 1,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 2666.5,
+      "route_p95_ns": 11720.599999999999,
+      "route_p99_ns": 13193.84,
+      "route_requests_per_execution_second": 157175.74827321566,
+      "result_sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c"
+    },
+    {
+      "run": "routes-astar-1-1",
+      "outcome": "completed",
+      "algorithm": "astar",
+      "concurrency": 1,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 2542.0,
+      "route_p95_ns": 11125.0,
+      "route_p99_ns": 12532.340000000004,
+      "route_requests_per_execution_second": 156934.86590038313,
+      "result_sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c"
+    },
+    {
+      "run": "routes-astar-1-2",
+      "outcome": "completed",
+      "algorithm": "astar",
+      "concurrency": 1,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 2604.5,
+      "route_p95_ns": 11122.249999999998,
+      "route_p99_ns": 13430.750000000004,
+      "route_requests_per_execution_second": 161242.98183623006,
+      "result_sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c"
+    },
+    {
+      "run": "routes-astar-4-0",
+      "outcome": "completed",
+      "algorithm": "astar",
+      "concurrency": 4,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 4750.5,
+      "route_p95_ns": 18095.94999999998,
+      "route_p99_ns": 21600.500000000007,
+      "route_requests_per_execution_second": 222834.63059066844,
+      "result_sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c"
+    },
+    {
+      "run": "routes-astar-4-1",
+      "outcome": "completed",
+      "algorithm": "astar",
+      "concurrency": 4,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 4396.0,
+      "route_p95_ns": 19706.25,
+      "route_p99_ns": 26858.75000000001,
+      "route_requests_per_execution_second": 219287.72605480824,
+      "result_sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c"
+    },
+    {
+      "run": "routes-astar-4-2",
+      "outcome": "completed",
+      "algorithm": "astar",
+      "concurrency": 4,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 5958.5,
+      "route_p95_ns": 19026.65,
+      "route_p99_ns": 71299.41000000024,
+      "route_requests_per_execution_second": 156750.56087310062,
+      "result_sha256": "76c87cee2a91052e5e7f530d63a9dcc549d4e8265ac5594384ac6be6341e338c"
+    },
+    {
+      "run": "routes-dijkstra-1-0",
+      "outcome": "completed",
+      "algorithm": "dijkstra",
+      "concurrency": 1,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 6375.0,
+      "route_p95_ns": 18375.0,
+      "route_p99_ns": 19859.84,
+      "route_requests_per_execution_second": 94803.15753766573,
+      "result_sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0"
+    },
+    {
+      "run": "routes-dijkstra-1-1",
+      "outcome": "completed",
+      "algorithm": "dijkstra",
+      "concurrency": 1,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 6250.0,
+      "route_p95_ns": 18512.6,
+      "route_p99_ns": 19281.730000000003,
+      "route_requests_per_execution_second": 95925.05854800936,
+      "result_sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0"
+    },
+    {
+      "run": "routes-dijkstra-1-2",
+      "outcome": "completed",
+      "algorithm": "dijkstra",
+      "concurrency": 1,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 6292.0,
+      "route_p95_ns": 18667.0,
+      "route_p99_ns": 22310.57000000001,
+      "route_requests_per_execution_second": 87593.7184354667,
+      "result_sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0"
+    },
+    {
+      "run": "routes-dijkstra-4-0",
+      "outcome": "completed",
+      "algorithm": "dijkstra",
+      "concurrency": 4,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 9292.0,
+      "route_p95_ns": 23425.1,
+      "route_p99_ns": 31601.430000000015,
+      "route_requests_per_execution_second": 174873.1827875605,
+      "result_sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0"
+    },
+    {
+      "run": "routes-dijkstra-4-1",
+      "outcome": "completed",
+      "algorithm": "dijkstra",
+      "concurrency": 4,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 9250.0,
+      "route_p95_ns": 27760.199999999997,
+      "route_p99_ns": 36634.93000000001,
+      "route_requests_per_execution_second": 162582.62499809475,
+      "result_sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0"
+    },
+    {
+      "run": "routes-dijkstra-4-2",
+      "outcome": "completed",
+      "algorithm": "dijkstra",
+      "concurrency": 4,
+      "queries": 128,
+      "successful": 128,
+      "errors": 0,
+      "route_p50_ns": 11500.5,
+      "route_p95_ns": 50454.15,
+      "route_p99_ns": 79743.75000000001,
+      "route_requests_per_execution_second": 134542.11010379714,
+      "result_sha256": "e94af4ea30ba26f22bc5cee2a34cc2d3349b2001cf400c395b4ca70e0a7ebaa0"
+    }
+  ],
+  "limits": "Complete JSON files are pooled by exact SHA-256 and losslessly gzip compressed. This is benchmark packaging, not a new historical archive or reduced evidence format. Successful headless warmups remain in raw records but not measured distributions. Failed warmups remain visible. Collector wall includes monitoring/bookkeeping; OS real/CPU time is coarse. Null OS/sampled measurements are unavailable, not zero allocations. No capacity extrapolation.",
+  "archive_tool_sha256": "9a1a9033b33f841902e3d41923243f3cd098b8acff48982e9c43273db610cad1",
+  "summary_tool_sha256": "69f9a21cbe9900aef6d971e9631d42a8eca26d760f288e7e4a414fc491ff120e"
+}

@@ -1,6 +1,9 @@
-# Phase 34 entry and workload plan (not implemented)
+# Phase 34 entry and workload plan
 
-Phase 34 requires separate explicit authorization after review of Phase 33 evidence.
+The user explicitly authorized Phase 34 after reviewing Phase 33. The headless
+workload implementation and staged outcomes are recorded in
+[completion](../phase-34-completion.md). The requirements below remain the broader
+qualification plan; unqualified environments are listed explicitly in completion.
 The targets are generated populations, not supported capacity or completion promises:
 
 - A: 100 riders / 1,000 orders.

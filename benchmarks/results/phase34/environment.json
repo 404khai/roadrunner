@@ -1,0 +1,16 @@
+{
+  "binary_source_revision": "2293f7e2",
+  "environment_recorded_after_collection_utc": "2026-10-18T20:08:31.706049+00:00",
+  "cpu": "Apple M3",
+  "physical_memory_bytes": 17179869184,
+  "python": "3.9.6",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)\nbinary: rustc\ncommit-hash: ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96\ncommit-date: 2026-05-25\nhost: aarch64-apple-darwin\nrelease: 1.96.0\nLLVM version: 22.1.2",
+  "conditions": "Release build; no builds/tests during timed qualification. Nonexclusive desktop host with uncontrolled background activity and warm OS/filesystem. One excluded successful headless warmup per case, three measured headless repetitions; failed warmup retained. Independent routing has three repetitions without an excluded warmup. Collector wall includes monitor polling and postprocess bookkeeping; execution and serialization clocks are separate.",
+  "scope": "Synthetic headless and free-flow core routing only; not operational/durable/browser scale.",
+  "external_safety": {
+    "wall_seconds": 60,
+    "sampled_process_group_rss_mib": 1024,
+    "output_mib": 256,
+    "poll_seconds": 0.1
+  }
+}
