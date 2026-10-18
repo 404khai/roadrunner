@@ -2387,6 +2387,10 @@ This becomes one of Roadrunner's strongest demo features.
 
 # PHASE 33 — Performance Engineering
 
+The user accepted the Q1–Q18 [performance and scale contract](docs/performance/architecture-contract.md).
+The finite Phase 33 tranche and evidence are recorded in [completion](docs/phase-33-completion.md).
+Phase 34 implementation requires separate authorization after reviewing its [workload plan](docs/performance/phase34-plan.md).
+
 ## Goal
 
 Optimize only after profiling.

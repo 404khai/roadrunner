@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "simulation-grid16",
+  "workload": "simulation",
+  "grid_side": 16,
+  "artifact_path": null,
+  "riders": 1,
+  "orders": 32,
+  "history_orders": 0,
+  "queries": 1,
+  "seed": 33,
+  "capture": false,
+  "churn": false,
+  "diagnostics": true
+}
