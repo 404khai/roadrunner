@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "case_id": "backlog-drain",
+  "seed": 34,
+  "riders": 2,
+  "available_riders": 2,
+  "orders": 24,
+  "capacity": 1,
+  "arrival": {
+    "kind": "backlog_drain",
+    "interval_seconds": 0.1,
+    "burst_size": 4,
+    "burst_interval_seconds": 40
+  },
+  "geography": "dispersed",
+  "horizon_seconds": 600,
+  "readiness_seconds": 3,
+  "policy": {
+    "kind": "basic"
+  },
+  "scenario_schema": 1,
+  "admission": null,
+  "traffic_changes": [],
+  "grid": {
+    "side": 8,
+    "spacing_e7": 1000
+  }
+}

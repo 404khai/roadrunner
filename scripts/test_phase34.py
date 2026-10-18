@@ -1,5 +1,7 @@
 """Generator, isolation and observed/unobserved execution contracts."""
 import copy
+import gzip
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -20,6 +22,8 @@ class GeneratorContracts(unittest.TestCase):
         self.assertEqual(Rng(0).next(), 0xe220a8397b1dcdaf)
         first = encode(scenario(self.manifest, self.graph))
         self.assertEqual(first, encode(scenario(self.manifest, self.graph)))
+        retained = json.loads((ROOT/'benchmarks/results/phase34/smoke-bundle/bundle.json').read_text())
+        self.assertEqual(sha(encode(scenario(self.manifest, retained))), retained['scenario_sha256'])
         self.manifest['seed'] += 1
         self.assertNotEqual(first, encode(scenario(self.manifest, self.graph)))
 
@@ -138,6 +142,26 @@ class EngineContracts(unittest.TestCase):
 
 
 class SummaryContracts(unittest.TestCase):
+    def test_retained_complete_evidence_and_generated_inputs_are_lossless(self):
+        root = ROOT/'benchmarks/results/phase34'
+        index = json.loads((root/'index.json').read_text())
+        references = [entry[name] for entry in index['runs'] for name in ['result.json', 'routes.json'] if name in entry]
+        references.extend(json.loads(p.read_text())['scenario'] for p in root.glob('*-bundle/retained.json'))
+        checked = set()
+        for reference in references:
+            if reference['path'] in checked:
+                continue
+            checked.add(reference['path'])
+            checksum = hashlib.sha256()
+            count = 0
+            with gzip.open(root/reference['path'], 'rb') as file:
+                for data in iter(lambda: file.read(1024*1024), b''):
+                    checksum.update(data)
+                    count += len(data)
+            self.assertEqual(checksum.hexdigest(), reference['sha256'])
+            self.assertEqual(count, reference['uncompressed_bytes'])
+        self.assertGreater(len(checked), 10)
+
     def test_summary_retains_failure_without_fabricating_counts(self):
         from summarize_phase34 import summarize
         stopped = dict(bundle=dict(scenario_sha256='input'), configuration=dict(diagnostics=True),

@@ -2431,6 +2431,12 @@ tests
 
 # PHASE 34 — Large-Scale Simulation
 
+The user authorized Phase 34 after reviewing Phase 33. The bounded workload harness,
+staged qualification, full evidence and unsupported environments are documented in
+[Phase 34 completion](docs/phase-34-completion.md) and its
+[reproduction guide](benchmarks/phase34/README.md). Population tiers remain workload
+targets; Tier B's resource-incomplete run and unexecuted Tier C are not capacity claims.
+
 ## Goal
 
 Stress Roadrunner.

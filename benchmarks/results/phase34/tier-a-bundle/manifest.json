@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "case_id": "tier-a",
+  "seed": 34,
+  "riders": 100,
+  "available_riders": 100,
+  "orders": 1000,
+  "capacity": 1,
+  "arrival": {
+    "kind": "sustained",
+    "interval_seconds": 2,
+    "burst_size": 4,
+    "burst_interval_seconds": 40
+  },
+  "geography": "dispersed",
+  "horizon_seconds": 2600,
+  "readiness_seconds": 3,
+  "policy": {
+    "kind": "basic"
+  },
+  "scenario_schema": 1,
+  "admission": null,
+  "traffic_changes": [],
+  "grid": {
+    "side": 16,
+    "spacing_e7": 1000
+  }
+}

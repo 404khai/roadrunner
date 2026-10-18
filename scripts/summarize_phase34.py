@@ -58,10 +58,11 @@ def summarize(records):
                           full_result_sha256=next(iter(hashes),None),
                           queue_action_latency_buckets={k:histogram_quantiles(v) for k,v in histogram.items()},
                           final_counts=[r['final']['summary'] for r in completed],
-                          delivered_per_wall_second=[r['final']['summary']['delivered_orders']/r['wall_seconds'] for r in completed],
-                          peak_sampled_process_group_rss_bytes=[max((s['process_group_rss_bytes'] for s in r['resource_samples']), default=0) for r in runs],
+                          delivered_per_collector_wall_second=[r['final']['summary']['delivered_orders']/r['wall_seconds'] for r in completed],
+                          delivered_per_execution_second=[r['final']['summary']['delivered_orders']/(r['final']['execution_ns']/1e9) for r in completed],
+                          peak_sampled_process_group_rss_bytes=[max((s['process_group_rss_bytes'] for s in r['resource_samples']), default=0) or None for r in runs],
                           last_observed_boundary=[r['last_observed_boundary'] for r in runs]))
-    return dict(schema_version=1,cases=cases,limits='No cold-cache, city capacity, operational service, durable throughput or rendering claims. Histograms give bucket upper bounds for queue-action processing, not HTTP requests. Run quantiles describe small repeated-run samples, not per-order tails. Incomplete runs excluded from timing quantiles but retained in outcomes.')
+    return dict(schema_version=1,cases=cases,limits='No cold-cache, city capacity, operational service, durable throughput or rendering claims. Histograms give bucket upper bounds for queue-action processing, not HTTP requests. Run quantiles describe small repeated-run samples, not per-order tails. Collector wall includes polling and bookkeeping overhead; it is not exact process runtime. A null sampled RSS peak means no positive sample, not zero memory. Incomplete runs excluded from timing quantiles but retained in outcomes.')
 
 
 def main():

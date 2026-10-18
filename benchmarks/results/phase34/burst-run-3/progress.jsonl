@@ -1,0 +1,2 @@
+{"created":1,"delivered":0,"elapsed_ns":130334,"entries":1,"logical_seconds":0.0,"outstanding":1,"peak_outstanding":1,"peak_pending":1,"peak_queue":48,"pending":1,"queue_depth":48,"riders_with_work":0,"started_actions":0,"waiting_riders":0}
+{"created":16,"delivered":12,"elapsed_ns":4197042,"entries":100,"logical_seconds":120.0,"outstanding":4,"peak_outstanding":4,"peak_pending":4,"peak_queue":48,"pending":4,"queue_depth":24,"riders_with_work":0,"started_actions":24,"waiting_riders":0}

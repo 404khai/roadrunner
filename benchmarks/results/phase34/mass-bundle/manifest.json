@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "case_id": "mass",
+  "seed": 34,
+  "riders": 4,
+  "available_riders": 4,
+  "orders": 24,
+  "capacity": 1,
+  "arrival": {
+    "kind": "mass",
+    "interval_seconds": 20,
+    "burst_size": 4,
+    "burst_interval_seconds": 40
+  },
+  "geography": "dispersed",
+  "horizon_seconds": 600,
+  "readiness_seconds": 3,
+  "policy": {
+    "kind": "basic"
+  },
+  "scenario_schema": 1,
+  "admission": null,
+  "traffic_changes": [],
+  "grid": {
+    "side": 8,
+    "spacing_e7": 1000
+  }
+}
