@@ -119,3 +119,69 @@ it("offers the pinned distributed demo explicitly and hides irrelevant node sele
   expect(screen.queryByLabelText("rider node")).toBeNull();
   expect(screen.getByText(/Six fixed graph-node starts/)).toBeTruthy();
 });
+
+it("opens saved evidence without a catalog or API, resets speed, and seeks both ways", async () => {
+  const fetch = vi.fn();
+  vi.stubGlobal("fetch", fetch);
+  render(<DeliveryWorkspace token="" onExit={() => {}} />);
+  const upload = () =>
+    fireEvent.change(screen.getByLabelText("Open saved replay"), {
+      target: { files: [{ size: raw.length, text: async () => raw }] },
+    });
+  upload();
+  await screen.findByLabelText("Presentation speed");
+  expect(
+    (screen.getByLabelText("Presentation speed") as HTMLSelectElement).value,
+  ).toBe("1");
+  expect(
+    screen.getByRole("button", { name: "Play simulation presentation" }),
+  ).toBeTruthy();
+  expect(
+    Array.from(
+      (screen.getByLabelText("Presentation speed") as HTMLSelectElement)
+        .options,
+    ).map((o) => o.value),
+  ).toEqual(["1", "2", "5", "10"]);
+  fireEvent.change(screen.getByLabelText("Presentation speed"), {
+    target: { value: "10" },
+  });
+  fireEvent.change(screen.getByLabelText("Presentation seconds"), {
+    target: { value: "125" },
+  });
+  expect(screen.getByText("Accepted simulation endpoint")).toBeTruthy();
+  fireEvent.change(screen.getByLabelText("Simulation presentation time"), {
+    target: { value: "1" },
+  });
+  expect(
+    screen.getByText("Simulated position · uniform route progress"),
+  ).toBeTruthy();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Expand Delivery simulation" }),
+  );
+  upload();
+  await waitFor(() =>
+    expect(
+      (screen.getByLabelText("Presentation speed") as HTMLSelectElement).value,
+    ).toBe("1"),
+  );
+  expect(fetch).not.toHaveBeenCalled();
+});
+
+it("rejects unsupported saved evidence while preserving the existing scene", async () => {
+  render(<DeliveryWorkspace token="" onExit={() => {}} />);
+  const upload = (text: string) =>
+    fireEvent.change(screen.getByLabelText("Open saved replay"), {
+      target: { files: [{ size: text.length, text: async () => text }] },
+    });
+  upload(raw);
+  await screen.findByLabelText("Presentation speed");
+  fireEvent.click(
+    screen.getByRole("button", { name: "Expand Delivery simulation" }),
+  );
+  upload('{"schema_version":99}');
+  expect(await screen.findByRole("alert")).toHaveProperty(
+    "textContent",
+    "Unsupported replay: expected downloaded delivery scene evidence",
+  );
+  expect(screen.getByLabelText("Presentation speed")).toBeTruthy();
+});

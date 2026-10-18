@@ -3,6 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import {
   cleanup,
+  act,
   fireEvent,
   render,
   screen,
@@ -89,4 +90,23 @@ it("autoplays a normal-motion preview and restarts playback when changing tabs",
   fireEvent.click(screen.getByRole("button", { name: "Pause" }));
   fireEvent.click(screen.getByRole("tab", { name: "Dispatch visualization" }));
   expect(screen.getByRole("button", { name: "Pause" })).toBeEnabled();
+});
+
+it("plays delivery evidence at one logical second per wall second", async () => {
+  motion.reduced = false;
+  render(<EngineDemo />);
+  await screen.findByTestId("delivery-time");
+  fireEvent.click(screen.getByRole("button", { name: "Pause" }));
+  const before = Number(screen.getByTestId("delivery-time").textContent);
+  vi.useFakeTimers({ toFake: ["setInterval", "clearInterval", "performance"] });
+  try {
+    fireEvent.click(screen.getByRole("button", { name: "Play demo" }));
+    act(() => vi.advanceTimersByTime(1000));
+    expect(
+      Number(screen.getByTestId("delivery-time").textContent) - before,
+    ).toBeCloseTo(1, 6);
+  } finally {
+    cleanup();
+    vi.useRealTimers();
+  }
 });

@@ -89,12 +89,21 @@ export function EngineDemo() {
     let previous = performance.now();
     const timer = window.setInterval(() => {
       const now = performance.now();
-      const delta = Math.min(now - previous, 100) / 30000;
+      // Delivery playback uses logical seconds at 1×; other tabs reveal over 30s.
+      const duration =
+        mode === "delivery"
+          ? Math.max(
+              0.001,
+              Math.min(data.scene.end, data.scene.frames.at(-1)!.at) -
+                data.scene.start,
+            ) * 1000
+          : 30000;
+      const delta = Math.min(now - previous, 100) / duration;
       previous = now;
       if (!document.hidden) setProgress((p) => Math.min(1, p + delta));
     }, 50);
     return () => clearInterval(timer);
-  }, [data, playing, reduced, complete]);
+  }, [data, playing, reduced, complete, mode]);
   const at = data
     ? data.scene.start +
       progress *

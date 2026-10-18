@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Play,
@@ -13,6 +13,11 @@ import { riderVisual } from "./riderVisual";
 import type { ReactNode } from "react";
 import type { Catalog } from "./contracts";
 import { decodeScene, frameAt, sampleRider, type Scene } from "./deliveryScene";
+import {
+  decodeReplay,
+  replayEvents,
+  MAX_REPLAY_BYTES,
+} from "./historicalReplay";
 import { DispatchAuditCard, type AuditFocus } from "./DispatchAuditCard";
 import { DeliveryMap } from "./DeliveryMap";
 import { useReducedMotion } from "./useReveal";
@@ -179,7 +184,7 @@ export function DeliveryWorkspace({
   const [scene, setScene] = useState<Scene>(),
     [at, setAt] = useState(0),
     [playing, setPlaying] = useState(false),
-    [speed, setSpeed] = useState(4),
+    [speed, setSpeed] = useState(1),
     [selected, setSelected] = useState("1"),
     [selectionRevision, setSelectionRevision] = useState(0),
     [edge, setEdge] = useState<number>(),
@@ -229,6 +234,39 @@ export function DeliveryWorkspace({
   useEffect(() => {
     if (scene && at >= scene.end) setPlaying(false);
   }, [scene, at]);
+  function openScene(next: Scene, autoplay: boolean) {
+    setDispatchFocus(undefined);
+    setScene(next);
+    setAt(next.start);
+    setSpeed(1);
+    setSelected(next.frames[0].riders[0]?.id ?? "");
+    setEdge(undefined);
+    setPlaying(autoplay && !reduced);
+    setConfigOpen(false);
+    if (window.matchMedia("(max-width:600px)").matches) setInspectOpen(false);
+  }
+  async function importReplay(file: File) {
+    request.current?.abort();
+    const controller = new AbortController();
+    request.current = controller;
+    setBusy(true);
+    setPlaying(false);
+    setError("");
+    try {
+      if (file.size > MAX_REPLAY_BYTES)
+        throw Error("Replay exceeds the 8 MiB scene limit");
+      const next = decodeReplay(await file.text());
+      if (!controller.signal.aborted) openScene(next, false);
+    } catch (e) {
+      if (!controller.signal.aborted)
+        setError(
+          e instanceof Error ? e.message : "Unsupported replay evidence",
+        );
+    } finally {
+      if (!controller.signal.aborted) setBusy(false);
+    }
+  }
+  const events = useMemo(() => (scene ? replayEvents(scene) : []), [scene]);
   async function run() {
     if (!catalog) return;
     request.current?.abort();
@@ -263,14 +301,7 @@ export function DeliveryWorkspace({
       }
       const next = decodeScene(raw, catalog.graph.snapshot_digest);
       if (controller.signal.aborted) return;
-      setDispatchFocus(undefined);
-      setScene(next);
-      setAt(next.start);
-      setSelected(next.frames[0].riders[0]?.id ?? "");
-      setEdge(undefined);
-      setPlaying(!reduced);
-      setConfigOpen(false);
-      if (window.matchMedia("(max-width:600px)").matches) setInspectOpen(false);
+      openScene(next, true);
     } catch (e) {
       if (!controller.signal.aborted)
         setError(e instanceof Error ? e.message : "Scene unavailable");
@@ -340,6 +371,23 @@ export function DeliveryWorkspace({
           Real engine decisions. A simulated journey.
         </p>
         <div className="delivery-config">
+          <label>
+            Open saved replay
+            <input
+              type="file"
+              accept=".json,application/json"
+              disabled={busy}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                e.target.value = "";
+                if (file) void importReplay(file);
+              }}
+            />
+          </label>
+          <small>
+            Open downloaded scene evidence locally. No engine connection
+            required. Starts paused at 1×.
+          </small>
           <label>
             Scenario
             <select value={kind} onChange={(e) => setKind(e.target.value)}>
@@ -665,6 +713,29 @@ export function DeliveryWorkspace({
             onToggle={() => setOrdersOpen((v) => !v)}
           >
             <div className="delivery-orders">
+              <details>
+                <summary>
+                  Replay events · {events.length} retained changes
+                </summary>
+                <p>
+                  Whole-run index from captured state changes. Plan revisions do
+                  not necessarily change the active route.
+                </p>
+                <ol className="replay-events" aria-label="Replay events">
+                  {events.map((event, i) => (
+                    <li key={i}>
+                      <button
+                        onClick={() => {
+                          setAt(event.at);
+                          setPlaying(false);
+                        }}
+                      >
+                        {event.at.toFixed(1)}s · {event.label}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </details>
               {frame.orders.length === 0 && (
                 <p>No orders created at this time.</p>
               )}
@@ -793,8 +864,13 @@ export function DeliveryWorkspace({
                   ? "Pause simulation presentation"
                   : "Play simulation presentation"
               }
-              onClick={() => setPlaying((v) => !v)}
-              disabled={at >= scene.end}
+              onClick={() => {
+                if (at >= scene.end) {
+                  setAt(scene.start);
+                  setSpeed(1);
+                  setPlaying(true);
+                } else setPlaying((v) => !v);
+              }}
             >
               {running ? <Pause size={18} /> : <Play size={18} />}
             </button>
@@ -802,6 +878,7 @@ export function DeliveryWorkspace({
               aria-label="Restart simulation presentation"
               onClick={() => {
                 setAt(scene.start);
+                setSpeed(1);
                 setPlaying(false);
               }}
             >
@@ -835,7 +912,7 @@ export function DeliveryWorkspace({
               value={speed}
               onChange={(e) => setSpeed(Number(e.target.value))}
             >
-              {[1, 4, 16, 64].map((s) => (
+              {[1, 2, 5, 10].map((s) => (
                 <option key={s} value={s}>
                   {s}×
                 </option>
