@@ -233,3 +233,12 @@ Run this command from the repository root. It compares all five actual source ar
 and checks that namespace, revision, world, execution, plans and publications are unchanged.
 
 Dispatch candidates, original hypothetical routes and cinematic policy presentation are described in [Phase 31](../docs/dispatch-visualization.md).
+
+## Historical replay (Phase 32)
+
+Download **Scene evidence**, then use **Delivery simulation → Open saved replay**
+to reopen it locally, even without an API connection. Imported scenes start paused
+at 1×; new runs and restarts reset to 1×. Speeds are 1×/2×/5×/10×.
+Use **Orders → Replay events** to seek retained order, assignment, traffic, plan
+and delivery changes. The landing delivery demo also runs at 1× logical time.
+See [replay semantics, limits and verification](../docs/historical-replay.md).

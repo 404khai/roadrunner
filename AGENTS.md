@@ -2299,7 +2299,7 @@ A physically interacting traffic simulator needs separate engine design and appr
 Implementation and evidence: [dispatch visualization](docs/dispatch-visualization.md).
 The bounded isolated evaluation captures original hypothetical routes; simulation
 audit records retain publication and incomplete/unavailable outcomes. Final mobile
-visual acceptance remains pending browser-host availability. Phase 32 is not started.
+visual acceptance remains pending browser-host availability. Phase 32 historical replay is documented in [historical replay](docs/historical-replay.md).
 
 ## Goal
 
@@ -2352,6 +2352,8 @@ unavailable-evidence cases. Full dispatch radar is Phase 31 work, not Phase 30 s
 ---
 
 # PHASE 32 — Historical Replay
+
+Implementation, usage and verification: [historical replay](docs/historical-replay.md).
 
 ## Goal
 

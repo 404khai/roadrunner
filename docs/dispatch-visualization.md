@@ -26,7 +26,7 @@ The Rust workspace passes 317 tests and workspace Clippy. Frontend suite passes 
 
 Running-app inspection confirmed candidate scores, recommendation/publication labels and six distinct rider markers; presentation returns to normal fleet emphasis. [Desktop screenshot](evidence/phase-31/dispatch-desktop.png) records the full-map layout and helmet identities. Browser capture became unreliable during final verification (repeated host snapshot/resize timeouts; alternate browser also timed out), so final mobile visual verification is **not complete**. Mobile layout uses mutually exclusive floating setup/result cards but requires a reliable browser follow-up. No animation-performance benchmark or mobile visual pass is claimed.
 
-Phase 31's functional and evidence requirements are implemented. Final mobile visual acceptance remains outstanding due to browser-host failures. Phase 32 is not started.
+Phase 31's functional and evidence requirements are implemented. Final mobile visual acceptance remains outstanding due to browser-host failures. Phase 32 now adds [saved-run historical replay](historical-replay.md).
 
 ## Changed interfaces
 

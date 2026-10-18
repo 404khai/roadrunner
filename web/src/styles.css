@@ -3545,3 +3545,14 @@ h1 > span {
   outline: 2px solid #66765b;
   outline-offset: 3px;
 }
+
+.replay-events {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-left: 20px;
+}
+.replay-events button {
+  text-align: left;
+  font-size: 11px;
+  margin-bottom: 4px;
+}

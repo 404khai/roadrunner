@@ -33,8 +33,9 @@ physical attributes or authority. The overhead scooter and portraits are origina
 SVG artwork informed by the supplied reference; reference bitmap files are not bundled.
 
 Play/pause, restart, next distinct event time, range scrub, exact logical seconds and
-1/4/16/64× affect only presentation. Reduced motion starts paused. This is deterministic
-sampling of one finite captured run, not a general historical replay/seek service.
+1/2/5/10× affect only presentation; playback starts at 1×. Reduced motion starts paused. This is deterministic
+sampling of one finite captured run. [Phase 32](historical-replay.md) adds local saved-run
+import and event navigation; it does not introduce a server-side session store.
 At equal logical times the final captured queue boundary is shown; intermediate
 Arrived states remain in source captures and accepted effects remain inspectable.
 Leaving the delivery workspace discards its local presentation; routing results in
