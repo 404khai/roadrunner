@@ -15,14 +15,78 @@ cargo +1.99.0 build -p roadrunner-cli --release --locked
 cargo +1.99.0 run -p roadrunner-cli --locked -- --help
 ```
 
+For a storage-constrained checkout, reuse the existing debug target rather than
+building another release profile: `CARGO_INCREMENTAL=0 cargo build -p roadrunner-cli --locked`.
+This does not create a worktree or add dependencies.
+
 Cargo's package name is `roadrunner-cli`; the binary name is `roadrunner`. No arguments,
 `help` and `--help` display the command list. Invalid arguments print an error to stderr
 and exit nonzero. Use the explicit `--` between Cargo flags and program arguments.
+
+## Terminal workflows
+
+Help displays block-letter ROADRUNNER branding. New human graph/routing commands
+also display it when stdout is a terminal; piped summaries stay compact. Machine
+output never includes the banner or ANSI escapes. `--version` / `-V` prints the version.
+
+```bash
+roadrunner graph import data/fixtures/phase-7/lagos-marina.osm.pbf \
+  /tmp/marina-snapshot --source-id local-marina --json
+roadrunner graph stats /tmp/marina-snapshot
+roadrunner route --graph /tmp/marina-snapshot \
+  --from osm:5602610872 --to osm:5594385916 --alternatives 3 --json
+roadrunner route compare --graph /tmp/marina-snapshot \
+  --from osm:5602610872 --to osm:5594385916
+# Coordinates are latitude,longitude (not GeoJSON longitude,latitude):
+roadrunner route --graph /tmp/marina-snapshot \
+  --from '6.450,3.390' --to '6.452,3.395' --algorithm astar --json
+```
+
+Graph import composes the existing PBF normalization, versioned artifact validation,
+motorcycle compilation and atomic bundle publication. It refuses an existing target;
+there is no overwrite flag. Normalized data is encoded/decoded in memory to preserve
+the existing compiler integrity boundary. It is not a streaming import optimization.
+Graph stats and routing load and deeply verify the complete bundle or standalone
+`.rr-graph` artifact. Standalone artifacts have no OSM provenance.
+
+New route endpoints accept `node:<snapshot-local-id>`, `osm:<source-id>` (bundle
+required), or WGS84 `latitude,longitude`. Coordinates use a linear nearest-node
+scan, with node ID as the distance-tie breaker and a default 1,000m maximum.
+`--snap-radius-meters <finite-nonnegative-number>` changes that explicit boundary.
+The output includes resolved coordinates, IDs, method and snap distance. This is
+**node snapping**, not edge snapping or map matching; no connector distance/time is
+added, and unreachable nodes are not replaced by farther reachable candidates.
+
+These new routes minimize **motorcycle free-flow travel time**, defaulting to
+Dijkstra. `--algorithm astar` uses the existing graph-qualified admissible heuristic
+with the graph's maximum effective free-flow speed. `route compare` runs both and
+reports their routes, canonical expansions and observed cost delta; it is not a
+runtime benchmark or a guarantee of identical paths. It rejects algorithm/alternative
+flags. `--alternatives N` uses the existing bounded Dijkstra/Yen producer (default
+50,000 search states, 1,000 candidate paths); it preserves termination and truncated
+result evidence. Explicit alternative enumeration cannot be combined with A*, including a requested count of one.
+Traffic and departure-dependent routing remain explicit legacy commands below.
+
+New graph/routing options can appear in any order after the command/positional
+paths; unknown, duplicate and missing options fail. `--json` selects schema-version-1
+adapter envelopes embedding existing domain records, not a new portable route format.
+New graph/routing errors with `--json` go to stderr as `{"error":"..."}`, with empty stdout and nonzero
+exit status. Existing legacy successful JSON formats remain unchanged.
+
+`roadrunner serve [API arguments]` starts a separately built `roadrunner-api`
+executable **beside** the CLI, inheriting environment, streams and API configuration.
+On Unix the CLI replaces itself so API signals and exit status remain intact.
+It neither builds the server nor supplies authorization/trusted-local flags for you.
+See [API setup](../roadrunner-api/README.md) for its security and database requirements.
 
 ## Complete command reference
 
 | Command | Input / output |
 | --- | --- |
+| `graph import <input.osm.pbf> <new-snapshot-directory> --source-id <identity> [--json]` | Normalize, validate, compile and atomically publish a new bundle |
+| `graph stats <snapshot-directory-or-artifact> [--json]` | Verified identity, capabilities and topology counts |
+| `route [compare] --graph <path> --from <endpoint> --to <endpoint> [options] [--json]` | Free-flow route, alternatives or Dijkstra/A* comparison |
+| `serve [API arguments]` | Delegate to the sibling API executable |
 | `osm extract <input.osm.pbf> <output.rr-osm> --source-id <identity>` | Normalize PBF to a versioned artifact; readable count summary |
 | `osm compile <input.rr-osm> <snapshot-directory>` | Compile motorcycle graph/provenance/manifest; atomic directory publication and count summary |
 | `graph verify <snapshot-directory> --deep` | Validate bundle and provenance against graph; readable identity/count summary |
@@ -33,11 +97,10 @@ and exit nonzero. Use the explicit `--` between Cargo flags and program argument
 | `simulate <scenario.json> [--json]` | Readable or structured simulation/planning/publication/actual outcome evidence |
 | `benchmark dispatch <scenario.json> [--idle-penalty-weight <weight>] [--json]` | Four-policy schema 1 comparison; readable or JSON summaries |
 
-Route commands already emit JSON; they do not accept an extra `--json`. Routing endpoints
-are source **OSM node identities**, not local graph IDs or geographic coordinate strings.
-Departure seconds are logical scenario time, not ISO timestamps. CLI parsing uses the
-listed positional order. Planned `serve`, generic `route --from/--to`, `graph stats`,
-interactive map commands do not exist yet. Fleet optimization uses schema 3 simulation.
+Legacy positional `route corpus/alternatives/traffic/schedule` commands already
+emit JSON and do not accept an extra `--json`. Their endpoints are source OSM IDs.
+Departure seconds are logical scenario time, not ISO timestamps. Legacy commands
+retain positional parsing. Fleet optimization uses schema 3 simulation.
 
 ## Offline OSM routing walkthrough
 

@@ -10,18 +10,38 @@ use roadrunner_osm::{
 
 mod alternatives_command;
 mod baseline_command;
+mod command_options;
 mod dataset_command;
+mod graph_command;
 mod learned_command;
 mod reference_comparison;
+mod route_command;
 mod simulation_command;
+mod terminal;
 mod time_dependent_command;
 mod traffic_command;
 
 fn main() -> ExitCode {
-    match run(std::env::args_os().skip(1).collect()) {
+    let arguments: Vec<OsString> = std::env::args_os().skip(1).collect();
+    let command = arguments
+        .first()
+        .and_then(|s| s.to_str())
+        .unwrap_or_default();
+    let subcommand = arguments
+        .get(1)
+        .and_then(|s| s.to_str())
+        .unwrap_or_default();
+    let json = arguments.iter().any(|arg| arg == "--json")
+        && ((command == "graph" && matches!(subcommand, "stats" | "import"))
+            || (command == "route" && (subcommand == "compare" || subcommand.starts_with("--"))));
+    match run(arguments) {
         Ok(()) => ExitCode::SUCCESS,
         Err(message) => {
-            eprintln!("error: {message}");
+            if json {
+                eprintln!("{}", serde_json::json!({"error": message}));
+            } else {
+                eprintln!("error: {message}");
+            }
             ExitCode::FAILURE
         }
     }
@@ -46,7 +66,32 @@ fn run(arguments: Vec<OsString>) -> Result<(), String> {
 
 fn run_commands(args: &[String]) -> Result<(), String> {
     match args {
-        [command] if command == "--help" || command == "help" => {
+        [flag] if flag == "--version" || flag == "-V" => {
+            println!("roadrunner {}", env!("CARGO_PKG_VERSION"));
+            Ok(())
+        }
+        [graph, stats, path, rest @ ..] if graph == "graph" && stats == "stats" => {
+            graph_command::stats(path, rest)
+        }
+        [graph, import, input, output, rest @ ..] if graph == "graph" && import == "import" => {
+            graph_command::import(input, output, rest)
+        }
+        [route, compare, rest @ ..] if route == "route" && compare == "compare" => {
+            route_command::run(rest, true)
+        }
+        [route, first, rest @ ..] if route == "route" && first.starts_with("--") => {
+            let mut options = vec![first.clone()];
+            options.extend_from_slice(rest);
+            route_command::run(&options, false)
+        }
+        [command, rest @ ..] if command == "serve" => serve(rest),
+        _ => run_legacy_commands(args),
+    }
+}
+
+fn run_legacy_commands(args: &[String]) -> Result<(), String> {
+    match args {
+        [command] if command == "--help" || command == "-h" || command == "help" => {
             print_help();
             Ok(())
         }
@@ -139,6 +184,35 @@ fn run_commands(args: &[String]) -> Result<(), String> {
     }
 }
 
+fn serve(args: &[String]) -> Result<(), String> {
+    let binary = std::env::current_exe()
+        .map_err(|e| e.to_string())?
+        .with_file_name(format!("roadrunner-api{}", std::env::consts::EXE_SUFFIX));
+    if !binary.is_file() {
+        return Err(format!(
+            "API executable missing at {}; build roadrunner-api separately and place it beside roadrunner",
+            binary.display()
+        ));
+    }
+    let mut command = std::process::Command::new(binary);
+    command.args(args);
+    // Replace the CLI so shutdown signals and exit status belong to the API itself.
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::CommandExt;
+        Err(command.exec().to_string())
+    }
+    #[cfg(not(unix))]
+    {
+        let status = command.status().map_err(|e| e.to_string())?;
+        if status.success() {
+            Ok(())
+        } else {
+            Err(format!("API exited with {status}"))
+        }
+    }
+}
+
 fn compile_dataset(input: &str, snapshot: &str) -> Result<(), String> {
     let bytes = std::fs::read(input)
         .map_err(|error| format!("could not read normalized dataset {input}: {error}"))?;
@@ -157,8 +231,15 @@ fn compile_dataset(input: &str, snapshot: &str) -> Result<(), String> {
 
 fn print_help() {
     println!(
-        "Roadrunner\n\n\
-         Usage:\n  \
+        "{}\nRouting & delivery optimization · v{}\n",
+        terminal::BANNER,
+        env!("CARGO_PKG_VERSION")
+    );
+    println!(
+        "Core workflows:\n  roadrunner graph import <input.osm.pbf> <new-snapshot-directory> --source-id <identity> [--json]\n  roadrunner graph stats <snapshot-directory-or-graph-artifact> [--json]\n  roadrunner route [compare] --graph <path> --from <lat,lng|node:id|osm:id> --to <endpoint> [--json]\n    [--algorithm dijkstra|astar] [--alternatives <n>] [--snap-radius-meters <m>]\n  roadrunner serve [API arguments] (requires sibling roadrunner-api executable)\n  Coordinates snap to the nearest node within 1000m by default, not to road edges.\n  New route commands use motorcycle free-flow travel time. Compare runs both algorithms.\n  New graph/routing --json emits only JSON; errors are JSON on stderr with a nonzero exit.\n"
+    );
+    println!(
+        "Existing commands:\n  \
          roadrunner osm extract <input.osm.pbf> <output.rr-osm> --source-id <identity>\n  \
          roadrunner osm compile <input.rr-osm> <snapshot-directory>\n  \
          roadrunner graph verify <snapshot-directory> --deep\n  \
@@ -171,7 +252,7 @@ fn print_help() {
          roadrunner learned export <dataset-directory>\n  \
          roadrunner dataset build <request.json> <new-output-directory>\n  \
          roadrunner dataset verify <dataset-directory>\n  \
-         roadrunner simulate <scenario.json> [--json]\n\
+         roadrunner simulate <scenario.json> [--json]\n  \
          roadrunner benchmark dispatch <scenario.json> [--idle-penalty-weight <weight>] [--json]"
     );
 }

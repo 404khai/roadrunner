@@ -2550,6 +2550,7 @@ Example:
 
 ```bash
 roadrunner route \
+  --graph <snapshot-directory> \
   --from "6.5244,3.3792" \
   --to "6.6018,3.3515" \
   --alternatives 3
@@ -2562,6 +2563,10 @@ Support:
 ```text
 --json
 ```
+
+Implemented command scope and verification: [Phase 36 completion](docs/phase-36-completion.md).
+The CLI reference documents free-flow routing, bounded nearest-node resolution, JSON
+contracts and the separate API executable required by `serve`.
 
 ---
 
