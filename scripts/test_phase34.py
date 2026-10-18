@@ -122,7 +122,8 @@ class EngineContracts(unittest.TestCase):
                     self.assertEqual(record['final']['successful'], 24)
                     routes[(algorithm, concurrency)] = json.loads((destination/'engine/routes.json').read_text())
                 self.assertEqual(routes[(algorithm, 1)], routes[(algorithm, 4)])
-            for d, a in zip(routes[('dijkstra', 1)], routes[('astar', 1)], strict=True):
+            self.assertEqual(len(routes[('dijkstra', 1)]), len(routes[('astar', 1)]))
+            for d, a in zip(routes[('dijkstra', 1)], routes[('astar', 1)]):
                 self.assertEqual(d['result']['route']['total_cost'], a['result']['route']['total_cost'])
 
     def test_harness_timeout_does_not_invent_engine_result(self):

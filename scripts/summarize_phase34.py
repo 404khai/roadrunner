@@ -49,7 +49,9 @@ def summarize(records):
         histogram = {}
         for r in completed:
             for operation, buckets in r['final']['queue_action_log2_ns'].items():
-                histogram[operation] = [a+b for a,b in zip(histogram.get(operation, [0]*65), buckets, strict=True)]
+                if len(buckets) != 65:
+                    raise ValueError('invalid histogram shape')
+                histogram[operation] = [a+b for a,b in zip(histogram.get(operation, [0]*65), buckets)]
         cases.append(dict(scenario_sha256=identity, diagnostics=observed, runs=len(runs), completed=len(completed),
                           outcomes=[r['outcome'] for r in runs],
                           execution_ns=None if not times else dict(raw=times, median=statistics.median(times), p95=quantile(times,.95), p99=quantile(times,.99)),
