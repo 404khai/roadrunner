@@ -1,11 +1,50 @@
 //! Versioned all-started synthetic evidence, separate from completed-movement metrics.
-use std::collections::BTreeMap;
+use std::{
+    collections::BTreeMap,
+    ops::{Deref, DerefMut},
+    sync::Arc,
+};
 
 use roadrunner_dispatch::{
     ActionId, ActiveExecution, AppliedEffect, DispatchInstant, OperationalRevision,
     OperationalTransitionRecord, RiderId, ScheduleGeneration,
 };
 use serde::{Deserialize, Serialize};
+
+/// Full original traffic evidence with shared immutable storage and copy-on-write edits.
+///
+/// Its wire representation remains the original ordered array, including normal
+/// factors. Cloning shares storage; editing a cloned artifact cannot rewrite any
+/// other action's original evidence. Deserialization does not infer shared identity.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ActionTraffic(Arc<Vec<crate::TrafficOverride>>);
+
+impl From<Vec<crate::TrafficOverride>> for ActionTraffic {
+    fn from(value: Vec<crate::TrafficOverride>) -> Self {
+        Self(Arc::new(value))
+    }
+}
+impl Deref for ActionTraffic {
+    type Target = Vec<crate::TrafficOverride>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+impl DerefMut for ActionTraffic {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        Arc::make_mut(&mut self.0)
+    }
+}
+impl Serialize for ActionTraffic {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        self.0.as_ref().serialize(serializer)
+    }
+}
+impl<'de> Deserialize<'de> for ActionTraffic {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        Vec::<crate::TrafficOverride>::deserialize(deserializer).map(Self::from)
+    }
+}
 
 /// Original committed start and predictor-visible inputs only. No outcomes or scenario.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -17,7 +56,7 @@ pub struct StartedAction {
     /// Revision immediately following the successful start transition.
     pub committed_revision: OperationalRevision,
     /// Original immutable static overlay, not later adopted traffic.
-    pub traffic: Vec<crate::TrafficOverride>,
+    pub traffic: ActionTraffic,
 }
 
 /// A schedule change is outcome lineage, never another logical road leg or predictor.

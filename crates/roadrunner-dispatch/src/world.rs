@@ -518,6 +518,22 @@ pub fn basic_dispatch_eligible(
     rider: RiderId,
 ) -> Result<bool, DispatchEvaluationError> {
     validate_world(data)?;
+    eligible_in_validated_data(data, rider)
+}
+
+// This boundary consumes the actual immutable constructor-validated view. World
+// identity/version alone must never act as a transferable validation certificate.
+pub(crate) fn basic_dispatch_eligible_snapshot(
+    snapshot: &crate::DispatchSnapshot<'_>,
+    rider: RiderId,
+) -> Result<bool, DispatchEvaluationError> {
+    eligible_in_validated_data(snapshot.world().data(), rider)
+}
+
+fn eligible_in_validated_data(
+    data: &WorldData,
+    rider: RiderId,
+) -> Result<bool, DispatchEvaluationError> {
     let state = data
         .riders
         .get(&rider)

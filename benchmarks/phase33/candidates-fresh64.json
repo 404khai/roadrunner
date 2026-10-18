@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "candidates-fresh64",
+  "workload": "candidates",
+  "grid_side": 8,
+  "artifact_path": null,
+  "riders": 64,
+  "orders": 0,
+  "history_orders": 0,
+  "queries": 5,
+  "seed": 33,
+  "capture": false,
+  "churn": false,
+  "diagnostics": true
+}

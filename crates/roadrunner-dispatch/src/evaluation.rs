@@ -11,8 +11,8 @@ use crate::{
     DispatchDecisionOutcome, DispatchInstant, DispatchTimeError, FulfillmentState, OrderId,
     PreparationAwareStrategy, PreparationPolicyEvidence, RiderId, RiderPlan, RouteOutcome,
     RouteProvider, RoutingAnchor, RoutingAnchors, RoutingEpoch, RoutingProvenance,
-    ScoreContributions, SelectionReason, Stop, UnassignedScope, World, basic_dispatch_eligible,
-    validate_plan, validate_world,
+    ScoreContributions, SelectionReason, Stop, UnassignedScope, World,
+    basic_dispatch_eligible_snapshot, validate_plan, validate_world,
 };
 
 /// Failed decision evaluation, distinct from a completed Unassigned decision.
@@ -289,7 +289,7 @@ pub fn generate_candidates(
         .ok_or(DispatchEvaluationError::InvalidRequest)?;
     let mut eligible = Vec::new();
     for rider in data.profiles.keys().copied() {
-        if basic_dispatch_eligible(data, rider)? {
+        if basic_dispatch_eligible_snapshot(snapshot, rider)? {
             eligible.push(rider);
         }
     }

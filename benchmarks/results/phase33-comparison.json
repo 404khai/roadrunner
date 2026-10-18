@@ -1,0 +1,1381 @@
+{
+  "schema_version": 1,
+  "baseline_binary_sha256": "c1e3bba7621d2bbb7eec4c054bba65fd78a7ba49ba820d8cbf1fb4ff12468676",
+  "candidate_binary_sha256": "058d85568534a91422ec553783894dbb8925253bf73ea695ce8c124673f20c4f",
+  "baseline_source": "d265c050417b15aaef76252898f087e12c9056bc",
+  "candidate_source": "0ebc11432671f227aab1e05ac01028e041279a3e",
+  "hardware": {
+    "os": "macOS-27.0-arm64-arm-64bit",
+    "architecture": "arm64",
+    "logical_cpus": 8,
+    "cpu": "Apple M3",
+    "memory_bytes": 17179869184
+  },
+  "cases": [
+    {
+      "manifest": "benchmarks/phase33/candidates-aged128.json",
+      "semantic_hash": "3b7e6b35e2353438254eb04d3aab9eac44081514075da2091d0bd8c236325469",
+      "graph_nodes": 64,
+      "graph_edges": 224,
+      "stages": {
+        "exhaustive_ns": {
+          "before": {
+            "raw": [
+              88358666,
+              122483000,
+              86641917,
+              88240500,
+              88980042,
+              90045500,
+              88612583
+            ],
+            "median": 88612583,
+            "p95": 112751749.99999997,
+            "p99": 120536749.99999999
+          },
+          "after": {
+            "raw": [
+              356334,
+              342208,
+              348375,
+              360625,
+              353584,
+              352417,
+              339583
+            ],
+            "median": 352417,
+            "p95": 359337.7,
+            "p99": 360367.54
+          }
+        },
+        "snapshot_ns": {
+          "before": {
+            "raw": [
+              193958,
+              263875,
+              186416,
+              193625,
+              190417,
+              197208,
+              194833
+            ],
+            "median": 193958,
+            "p95": 243874.89999999997,
+            "p99": 259874.97999999998
+          },
+          "after": {
+            "raw": [
+              193709,
+              197000,
+              193667,
+              191792,
+              193375,
+              193583,
+              188708
+            ],
+            "median": 193583,
+            "p95": 196012.7,
+            "p99": 196802.54
+          }
+        },
+        "spatial_eligibility_build_query_ns": {
+          "before": {
+            "raw": [
+              101800792,
+              95990750,
+              86402834,
+              86822250,
+              87927583,
+              88738584,
+              88116500
+            ],
+            "median": 88116500,
+            "p95": 100057779.39999999,
+            "p99": 101452189.47999999
+          },
+          "after": {
+            "raw": [
+              488875,
+              456125,
+              458042,
+              465542,
+              460209,
+              453125,
+              443750
+            ],
+            "median": 458042,
+            "p95": 481875.1,
+            "p99": 487475.02
+          }
+        },
+        "validation_ns": {
+          "before": {
+            "raw": [
+              149167,
+              203750,
+              146708,
+              150375,
+              149416,
+              150916,
+              148083
+            ],
+            "median": 149416,
+            "p95": 187899.79999999996,
+            "p99": 200579.95999999996
+          },
+          "after": {
+            "raw": [
+              149000,
+              150584,
+              148375,
+              150084,
+              148250,
+              147125,
+              144250
+            ],
+            "median": 148375,
+            "p95": 150434.0,
+            "p99": 150554.0
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            3276800,
+            3293184,
+            3293184,
+            3309568,
+            3276800,
+            3276800,
+            3293184
+          ],
+          "median": 3293184,
+          "p95": 3304652.8,
+          "p99": 3308584.96
+        },
+        "after": {
+          "raw": [
+            3260416,
+            3293184,
+            3293184,
+            3276800,
+            3260416,
+            3260416,
+            3293184
+          ],
+          "median": 3276800,
+          "p95": 3293184.0,
+          "p99": 3293184.0
+        }
+      },
+      "result_bytes": {
+        "before": null,
+        "after": null
+      },
+      "retained": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/candidates-fresh64.json",
+      "semantic_hash": "cdbed1fd55258f16a6afa46a1e421854832995fcc230cfac005b0efa45f4aba0",
+      "graph_nodes": 64,
+      "graph_edges": 224,
+      "stages": {
+        "exhaustive_ns": {
+          "before": {
+            "raw": [
+              786542,
+              767250,
+              769042,
+              794375,
+              775541,
+              778250,
+              778167
+            ],
+            "median": 778167,
+            "p95": 792025.1,
+            "p99": 793905.02
+          },
+          "after": {
+            "raw": [
+              22375,
+              21375,
+              22000,
+              19667,
+              19667,
+              22875,
+              19792
+            ],
+            "median": 21375,
+            "p95": 22725.0,
+            "p99": 22845.0
+          }
+        },
+        "snapshot_ns": {
+          "before": {
+            "raw": [
+              7833,
+              8583,
+              8125,
+              8000,
+              8542,
+              8250,
+              7792
+            ],
+            "median": 8125,
+            "p95": 8570.7,
+            "p99": 8580.54
+          },
+          "after": {
+            "raw": [
+              7292,
+              7459,
+              7542,
+              7291,
+              7250,
+              7875,
+              7500
+            ],
+            "median": 7459,
+            "p95": 7775.099999999999,
+            "p99": 7855.0199999999995
+          }
+        },
+        "spatial_eligibility_build_query_ns": {
+          "before": {
+            "raw": [
+              912709,
+              839084,
+              845334,
+              858792,
+              842000,
+              850083,
+              849291
+            ],
+            "median": 849291,
+            "p95": 896533.8999999999,
+            "p99": 909473.98
+          },
+          "after": {
+            "raw": [
+              82708,
+              83250,
+              82834,
+              82291,
+              80958,
+              85792,
+              81958
+            ],
+            "median": 82708,
+            "p95": 85029.4,
+            "p99": 85639.48
+          }
+        },
+        "validation_ns": {
+          "before": {
+            "raw": [
+              4042,
+              4750,
+              4625,
+              4125,
+              4584,
+              4584,
+              4000
+            ],
+            "median": 4584,
+            "p95": 4712.5,
+            "p99": 4742.5
+          },
+          "after": {
+            "raw": [
+              4541,
+              4334,
+              4541,
+              4417,
+              4250,
+              4583,
+              4042
+            ],
+            "median": 4417,
+            "p95": 4570.4,
+            "p99": 4580.48
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            2949120,
+            2965504,
+            2965504,
+            2965504,
+            2965504,
+            2965504,
+            2965504
+          ],
+          "median": 2965504,
+          "p95": 2965504.0,
+          "p99": 2965504.0
+        },
+        "after": {
+          "raw": [
+            2965504,
+            2998272,
+            2965504,
+            2981888,
+            2981888,
+            2981888,
+            2998272
+          ],
+          "median": 2981888,
+          "p95": 2998272.0,
+          "p99": 2998272.0
+        }
+      },
+      "result_bytes": {
+        "before": null,
+        "after": null
+      },
+      "retained": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/graph-grid32.json",
+      "semantic_hash": "8a8a4bb2209bd5aac4e0a810c506bffc4d8ba48f103d89918d2c8609e3c9b91d",
+      "graph_nodes": 1024,
+      "graph_edges": 3968,
+      "stages": {
+        "clone_ns": {
+          "before": {
+            "raw": [
+              29417,
+              22291,
+              76541,
+              43834,
+              24166,
+              21792,
+              21000
+            ],
+            "median": 24166,
+            "p95": 66728.89999999998,
+            "p99": 74578.57999999999
+          },
+          "after": {
+            "raw": [
+              16583,
+              16292,
+              16875,
+              18250,
+              17625,
+              17667,
+              15833
+            ],
+            "median": 16875,
+            "p95": 18075.1,
+            "p99": 18215.02
+          }
+        },
+        "decode_verify_ns": {
+          "before": {
+            "raw": [
+              19215250,
+              19346958,
+              19427083,
+              19160750,
+              19032375,
+              18995666,
+              19091125
+            ],
+            "median": 19160750,
+            "p95": 19403045.5,
+            "p99": 19422275.5
+          },
+          "after": {
+            "raw": [
+              18951792,
+              19126000,
+              19122541,
+              19089292,
+              18975125,
+              19000292,
+              18810959
+            ],
+            "median": 19000292,
+            "p95": 19124962.3,
+            "p99": 19125792.46
+          }
+        },
+        "encode_ns": {
+          "before": {
+            "raw": [
+              8234792,
+              8146458,
+              8268917,
+              8130000,
+              8183917,
+              8096834,
+              8178208
+            ],
+            "median": 8178208,
+            "p95": 8258679.5,
+            "p99": 8266869.5
+          },
+          "after": {
+            "raw": [
+              8133959,
+              8109208,
+              8125333,
+              8134458,
+              8116000,
+              8138458,
+              8040292
+            ],
+            "median": 8125333,
+            "p95": 8137258.0,
+            "p99": 8138218.0
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            14385152,
+            14385152,
+            14401536,
+            14352384,
+            14385152,
+            14401536,
+            14352384
+          ],
+          "median": 14385152,
+          "p95": 14401536.0,
+          "p99": 14401536.0
+        },
+        "after": {
+          "raw": [
+            14385152,
+            14385152,
+            14385152,
+            14368768,
+            14401536,
+            14385152,
+            14368768
+          ],
+          "median": 14385152,
+          "p95": 14396620.8,
+          "p99": 14400552.96
+        }
+      },
+      "result_bytes": {
+        "before": null,
+        "after": null
+      },
+      "retained": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/routing-grid16.json",
+      "semantic_hash": "0ec440d8074d6d7782290a0e03fe8e6888648b44af148ae88efbe781391324be",
+      "graph_nodes": 256,
+      "graph_edges": 960,
+      "stages": {
+        "astar_prepared_ns": {
+          "before": {
+            "raw": [
+              3814042,
+              3792917,
+              3820750,
+              3817917,
+              3815375,
+              3799917,
+              3770459
+            ],
+            "median": 3814042,
+            "p95": 3819900.1,
+            "p99": 3820580.02
+          },
+          "after": {
+            "raw": [
+              3823208,
+              3801750,
+              3773875,
+              3828459,
+              3799458,
+              3829541,
+              3837291
+            ],
+            "median": 3823208,
+            "p95": 3834966.0,
+            "p99": 3836826.0
+          }
+        },
+        "dijkstra_ns": {
+          "before": {
+            "raw": [
+              2230750,
+              2209584,
+              2230041,
+              2199166,
+              2223959,
+              2164834,
+              2199125
+            ],
+            "median": 2209584,
+            "p95": 2230537.3,
+            "p99": 2230707.46
+          },
+          "after": {
+            "raw": [
+              2223208,
+              2192792,
+              2201750,
+              2214500,
+              2192583,
+              2249500,
+              2262708
+            ],
+            "median": 2214500,
+            "p95": 2258745.6,
+            "p99": 2261915.52
+          }
+        },
+        "heuristic_preparation_ns": {
+          "before": {
+            "raw": [
+              2833,
+              2875,
+              1625,
+              2250,
+              1334,
+              1583,
+              1542
+            ],
+            "median": 1625,
+            "p95": 2862.4,
+            "p99": 2872.48
+          },
+          "after": {
+            "raw": [
+              1458,
+              1333,
+              1292,
+              1292,
+              1416,
+              1333,
+              1583
+            ],
+            "median": 1333,
+            "p95": 1545.5,
+            "p99": 1575.5
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            3522560,
+            3522560,
+            3538944,
+            3506176,
+            3538944,
+            3538944,
+            3555328
+          ],
+          "median": 3538944,
+          "p95": 3550412.8,
+          "p99": 3554344.96
+        },
+        "after": {
+          "raw": [
+            3571712,
+            3538944,
+            3506176,
+            3588096,
+            3555328,
+            3555328,
+            3571712
+          ],
+          "median": 3555328,
+          "p95": 3583180.8,
+          "p99": 3587112.96
+        }
+      },
+      "result_bytes": {
+        "before": null,
+        "after": null
+      },
+      "retained": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/routing-grid32.json",
+      "semantic_hash": "3e641843dafa3e0242475444a0313cac1e66f601e7bc0c030554ba3fa7a578b0",
+      "graph_nodes": 1024,
+      "graph_edges": 3968,
+      "stages": {
+        "astar_prepared_ns": {
+          "before": {
+            "raw": [
+              17427541,
+              17422334,
+              17470583,
+              17442042,
+              17465916,
+              17434125,
+              17426583
+            ],
+            "median": 17434125,
+            "p95": 17469182.9,
+            "p99": 17470302.98
+          },
+          "after": {
+            "raw": [
+              17535208,
+              17483375,
+              17839791,
+              17342125,
+              17397458,
+              17473667,
+              19814750
+            ],
+            "median": 17483375,
+            "p95": 19222262.299999997,
+            "p99": 19696252.46
+          }
+        },
+        "dijkstra_ns": {
+          "before": {
+            "raw": [
+              9159625,
+              9188375,
+              9318583,
+              9244791,
+              9257208,
+              9253625,
+              9168375
+            ],
+            "median": 9244791,
+            "p95": 9300170.5,
+            "p99": 9314900.5
+          },
+          "after": {
+            "raw": [
+              9264166,
+              9243208,
+              9263500,
+              9201667,
+              9230625,
+              9187708,
+              9332834
+            ],
+            "median": 9243208,
+            "p95": 9312233.6,
+            "p99": 9328713.92
+          }
+        },
+        "heuristic_preparation_ns": {
+          "before": {
+            "raw": [
+              8166,
+              7750,
+              7958,
+              8542,
+              8333,
+              10417,
+              8459
+            ],
+            "median": 8333,
+            "p95": 9854.499999999998,
+            "p99": 10304.5
+          },
+          "after": {
+            "raw": [
+              11458,
+              12792,
+              8500,
+              8291,
+              9584,
+              8625,
+              8084
+            ],
+            "median": 8625,
+            "p95": 12391.8,
+            "p99": 12711.96
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            5554176,
+            5586944,
+            5554176,
+            5586944,
+            5603328,
+            5570560,
+            5586944
+          ],
+          "median": 5586944,
+          "p95": 5598412.8,
+          "p99": 5602344.96
+        },
+        "after": {
+          "raw": [
+            5603328,
+            5554176,
+            5570560,
+            5603328,
+            5554176,
+            5603328,
+            5767168
+          ],
+          "median": 5603328,
+          "p95": 5718016.0,
+          "p99": 5757337.6
+        }
+      },
+      "result_bytes": {
+        "before": null,
+        "after": null
+      },
+      "retained": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/routing-pinned-osm.json",
+      "semantic_hash": "a26a0a0dc831029df3a9b476967424928981643da7923fe0256b7fdf7dcc1124",
+      "graph_nodes": 58,
+      "graph_edges": 114,
+      "stages": {
+        "astar_prepared_ns": {
+          "before": {
+            "raw": [
+              28250,
+              30083,
+              31583,
+              33375,
+              32375,
+              28500,
+              28708
+            ],
+            "median": 30083,
+            "p95": 33075.0,
+            "p99": 33315.0
+          },
+          "after": {
+            "raw": [
+              32167,
+              32042,
+              28250,
+              30708,
+              32250,
+              34708,
+              28458
+            ],
+            "median": 32042,
+            "p95": 33970.6,
+            "p99": 34560.52
+          }
+        },
+        "dijkstra_ns": {
+          "before": {
+            "raw": [
+              58791,
+              59917,
+              59375,
+              59541,
+              117250,
+              58375,
+              58083
+            ],
+            "median": 59375,
+            "p95": 100050.09999999996,
+            "p99": 113810.01999999997
+          },
+          "after": {
+            "raw": [
+              61250,
+              58875,
+              60583,
+              59666,
+              60417,
+              60000,
+              58416
+            ],
+            "median": 60000,
+            "p95": 61049.9,
+            "p99": 61209.98
+          }
+        },
+        "heuristic_preparation_ns": {
+          "before": {
+            "raw": [
+              584,
+              584,
+              208,
+              167,
+              334,
+              208,
+              416
+            ],
+            "median": 334,
+            "p95": 584.0,
+            "p99": 584.0
+          },
+          "after": {
+            "raw": [
+              292,
+              375,
+              458,
+              333,
+              500,
+              250,
+              500
+            ],
+            "median": 375,
+            "p95": 500.0,
+            "p99": 500.0
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            2932736,
+            2949120,
+            2981888,
+            2998272,
+            2998272,
+            2965504,
+            2965504
+          ],
+          "median": 2965504,
+          "p95": 2998272.0,
+          "p99": 2998272.0
+        },
+        "after": {
+          "raw": [
+            2965504,
+            2965504,
+            2932736,
+            2949120,
+            2965504,
+            2981888,
+            2949120
+          ],
+          "median": 2965504,
+          "p95": 2976972.8,
+          "p99": 2980904.96
+        }
+      },
+      "result_bytes": {
+        "before": null,
+        "after": null
+      },
+      "retained": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/scene-grid8.json",
+      "semantic_hash": "abd36921e21ed11bcb0ca4481283d66f92d79e581eb77ecf5e2bd06b5253c029",
+      "graph_nodes": 64,
+      "graph_edges": 224,
+      "stages": {
+        "execution_ns": {
+          "before": {
+            "raw": [
+              1226042,
+              1323750,
+              1240000,
+              1194916,
+              1271417,
+              1230125,
+              1185750
+            ],
+            "median": 1230125,
+            "p95": 1308050.0999999999,
+            "p99": 1320610.02
+          },
+          "after": {
+            "raw": [
+              1117875,
+              1146625,
+              1101167,
+              1163958,
+              1187833,
+              1091084,
+              1109000
+            ],
+            "median": 1117875,
+            "p95": 1180670.5,
+            "p99": 1186400.5
+          }
+        },
+        "serialization_ns": {
+          "before": {
+            "raw": [
+              708666,
+              701666,
+              703667,
+              689500,
+              735792,
+              697375,
+              682250
+            ],
+            "median": 701666,
+            "p95": 727654.2,
+            "p99": 734164.44
+          },
+          "after": {
+            "raw": [
+              684791,
+              673834,
+              691375,
+              707084,
+              696833,
+              688042,
+              687291
+            ],
+            "median": 688042,
+            "p95": 704008.7,
+            "p99": 706468.94
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            5505024,
+            5341184,
+            5488640,
+            5472256,
+            5292032,
+            5472256,
+            5488640
+          ],
+          "median": 5472256,
+          "p95": 5500108.8,
+          "p99": 5504040.96
+        },
+        "after": {
+          "raw": [
+            5324800,
+            5308416,
+            5193728,
+            5193728,
+            5275648,
+            5210112,
+            5226496
+          ],
+          "median": 5226496,
+          "p95": 5319884.8,
+          "p99": 5323816.96
+        }
+      },
+      "result_bytes": {
+        "before": 358254,
+        "after": 358254
+      },
+      "retained": {
+        "before": {
+          "distinct_traffic_buffers": 16,
+          "logical_traffic_records": 3584,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 32,
+          "scene_frames": 66,
+          "source_transition_records": 88,
+          "traffic_vector_capacity_bytes": 65536
+        },
+        "after": {
+          "distinct_traffic_buffers": 2,
+          "logical_traffic_records": 3584,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 32,
+          "scene_frames": 66,
+          "source_transition_records": 88,
+          "traffic_vector_capacity_bytes": 8192
+        }
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/simulation-churn.json",
+      "semantic_hash": "c886d75be17b797f3b533344bb05f1ff5f98d8031a6c2701fb0faead994b2bb0",
+      "graph_nodes": 256,
+      "graph_edges": 960,
+      "stages": {
+        "execution_ns": {
+          "before": {
+            "raw": [
+              2891583,
+              2874375,
+              2832375,
+              2940791,
+              2883958,
+              2899584,
+              2891083
+            ],
+            "median": 2891083,
+            "p95": 2928428.9,
+            "p99": 2938318.58
+          },
+          "after": {
+            "raw": [
+              2713542,
+              2751792,
+              3048750,
+              2724542,
+              2783625,
+              2779333,
+              2719458
+            ],
+            "median": 2751792,
+            "p95": 2969212.5,
+            "p99": 3032842.5
+          }
+        },
+        "serialization_ns": {
+          "before": {
+            "raw": [
+              2040125,
+              2106500,
+              2161917,
+              2066583,
+              2069583,
+              2146000,
+              2040417
+            ],
+            "median": 2069583,
+            "p95": 2157141.9,
+            "p99": 2160961.98
+          },
+          "after": {
+            "raw": [
+              2087000,
+              2118375,
+              2083291,
+              2047125,
+              2131167,
+              2061458,
+              2104875
+            ],
+            "median": 2087000,
+            "p95": 2127329.4,
+            "p99": 2130399.48
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            6733824,
+            6832128,
+            6750208,
+            6799360,
+            6733824,
+            6750208,
+            6569984
+          ],
+          "median": 6750208,
+          "p95": 6822297.6,
+          "p99": 6830161.92
+        },
+        "after": {
+          "raw": [
+            6078464,
+            5849088,
+            5849088,
+            5849088,
+            6144000,
+            6062080,
+            5849088
+          ],
+          "median": 5849088,
+          "p95": 6124339.2,
+          "p99": 6140067.84
+        }
+      },
+      "result_bytes": {
+        "before": 1174619,
+        "after": 1174619
+      },
+      "retained": {
+        "before": {
+          "distinct_traffic_buffers": 32,
+          "logical_traffic_records": 30720,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 64,
+          "scene_frames": 0,
+          "source_transition_records": 176,
+          "traffic_vector_capacity_bytes": 524288
+        },
+        "after": {
+          "distinct_traffic_buffers": 2,
+          "logical_traffic_records": 30720,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 64,
+          "scene_frames": 0,
+          "source_transition_records": 176,
+          "traffic_vector_capacity_bytes": 32768
+        }
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/simulation-grid16.json",
+      "semantic_hash": "0ca1efd51229390775c1527c2866383272a209a5144648c1bd915593626c50a2",
+      "graph_nodes": 256,
+      "graph_edges": 960,
+      "stages": {
+        "execution_ns": {
+          "before": {
+            "raw": [
+              7277792,
+              7131291,
+              7263334,
+              7130125,
+              7050625,
+              7101292,
+              7096417
+            ],
+            "median": 7130125,
+            "p95": 7273454.6,
+            "p99": 7276924.52
+          },
+          "after": {
+            "raw": [
+              6298167,
+              6309708,
+              6292292,
+              6434084,
+              6359375,
+              6400625,
+              6367000
+            ],
+            "median": 6359375,
+            "p95": 6424046.3,
+            "p99": 6432076.46
+          }
+        },
+        "serialization_ns": {
+          "before": {
+            "raw": [
+              4316834,
+              4315291,
+              4212542,
+              4364667,
+              4232542,
+              4210042,
+              4238416
+            ],
+            "median": 4238416,
+            "p95": 4350317.1,
+            "p99": 4361797.02
+          },
+          "after": {
+            "raw": [
+              4154125,
+              4255542,
+              4176708,
+              4208334,
+              4184416,
+              4209583,
+              4176375
+            ],
+            "median": 4184416,
+            "p95": 4241754.3,
+            "p99": 4252784.46
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            10600448,
+            10616832,
+            10436608,
+            10436608,
+            10485760,
+            10436608,
+            10616832
+          ],
+          "median": 10485760,
+          "p95": 10616832.0,
+          "p99": 10616832.0
+        },
+        "after": {
+          "raw": [
+            9240576,
+            9207808,
+            9289728,
+            9224192,
+            9224192,
+            9519104,
+            9469952
+          ],
+          "median": 9240576,
+          "p95": 9504358.4,
+          "p99": 9516154.88
+        }
+      },
+      "result_bytes": {
+        "before": 2322827,
+        "after": 2322827
+      },
+      "retained": {
+        "before": {
+          "distinct_traffic_buffers": 64,
+          "logical_traffic_records": 61440,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 128,
+          "scene_frames": 0,
+          "source_transition_records": 352,
+          "traffic_vector_capacity_bytes": 1048576
+        },
+        "after": {
+          "distinct_traffic_buffers": 1,
+          "logical_traffic_records": 61440,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 128,
+          "scene_frames": 0,
+          "source_transition_records": 352,
+          "traffic_vector_capacity_bytes": 16384
+        }
+      }
+    },
+    {
+      "manifest": "benchmarks/phase33/simulation-grid32.json",
+      "semantic_hash": "190893c4ca4b64ce2201c8b85cce5c64cc851aa09285b60d8fd22a0e3fb1b1d2",
+      "graph_nodes": 1024,
+      "graph_edges": 3968,
+      "stages": {
+        "execution_ns": {
+          "before": {
+            "raw": [
+              99350625,
+              98728917,
+              99453625,
+              97265084,
+              97409500,
+              96983917,
+              89954208
+            ],
+            "median": 97409500,
+            "p95": 99422725.0,
+            "p99": 99447445.0
+          },
+          "after": {
+            "raw": [
+              85426583,
+              86739666,
+              86672250,
+              86820000,
+              86515167,
+              85373167,
+              86213250
+            ],
+            "median": 86515167,
+            "p95": 86795899.8,
+            "p99": 86815179.96
+          }
+        },
+        "serialization_ns": {
+          "before": {
+            "raw": [
+              64164500,
+              65969291,
+              65219334,
+              65427292,
+              64465416,
+              65968792,
+              61259291
+            ],
+            "median": 65219334,
+            "p95": 65969141.3,
+            "p99": 65969261.06
+          },
+          "after": {
+            "raw": [
+              60488375,
+              60270417,
+              61239583,
+              60626666,
+              60567917,
+              60073000,
+              60552417
+            ],
+            "median": 60552417,
+            "p95": 61055707.9,
+            "p99": 61202807.98
+          }
+        }
+      },
+      "peak_process_rss_bytes": {
+        "before": {
+          "raw": [
+            64667648,
+            64782336,
+            63520768,
+            64782336,
+            64405504,
+            64241664,
+            64208896
+          ],
+          "median": 64405504,
+          "p95": 64782336.0,
+          "p99": 64782336.0
+        },
+        "after": {
+          "raw": [
+            45481984,
+            45350912,
+            45236224,
+            45432832,
+            45252608,
+            45449216,
+            45252608
+          ],
+          "median": 45350912,
+          "p95": 45472153.6,
+          "p99": 45480017.92
+        }
+      },
+      "result_bytes": {
+        "before": 35465900,
+        "after": 35465900
+      },
+      "retained": {
+        "before": {
+          "distinct_traffic_buffers": 256,
+          "logical_traffic_records": 1015808,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 512,
+          "scene_frames": 0,
+          "source_transition_records": 1408,
+          "traffic_vector_capacity_bytes": 16777216
+        },
+        "after": {
+          "distinct_traffic_buffers": 1,
+          "logical_traffic_records": 1015808,
+          "payload_scope": "live Vec element capacity only; excludes allocator/Arc headers, other data and RSS",
+          "recognized_effect_records": 512,
+          "scene_frames": 0,
+          "source_transition_records": 1408,
+          "traffic_vector_capacity_bytes": 65536
+        }
+      }
+    }
+  ],
+  "limits": "Descriptive medians/quantiles of small process/stage samples; not request tails, SLOs or supported-scale claims. Full result SHA-256 matches, not reduced output. Whole-process RSS includes setup and serialization. Original queue, dispatch, context and evidence semantics retained."
+}

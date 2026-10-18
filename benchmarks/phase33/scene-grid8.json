@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "scene-grid8",
+  "workload": "simulation",
+  "grid_side": 8,
+  "artifact_path": null,
+  "riders": 2,
+  "orders": 8,
+  "history_orders": 0,
+  "queries": 1,
+  "seed": 33,
+  "capture": true,
+  "churn": true,
+  "diagnostics": true
+}

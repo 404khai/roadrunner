@@ -97,6 +97,7 @@ struct Engine<'a> {
     epoch: RoutingEpoch,
     world: OperationalState,
     traffic: TrafficSnapshot,
+    action_traffic: Option<(String, crate::ActionTraffic)>,
     anchors: RoutingAnchors,
     queue: BinaryHeap<QueuedEvent>,
     next_sequence: u64,
@@ -299,6 +300,7 @@ impl<'a> Engine<'a> {
             epoch,
             world,
             traffic: traffic(graph, &scenario.initial_traffic)?,
+            action_traffic: None,
             anchors: RoutingAnchors::default(),
             queue: BinaryHeap::new(),
             next_sequence: 0,
@@ -1394,23 +1396,12 @@ impl<'a> Engine<'a> {
             &self.anchors.riders[&rider],
             anchor,
         )?;
+        let traffic = self.original_action_traffic();
         self.starts.push(crate::StartedAction {
             rider,
             original: self.world.execution()[&rider].clone(),
             committed_revision: self.world.revision(),
-            traffic: self
-                .graph
-                .edges()
-                .iter()
-                .filter_map(|e| {
-                    self.traffic
-                        .multiplier(e.id())
-                        .map(|multiplier| TrafficOverride {
-                            edge_id: e.id().value(),
-                            multiplier,
-                        })
-                })
-                .collect(),
+            traffic,
         });
         self.push(
             arrival,
@@ -1582,6 +1573,34 @@ impl<'a> Engine<'a> {
             Action::Deliver(order, rider, _) => self.deliver(order, rider),
         }?;
         Ok(Some(event))
+    }
+
+    // Only the currently materialized context is cached. Older vectors live as
+    // long as their original actions; a later context never mutates them. Full
+    // graph-qualified traffic digest, not operational revision, selects reuse.
+    fn original_action_traffic(&mut self) -> crate::ActionTraffic {
+        let digest = self.traffic.traffic_snapshot_digest();
+        if let Some((prior, values)) = &self.action_traffic {
+            if prior == digest {
+                return values.clone();
+            }
+        }
+        let values: crate::ActionTraffic = self
+            .graph
+            .edges()
+            .iter()
+            .filter_map(|edge| {
+                self.traffic
+                    .multiplier(edge.id())
+                    .map(|multiplier| TrafficOverride {
+                        edge_id: edge.id().value(),
+                        multiplier,
+                    })
+            })
+            .collect::<Vec<_>>()
+            .into();
+        self.action_traffic = Some((digest.to_owned(), values.clone()));
+        values
     }
 
     fn capture_scene(&mut self) -> Result<(), SimulationError> {

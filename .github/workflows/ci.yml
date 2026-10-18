@@ -50,6 +50,10 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Run tests
         run: cargo test --workspace --all-features --locked
+      - name: Verify retained performance comparison contracts
+        run: python3 -m unittest discover -s scripts -p test_phase33.py -v
+      - name: Exercise bounded profiling probe without timing thresholds
+        run: cargo run --locked -p roadrunner-simulation --example phase33_probe -- benchmarks/phase33/candidates-fresh64.json
 
   web:
     name: Routing visualization client

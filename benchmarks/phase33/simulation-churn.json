@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "case_id": "simulation-churn",
+  "workload": "simulation",
+  "grid_side": 16,
+  "artifact_path": null,
+  "riders": 2,
+  "orders": 16,
+  "history_orders": 0,
+  "queries": 1,
+  "seed": 33,
+  "capture": false,
+  "churn": true,
+  "diagnostics": true
+}

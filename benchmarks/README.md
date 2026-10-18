@@ -141,3 +141,11 @@ records graph identities, topology/point counts, configuration and exact runs. R
 [retained result](results/2026-10-16-phase26-visualization.json) and
 [limitations/completion evidence](../docs/phase-26-completion.md). Whole-example process RSS includes
 artifact creation; it does not measure exporter-only allocation. No renderer or fleet scalability claim.
+
+## Phase 33 measured tranche
+
+[Bounded probes and reproduction](phase33/README.md) separate graph lifecycle, routing,
+validation/candidate generation, headless execution, retained traffic and serialization.
+The [completion package](../docs/phase-33-completion.md) links matched raw data, semantic
+comparison, remaining limits and the separately authorized Phase 34 plan. These
+measurements establish two scoped improvements, not large-fleet service capacity.

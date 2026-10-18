@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "transport": "PostgreSQL immutable local stream/v1",
+  "cases": [
+    {
+      "case": "SIGKILL publisher before append COMMIT",
+      "result": "PASS",
+      "namespace": "140549c47e348bea4857f9c089a0b3a8:world:0",
+      "initial_operational_revision": "1",
+      "original_command": "140549c47e348bea4857f9c089a0b3a8:command:1",
+      "origin_event_ids": [
+        "140549c47e348bea4857f9c089a0b3a8:world:0:event:2:0",
+        "140549c47e348bea4857f9c089a0b3a8:world:0:event:2:1"
+      ],
+      "after_SIGKILL_visible_rows": {
+        "rr_stream": 0,
+        "rr_publish_ack": 0,
+        "rr_consumer_effects": 0,
+        "rr_inbox": 0,
+        "rr_delivery_ack": 0
+      },
+      "outbox": 2,
+      "stream": 2,
+      "consumer_effects": 4,
+      "notifications": 2,
+      "operational_state_unchanged": true,
+      "replay_projection_digest": "a1fd6e0b497ba3cb871c28b0078bda64dce5db21fb0825a93e656998eb57c95d"
+    },
+    {
+      "case": "SIGKILL publisher after append before transport ACK",
+      "result": "PASS",
+      "namespace": "e68a5b50f43e9d818e308d6c91c90891:world:0",
+      "initial_operational_revision": "1",
+      "original_command": "e68a5b50f43e9d818e308d6c91c90891:command:1",
+      "origin_event_ids": [
+        "e68a5b50f43e9d818e308d6c91c90891:world:0:event:2:0",
+        "e68a5b50f43e9d818e308d6c91c90891:world:0:event:2:1"
+      ],
+      "after_SIGKILL_visible_rows": {
+        "rr_stream": 1,
+        "rr_publish_ack": 0,
+        "rr_consumer_effects": 0,
+        "rr_inbox": 0,
+        "rr_delivery_ack": 0
+      },
+      "outbox": 2,
+      "stream": 2,
+      "consumer_effects": 4,
+      "notifications": 2,
+      "operational_state_unchanged": true,
+      "replay_projection_digest": "a1fd6e0b497ba3cb871c28b0078bda64dce5db21fb0825a93e656998eb57c95d"
+    },
+    {
+      "case": "SIGKILL consumer after partial effect before inbox COMMIT",
+      "result": "PASS",
+      "namespace": "7860943be1a8ee7fe2db2fd314b9155c:world:0",
+      "initial_operational_revision": "1",
+      "original_command": "7860943be1a8ee7fe2db2fd314b9155c:command:1",
+      "origin_event_ids": [
+        "7860943be1a8ee7fe2db2fd314b9155c:world:0:event:2:0",
+        "7860943be1a8ee7fe2db2fd314b9155c:world:0:event:2:1"
+      ],
+      "after_SIGKILL_visible_rows": {
+        "rr_stream": 1,
+        "rr_publish_ack": 1,
+        "rr_consumer_effects": 0,
+        "rr_inbox": 0,
+        "rr_delivery_ack": 0
+      },
+      "outbox": 2,
+      "stream": 2,
+      "consumer_effects": 4,
+      "notifications": 2,
+      "operational_state_unchanged": true,
+      "replay_projection_digest": "a1fd6e0b497ba3cb871c28b0078bda64dce5db21fb0825a93e656998eb57c95d"
+    },
+    {
+      "case": "SIGKILL consumer after effect/inbox COMMIT before delivery ACK",
+      "result": "PASS",
+      "namespace": "c9fb02c75b7954bb833b127c1e9bbb5c:world:0",
+      "initial_operational_revision": "1",
+      "original_command": "c9fb02c75b7954bb833b127c1e9bbb5c:command:1",
+      "origin_event_ids": [
+        "c9fb02c75b7954bb833b127c1e9bbb5c:world:0:event:2:0",
+        "c9fb02c75b7954bb833b127c1e9bbb5c:world:0:event:2:1"
+      ],
+      "after_SIGKILL_visible_rows": {
+        "rr_stream": 1,
+        "rr_publish_ack": 1,
+        "rr_consumer_effects": 1,
+        "rr_inbox": 1,
+        "rr_delivery_ack": 0
+      },
+      "outbox": 2,
+      "stream": 2,
+      "consumer_effects": 4,
+      "notifications": 2,
+      "operational_state_unchanged": true,
+      "replay_projection_digest": "a1fd6e0b497ba3cb871c28b0078bda64dce5db21fb0825a93e656998eb57c95d"
+    },
+    {
+      "case": "asynchronous live delivery, writer exclusion, isolated compatible replay",
+      "result": "PASS",
+      "riders": 3,
+      "stream": 6,
+      "delivery_acknowledgements": 12,
+      "operational_revision": "3"
+    }
+  ],
+  "world_key": "ev22-3813aa33767e4487967a",
+  "namespace": "eb6b32141867470d90b64668757fa1fa:world:0",
+  "database": "PostgreSQL 18.4 (Homebrew) on aarch64-apple-darwin25.4.0, compiled by Apple clang version 21.0.0 (clang-2100.0.123.102), 64-bit",
+  "postgis": "3.6.4",
+  "graph_sha256": "7943c50063f8e268359b1e54f066617bfe303edd97e82bf549b388ebf4a5a317",
+  "event_binary_sha256": "aa23b45aa37b4b1040fe944103fcb38129984fc955e12dcb7106c098d060bfce"
+}
