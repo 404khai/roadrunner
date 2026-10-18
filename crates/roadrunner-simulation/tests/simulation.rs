@@ -595,3 +595,45 @@ fn simultaneous_traffic_replacements_preserve_input_order_before_assignments() {
         85.0,
     );
 }
+
+#[test]
+fn original_traffic_shares_storage_only_within_its_immutable_context() {
+    let g = graph();
+    let mut s = scenario();
+    s.end_seconds = seconds(400.0);
+    s.orders.push(order(2, 100.0, 100.0));
+    s.traffic_changes.push(TrafficChange {
+        at_seconds: seconds(90.0),
+        overrides: vec![TrafficOverride {
+            edge_id: 0,
+            multiplier: ok(TrafficMultiplier::new(2.0)),
+        }],
+    });
+    let result = ok(simulate(&g, &s));
+    let starts = &result.trace.starts;
+    assert_eq!(starts.len(), 4);
+    assert_eq!(starts[0].traffic.as_ptr(), starts[1].traffic.as_ptr());
+    assert_eq!(starts[2].traffic.as_ptr(), starts[3].traffic.as_ptr());
+    assert_ne!(starts[0].traffic.as_ptr(), starts[2].traffic.as_ptr());
+    assert_eq!(starts[0].traffic.len(), g.edge_count());
+    assert!(
+        starts[0]
+            .traffic
+            .iter()
+            .all(|t| t.multiplier == TrafficMultiplier::NORMAL)
+    );
+    assert_eq!(
+        starts[2].traffic[0].multiplier,
+        ok(TrafficMultiplier::new(2.0))
+    );
+    let original = ok(serde_json::to_vec(&starts[0].traffic));
+    // Exact old array representation; deserialization never assumes pointer identity.
+    assert_eq!(original, ok(serde_json::to_vec(&*starts[0].traffic)));
+    let decoded: roadrunner_simulation::ActionTraffic = ok(serde_json::from_slice(&original));
+    assert_eq!(decoded, starts[0].traffic);
+    let mut edited = starts[0].clone();
+    edited.traffic[0].multiplier = ok(TrafficMultiplier::new(3.0));
+    assert_ne!(edited.traffic.as_ptr(), starts[0].traffic.as_ptr());
+    assert_eq!(original, ok(serde_json::to_vec(&starts[0].traffic)));
+    assert_eq!(starts[0].traffic, starts[1].traffic);
+}

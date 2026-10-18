@@ -9,7 +9,9 @@ mod event;
 mod metrics;
 mod scenario;
 mod trace;
-pub use trace::{ArrivalEvidence, PendingEvent, ScheduleChange, StartedAction, SyntheticTrace};
+pub use trace::{
+    ActionTraffic, ArrivalEvidence, PendingEvent, ScheduleChange, StartedAction, SyntheticTrace,
+};
 
 pub use comparison::{StrategyComparison, compare_strategies};
 pub use engine::{simulate, simulate_scene, simulate_with_run_identity};
