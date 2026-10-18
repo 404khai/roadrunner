@@ -3546,8 +3546,14 @@ h1 > span {
   z-index: 1;
   overflow: visible;
 }
+/* MapLibre transforms create a stacking context: raise the whole picked marker
+   so the star can paint above neighboring markers, controls and floating cards. */
+.dispatch-rider-tag[data-recommended="true"] {
+  z-index: 20;
+}
 .dispatch-recommendation-star {
   position: absolute;
+  z-index: 1;
   left: 50%;
   bottom: calc(100% + 8px);
   width: 22px;

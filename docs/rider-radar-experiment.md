@@ -10,7 +10,9 @@ retained evidence; the sweep is a presentation metaphor.
 A controlled sweep completes during the first 75% of the existing presentation.
 Each actual projected rider tag emits a 550 ms ring when crossed, once per replay.
 The remaining presentation interval lets those pulses finish before the picked
-rider's star appears directly above their tag. The star persists after completion;
+rider's star appears directly above their tag. The selected MapLibre marker is raised above neighboring tags, map controls and
+floating cards so its star is not trapped in a lower stacking context.
+The star persists after completion;
 manual inspection does not change which rider was recommended. Pause/replay/skip
 follow the existing controls. Reduced motion skips the sweep and reveals the result.
 A result with no selected rider never receives a star.
