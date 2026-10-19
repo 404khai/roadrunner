@@ -67,6 +67,12 @@ jobs:
       - name: Verify benchmark suite accounting, matched inputs and replay (no timing thresholds)
         run: python3 -m unittest discover -s scripts -p test_benchmark_suite.py -v
 
+      - name: Reproduce retained fleet captures and verify authority isolation
+        run: |
+          cargo build --locked -p roadrunner-api --example fleet_demo
+          target/debug/examples/fleet_demo 12 web/public/demos/fleet-12.json --check
+          target/debug/examples/fleet_demo 24 web/public/demos/fleet-24.json --check
+
   web:
     name: Routing visualization client
     runs-on: ubuntu-latest

@@ -103,7 +103,7 @@ it("shows missing connection and explicit server errors", async () => {
   );
 });
 
-it("offers the pinned distributed demo explicitly and hides irrelevant node selectors", () => {
+it("defaults to the fleet showcase and keeps the legacy distributed preset", () => {
   render(
     <DeliveryWorkspace
       catalog={catalogSchema.parse(catalog)}
@@ -112,12 +112,12 @@ it("offers the pinned distributed demo explicitly and hides irrelevant node sele
     />,
   );
   const option = screen.getByRole("option", {
-    name: "Distributed Fleet Demo · 6 riders",
+    name: "Fleet showcase · 12 riders / 16 orders",
   }) as HTMLOptionElement;
   expect(option.selected).toBe(true);
   expect(option.disabled).toBe(false);
   expect(screen.queryByLabelText("rider node")).toBeNull();
-  expect(screen.getByText(/Six fixed graph-node starts/)).toBeTruthy();
+  expect(screen.getByText(/Graph-qualified fleet starts/)).toBeTruthy();
 });
 
 it("opens saved evidence without a catalog or API, resets speed, and seeks both ways", async () => {
@@ -184,4 +184,52 @@ it("rejects unsupported saved evidence while preserving the existing scene", asy
     "Unsupported replay: expected downloaded delivery scene evidence",
   );
   expect(screen.getByLabelText("Presentation speed")).toBeTruthy();
+});
+
+it("opens a recorded 24-rider fleet without an API and keeps every rider inspectable", async () => {
+  const fleet = await import("../public/demos/fleet-24.json?raw");
+  const fetch = vi.fn().mockResolvedValue(new Response(fleet.default));
+  vi.stubGlobal("fetch", fetch);
+  render(<DeliveryWorkspace token="" onExit={() => {}} />);
+  fireEvent.change(screen.getByLabelText("Recorded fleet"), {
+    target: { value: "24" },
+  });
+  fireEvent.click(
+    screen.getByRole("button", { name: "Open recorded fleet demo" }),
+  );
+  await screen.findByLabelText("Presentation speed");
+  expect(fetch.mock.calls[0][0]).toBe("/demos/fleet-24.json");
+  expect(fetch.mock.calls[0][1]).not.toHaveProperty("headers");
+  expect(
+    (screen.getByLabelText("Presentation speed") as HTMLSelectElement).value,
+  ).toBe("1");
+  expect(
+    screen.getAllByRole("button", { name: /^Inspect rider \d+$/ }),
+  ).toHaveLength(24);
+  expect(
+    screen.getByRole("button", { name: "Play simulation presentation" }),
+  ).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Inspect rider 24" }));
+  expect(
+    screen.getByRole("button", { name: "Collapse Rider 24" }),
+  ).toBeTruthy();
+  fireEvent.change(screen.getByLabelText("Presentation seconds"), {
+    target: { value: "900" },
+  });
+  expect(screen.getByText("28 delivered")).toBeTruthy();
+}, 15000);
+
+it("reports recorded fleet load failures without opening a scene", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue(new Response("unavailable", { status: 503 })),
+  );
+  render(<DeliveryWorkspace token="" onExit={() => {}} />);
+  fireEvent.click(
+    screen.getByRole("button", { name: "Open recorded fleet demo" }),
+  );
+  expect((await screen.findByRole("alert")).textContent).toContain(
+    "Recorded fleet demo unavailable (503)",
+  );
+  expect(screen.queryByLabelText("Presentation speed")).toBeNull();
 });

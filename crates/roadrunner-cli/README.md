@@ -212,3 +212,12 @@ See [usage and evidence contracts](../../docs/eta-dataset.md).
 frozen Phase 23 dataset and publishes action-paired B0 errors, coverage and segments.
 `roadrunner baseline verify <result-directory>` checks/recomputes the self-contained
 result. See the [Phase 24 guide](../../docs/eta-baseline.md).
+
+## Fleet showcase
+
+`roadrunner demo` executes the shared 12-rider scenario; `--riders 24` selects the
+larger capture's scenario, and `--json` emits the actual engine result plus route
+alternatives. Run from the repository root with the bundled Phase 10 graph.
+This is a headless command; it prints instructions for opening the matching recorded
+fleet in the workspace. See [the complete demo walkthrough](../../docs/demo.md) for
+browser playback, live recomputation, reproduction and the unchanged visual limits.

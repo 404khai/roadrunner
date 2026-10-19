@@ -1,0 +1,1264 @@
+{
+  "12": {
+    "schema_version": 2,
+    "scenario_id": "fleet-showcase-12/v1",
+    "graph_snapshot_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+    "seed": 38,
+    "start_seconds": 0,
+    "end_seconds": 900,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "multi_order",
+      "work_budget": 1024,
+      "forecast_validity_seconds": 2000
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 1,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 2,
+        "node": 22,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 3,
+        "node": 53,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 4,
+        "node": 46,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 5,
+        "node": 48,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 6,
+        "node": 14,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 7,
+        "node": 47,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 8,
+        "node": 27,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 9,
+        "node": 7,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 10,
+        "node": 0,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 11,
+        "node": 11,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 12,
+        "node": 5,
+        "capacity": 1,
+        "available": true
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 19,
+        "created_at_seconds": 0.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 2,
+        "pickup_node": 31,
+        "dropoff_node": 43,
+        "created_at_seconds": 0.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 3,
+        "pickup_node": 37,
+        "dropoff_node": 16,
+        "created_at_seconds": 1.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 4,
+        "pickup_node": 41,
+        "dropoff_node": 13,
+        "created_at_seconds": 1.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 5,
+        "pickup_node": 4,
+        "dropoff_node": 15,
+        "created_at_seconds": 2.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 6,
+        "pickup_node": 12,
+        "dropoff_node": 35,
+        "created_at_seconds": 2.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 7,
+        "pickup_node": 48,
+        "dropoff_node": 14,
+        "created_at_seconds": 3.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 8,
+        "pickup_node": 28,
+        "dropoff_node": 44,
+        "created_at_seconds": 3.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 9,
+        "pickup_node": 8,
+        "dropoff_node": 28,
+        "created_at_seconds": 4.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 10,
+        "pickup_node": 1,
+        "dropoff_node": 18,
+        "created_at_seconds": 4.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 11,
+        "pickup_node": 12,
+        "dropoff_node": 32,
+        "created_at_seconds": 5.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 12,
+        "pickup_node": 57,
+        "dropoff_node": 22,
+        "created_at_seconds": 5.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 13,
+        "pickup_node": 0,
+        "dropoff_node": 20,
+        "created_at_seconds": 12,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 14,
+        "pickup_node": 31,
+        "dropoff_node": 45,
+        "created_at_seconds": 13,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 15,
+        "pickup_node": 0,
+        "dropoff_node": 22,
+        "created_at_seconds": 14,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 16,
+        "pickup_node": 31,
+        "dropoff_node": 47,
+        "created_at_seconds": 15,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      }
+    ],
+    "initial_traffic": [],
+    "traffic_changes": [
+      {
+        "at_seconds": 30,
+        "overrides": [
+          {
+            "edge_id": 91,
+            "multiplier": 4
+          },
+          {
+            "edge_id": 87,
+            "multiplier": 2
+          }
+        ]
+      },
+      {
+        "at_seconds": 180,
+        "overrides": []
+      }
+    ],
+    "dynamic_events": []
+  },
+  "24": {
+    "schema_version": 2,
+    "scenario_id": "fleet-showcase-24/v1",
+    "graph_snapshot_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+    "seed": 38,
+    "start_seconds": 0,
+    "end_seconds": 900,
+    "routing_epoch_seconds": 0,
+    "dispatch": {
+      "kind": "multi_order",
+      "work_budget": 1024,
+      "forecast_validity_seconds": 2000
+    },
+    "riders": [
+      {
+        "id": 1,
+        "node": 1,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 2,
+        "node": 22,
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 3,
+        "node": 53,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 4,
+        "node": 46,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 5,
+        "node": 48,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 6,
+        "node": 14,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 7,
+        "node": 47,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 8,
+        "node": 27,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 9,
+        "node": 7,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 10,
+        "node": 0,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 11,
+        "node": 11,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 12,
+        "node": 5,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 13,
+        "node": 8,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 14,
+        "node": 33,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 15,
+        "node": 13,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 16,
+        "node": 32,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 17,
+        "node": 29,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 18,
+        "node": 43,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 19,
+        "node": 39,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 20,
+        "node": 31,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 21,
+        "node": 28,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 22,
+        "node": 30,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 23,
+        "node": 44,
+        "capacity": 1,
+        "available": true
+      },
+      {
+        "id": 24,
+        "node": 2,
+        "capacity": 1,
+        "available": true
+      }
+    ],
+    "orders": [
+      {
+        "id": 1,
+        "pickup_node": 0,
+        "dropoff_node": 19,
+        "created_at_seconds": 0.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 2,
+        "pickup_node": 31,
+        "dropoff_node": 43,
+        "created_at_seconds": 0.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 3,
+        "pickup_node": 37,
+        "dropoff_node": 16,
+        "created_at_seconds": 1.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 4,
+        "pickup_node": 41,
+        "dropoff_node": 13,
+        "created_at_seconds": 1.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 5,
+        "pickup_node": 4,
+        "dropoff_node": 15,
+        "created_at_seconds": 2.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 6,
+        "pickup_node": 12,
+        "dropoff_node": 35,
+        "created_at_seconds": 2.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 7,
+        "pickup_node": 48,
+        "dropoff_node": 14,
+        "created_at_seconds": 3.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 8,
+        "pickup_node": 28,
+        "dropoff_node": 44,
+        "created_at_seconds": 3.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 9,
+        "pickup_node": 8,
+        "dropoff_node": 28,
+        "created_at_seconds": 4.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 10,
+        "pickup_node": 1,
+        "dropoff_node": 18,
+        "created_at_seconds": 4.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 11,
+        "pickup_node": 12,
+        "dropoff_node": 32,
+        "created_at_seconds": 5.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 12,
+        "pickup_node": 57,
+        "dropoff_node": 22,
+        "created_at_seconds": 5.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 13,
+        "pickup_node": 7,
+        "dropoff_node": 29,
+        "created_at_seconds": 6.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 14,
+        "pickup_node": 28,
+        "dropoff_node": 57,
+        "created_at_seconds": 6.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 15,
+        "pickup_node": 6,
+        "dropoff_node": 34,
+        "created_at_seconds": 7.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 16,
+        "pickup_node": 17,
+        "dropoff_node": 53,
+        "created_at_seconds": 7.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 17,
+        "pickup_node": 20,
+        "dropoff_node": 46,
+        "created_at_seconds": 8.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 18,
+        "pickup_node": 32,
+        "dropoff_node": 10,
+        "created_at_seconds": 8.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 19,
+        "pickup_node": 10,
+        "dropoff_node": 6,
+        "created_at_seconds": 9.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 20,
+        "pickup_node": 17,
+        "dropoff_node": 48,
+        "created_at_seconds": 9.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 21,
+        "pickup_node": 18,
+        "dropoff_node": 45,
+        "created_at_seconds": 10.0,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 22,
+        "pickup_node": 15,
+        "dropoff_node": 47,
+        "created_at_seconds": 10.5,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 23,
+        "pickup_node": 43,
+        "dropoff_node": 11,
+        "created_at_seconds": 11.0,
+        "expected_ready_at_seconds": 90,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 90
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 24,
+        "pickup_node": 0,
+        "dropoff_node": 20,
+        "created_at_seconds": 11.5,
+        "expected_ready_at_seconds": 105,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 105
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 25,
+        "pickup_node": 0,
+        "dropoff_node": 20,
+        "created_at_seconds": 12,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 26,
+        "pickup_node": 31,
+        "dropoff_node": 45,
+        "created_at_seconds": 13,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 27,
+        "pickup_node": 0,
+        "dropoff_node": 22,
+        "created_at_seconds": 14,
+        "expected_ready_at_seconds": 60,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 60
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      },
+      {
+        "id": 28,
+        "pickup_node": 31,
+        "dropoff_node": 47,
+        "created_at_seconds": 15,
+        "expected_ready_at_seconds": 75,
+        "actual_readiness": {
+          "kind": "fixed",
+          "at_seconds": 75
+        },
+        "deadline_seconds": 700,
+        "demand": 1,
+        "admission": {
+          "id": "scene-service/v1",
+          "version": 1,
+          "deadline": "SoftObserved",
+          "max_completion_delay": null,
+          "pickup_service": 8,
+          "dropoff_service": 5,
+          "readiness": "ValidForecastV1"
+        }
+      }
+    ],
+    "initial_traffic": [],
+    "traffic_changes": [
+      {
+        "at_seconds": 30,
+        "overrides": [
+          {
+            "edge_id": 91,
+            "multiplier": 4
+          },
+          {
+            "edge_id": 87,
+            "multiplier": 2
+          }
+        ]
+      },
+      {
+        "at_seconds": 180,
+        "overrides": []
+      }
+    ],
+    "dynamic_events": []
+  }
+}

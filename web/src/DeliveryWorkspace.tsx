@@ -8,6 +8,7 @@ import {
   TrafficCone,
   ChevronDown,
 } from "lucide-react";
+import fleetScenarios from "./fleet-demo-scenarios.json";
 import { RiderPortrait } from "./RiderPortrait";
 import { riderVisual } from "./riderVisual";
 import type { ReactNode } from "react";
@@ -29,6 +30,14 @@ export function deliveryScenario(
   kind: string,
   nodes: { rider: number; pickup: number; customer: number },
 ) {
+  if (kind === "showcase-12" || kind === "showcase-24") {
+    const scenario = fleetScenarios[kind === "showcase-24" ? "24" : "12"];
+    if (digest !== scenario.graph_snapshot_digest)
+      throw Error(
+        "Fleet showcase requires the bundled Phase 10 graph. Open the recorded demo or choose another preset.",
+      );
+    return structuredClone(scenario);
+  }
   const policy = {
     id: "scene-service/v1",
     version: 1,
@@ -193,9 +202,10 @@ export function DeliveryWorkspace({
     [error, setError] = useState(""),
     [kind, setKind] = useState(
       catalog?.graph.snapshot_digest === DISTRIBUTED_DEMO_DIGEST
-        ? "distributed"
+        ? "showcase-12"
         : "fleet",
     ),
+    [recordedSize, setRecordedSize] = useState("12"),
     [advanced, setAdvanced] = useState(false),
     [draft, setDraft] = useState(""),
     [configOpen, setConfigOpen] = useState(true),
@@ -262,6 +272,28 @@ export function DeliveryWorkspace({
         setError(
           e instanceof Error ? e.message : "Unsupported replay evidence",
         );
+    } finally {
+      if (!controller.signal.aborted) setBusy(false);
+    }
+  }
+  async function openRecordedDemo() {
+    request.current?.abort();
+    const controller = new AbortController();
+    request.current = controller;
+    setBusy(true);
+    setPlaying(false);
+    setError("");
+    try {
+      const response = await fetch(`/demos/fleet-${recordedSize}.json`, {
+        signal: controller.signal,
+      });
+      if (!response.ok)
+        throw Error(`Recorded fleet demo unavailable (${response.status})`);
+      const next = decodeReplay(await response.text());
+      if (!controller.signal.aborted) openScene(next, false);
+    } catch (e) {
+      if (!controller.signal.aborted)
+        setError(e instanceof Error ? e.message : "Unsupported fleet replay");
     } finally {
       if (!controller.signal.aborted) setBusy(false);
     }
@@ -372,6 +404,29 @@ export function DeliveryWorkspace({
         </p>
         <div className="delivery-config">
           <label>
+            Recorded fleet
+            <select
+              value={recordedSize}
+              onChange={(e) => setRecordedSize(e.target.value)}
+              disabled={busy}
+            >
+              <option value="12">12 riders · 16 orders</option>
+              <option value="24">24 riders · 28 orders</option>
+            </select>
+          </label>
+          <button
+            className="delivery-run"
+            disabled={busy}
+            onClick={() => void openRecordedDemo()}
+          >
+            <Play size={15} /> Open recorded fleet demo
+          </button>
+          <small>
+            Real engine capture · no API needed · starts paused at 1×. Includes
+            idle riders, preparation, pooled deliveries and synthetic traffic
+            changes.
+          </small>
+          <label>
             Open saved replay
             <input
               type="file"
@@ -392,6 +447,22 @@ export function DeliveryWorkspace({
             Scenario
             <select value={kind} onChange={(e) => setKind(e.target.value)}>
               <option
+                value="showcase-12"
+                disabled={
+                  catalog?.graph.snapshot_digest !== DISTRIBUTED_DEMO_DIGEST
+                }
+              >
+                Fleet showcase · 12 riders / 16 orders
+              </option>
+              <option
+                value="showcase-24"
+                disabled={
+                  catalog?.graph.snapshot_digest !== DISTRIBUTED_DEMO_DIGEST
+                }
+              >
+                Fleet showcase · 24 riders / 28 orders
+              </option>
+              <option
                 value="distributed"
                 disabled={
                   catalog?.graph.snapshot_digest !== DISTRIBUTED_DEMO_DIGEST
@@ -406,7 +477,14 @@ export function DeliveryWorkspace({
               <option value="delayed">Delay & active plan suffix change</option>
             </select>
           </label>
-          {kind === "distributed" ? (
+          {kind.startsWith("showcase-") ? (
+            <p className="distributed-demo-note">
+              Graph-qualified fleet starts and staggered arrivals ·
+              engine-selected assignments · capacity-two insertion · traffic
+              changes at 30s and 180s. Node controls apply to the smaller
+              presets.
+            </p>
+          ) : kind === "distributed" ? (
             <p className="distributed-demo-note">
               Six fixed graph-node starts · five pickup/customer pairs across
               the bundled street network. Assignments remain engine-selected.
@@ -527,7 +605,22 @@ export function DeliveryWorkspace({
             open={ridersOpen}
             onToggle={() => setRidersOpen((v) => !v)}
           >
-            <div className="delivery-rider-roster">
+            <p className="fleet-activity" aria-live="off">
+              {
+                frame.riders.filter((r) => r.execution?.stage === "Travelling")
+                  .length
+              }{" "}
+              travelling ·{" "}
+              {
+                frame.riders.filter(
+                  (r) => r.execution && r.execution.stage !== "Travelling",
+                ).length
+              }{" "}
+              at stops · {frame.riders.filter((r) => !r.execution).length} idle
+            </p>
+            <div
+              className={`delivery-rider-roster ${frame.riders.length > 6 ? "fleet-grid" : ""}`}
+            >
               {frame.riders.map((r) => (
                 <button
                   key={r.id}

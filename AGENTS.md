@@ -2651,6 +2651,8 @@ The objective is for someone evaluating the repository to understand Roadrunner 
 
 ---
 
+Implementation, walkthrough and evidence: [Phase 38–39 completion](docs/phase-38-39-completion.md) and [fleet demo](docs/demo.md). The 12/24-rider demos preserve existing visual capture limits; the population example above is not a supported-capacity claim.
+
 # PHASE 39 — Documentation
 
 Create high-quality documentation.
@@ -2680,6 +2682,8 @@ Document mathematical assumptions.
 Explain algorithms rather than simply naming them.
 
 ---
+
+Documentation index: [docs/README.md](docs/README.md). Release scope: [v0.1.0 engineering preview](docs/v0.1.0.md). Phase 40 remains a separate v1.0 gate.
 
 # PHASE 40 — v1.0
 
