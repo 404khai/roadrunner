@@ -3597,3 +3597,50 @@ h1 > span {
   opacity: 0;
   pointer-events: none;
 }
+
+/* Bounded fleet scenes keep every rider reachable without a long horizontal strip. */
+.delivery-rider-roster.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+  max-height: 30dvh;
+  min-width: 230px;
+  overflow: auto;
+}
+.delivery-rider-roster.fleet-grid > button {
+  width: auto;
+  min-width: 0;
+}
+.fleet-activity {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+@media (max-width: 780px) {
+  /* Audit spacing must not pin both top and bottom of the navigation card. */
+  .delivery-workspace:has(.delivery-dispatch-audit:not([open]))
+    .navigation-card {
+    top: auto;
+  }
+}
+@media (max-width: 500px) {
+  .delivery-rider-roster.fleet-grid {
+    max-height: 128px;
+  }
+}
+@media (max-width: 500px) {
+  /* Stack the audit handle, fleet roster and rider inspector without overlap. */
+  .scene-riders {
+    top: 166px;
+  }
+  .scene-inspector {
+    top: 372px;
+  }
+  .scene-riders:not(.is-open) ~ .scene-inspector {
+    top: 244px;
+  }
+  .delivery-workspace:has(.delivery-dispatch-audit[open]) .scene-riders,
+  .delivery-workspace:has(.delivery-dispatch-audit[open]) .scene-inspector {
+    display: none;
+  }
+}

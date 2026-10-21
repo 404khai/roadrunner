@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "purpose": "reproducibility/accounting evidence, not performance benchmark",
+  "base_revision": "1f8973cd3a44e9cf1ac3709230b37c79a76c7d85",
+  "source_note": "Phase 38 changes in the containing commit; no self-referential source hash",
+  "os": "macOS-27.0-arm64-arm-64bit",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "node": "v24.16.0",
+  "profile": "debug",
+  "scenario_seed": 38,
+  "logical_duration_seconds": 900,
+  "graph_nodes": 58,
+  "graph_directed_edges": 114,
+  "artifacts": {
+    "web/src/fleet-demo-scenarios.json": "ca64734a5064bae5a1e1c0cd5cf409f13672ca06ebed5ce8c334eb3f7ede33a8",
+    "data/fixtures/phase-10/snapshot.semantic-v2/graph.rr-graph": "7943c50063f8e268359b1e54f066617bfe303edd97e82bf549b388ebf4a5a317",
+    "web/public/demos/fleet-12.json": "d24b8aedb6438305b81ae596bc86bef2b0951c911e9fe9eb856c832d1c0337c4",
+    "web/public/demos/fleet-24.json": "022676259807d7432d3b7da580a60e944f8cf5a95cda90520692c20b293b72b0"
+  }
+}

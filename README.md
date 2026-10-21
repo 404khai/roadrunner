@@ -10,7 +10,7 @@ traffic changes the route, and whether another delivery fits an existing rider p
 
 ## Current capabilities
 
-Implemented through **Phase 22 — Event-Driven Runtime**:
+**v0.1.0 engineering preview** — routing, dispatch, simulation and visualization:
 
 - Deterministic graph construction, geographic units, Haversine distance, validated
   graph artifacts, and provenance-addressed OSM ingestion.
@@ -33,11 +33,20 @@ Implemented through **Phase 22 — Event-Driven Runtime**:
 - Seeded discrete-event delivery simulation, deterministic replay, CLI workflows,
   correctness oracles, and reproducible benchmark artifacts.
 
-[Phase 17 completion](docs/phase-17-completion.md), [Phase 18 completion](docs/phase-18-completion.md)
-and [Phase 19 completion](docs/phase-19-completion.md) record implementation gates. Phase 20 adds an [HTTP API with Swagger UI](crates/roadrunner-api/README.md). [Phase 21 PostgreSQL/PostGIS persistence](docs/persistence.md) now preserves operational authority and retry outcomes across restart.
-[Phase 22 event delivery](docs/events.md) is implemented with a local PostgreSQL stream.
-Redis/Kafka, live traffic, machine learning, and a map UI are future phases. The current
-workspace runs locally without those services; there is no `serve` or `demo` command.
+- Map workspace with directed route inspection, alternatives, delivery animation,
+  dispatch inspection and bounded historical replay.
+- Offline synthetic ETA datasets, deterministic baselines and gated learned research;
+  learned estimates do not change operational routing or dispatch.
+- Reproducible profiling and staged scale/comparison harnesses with explicit failure,
+  resource and backlog accounting; population targets are not capacity promises.
+- Shared 12- and 24-rider fleet demos, available as CLI scenarios and retained browser
+  replays, with preparation, multi-order custody and synthetic traffic changes.
+
+Start with the [five-minute fleet demonstration](docs/demo.md), the
+[documentation index](docs/README.md) and [v0.1.0 scope and limitations](docs/v0.1.0.md).
+The web app can open the recorded fleet without an API or database. Live API operations
+and PostgreSQL persistence remain opt-in. Redis/Kafka, physical live traffic and a
+deployed learned ETA engine are not required or claimed.
 
 ## Workspace
 

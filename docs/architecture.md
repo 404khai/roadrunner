@@ -1,7 +1,37 @@
 # Roadrunner Architecture
 
-Status: Accepted through Phase 19 and pre-Phase-20 authority foundations
-Last updated: 2026-10-10
+Status: v0.1.0 documentation consolidation, 2026-10-19.
+
+## Current system map
+
+```text
+OSM -> verified immutable core graph -> routing / traversal evaluation
+                        |                         |
+                        +-------> dispatch <------+
+                                     |
+                    logical-event simulation / operational coordinator
+                                     |
+                    API -> PostgreSQL authority + outbox -> event consumers
+                     |
+              scene / replay contracts -> React + MapLibre workspace
+
+CLI composes graph, routing, simulation and benchmark adapters.
+Offline ETA research consumes verified retained synthetic evidence.
+```
+
+Core owns graph/routing semantics; dispatch owns feasibility, accepted protections
+and atomic planning publication. Simulation advances logical events. The API owns
+request authorization/admission and the operational coordinator; optional storage
+provides fenced restoration, retry recognition and outbox obligations. The browser
+samples retained routes and cannot create accepted business effects by animation.
+CLI, retained demos and API scenes share engine producers; decorative ambient actors
+remain separate from riders and authority.
+
+The sections below retain the foundational architecture and its historical rationale.
+For current later-phase contracts use [persistence](persistence.md), [events](events.md),
+[visualization](visualization-contract.md), [replay](historical-replay.md),
+[performance](phase-33-completion.md), [scale investigation](phase-34-completion.md),
+[offline ML](machine-learning.md) and [v0.1.0 limitations](v0.1.0.md).
 
 ## 1. Architectural intent
 

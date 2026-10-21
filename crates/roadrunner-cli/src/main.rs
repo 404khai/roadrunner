@@ -12,6 +12,7 @@ mod alternatives_command;
 mod baseline_command;
 mod command_options;
 mod dataset_command;
+mod demo_command;
 mod graph_command;
 mod learned_command;
 mod reference_comparison;
@@ -32,7 +33,8 @@ fn main() -> ExitCode {
         .and_then(|s| s.to_str())
         .unwrap_or_default();
     let json = arguments.iter().any(|arg| arg == "--json")
-        && ((command == "graph" && matches!(subcommand, "stats" | "import"))
+        && (command == "demo"
+            || (command == "graph" && matches!(subcommand, "stats" | "import"))
             || (command == "route" && (subcommand == "compare" || subcommand.starts_with("--"))));
     match run(arguments) {
         Ok(()) => ExitCode::SUCCESS,
@@ -85,6 +87,7 @@ fn run_commands(args: &[String]) -> Result<(), String> {
             route_command::run(&options, false)
         }
         [command, rest @ ..] if command == "serve" => serve(rest),
+        [command, rest @ ..] if command == "demo" => demo_command::run(rest),
         _ => run_legacy_commands(args),
     }
 }
@@ -236,7 +239,7 @@ fn print_help() {
         env!("CARGO_PKG_VERSION")
     );
     println!(
-        "Core workflows:\n  roadrunner graph import <input.osm.pbf> <new-snapshot-directory> --source-id <identity> [--json]\n  roadrunner graph stats <snapshot-directory-or-graph-artifact> [--json]\n  roadrunner route [compare] --graph <path> --from <lat,lng|node:id|osm:id> --to <endpoint> [--json]\n    [--algorithm dijkstra|astar] [--alternatives <n>] [--snap-radius-meters <m>]\n  roadrunner serve [API arguments] (requires sibling roadrunner-api executable)\n  Coordinates snap to the nearest node within 1000m by default, not to road edges.\n  New route commands use motorcycle free-flow travel time. Compare runs both algorithms.\n  New graph/routing --json emits only JSON; errors are JSON on stderr with a nonzero exit.\n"
+        "Core workflows:\n  roadrunner demo [--riders 12|24] [--graph <pinned-path>] [--json]\n  roadrunner graph import <input.osm.pbf> <new-snapshot-directory> --source-id <identity> [--json]\n  roadrunner graph stats <snapshot-directory-or-graph-artifact> [--json]\n  roadrunner route [compare] --graph <path> --from <lat,lng|node:id|osm:id> --to <endpoint> [--json]\n    [--algorithm dijkstra|astar] [--alternatives <n>] [--snap-radius-meters <m>]\n  roadrunner serve [API arguments] (requires sibling roadrunner-api executable)\n  Coordinates snap to the nearest node within 1000m by default, not to road edges.\n  New route commands use motorcycle free-flow travel time. Compare runs both algorithms.\n  New graph/routing --json emits only JSON; errors are JSON on stderr with a nonzero exit.\n"
     );
     println!(
         "Existing commands:\n  \
