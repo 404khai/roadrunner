@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import * as ml from "maplibre-gl";
 import { DispatchRadar } from "./DispatchRadar";
 import { style } from "./MapView";
@@ -7,6 +7,7 @@ import { riderVisual } from "./riderVisual";
 import { radiusRing, legPath, type DispatchEvidence } from "./dispatchEvidence";
 import { revealPrefix } from "./geometry";
 import type { FeatureCollection } from "geojson";
+import { H3MapOverlay } from "./H3MapOverlay";
 export function DispatchMap({
   evidence,
   inspected,
@@ -37,6 +38,24 @@ export function DispatchMap({
   const [ready, setReady] = useState(false),
     [error, setError] = useState(""),
     [tilted, setTilted] = useState(false);
+  const h3Locations = useMemo(
+    () =>
+      evidence
+        ? [
+            ...[
+              evidence.pickup,
+              evidence.customer,
+              ...evidence.riders.map((r) => r.coordinate),
+            ].map((c) => [c.longitude, c.latitude] as [number, number]),
+            ...(evidence.candidates
+              .find((c) => c.rider === inspected)
+              ?.legs.flatMap((leg) =>
+                leg.geometry ? legPath(leg.geometry).points : [],
+              ) ?? []),
+          ]
+        : [],
+    [evidence, inspected],
+  );
   useEffect(() => {
     if (!container.current) return;
     let m: ml.Map;
@@ -308,6 +327,12 @@ export function DispatchMap({
         aria-label="Dispatch candidate map"
       />
       <div className="dispatch-view-controls">
+        <H3MapOverlay
+          map={ready ? map.current : null}
+          locations={h3Locations}
+          beforeLayer="dispatch-boundary"
+          scope="dispatch"
+        />
         <button onClick={() => setTilted((v) => !v)}>
           {tilted ? "Overhead view" : "Perspective view"}
         </button>

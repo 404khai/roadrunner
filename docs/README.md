@@ -9,6 +9,7 @@ Start with the [fleet demonstration](demo.md) and [v0.1.0 scope](v0.1.0.md).
 | Graph-qualified routing | [Routing](routing.md) |
 | Static and time-dependent costs | [Traffic](traffic.md), [time-dependent routing](time-dependent-routing.md) |
 | Candidate selection and readiness | [Dispatch](dispatch.md) |
+| Geographic idle supply and pickup demand | [H3 spatial projection](h3-spatial-projection.md) |
 | Insertion, fleet planning and performance | [Optimization](optimization.md) |
 | Logical events and reproducibility | [Simulation](simulation.md) |
 | Synthetic ETA datasets and offline research | [Machine learning](machine-learning.md) |

@@ -203,7 +203,9 @@ export function MapView({
   onSelectSegment,
   debug,
   onInspectGraph,
+  h3Cells,
 }: {
+  h3Cells?: FeatureCollection;
   catalog?: Catalog;
   debug: GraphDebugger;
   onInspectGraph: (selection: GraphSelection) => void;
@@ -403,6 +405,7 @@ export function MapView({
     map.on("style.load", () => {
       for (const id of [
         "anchors",
+        "h3-cells",
         "debug-edges",
         "debug-nodes",
         "alternatives",
@@ -415,6 +418,27 @@ export function MapView({
         "endpoints",
       ])
         map.addSource(id, { type: "geojson", data: empty });
+      map.addLayer({
+        id: "h3-fill",
+        type: "fill",
+        source: "h3-cells",
+        paint: { "fill-color": "#c5c5c5", "fill-opacity": 0.045 },
+      });
+      map.addLayer({
+        id: "h3-outline",
+        type: "line",
+        source: "h3-cells",
+        paint: {
+          "line-color": [
+            "case",
+            [">", ["get", "route_vertices"], 0],
+            "#d3bb79",
+            "#a4a4a4",
+          ],
+          "line-width": 1.2,
+          "line-opacity": 0.7,
+        },
+      });
       map.addLayer({
         id: "anchors",
         type: "circle",
@@ -791,6 +815,10 @@ export function MapView({
     });
     fitRef.current();
   }, [ready, catalog]);
+  useEffect(() => {
+    if (ready && mapRef.current)
+      source(mapRef.current, "h3-cells", h3Cells ?? empty);
+  }, [ready, h3Cells]);
   useEffect(() => {
     if (!ready || !mapRef.current) return;
     source(mapRef.current, "endpoints", {

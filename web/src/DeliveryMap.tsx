@@ -10,6 +10,7 @@ import { CameraGizmo } from "./CameraGizmo";
 import { useReveal } from "./useReveal";
 import { revealPrefix } from "./geometry";
 import { scooterAsset, riderVisual } from "./riderVisual";
+import { H3MapOverlay } from "./H3MapOverlay";
 import type { Position } from "./geometry";
 import {
   ambientActors,
@@ -389,6 +390,34 @@ export function DeliveryMap({
     });
   }, [ready, scene, fitId]);
   const frame = scene && frameAt(scene, at);
+  const h3Locations = useMemo(
+    () =>
+      frame && scene
+        ? [
+            ...frame.riders.map(
+              (r) =>
+                [r.coordinate.longitude, r.coordinate.latitude] as Position,
+            ),
+            ...frame.orders
+              .filter(
+                (o) => o.status !== "cancelled" && o.status !== "delivered",
+              )
+              .flatMap((o) => [
+                ...(o.status === "awaiting_pickup"
+                  ? [[o.pickup.longitude, o.pickup.latitude] as Position]
+                  : []),
+                [o.dropoff.longitude, o.dropoff.latitude] as Position,
+              ]),
+            ...frame.riders.flatMap((r) =>
+              r.execution
+                ? (scene.paths.get(actionKey(r.id, r.execution.action_id))
+                    ?.points ?? [])
+                : [],
+            ),
+          ]
+        : [],
+    [frame, scene],
+  );
   const activeRider = frame?.riders.find((r) => r.id === selected);
   const activeSample = useMemo(
     () =>
@@ -906,6 +935,12 @@ export function DeliveryMap({
       >
         <summary>{mini ? "Scene controls" : "Navigation view"}</summary>
         <div className="navigation-card-body">
+          <H3MapOverlay
+            map={ready ? map.current : null}
+            locations={h3Locations}
+            beforeLayer="delivery-routes"
+            scope="delivery"
+          />
           {!mini && viewButtons}
           <label>
             <input

@@ -122,6 +122,36 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 describe("delivery marker lifecycle", () => {
+  it("toggles H3 cells while preserving rider markers, action identity and positions", () => {
+    render(
+      <DeliveryMap
+        scene={scene}
+        at={0}
+        selected={scene.frames[0].riders[0].id}
+        onSelect={vi.fn()}
+        traffic={false}
+        onEdge={vi.fn()}
+        reduced
+      />,
+    );
+    const before = engine.markers.map((m) => ({
+      element: m.element,
+      position: m.position,
+      action: m.element.dataset.action,
+    }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "H3 hexagons" }));
+    expect(
+      (screen.getByLabelText("H3 cell resolution") as HTMLSelectElement).value,
+    ).toBe("11");
+    fireEvent.click(screen.getByRole("checkbox", { name: "H3 hexagons" }));
+    expect(
+      engine.markers.map((m) => ({
+        element: m.element,
+        position: m.position,
+        action: m.element.dataset.action,
+      })),
+    ).toEqual(before);
+  });
   it("reuses one rider element across schedule and suffix changes, moving it causally", () => {
     const props = {
       scene,

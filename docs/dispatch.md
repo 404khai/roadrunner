@@ -20,6 +20,10 @@ The example asserts both results and prints the full decisions as JSON, includin
 per-candidate pickup/delivery travel, total score, distance, timing, provenance,
 coverage, and selection reason.
 
+It also prints a read-only [H3 projection](h3-spatial-projection.md) of the initial
+idle-rider supply and unassigned-pickup demand, with a logical rollup to coarser
+cells. The projection retains source identity/version/time and does not select riders.
+
 It explicitly commits the exhaustive proposal, moves the selected rider to pickup,
 records pickup, moves to dropoff, and records delivery using `World` transitions.
 The order is observed ready at scenario time zero so the zero-wait baseline is

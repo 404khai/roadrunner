@@ -1,0 +1,126 @@
+{
+  "kind": "single_fixture_correctness_observation_not_latency_benchmark",
+  "graph": {
+    "build_identity": {
+      "build_configuration": "compiler_semantics=osm_graph_compiler_v4;contraction=semantic_split_points_v2;retain_all_components=true;restrictions=node_via_motorcycle_v1",
+      "compiler_version": "0.1.0",
+      "normalization_version": "osm_normalization_v2",
+      "source_dataset": "phase10-lagos-marina",
+      "source_integrity": "661df8d84fcb77877f8d6a2d809b3a639d5eaa6cf7a43b1bdb14ec68286b1977"
+    },
+    "jurisdiction_policy": "ng_v2",
+    "provenance_digest": "afe1cfd4a6ef55fde35bf9eea8c94e4046aec5551cc7d6c5b33529a3bb44b482",
+    "routing_profile": "delivery_motorcycle_v2",
+    "snapshot_digest": "a3f19ae1814288d33c2db7bd3d60f402ee047d2cb0b8e60ad24e1d82a4273e95",
+    "turn_restrictions_enforced": true
+  },
+  "node_count": 58,
+  "edge_count": 114,
+  "request": {
+    "origin_node": 0,
+    "destination_node": 22,
+    "objective": "travel_time",
+    "departure_time": "2026-10-30T18:00:00Z"
+  },
+  "results": {
+    "dijkstra": {
+      "provenance": {
+        "departure_seconds": 1793383200.0,
+        "evaluator": "free-flow-travel-time/v1",
+        "heuristic": null,
+        "routing_context": {
+          "departure_time": 1793383200.0,
+          "permit_access": false,
+          "private_access": false
+        },
+        "time_domain": "unix_seconds",
+        "traffic_digest": null
+      },
+      "search": {
+        "algorithm": "dijkstra",
+        "counter_semantics": "accepted_non_stale_pops_including_goal;source_equals_destination_convention_1_without_queue_operations",
+        "detailed_trace": "deferred",
+        "expanded_states": 98,
+        "relaxation": "strict_objective_improvement_only",
+        "state_mode": "node_incoming_edge_with_source_sentinel",
+        "termination": "route_found"
+      },
+      "objective": {
+        "kind": "travel_time",
+        "value": 105.99551481536915
+      },
+      "distance_meters": 607.312320579204
+    },
+    "astar": {
+      "provenance": {
+        "departure_seconds": 1793383200.0,
+        "evaluator": "free-flow-travel-time/v1",
+        "heuristic": "travel-time-haversine/v1;max_kph=30",
+        "routing_context": {
+          "departure_time": 1793383200.0,
+          "permit_access": false,
+          "private_access": false
+        },
+        "time_domain": "unix_seconds",
+        "traffic_digest": null
+      },
+      "search": {
+        "algorithm": "a_star",
+        "counter_semantics": "accepted_non_stale_pops_including_goal;source_equals_destination_convention_1_without_queue_operations",
+        "detailed_trace": "deferred",
+        "expanded_states": 70,
+        "relaxation": "strict_objective_improvement_only",
+        "state_mode": "node_incoming_edge_with_source_sentinel",
+        "termination": "route_found"
+      },
+      "objective": {
+        "kind": "travel_time",
+        "value": 105.99551481536915
+      },
+      "distance_meters": 607.312320579204
+    }
+  },
+  "geographic_buckets": {
+    "nodeCount": 58,
+    "routeVertices": 38,
+    "cost": 105.99551481536915,
+    "dijkstra": 98,
+    "astar": 70,
+    "resolutions": [
+      {
+        "resolution": 8,
+        "nodeCells": 3,
+        "routeVertexCells": 1
+      },
+      {
+        "resolution": 9,
+        "nodeCells": 7,
+        "routeVertexCells": 2
+      },
+      {
+        "resolution": 10,
+        "nodeCells": 22,
+        "routeVertexCells": 6
+      },
+      {
+        "resolution": 11,
+        "nodeCells": 46,
+        "routeVertexCells": 13
+      },
+      {
+        "resolution": 12,
+        "nodeCells": 57,
+        "routeVertexCells": 26
+      }
+    ]
+  },
+  "browser_checks": [
+    "route_0_to_22",
+    "matched_search_comparison",
+    "resolution_9_11",
+    "select_dijkstra_then_astar",
+    "expand_membership",
+    "source_preserved"
+  ],
+  "preview": "preview.jpg"
+}
