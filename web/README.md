@@ -68,6 +68,15 @@ layer that complements both searches, with no shortest-path result of its own.
 These counters are per-request evidence, not latency benchmarks. See the
 [integration analysis](../docs/h3-spatial-projection.md).
 
+**Dispatch visualization** also has **H3 hexagons** in its map view controls.
+**Delivery simulation** has the same checkbox inside **Navigation view**.
+Both start off and offer a cell-resolution selector when enabled. Dispatch
+indexes retained riders, stops and inspected-route vertices; delivery indexes
+captured rider positions, active stops and active-route vertices. Delivery cells
+update at retained frames, independently of presentation interpolation. Switching
+the overlay never reevaluates dispatch or advances simulation time; decorative
+ambient vehicles are excluded. The layer clears when switched off.
+
 ### Selected route
 
 The muted path shows the entire returned result immediately. Its white prefix and

@@ -28,6 +28,43 @@ export function h3Overlay(
     a.cell.localeCompare(b.cell),
   );
   for (const cell of cells) cell.nodes.sort((a, b) => a - b);
+  return {
+    cells,
+    ...cellPolygons(
+      cells.map((value) => ({
+        cell: value.cell,
+        properties: {
+          nodes: value.nodes.length,
+          route_vertices: value.routeVertices,
+        },
+      })),
+    ),
+  };
+}
+
+/** Display-only buckets of retained scene locations; no entity or graph-node IDs are invented. */
+export function h3LocationOverlay(
+  positions: readonly (readonly [number, number])[],
+  resolution: number,
+) {
+  if (!Number.isInteger(resolution) || resolution < 0 || resolution > 15)
+    throw new Error("H3 resolution must be in 0..=15");
+  const cells = [
+    ...new Set(
+      positions.map(([longitude, latitude]) =>
+        latLngToCell(latitude, longitude, resolution),
+      ),
+    ),
+  ].sort();
+  return {
+    cells,
+    ...cellPolygons(cells.map((cell) => ({ cell, properties: {} }))),
+  };
+}
+
+function cellPolygons(
+  cells: { cell: string; properties: Record<string, number> }[],
+) {
   const geojson: FeatureCollection<Polygon> = {
     type: "FeatureCollection",
     features: [],
@@ -49,11 +86,10 @@ export function h3Overlay(
       type: "Feature",
       properties: {
         cell: value.cell,
-        nodes: value.nodes.length,
-        route_vertices: value.routeVertices,
+        ...value.properties,
       },
       geometry: { type: "Polygon", coordinates: [ring] },
     });
   }
-  return { cells, geojson, truncated: cells.length > 1000, unsupported };
+  return { geojson, truncated: cells.length > 1000, unsupported };
 }

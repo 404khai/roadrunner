@@ -3707,3 +3707,47 @@ h1 > span {
   border-bottom: 1px solid #dededb;
   overflow-wrap: anywhere;
 }
+.h3-map-controls {
+  display: grid;
+  gap: 8px;
+  max-width: 240px;
+}
+.h3-map-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.h3-map-controls select {
+  color: inherit;
+  background: inherit;
+  border: 1px solid #b8b8b2;
+  border-radius: 5px;
+  padding: 4px;
+}
+.h3-map-controls small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.dispatch-view-controls {
+  left: 330px;
+  width: 250px;
+  max-width: calc(100vw - 350px);
+  padding: 12px;
+  flex-wrap: wrap;
+  background: #1b1b1bf2;
+  border: 1px solid #ffffff1d;
+  border-radius: 10px;
+  z-index: 3;
+}
+.dispatch-view-controls .h3-map-controls {
+  flex-basis: 100%;
+}
+@media (max-width: 780px) {
+  .dispatch-view-controls {
+    left: auto;
+    width: 170px;
+    max-width: calc(100vw - 24px);
+  }
+}

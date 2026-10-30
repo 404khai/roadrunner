@@ -134,6 +134,29 @@ Browser tests cover adapter/reference parity, conservation across resolutions,
 geometry immutability, unsupported polygons, actual route-envelope decoding,
 heuristic differences, map result switching and rejection of changed context.
 
+### Dispatch and delivery map toggles
+
+Both additional map workspaces have an independent **H3 hexagons** checkbox,
+off by default, with resolutions 7 through 12. Dispatch keeps it in the view
+controls beside the evaluation cards. Delivery keeps it in **Navigation view**.
+Turning it off clears the polygon source; turning it on indexes the currently
+retained locations without rerunning dispatch or changing simulation time.
+
+Dispatch cells cover submitted rider coordinates, pickup/customer stops and the
+inspected candidate's original route vertices. Delivery cells cover captured
+rider coordinates, active stops and active actions' original route vertices at
+the current retained frame. The overlay follows captured transitions rather
+than treating interpolated scooter positions as observations. Unknown route
+geometry contributes no vertices. Synthetic ambient vehicles are excluded.
+
+These uniform geographic cells convey point membership only; they carry no
+invented entity IDs, traffic density, eligibility, or complete route coverage.
+The same 1,000-polygon cap and polar/seam diagnostics apply. Map sources belong
+to the renderer and disappear with their map. Tests check both toggles, resolution
+and input changes, empty/readiness states, source clearing, and delivery marker/
+action/position preservation. The running application was verified against real
+engine dispatch and a two-rider simulation.
+
 ## Follow-on integration gates
 
 An H3 candidate policy would need a conservative geographic cover followed by
