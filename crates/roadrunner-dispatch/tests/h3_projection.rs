@@ -185,7 +185,7 @@ fn empty_snapshot_remains_empty_and_cannot_be_refined() {
     f.anchors = RoutingAnchors::default();
     let world = ok(World::new(73, f.data.clone()));
     let grid = project(&f, &world, 0);
-    assert!(grid.cells().is_empty());
-    assert!(ok(grid.coarsen(resolution(0))).cells().is_empty());
+    assert_eq!(grid.cells(), []);
+    assert_eq!(ok(grid.coarsen(resolution(0))).cells(), []);
     assert_eq!(grid.coarsen(resolution(1)), Err(H3Error::FinerResolution));
 }
