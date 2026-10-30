@@ -7,6 +7,7 @@ use roadrunner_core::graph::{
     AccessClass, BuilderNodeId, BuilderSegmentId, EdgeProperties, FrozenGraph, GraphBuildIdentity,
     GraphBuilder, GraphMetadata, GraphSnapshotId, NodeId,
 };
+use roadrunner_dispatch::spatial::{H3DispatchProjection, H3Resolution};
 use roadrunner_dispatch::{
     Availability, CandidatePolicy, CandidateResult, CapacityUnits, CoreRouteProvider, DecisionId,
     DispatchDecisionOutcome, DispatchInstant, DispatchSnapshot, FulfillmentState, Order, OrderId,
@@ -128,6 +129,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let dropoff = &anchors.dropoffs[&order];
     let provider = CoreRouteProvider::new(&graph, TrafficContext::FreeFlow)?;
     let snapshot = DispatchSnapshot::new(&world, at, epoch, &provider, &anchors)?;
+    let h3_resolution = H3Resolution::try_from(9)?;
+    let h3_before = H3DispatchProjection::from_snapshot(&snapshot, h3_resolution)?;
     let complete = basic_dispatch(
         &snapshot,
         order,
@@ -201,6 +204,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         serde_json::to_string_pretty(&serde_json::json!({
             "exhaustive_decision": complete,
             "spatial_decision": shortlist,
+            "h3_before_dispatch": h3_before,
+            "h3_logical_rollup": h3_before.coarsen(H3Resolution::try_from(7)?)?,
             "execution": {
                 "fulfillment": world.data().fulfillment[&order],
                 "remaining_plan": world.data().plans[&fast],

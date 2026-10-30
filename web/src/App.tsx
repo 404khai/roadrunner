@@ -42,6 +42,8 @@ import { useGraphDebugger } from "./useGraphDebugger";
 import { DispatchWorkspace } from "./DispatchWorkspace";
 import { DeliveryWorkspace } from "./DeliveryWorkspace";
 import { MapView } from "./MapView";
+import { H3Panel } from "./H3Panel";
+import { h3Overlay } from "./h3Overlay";
 import { useReducedMotion, useReveal } from "./useReveal";
 function message(error: unknown) {
   if (error instanceof ApiError)
@@ -53,6 +55,10 @@ function message(error: unknown) {
   };
 }
 export function App() {
+  const [h3Enabled, setH3Enabled] = useState(
+    () => new URLSearchParams(window.location.search).get("h3") === "1",
+  );
+  const [h3Resolution, setH3Resolution] = useState(9);
   const [deliveryMode, setDeliveryMode] = useState(
     () =>
       new URLSearchParams(window.location.search).get("mode") === "delivery",
@@ -279,6 +285,13 @@ export function App() {
     URL.revokeObjectURL(url);
   }
   const route = result?.evidence;
+  const h3 = useMemo(
+    () =>
+      h3Enabled
+        ? h3Overlay(catalog?.anchors ?? [], route, h3Resolution)
+        : undefined,
+    [h3Enabled, catalog, route, h3Resolution],
+  );
   const debug = useGraphDebugger(catalog?.graph.snapshot_digest, token);
   const noRoute = error?.code === "no_route";
   if (dispatchMode)
@@ -368,6 +381,13 @@ export function App() {
                 onClick={() => setDispatchMode(true)}
               >
                 <ScanLine size={19} aria-hidden="true" /> Dispatch visualization
+              </button>
+              <button
+                className="delivery-entry"
+                aria-pressed={h3Enabled}
+                onClick={() => setH3Enabled(!h3Enabled)}
+              >
+                H3 inspection
               </button>
             </div>
             {debug.enabled && <GraphPanel debug={debug} route={route} />}
@@ -547,6 +567,18 @@ export function App() {
                 Explicit graph anchors. No automatic snapping.
               </p>
             </form>
+            {h3 && !debug.enabled && (
+              <H3Panel
+                cells={h3.cells}
+                resolution={h3Resolution}
+                onResolution={setH3Resolution}
+                result={count === 1 ? result : undefined}
+                token={token}
+                onRoute={setResult}
+                truncated={h3.truncated}
+                unsupported={h3.unsupported}
+              />
+            )}
             <div
               ref={resultPanel}
               className="result-panel"
@@ -742,6 +774,7 @@ export function App() {
         </aside>
         <div className="map-workspace">
           <MapView
+            h3Cells={h3?.geojson}
             onConnect={() => setSettings(true)}
             connected={!!catalog}
             panelOpen={!collapsed}

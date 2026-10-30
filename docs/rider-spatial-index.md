@@ -1,5 +1,9 @@
 # Rider spatial lookup (Phase 12)
 
+For read-only geographic supply/demand grouping, see the separate
+[H3 dispatch projection](h3-spatial-projection.md). It preserves the locators and
+candidate policy described here.
+
 `roadrunner-dispatch::spatial` provides `LinearRiderLocator` and `IndexedRiderLocator`. Both accept a caller-selected immutable rider-position projection and a positive, configured speed. Both expose `nearest_riders(location, radius, limit)` through `RiderLookup`. Results are sorted by increasing great-circle distance, then rider ID, and include the rider ID, distance in meters, and estimated arrival in seconds. A zero limit returns no riders; the radius boundary is inclusive.
 
 ```text

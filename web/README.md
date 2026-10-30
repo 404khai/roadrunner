@@ -52,6 +52,24 @@ The UI does not create traffic contexts or change the world.
 
 ## Route presentation
 
+### H3 inspection
+
+Open `/workspace?h3=1` or select **H3 inspection**. Pick origin **0**, destination
+**22**, then **Find route**. Change **Cell resolution** to inspect cell boundaries
+and expand **Inspect cell IDs and membership**. Pale cells group loaded graph
+nodes; gold cells group selected-route geometry vertices. These are sample buckets,
+not route coverage, rider supply, demand, or traffic measurements. Up to 1,000
+polygons are displayed; truncation and unsupported polar/seam geometry are explicit.
+
+**Compare Dijkstra and A*** sends two real engine requests with the same anchors,
+objective and pinned departure time. It compares optimal cost and expanded states;
+click either result to display its original directed route. H3 is an indexing
+layer that complements both searches, with no shortest-path result of its own.
+These counters are per-request evidence, not latency benchmarks. See the
+[integration analysis](../docs/h3-spatial-projection.md).
+
+### Selected route
+
 The muted path shows the entire returned result immediately. Its white prefix and
 leading highlight progressively reveal the directed canonical geometry, then become
 the normal selected route. A/B mark origin/destination. A=B marks no travel.

@@ -3644,3 +3644,65 @@ h1 > span {
     display: none;
   }
 }
+/* H3 is a geographic inspection overlay; road search evidence stays separate. */
+.h3-panel {
+  padding: 18px 22px;
+  border-bottom: 1px solid #333;
+}
+.h3-panel h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+.h3-panel p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #bbb;
+}
+.h3-panel label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+}
+.h3-panel select {
+  background: #242424;
+  color: #eee;
+  border: 1px solid #444;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+.h3-search-result {
+  display: grid;
+  width: 100%;
+  gap: 5px;
+  text-align: left;
+  margin: 8px 0;
+  padding: 12px;
+  color: #eee;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 8px;
+}
+.h3-search-result[aria-pressed="true"] {
+  border-color: #ccc;
+}
+.h3-search-result span,
+.h3-cell-list {
+  font-size: 12px;
+}
+.h3-panel details {
+  margin-top: 14px;
+  font-size: 12px;
+}
+.h3-cell-list {
+  max-height: 240px;
+  overflow: auto;
+}
+.h3-cell-list > div {
+  display: grid;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+  overflow-wrap: anywhere;
+}
